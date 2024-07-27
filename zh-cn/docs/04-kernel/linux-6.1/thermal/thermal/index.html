@@ -1,0 +1,1452 @@
+<!doctype html>
+<html class="position-relative" itemscope itemtype="https://schema.org/WebPage" lang="zh-cn"
+  data-bs-theme="auto" data-palette="purple">
+  <head><script src="/assets/init/bundle.min.17bb1d3aa57be1ea17bd5f48fa2a59b44cab5fd5291efdf44dad530987335a4a.js" integrity="sha256-F7sdOqV74eoXvV9I&#43;ipZtEyrX9UpHv30Ta1TCYczWko=" crossorigin="anonymous"></script>
+<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>linux thermal子系统简介 - kingdix10&#39;s site</title>
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_16x16_resize_box_3.png" sizes="16x16" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_32x32_resize_box_3.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_150x150_resize_box_3.png" sizes="150x150" type="image/png">
+    <link rel="apple-touch-icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_180x180_resize_box_3.png" sizes="180x180" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_192x192_resize_box_3.png" sizes="192x192" type="image/png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#6f42c1">
+<meta name="keywords" content="thermal子系统" />
+  <meta name="description" content="1. thermal简介 内核版本：linux-6.1 thermal子系统主要用来监测和调节CPU、GPU等芯片或设备的温度。三个主要结构体的关系" />
+    <meta name="robots" content="index, follow" /><meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://kingdix10.github.io/covers/camera_photographer_smoke_126548_300x168.jpg"/>
+
+<meta name="twitter:title" content="linux thermal子系统简介"/>
+<meta name="twitter:description" content="1. thermal简介 内核版本：linux-6.1 thermal子系统主要用来监测和调节CPU、GPU等芯片或设备的温度。三个主要结构体的关系"/>
+<meta property="og:title" content="linux thermal子系统简介" />
+<meta property="og:description" content="1. thermal简介 内核版本：linux-6.1 thermal子系统主要用来监测和调节CPU、GPU等芯片或设备的温度。三个主要结构体的关系" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/" /><meta property="og:image" content="https://kingdix10.github.io/covers/camera_photographer_smoke_126548_300x168.jpg" /><meta property="article:section" content="docs" />
+<meta property="article:published_time" content="2023-05-05T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-05-05T10:00:00+00:00" /><meta property="og:site_name" content="kingdix10&#39;s site" />
+
+<meta itemprop="name" content="linux thermal子系统简介">
+<meta itemprop="description" content="1. thermal简介 内核版本：linux-6.1 thermal子系统主要用来监测和调节CPU、GPU等芯片或设备的温度。三个主要结构体的关系"><meta itemprop="datePublished" content="2023-05-05T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2023-05-05T10:00:00+00:00" />
+<meta itemprop="wordCount" content="6295"><meta itemprop="image" content="https://kingdix10.github.io/covers/camera_photographer_smoke_126548_300x168.jpg">
+<meta itemprop="keywords" content="linux内核,内核驱动,linux-6.1," />
+  <meta property="og:image:alt" content="linux thermal子系统简介" />
+  <meta name="twitter:image:alt" content="linux thermal子系统简介" />
+  <link rel="manifest" href="/zh-cn/manifest.json">
+
+<link data-precache rel="stylesheet" href="/assets/main/bundle.min.03fda061e9fca038de4b9a0a9f07d0f48b8bb6231de98a9cf415bf6818d719cd.css" integrity="sha256-A/2gYen8oDjeS5oKnwfQ9IuLtiMd6Yqc9BW/aBjXGc0=" crossorigin="anonymous">
+
+    <link data-precache rel="stylesheet" href="/assets/viewer/bundle.min.8c1002839fa22c1350d6ae1eef6593120e108f973c41348be9b5065430566aaf.css" integrity="sha256-jBACg5&#43;iLBNQ1q4e72WTEg4Qj5c8QTSL6bUGVDBWaq8=" crossorigin="anonymous">
+
+
+</head>
+  <body><header class="mb-4 sticky-top">
+  
+<nav class="top-app-bar shadow navbar navbar-expand-xxl">
+  <div class="container">
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDocsNav"
+      aria-expanded="false" aria-label="Toggle docs navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+<a class="navbar-brand d-flex align-items-center flex-grow-1 flex-xxl-grow-0 justify-content-xxl-start justify-content-center ms-2 ms-xxl-0 mx-auto me-xxl-2"
+    href="https://kingdix10.github.io/zh-cn/">
+    <picture><img class="logo " alt="Logo" src="https://kingdix10.github.io/images/icon_yellow_transparent_72x72.png" loading="lazy" width="72" height="72" />
+</picture>
+kingdix10
+</a>
+
+    <div class="offcanvas-xxl offcanvas-end flex-grow-1" data-bs-scroll="true" tabindex="-1" id="navbarMenus" aria-labelledby="navbarMenusLabel">
+      <div class="offcanvas-header px-4 pb-0">
+        <div class="offcanvas-title h5" id="navbarMenusLabel">kingdix10</div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#navbarMenus" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body p-4 pt-0 p-xxl-0">
+        <hr class="d-xxl-none">
+        <ul class="navbar-nav flex-row flex-wrap align-items-center me-auto"><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn">
+<span class="menu-icon me-1"><i class="fas fa-home"></i></span>主页
+            </a>
+          </li><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn/news/">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-newspaper"></i></span>新闻
+            </a>
+          </li><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn/docs/">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-folder"></i></span>文档
+            </a>
+          </li>
+          <li class="nav-item col-12 col-xxl-auto dropdown px-0">
+            <a href="#"
+              class="nav-link dropdown-toggle"
+              id="navbarDropdownBlog" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-blog"></i></span>博客
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog" data-bs-popper="none">
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/archives/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-file-archive text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">归档</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/series/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-columns"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">专栏</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of series.</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/categories/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-folder text-success"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">分类</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of categories.</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/tags/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-tags"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">标签</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of tags.</p>
+                  </div></a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item col-12 col-xxl-auto dropdown px-0">
+            <a href="#"
+              class="nav-link dropdown-toggle"
+              id="navbarDropdownLinks" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-link"></i></span>链接
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownLinks" data-bs-popper="none">
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://github.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-github text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">GitHub</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">github.com/kingdix10</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://gitee.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-github text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">Gitee</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">gitee.com/kingdix10</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://www.zhihu.com/people/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-zhihu text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">Zhihu</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://www.cnblogs.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">博客园</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://blog.csdn.net/u014001096" target="_blank" rel="noopener noreferrer">
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">CSDN</p>
+                  </div></a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+            </ul>
+          </li>
+        </ul>
+        
+    <hr class="d-xxl-none">
+    <form class="search-bar ms-auto my-auto" action="/zh-cn/search/" novalidate>
+      <div class="input-group align-items-center">
+        <span class="btn btn-search disabled position-absolute left-0 border-0 px-1">
+          <i class="fas fa-fw fa-search fa-lg"></i>
+        </span>
+        <input
+          class="my-1 form-control border-white rounded-5 search-input bg-body"
+          name="q"
+          type="search"
+          placeholder="搜索"
+          aria-label="Search"
+          required>
+          <span class="search-shortcut position-absolute end-0 top-0 me-2">
+            <kbd class="text-dark bg-white opacity-75 rounded-3 shadow border border-primary py-1 fw-bold">/</kbd>
+          </span>
+      </div>
+    </form><hr class="d-xxl-none">
+        <ul class="navbar-nav flex-row flex-wrap align-items-center ms-md-auto">
+<li class="nav-item py-2 py-xxl-1 col-12 col-xxl-auto">
+
+
+<nav class="social-links nav justify-content-center flex-row">
+      <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="https://github.com/kingdix10" title="GitHub" rel="me">
+        <i class="fa-fw fab fa-github"
+          ></i>
+        <span class="ms-1 d-xxl-none">Github</span>
+      </a>
+      <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="https://www.zhihu.com/people/kingdix10" title="知乎" rel="me">
+        <i class="fa-fw fab fa-zhihu"
+          ></i>
+        <span class="ms-1 d-xxl-none">Zhihu</span>
+      </a>
+  <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="/zh-cn/index.xml" title="RSS" rel="me">
+    <i class="fas fa-fw fa-rss"></i>
+    <span class="ms-1 d-xxl-none">RSS</span>
+  </a>
+</nav>
+
+</li>
+<li class="nav-item py-2 py-xxl-1 col-12 col-xxl-auto">
+  <div class="vr d-none d-xxl-flex h-100 mx-xxl-2 text-white"></div>
+  <hr class="d-xxl-none my-2">
+</li>
+<li class="nav-item dropdown py-1 py-xxl-1 col-6 col-xxl-auto">
+    <a class="nav-link px-0 px-xxl-1" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-globe"></i>
+        <span class="d-xxl-none">语言</span>
+    </a>
+    <ul class="language-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+        <li>
+        <a class="dropdown-item active" href="/zh-cn/">
+            简体中文
+        </a>
+        </li>
+        <li>
+        <a class="dropdown-item" href="/en/">
+            English
+        </a>
+        </li></ul>
+</li>
+<li class="nav-item py-1 col-12 col-xxl-auto">
+  <div class="vr d-none d-xxl-flex h-100 mx-xxl-2 text-white"></div>
+  <hr class="d-xxl-none my-2">
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="fontSizeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-font"></i>
+        <span class="d-xxl-none">字体大小</span>
+    </a>
+    <ul class="font-size-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="fontSizeDropdown">
+        <li>
+            <button class="font-size-item dropdown-item" data-size="xs">
+                特小号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="sm">
+                小号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item active" data-size="md">
+                中等
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="lg">
+                大号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="xl">
+                特大号
+            </button>
+        </li>
+    </ul>
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="paletteDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-palette"></i>
+        <span class="d-xxl-none">配色</span>
+    </a>
+    <ul class="palette-dropdown-menu dropdown-menu dropdown-menu-end px-2 row g-2" aria-labelledby="paletteDropdown">
+            <li class="col-4 my-1">
+                <a role="button" id="palette-blue" aria-label="蓝色"
+                    class="btn btn-sm w-100 palette text-bg-blue" data-palette="blue">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-blue-gray" aria-label="蓝灰色"
+                    class="btn btn-sm w-100 palette text-bg-blue-gray" data-palette="blue-gray">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-brown" aria-label="棕色"
+                    class="btn btn-sm w-100 palette text-bg-brown" data-palette="brown">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-cyan" aria-label="青色"
+                    class="btn btn-sm w-100 palette text-bg-cyan" data-palette="cyan">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-green" aria-label="绿色"
+                    class="btn btn-sm w-100 palette text-bg-green" data-palette="green">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-indigo" aria-label="靛青色"
+                    class="btn btn-sm w-100 palette text-bg-indigo" data-palette="indigo">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-orange" aria-label="橙色"
+                    class="btn btn-sm w-100 palette text-bg-orange" data-palette="orange">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-pink" aria-label="粉色"
+                    class="btn btn-sm w-100 palette text-bg-pink" data-palette="pink">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-purple" aria-label="紫色"
+                    class="btn btn-sm w-100 palette text-bg-purple" data-palette="purple">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-red" aria-label="红色"
+                    class="btn btn-sm w-100 palette text-bg-red" data-palette="red">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-teal" aria-label="蓝绿色"
+                    class="btn btn-sm w-100 palette text-bg-teal" data-palette="teal">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-yellow" aria-label="黄色"
+                    class="btn btn-sm w-100 palette text-bg-yellow" data-palette="yellow">
+                </a>
+            </li>
+    </ul>
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="modeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="mode-icon fas fa-fw fa-adjust" id="modeIcon"></i>
+        <span class="d-xxl-none">模式</span>
+    </a>
+    <ul class="mode-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="modeDropdown">
+        <li class="mode-item" data-color-mode="light" data-icon="sun">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-sun"></i> 浅色
+            </button>
+        </li>
+        <li class="mode-item" data-color-mode="dark" data-icon="moon">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-moon"></i> 深色
+            </button>
+        </li>
+        <li class="mode-item active" data-color-mode="auto" data-icon="adjust">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-adjust"></i> 自动
+            </button>
+        </li>
+    </ul>
+</li>
+        </ul>
+      </div>
+    </div>
+    <div class="d-flex">
+      <button class="navbar-toggler order-5 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarMenus"
+        aria-controls="navbarMenus" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-ellipsis-h"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+</header>
+
+    <main class="container">
+      <div class="row content"><noscript>
+    <div class="alert alert-danger" role="alert">你的浏览器不支持 JavaScript。</div>
+</noscript>
+<aside class="docs-nav col-xxl-2" tabindex="-1" data-bs-hide="focusout">
+  <div class="offcanvas-xxl offcanvas-start" id="offcanvasDocsNav" aria-labelledby="offcanvasDocsNavLabel">
+    <div class="offcanvas-header border-bottom">
+      <div class="offcanvas-title h5" id="offcanvasDocsNavLabel">浏览文档</div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#offcanvasDocsNav"></button>
+    </div>
+    <div class="offcanvas-body pt-2 flex-column"><div class="mb-3" style="margin-left: -0.5rem;">
+</div>
+<ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3 text-primary">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/"><span class="docs-nav-title">Linux内核分析</span></a>
+            <a class="btn-toggle ms-1" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-8d43cfa49df325f277d6f4234a021467" aria-expanded="true" aria-controls="nav-8d43cfa49df325f277d6f4234a021467">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse  show border-primary" id="nav-8d43cfa49df325f277d6f4234a021467">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3 text-primary">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/"><span class="docs-nav-title">linux-6.1</span></a>
+            <a class="btn-toggle ms-1" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-8ea97fb7a0a0d68cedef1b63b4664daa" aria-expanded="true" aria-controls="nav-8ea97fb7a0a0d68cedef1b63b4664daa">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse  show border-primary" id="nav-8ea97fb7a0a0d68cedef1b63b4664daa">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/01-task_0/"><span class="docs-nav-title">Linux 0号线程swapper简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/02-task_1/"><span class="docs-nav-title">Linux 1号线程init简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/03-task_2/"><span class="docs-nav-title">Linux 2号线程kthreadd简介</span></a>
+        </li><li class="mb-2 py-1 ms-3 text-primary" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/"><span class="docs-nav-title">linux thermal子系统简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/other/linux-err-retur/"><span class="docs-nav-title">Linux的errno简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/fdt/dt_to_dt/"><span class="docs-nav-title">Linux内核驱动模型（二）设备树转换</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/device_driver/initcall/"><span class="docs-nav-title">Linux内核驱动模型（三）驱动初始化</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/device_driver/device_model/"><span class="docs-nav-title">Linux内核驱动模型（四）核心结构体</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/fdt/fdt_dt/"><span class="docs-nav-title">Linux内核驱动模型（一）设备树展开</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/02-timekeeping/"><span class="docs-nav-title">linux内核时间子系统（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/01-tim/"><span class="docs-nav-title">linux内核时间子系统（一）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/kobject/kobject/"><span class="docs-nav-title">Linux内核数据结构kobject/kset/ktype</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/boot/01-entry/"><span class="docs-nav-title">内核启动流程（一）</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/"><span class="docs-nav-title">linux-6.6</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c105b2ef486b2fc777c1f47c8c02d8c9" aria-expanded="false" aria-controls="nav-c105b2ef486b2fc777c1f47c8c02d8c9">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-c105b2ef486b2fc777c1f47c8c02d8c9">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/"><span class="docs-nav-title">【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/arm64_setup/"><span class="docs-nav-title">ARM64 Crash调试环境搭建</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/jump_label/"><span class="docs-nav-title">ARM64 jump label源码分析</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/"><span class="docs-nav-title">ARM64 Linux中断入口</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/help/"><span class="docs-nav-title">Crash帮助信息</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtabl/"><span class="docs-nav-title">Linux ARM64页面大小和虚拟地址位数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/drm/drm_/"><span class="docs-nav-title">Linux drm mm分析</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-a-fork/"><span class="docs-nav-title">Linux fork进程/线程简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/04-relationship/"><span class="docs-nav-title">Linux进程和线程关系</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/05-pid_namespa/"><span class="docs-nav-title">Linux进程命名空间（pid namespace）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/07-task_stat/"><span class="docs-nav-title">Linux进程状态与生命周期</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_2/"><span class="docs-nav-title">Linux内核copy_process分析（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_3/"><span class="docs-nav-title">Linux内核copy_process分析（三）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_1/"><span class="docs-nav-title">Linux内核copy_process分析（一）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_tabl/"><span class="docs-nav-title">Linux内核sched_class汇总</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/optimize_tips/"><span class="docs-nav-title">Linux内核代码的编写和优化技巧</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/boot/01-entry/"><span class="docs-nav-title">内核启动流程（一）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/03-irq_create_mapping/"><span class="docs-nav-title">设备中断注册</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/04-request_irq/"><span class="docs-nav-title">申请中断request_irq</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/05-handler_entry/"><span class="docs-nav-title">中断处理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/02-irq_domain_a/"><span class="docs-nav-title">中断子系统domain注册</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/01-init/"><span class="docs-nav-title">中断子系统软硬件初始化</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/"><span class="docs-nav-title">开发环境</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-fd57bc387b9c3a4d19f1801fc65cd5b4" aria-expanded="false" aria-controls="nav-fd57bc387b9c3a4d19f1801fc65cd5b4">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-fd57bc387b9c3a4d19f1801fc65cd5b4">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/eel_env/eel_readm/"><span class="docs-nav-title">嵌入式学习环境快速搭建（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/eel_env/env_setup/"><span class="docs-nav-title">嵌入式学习环境快速搭建（一）</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/"><span class="docs-nav-title">启动</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-05b799579ad52d4ccfa92fd6313b23f7" aria-expanded="false" aria-controls="nav-05b799579ad52d4ccfa92fd6313b23f7">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-05b799579ad52d4ccfa92fd6313b23f7">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/uboot_m/"><span class="docs-nav-title">U-Boot从dtb获取内存布局并传递到内核</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/crc32_fu/"><span class="docs-nav-title">U-Boot和Linux内核的CRC函数</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/"><span class="docs-nav-title">系统工具</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-eb1c5d775f73e30b3a27244e12a84f81" aria-expanded="false" aria-controls="nav-eb1c5d775f73e30b3a27244e12a84f81">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-eb1c5d775f73e30b3a27244e12a84f81">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/git/git_mis/"><span class="docs-nav-title">git配置和操作</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_tips/"><span class="docs-nav-title">Linux Bash技巧</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_decorat/"><span class="docs-nav-title">Linux Bash终端美化</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/resizefs/"><span class="docs-nav-title">磁盘和文件系统扩容/缩容</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/win_python3/"><span class="docs-nav-title">解决Windows不能使用python3.10的问题</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/"><span class="docs-nav-title">杂项</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-4967b62f3b1964eee9739b39b25cd3eb" aria-expanded="false" aria-controls="nav-4967b62f3b1964eee9739b39b25cd3eb">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-4967b62f3b1964eee9739b39b25cd3eb">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/01-c/array_fu/"><span class="docs-nav-title">多维数组作为函数参数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/01-c/array_typ/"><span class="docs-nav-title">数组a、&amp;a、&amp;a[0]、&amp;a[0][0]的区别与联系</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/"><span class="docs-nav-title">4412</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-0cca8bc16c798175efb847597812f8c0" aria-expanded="false" aria-controls="nav-0cca8bc16c798175efb847597812f8c0">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-0cca8bc16c798175efb847597812f8c0">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/exynos4412/"><span class="docs-nav-title">Exynos4412启动介绍</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/mkbl1/"><span class="docs-nav-title">Exynos4412自制BL1</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/mkbl2/"><span class="docs-nav-title">Exynos4412自制BL2</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul></div>
+  </div>
+</aside><div class="col-xxl-7 ms-auto">
+  <div class="container-fluid"><nav class="row card component" aria-label="breadcrumb">
+  <div class="card-body pb-0">
+    <ol class="hbs-breadcrumb breadcrumb flex-nowrap"><li class="breadcrumb-item text-surface"><a href="/zh-cn/">主页</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/">文档</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/04-kernel/">Linux内核分析</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/04-kernel/linux-6.1/">linux-6.1</a></li><li class="breadcrumb-item active">Linux Thermal子系统简介</li></ol>
+  </div>
+</nav><div class="post-panel-wrapper position-relative d-flex justify-content-center">
+  <div class="d-flex flex-row justify-content-center rounded-5 border post-panel position-fixed px-3 py-1 surface shadow-1">
+    
+    
+
+    
+    
+    
+<a class="action action-toc d-block d-xxl-none" href="#post-toc-container" role="button" title="目录">
+  <i class="fas fa-fw fa-list-alt"></i>
+</a>
+    <a class="action action-copyright" href="#post-copyright" role="button" aria-label="Copyright" title="版权">
+  <i class="fas fa-fw fa-copyright"></i>
+</a>
+    
+    
+<a id="sidebarToggler" class="action action-sidebar-toggler d-none d-xxl-block" role="button" title="切换侧边栏">
+  <i class="fas fa-fw fa-expand-alt" data-fa-transform="rotate-45"></i>
+</a>
+
+    
+  </div>
+</div><article class="row card component mb-4 post">
+<div class="card-header ">
+    <h1 class="card-title post-title my-2">Linux Thermal子系统简介</h1>
+</div>
+<div class="card-body"><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2023-05-05 08:00:00 &#43;0800 CST，更新于 2023-05-05 18:00:00 &#43;0800 CST。">2023/05/05</span><span class="post-reading-time me-1 mb-1">13 分钟阅读</span><a href="/zh-cn/categories/thermal%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>Thermal子系统</a><a href="/zh-cn/tags/linux-6.1/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux-6.1</a><a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux内核</a><a href="/zh-cn/tags/%E5%86%85%E6%A0%B8%E9%A9%B1%E5%8A%A8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">内核驱动</a>
+</div>
+<picture class="d-flex justify-content-center"><img class="post-featured-img h-auto w-auto mb-3" alt="linux thermal子系统简介" src="https://kingdix10.github.io/covers/camera_photographer_smoke_126548_300x168.jpg"/>
+    </picture>
+<div class="mt-2 mb-3 d-block d-xxl-none">
+    <h2 class="text-surface mb-3">目录</h2>
+    <div id="post-toc-container">
+        </div>
+    <hr class="text-secondary">
+</div><div class="post-content mb-3" data-bs-spy="scroll" data-bs-target="#TableOfContents" tabindex="0">
+        <div id="post-content-body">
+<h1 id="1-thermal简介" data-numberify>1. thermal简介<a class="anchor ms-1" href="#1-thermal简介"></a></h1>
+<p>内核版本：linux-6.1</p>
+<p>thermal子系统主要用来监测和调节CPU、GPU等芯片或设备的温度。三个主要结构体的关系：从thermal_zone_device获取温度后，根据governor指定的策略，来控制thermal_cooling_device进行温度调节。</p>
+<table>
+<thead>
+<tr>
+<th>结构体</th>
+<th>描述</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>struct thermal_zone_device</td>
+<td>对温度调节域的抽象，包含配置信息和传感器信息</td>
+<td>NTC、Temperature Sensor ADC(TSADC)</td>
+</tr>
+<tr>
+<td>struct thermal_cooling_device</td>
+<td>用于冷却的设备</td>
+<td>CPU、GPU、风扇</td>
+</tr>
+<tr>
+<td>struct thermal_governor</td>
+<td>温度调节策略</td>
+<td>power_allocator、user_space、step_wise、bang_bang、fair_share</td>
+</tr>
+</tbody>
+</table>
+<p>CPU和GPU可以通过调压调频来调节功耗，也可以作为cooling device。</p>
+<p><picture><img class="img-fluid " alt="thermal_zone_device" src="/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/thermal_zone_device.png" loading="lazy" width="2000" height="1393" />
+</picture>
+
+</p>
+
+<h1 id="2-thermal子系统初始化" data-numberify>2. thermal子系统初始化<a class="anchor ms-1" href="#2-thermal子系统初始化"></a></h1>
+<p>thermal_init实现的工作比较简单</p>
+<ol>
+<li>如果使能了CONFIG_THERMAL_NETLINK，就注册thermal_gnl_family。</li>
+<li>注册governor，并设置def_governor。</li>
+<li>注册thermal_class。</li>
+<li>注册thermal_pm_nb通知链。</li>
+</ol>
+<p><picture><img class="img-fluid " alt="thermal_init" src="/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/thermal_init.png" loading="lazy" width="975" height="640" />
+</picture>
+
+</p>
+
+<h2 id="21-thermal_governor注册" data-numberify>2.1. thermal_governor注册<a class="anchor ms-1" href="#21-thermal_governor注册"></a></h2>
+<p>governor由THERMAL_GOVERNOR_DECLARE静态声明。
+在thermal_init中，thermal_register_governors会注册thermal_governor，将governor添加到thermal_governor_list链表，并根据DEFAULT_THERMAL_GOVERNOR，设定def_governor。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="n">drivers</span><span class="o">/</span><span class="n">thermal</span><span class="o">/</span><span class="n">gov_bang_bang</span><span class="p">.</span><span class="n">c</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="mi">113</span><span class="o">:</span><span class="nf">THERMAL_GOVERNOR_DECLARE</span><span class="p">(</span><span class="n">thermal_gov_bang_bang</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="n">drivers</span><span class="o">/</span><span class="n">thermal</span><span class="o">/</span><span class="n">gov_fair_share</span><span class="p">.</span><span class="n">c</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="mi">122</span><span class="o">:</span><span class="nf">THERMAL_GOVERNOR_DECLARE</span><span class="p">(</span><span class="n">thermal_gov_fair_share</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="n">drivers</span><span class="o">/</span><span class="n">thermal</span><span class="o">/</span><span class="n">gov_power_allocator</span><span class="p">.</span><span class="n">c</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="mi">744</span><span class="o">:</span><span class="nf">THERMAL_GOVERNOR_DECLARE</span><span class="p">(</span><span class="n">thermal_gov_power_allocator</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="n">drivers</span><span class="o">/</span><span class="n">thermal</span><span class="o">/</span><span class="n">gov_step_wise</span><span class="p">.</span><span class="n">c</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="mi">177</span><span class="o">:</span><span class="nf">THERMAL_GOVERNOR_DECLARE</span><span class="p">(</span><span class="n">thermal_gov_step_wise</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="n">drivers</span><span class="o">/</span><span class="n">thermal</span><span class="o">/</span><span class="n">gov_user_space</span><span class="p">.</span><span class="n">c</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="mi">56</span><span class="o">:</span><span class="nf">THERMAL_GOVERNOR_DECLARE</span><span class="p">(</span><span class="n">thermal_gov_user_space</span><span class="p">);</span>
+</span></span></code></pre></div><p>thermal_register_governor在注册一个新的governor时，还会遍历thermal_tz_list链表，尝试绑定thermal zone。但是thermal_init的调用时机比较早，通常来说thermal_tz_list链表是空的。</p>
+
+<h1 id="3-thermal_zone_device" data-numberify>3. thermal_zone_device<a class="anchor ms-1" href="#3-thermal_zone_device"></a></h1>
+<p>thermal_zone_device是对温度调节区域的一个抽象，这个区域可以是CPU，也可以是GPU或其他设备。thermal_zone_device会对应一个物理传感器或多个物理传感器，也可以对应传感器的一个通道或多个通道。
+thermal_zone_device包含一些配置信息，以及温度读取和调节的操作函数。thermal_zone_device配置信息记录在dtb中的 <code>thermal-zones</code>节点。</p>
+
+<h2 id="31-thermal_zone_device注册" data-numberify>3.1. thermal_zone_device注册<a class="anchor ms-1" href="#31-thermal_zone_device注册"></a></h2>
+<p>thermal_zone_device_register_with_trips是注册thermal_zone_device的核心函数。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cm"> * thermal_zone_device_register_with_trips() - register a new thermal zone device
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * @type:    the thermal zone device type
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> * @trips:    a pointer to an array of thermal trips
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> * @num_trips:    the number of trip points the thermal zone support
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> * @mask:    a bit string indicating the writeablility of trip points
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> * @devdata:    private device data
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> * @ops:    standard thermal zone device callbacks
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> * @tzp:    thermal zone platform parameters
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> * @passive_delay: number of milliseconds to wait between polls when
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cm"> *           performing passive cooling
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cm"> * @polling_delay: number of milliseconds to wait between polls when checking
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cm"> *           whether trip points have been crossed (0 for interrupt
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cm"> *           driven systems)
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cm"> * This interface function adds a new thermal zone device (sensor) to
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cm"> * /sys/class/thermal folder as thermal_zone[0-*]. It tries to bind all the
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="cm"> * thermal cooling devices registered at the same time.
+</span></span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="cm"> * thermal_zone_device_unregister() must be called when the device is no
+</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="cm"> * longer needed. The passive cooling depends on the .get_trend() return value.
+</span></span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="cm"> * Return: a pointer to the created struct thermal_zone_device or an
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="cm"> * in case of error, an ERR_PTR. Caller must check return value with
+</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="cm"> * IS_ERR*() helpers.
+</span></span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="cm"> */</span>
+</span></span></code></pre></div><p>thermal_zone_device_register_with_trips主要流程如下：</p>
+<ol>
+<li>
+<p>kzalloc申请结构体</p>
+</li>
+<li>
+<p>申请ida</p>
+</li>
+<li>
+<p>设置设备名</p>
+</li>
+<li>
+<p>变量赋值</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln">1</span><span class="cl">tz-&gt;ops = ops;
+</span></span><span class="line"><span class="ln">2</span><span class="cl">tz-&gt;tzp = tzp;
+</span></span><span class="line"><span class="ln">3</span><span class="cl">tz-&gt;device.class = &amp;thermal_class;
+</span></span><span class="line"><span class="ln">4</span><span class="cl">tz-&gt;devdata = devdata;
+</span></span><span class="line"><span class="ln">5</span><span class="cl">tz-&gt;trips = trips;
+</span></span><span class="line"><span class="ln">6</span><span class="cl">tz-&gt;num_trips = num_trips;
+</span></span></code></pre></div></li>
+<li>
+<p>指定默认的critical回调为thermal_zone_device_critical</p>
+</li>
+<li>
+<p>记录passive_delay和polling_delay</p>
+</li>
+<li>
+<p>thermal_zone_create_device_groups在sysfs创建目录和文件</p>
+</li>
+<li>
+<p>device_register注册设备</p>
+</li>
+<li>
+<p>查找governor并绑定</p>
+</li>
+<li>
+<p>判断是否需要在sysfs添加hwmon相关文件，如果需要，则调用thermal_add_hwmon_sysfs</p>
+</li>
+<li>
+<p>将设备添加到thermal_tz_list</p>
+</li>
+<li>
+<p>调用bind_bz遍历thermal_cdev_list，绑定匹配的cooling device</p>
+</li>
+<li>
+<p>初始化poll_queue为thermal_zone_device_check</p>
+</li>
+<li>
+<p>thermal_zone_device_init做一些变量初始化</p>
+</li>
+<li>
+<p>根据条件判断是否需要调用thermal_zone_device_update来进行温度调节</p>
+</li>
+<li>
+<p>thermal_notify_tz_create使用netlink通知用户态</p>
+</li>
+</ol>
+<p><picture><img class="img-fluid " alt="thermal_register" src="/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/thermal_register.png" loading="lazy" width="1690" height="864" />
+</picture>
+
+</p>
+
+<h2 id="32-thermal_of_zone_register" data-numberify>3.2. thermal_of_zone_register<a class="anchor ms-1" href="#32-thermal_of_zone_register"></a></h2>
+<p>在linux-6.0之前，thermal_init中会调用of_parse_thermal_zones来将dts中所有thermal_zone添加到列表。在probe sensor时，再调用thermal_zone_of_sensor_register来匹配zone下的thermal-sensor节点，并从列表中找到对应的zone。</p>
+<p>在6.0版本之后，则是各个sensor的设备驱动在probe时，调用devm_thermal_of_zone_register或thermal_of_zone_register来判断是否有使用该sensor的zone，再创建该温度域。比如：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl">    <span class="nl">tsadc</span><span class="p">:</span> <span class="n">tsadc</span><span class="err">@</span><span class="n">ff260000</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">        <span class="n">compatible</span> <span class="o">=</span> <span class="s">&#34;rockchip,rk3399-tsadc&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">        <span class="p">...</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">    <span class="p">...</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    <span class="nl">thermal_zones</span><span class="p">:</span> <span class="n">thermal</span><span class="o">-</span><span class="n">zones</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">        <span class="nl">cpu_thermal</span><span class="p">:</span> <span class="n">cpu</span><span class="o">-</span><span class="n">thermal</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">            <span class="n">polling</span><span class="o">-</span><span class="n">delay</span><span class="o">-</span><span class="n">passive</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">100</span><span class="o">&gt;</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">            <span class="n">polling</span><span class="o">-</span><span class="n">delay</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">1000</span><span class="o">&gt;</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">
+</span></span><span class="line"><span class="ln">11</span><span class="cl">            <span class="n">thermal</span><span class="o">-</span><span class="n">sensors</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">tsadc</span> <span class="mi">0</span><span class="o">&gt;</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">            <span class="p">...</span>
+</span></span></code></pre></div><p>thermal_of_zone_register需要传入sensor和ops参数，其主要流程如下：</p>
+<ol>
+<li>
+<p>复制ops为of_ops</p>
+</li>
+<li>
+<p>of_thermal_zone_find查找thermal-zones节点，遍历所有的zone，根据该zone下thermal-sensors节点，判断该zone是否使用了sensor，如果是，则返回该zone对应的device_node</p>
+</li>
+<li>
+<p>thermal_of_trips_init从zone中找到trips节点（包括temperature和hysteresis），填充到struct thermal_trip数组</p>
+</li>
+<li>
+<p>thermal_of_monitor_init解析polling-delay-passive和polling-delay</p>
+</li>
+<li>
+<p>thermal_of_parameters_init解析sustainable-power和coefficients节点，填充到struct thermal_zone_params</p>
+</li>
+<li>
+<p>填充默认回调</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="n">of_ops</span><span class="o">-&gt;</span><span class="n">get_trip_type</span> <span class="o">=</span> <span class="n">of_ops</span><span class="o">-&gt;</span><span class="n">get_trip_type</span> <span class="o">?</span> <span class="o">:</span> <span class="n">of_thermal_get_trip_type</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="n">of_ops</span><span class="o">-&gt;</span><span class="n">get_trip_temp</span> <span class="o">=</span> <span class="n">of_ops</span><span class="o">-&gt;</span><span class="n">get_trip_temp</span> <span class="o">?</span> <span class="o">:</span> <span class="n">of_thermal_get_trip_temp</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="n">of_ops</span><span class="o">-&gt;</span><span class="n">get_trip_hyst</span> <span class="o">=</span> <span class="n">of_ops</span><span class="o">-&gt;</span><span class="n">get_trip_hyst</span> <span class="o">?</span> <span class="o">:</span> <span class="n">of_thermal_get_trip_hyst</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="n">of_ops</span><span class="o">-&gt;</span><span class="n">set_trip_hyst</span> <span class="o">=</span> <span class="n">of_ops</span><span class="o">-&gt;</span><span class="n">set_trip_hyst</span> <span class="o">?</span> <span class="o">:</span> <span class="n">of_thermal_set_trip_hyst</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="n">of_ops</span><span class="o">-&gt;</span><span class="n">get_crit_temp</span> <span class="o">=</span> <span class="n">of_ops</span><span class="o">-&gt;</span><span class="n">get_crit_temp</span> <span class="o">?</span> <span class="o">:</span> <span class="n">of_thermal_get_crit_temp</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="n">of_ops</span><span class="o">-&gt;</span><span class="n">bind</span> <span class="o">=</span> <span class="n">thermal_of_bind</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">7</span><span class="cl"><span class="n">of_ops</span><span class="o">-&gt;</span><span class="n">unbind</span> <span class="o">=</span> <span class="n">thermal_of_unbind</span><span class="p">;</span>
+</span></span></code></pre></div></li>
+<li>
+<p>thermal_zone_device_register_with_trips</p>
+</li>
+<li>
+<p>thermal_zone_device_enable</p>
+</li>
+</ol>
+<p><picture><img class="img-fluid " alt="thermal_of_register" src="/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/thermal_of_register.png" loading="lazy" width="1299" height="647" />
+</picture>
+
+</p>
+
+<h2 id="33-thermal-sensor注册" data-numberify>3.3. thermal-sensor注册<a class="anchor ms-1" href="#33-thermal-sensor注册"></a></h2>
+<p><code>thermal_zone_device.devdata</code>记录了sensor相关的信息。通过各个设备的驱动中调用thermal_zone_of_sensor_register及其相关函数进行注册。</p>
+
+<h1 id="4-cooling-device-register" data-numberify>4. cooling device register<a class="anchor ms-1" href="#4-cooling-device-register"></a></h1>
+<p>核心函数是__thermal_cooling_device_register</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cm"> * __thermal_cooling_device_register() - register a new thermal cooling device
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * @np:        a pointer to a device tree node.
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> * @type:    the thermal cooling device type.
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> * @devdata:    device private data.
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> * @ops:        standard thermal cooling devices callbacks.
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> * This interface function adds a new thermal cooling device (fan/processor/...)
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> * to /sys/class/thermal/ folder as cooling_device[0-*]. It tries to bind itself
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> * to all the thermal zone devices registered at the same time.
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cm"> * It also gives the opportunity to link the cooling device to a device tree
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cm"> * node, so that it can be bound to a thermal zone created out of device tree.
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cm"> * Return: a pointer to the created struct thermal_cooling_device or an
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cm"> * ERR_PTR. Caller must check return value with IS_ERR*() helpers.
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cm"> */</span>
+</span></span></code></pre></div><p>主要流程</p>
+<ol>
+<li>从thermal_cdev_ida申请ida</li>
+<li>设置名字</li>
+<li>初始化变量</li>
+<li>thermal_cooling_device_setup_sysfs配置sysfs相关参数</li>
+<li>device_register注册设备</li>
+<li>添加cooling device到thermal_cdev_list</li>
+<li>bind_cdev遍历thermal_tz_list，查看是否有使用此cooling device的zone</li>
+<li>根据条件，判断是否需要针对匹配上的zone调用thermal_zone_device_update来进行温度调节</li>
+</ol>
+<p><picture><img class="img-fluid " alt="thermal_cooling_device_flow" src="/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/thermal_cooling_device_flow.png" loading="lazy" width="1516" height="785" />
+</picture>
+
+</p>
+
+<h1 id="5-tz和cdev的绑定" data-numberify>5. tz和cdev的绑定<a class="anchor ms-1" href="#5-tz和cdev的绑定"></a></h1>
+<p>thermal_zone_bind_cooling_device负责绑定thermal_zone_device和thermal_cooling_deivce，两者之间的绑定是通过thermal_instance来实现的。</p>
+<p>绑定部分的核心代码如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl">	<span class="nf">mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tz</span><span class="o">-&gt;</span><span class="n">lock</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">	<span class="nf">mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cdev</span><span class="o">-&gt;</span><span class="n">lock</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">	<span class="nf">list_for_each_entry</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tz</span><span class="o">-&gt;</span><span class="n">thermal_instances</span><span class="p">,</span> <span class="n">tz_node</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">		<span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">tz</span> <span class="o">==</span> <span class="n">tz</span> <span class="o">&amp;&amp;</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">trip</span> <span class="o">==</span> <span class="n">trip</span> <span class="o">&amp;&amp;</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">cdev</span> <span class="o">==</span> <span class="n">cdev</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">			<span class="n">result</span> <span class="o">=</span> <span class="o">-</span><span class="n">EEXIST</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">			<span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">result</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">		<span class="nf">list_add_tail</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">tz_node</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tz</span><span class="o">-&gt;</span><span class="n">thermal_instances</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">		<span class="nf">list_add_tail</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">cdev_node</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">cdev</span><span class="o">-&gt;</span><span class="n">thermal_instances</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">		<span class="nf">atomic_set</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tz</span><span class="o">-&gt;</span><span class="n">need_update</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">	<span class="nf">mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cdev</span><span class="o">-&gt;</span><span class="n">lock</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">	<span class="nf">mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tz</span><span class="o">-&gt;</span><span class="n">lock</span><span class="p">);</span>
+</span></span></code></pre></div><p><picture><img class="img-fluid " alt="tz_bind_cdev" src="/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/tz_bind_cdev.png" loading="lazy" width="458" height="495" />
+</picture>
+
+</p>
+
+<h1 id="6-温度调节" data-numberify>6. 温度调节<a class="anchor ms-1" href="#6-温度调节"></a></h1>
+
+<h2 id="61-温度调节的时机" data-numberify>6.1. 温度调节的时机<a class="anchor ms-1" href="#61-温度调节的时机"></a></h2>
+<p>在注册设备时，<code>thermal_zone_device_register_with_trips</code>中将 <code>tz-&gt;poll_queue</code>的工作函数设置为 <code>thermal_zone_device_check</code>。</p>
+<ol>
+<li>update_temperature调用sensor的get_temp函数读取温度，并保存到 <code>thermal_zone_device.temperature</code>，<code>thermal_zone_device.temperature</code>的值记录到 <code>thermal_zone_device.last_temperature</code>。</li>
+<li><code>__thermal_zone_set_trips</code>判断温度变换趋势，并更新当前的温度区间，用来决定使用那种温度调节策略</li>
+<li>遍历温度区间，调用handle_thermal_trip来做需要执行的动作，比如调节风扇、重启。</li>
+<li>monitor_thermal_zone根据当前温度区间，调用thermal_zone_device_set_polling来调节轮询时间；如果设备被disable，则不再执行轮询。轮询工作由system_freezable_power_efficient_wq来负责。</li>
+</ol>
+<p>如果sensor有中断信号给到CPU，当温度超过设置的阈值时，会上报中断，通常会在中断服务函数中调用thermal_zone_device_update，来达到温度实时调节的目的。
+<picture><img class="img-fluid " alt="thermal_poll" src="/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/thermal_poll.png" loading="lazy" width="1290" height="491" />
+</picture>
+
+</p>
+
+<h2 id="62-核心函数thermal_zone_device_update" data-numberify>6.2. 核心函数：thermal_zone_device_update<a class="anchor ms-1" href="#62-核心函数thermal_zone_device_update"></a></h2>
+<p><code>thermal_zone_device_update</code>是温度监测和调节的核心函数。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="kt">void</span> <span class="nf">thermal_zone_device_update</span><span class="p">(</span><span class="k">struct</span> <span class="n">thermal_zone_device</span> <span class="o">*</span><span class="n">tz</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">                <span class="k">enum</span> <span class="n">thermal_notify_event</span> <span class="n">event</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">    <span class="kt">int</span> <span class="n">count</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nf">atomic_read</span><span class="p">(</span><span class="o">&amp;</span><span class="n">in_suspend</span><span class="p">))</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">        <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nf">WARN_ONCE</span><span class="p">(</span><span class="o">!</span><span class="n">tz</span><span class="o">-&gt;</span><span class="n">ops</span><span class="o">-&gt;</span><span class="n">get_temp</span><span class="p">,</span> <span class="s">&#34;&#39;%s&#39; must not be called without &#34;</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">              <span class="s">&#34;&#39;get_temp&#39; ops set</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">__func__</span><span class="p">))</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">        <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">
+</span></span><span class="line"><span class="ln">13</span><span class="cl">    <span class="nf">mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tz</span><span class="o">-&gt;</span><span class="n">lock</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">
+</span></span><span class="line"><span class="ln">15</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nf">thermal_zone_device_is_enabled</span><span class="p">(</span><span class="n">tz</span><span class="p">))</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl">        <span class="k">goto</span> <span class="n">out</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">
+</span></span><span class="line"><span class="ln">18</span><span class="cl">    <span class="nf">update_temperature</span><span class="p">(</span><span class="n">tz</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">
+</span></span><span class="line"><span class="ln">20</span><span class="cl">    <span class="nf">__thermal_zone_set_trips</span><span class="p">(</span><span class="n">tz</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl">
+</span></span><span class="line"><span class="ln">22</span><span class="cl">    <span class="n">tz</span><span class="o">-&gt;</span><span class="n">notify_event</span> <span class="o">=</span> <span class="n">event</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl">
+</span></span><span class="line"><span class="ln">24</span><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="n">tz</span><span class="o">-&gt;</span><span class="n">num_trips</span><span class="p">;</span> <span class="n">count</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl">        <span class="nf">handle_thermal_trip</span><span class="p">(</span><span class="n">tz</span><span class="p">,</span> <span class="n">count</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">26</span><span class="cl">
+</span></span><span class="line"><span class="ln">27</span><span class="cl">    <span class="nf">monitor_thermal_zone</span><span class="p">(</span><span class="n">tz</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="nl">out</span><span class="p">:</span>
+</span></span><span class="line"><span class="ln">29</span><span class="cl">    <span class="nf">mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tz</span><span class="o">-&gt;</span><span class="n">lock</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div>
+<h3 id="621-handle_thermal_trip" data-numberify>6.2.1. handle_thermal_trip<a class="anchor ms-1" href="#621-handle_thermal_trip"></a></h3>
+<p>handle_thermal_trip主要工作是对 <code>thermal_zone_device.temperature</code>与各个阈值温度进行对比，并根据阈值温度的类型执行相应操作，最后调用monitor_thermal_zone来决定下一次执行 <code>tz-&gt;poll_queue</code>的时机。</p>
+<p>阈值温度的类型由 <code>enum thermal_trip_type</code>描述</p>
+<table>
+<thead>
+<tr>
+<th>thermal_trip_type</th>
+<th>温度调节策略</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>THERMAL_TRIP_ACTIVE, THERMAL_TRIP_PASSIVE</td>
+<td>由governor指定的策略来调节</td>
+</tr>
+<tr>
+<td>THERMAL_TRIP_HOT</td>
+<td>执行thermal_zone_device_ops的notify函数(可能为NULL)</td>
+</tr>
+<tr>
+<td>THERMAL_TRIP_CRITICAL</td>
+<td>执行poweroff_work指定的工作</td>
+</tr>
+</tbody>
+</table>
+<p>handle_thermal_trip主要流程如下：</p>
+<ol>
+<li>通过netlink通知温度变化趋势：<code>thermal_notify_tz_trip_up/down</code></li>
+<li>对于类型为CRITICAL或HOT，调用handle_critical_trips，否则调用handle_non_critical_trips</li>
+<li>handle_critical_trips会通过 <code>tz-&gt;ops-&gt;notify</code>发送通知，如果是CRITICAL，则会调用orderly_poweroff，执行poweroff_work指定的工作。</li>
+<li>调用thermal_governar的throttle函数，如果thermal_zone_device没有指定thermal_governor，则使用def_governor</li>
+</ol>
+<p>handle_thermal_trip及后续相关函数会用到thermal_zone_device_ops的一些函数，这些是在注册设备时指定的，如thermal_of_zone_register中指定的默认回调。除了OF系列函数外，还有ACPI等系列函数。</p>
+
+<h1 id="7-部分dts节点说明" data-numberify>7. 部分dts节点说明<a class="anchor ms-1" href="#7-部分dts节点说明"></a></h1>
+<p>主要的属性描述参考 <code>Documentation/devicetree/bindings/thermal/</code>下的几个文件。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln">1</span><span class="cl">thermal-cooling-devices.yaml
+</span></span><span class="line"><span class="ln">2</span><span class="cl">thermal-idle.yaml
+</span></span><span class="line"><span class="ln">3</span><span class="cl">thermal-sensor.yaml
+</span></span><span class="line"><span class="ln">4</span><span class="cl">thermal-zones.yaml
+</span></span></code></pre></div><ul>
+<li>thermal-zones：每个子节点对应一个温度调节域，也就是一个thermal_zone_device设备。</li>
+<li>thermal-sensors：温度传感器，可以指定多个。</li>
+<li>polling-delay：温度未超过阈值时的轮询时间，单位ms，为0表示不做轮询</li>
+<li>polling-delay-passive：温度超过阈值时的轮询时间，单位ms，为0表示不做轮询</li>
+<li>trip：指向触发温度调节对应的温度阈值trip节点</li>
+<li>cooling-device：包含cooling_device、最小和最大冷却状态的列表</li>
+<li>temperature：阈值温度，单位千分之一摄氏度</li>
+<li>hysteresis：滞后温度，表示当下降到temperature – hysteresis度时解除温度调节，防止解除温度调节后温度回升导致频繁启动温度调节</li>
+<li>type：阈值类型：active/passive/hot/critical，与enum thermal_trip_type对应</li>
+<li>coefficients：线性方程系数的数组，该线性方程将该thermal-zone中列出的所有传感器绑定在一起</li>
+<li>sustainable-power：该thermal-zone在所需控制温度下可耗散的可持续功率（热量）的估计值，单位mW</li>
+<li>contribution：cooling_device在thermal-zone的权重</li>
+</ul>
+
+<h1 id="8-sysfs下的文件" data-numberify>8. sysfs下的文件<a class="anchor ms-1" href="#8-sysfs下的文件"></a></h1>
+<p>thermal相关文件路径位于 <code>/sys/devices/virtual/thermal/</code>，<code>/sys/class/thermal/</code>的也会有这些文件的链接。</p>
+
+<h2 id="81-thermal_zonex目录" data-numberify>8.1. thermal_zoneX目录<a class="anchor ms-1" href="#81-thermal_zonex目录"></a></h2>
+<p>包含了 <code>struct thermal_zone_params</code>的参数</p>
+<table>
+<thead>
+<tr>
+<th>file</th>
+<th style="text-align:center">perm</th>
+<th>desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>available_policies</td>
+<td style="text-align:center">r</td>
+<td>可选的温度调节策略</td>
+</tr>
+<tr>
+<td>emul_temp</td>
+<td style="text-align:center">w</td>
+<td>模拟设置thermal的温度，单位毫摄氏度，设置后和实际达到这个温度同效果。值为0时读取的是真正的温度</td>
+</tr>
+<tr>
+<td>integral_cutoff</td>
+<td style="text-align:center">rw</td>
+<td>用于power_alloctor策略，误差不再累积的阈值</td>
+</tr>
+<tr>
+<td>k_d</td>
+<td style="text-align:center">rw</td>
+<td>用于power_alloctor策略，PID控制器的微分参数</td>
+</tr>
+<tr>
+<td>k_i</td>
+<td style="text-align:center">rw</td>
+<td>用于power_alloctor策略，PID控制器的积分参数</td>
+</tr>
+<tr>
+<td>k_po</td>
+<td style="text-align:center">rw</td>
+<td>用于power_alloctor策略，超调时PID控制器的比例参数</td>
+</tr>
+<tr>
+<td>k_pu</td>
+<td style="text-align:center">rw</td>
+<td>用于power_alloctor策略，下冲时PID控制器的比例参数</td>
+</tr>
+<tr>
+<td>mode</td>
+<td style="text-align:center">rw</td>
+<td>此thermal-zone是否使能了，若是为disabled，对其sys文件的操作不生效，可以echo enabled使能</td>
+</tr>
+<tr>
+<td>offset</td>
+<td style="text-align:center">rw</td>
+<td>线性温度调节曲线的偏移，Used by thermal zone drivers (default 0)</td>
+</tr>
+<tr>
+<td>passive</td>
+<td style="text-align:center">rw</td>
+<td>用于step-wise，如果大于0，打开所有ACPI处理器冷却设备的温度</td>
+</tr>
+<tr>
+<td>policy</td>
+<td style="text-align:center">rw</td>
+<td>当前使用的governor，也可以通过写入来修改策略</td>
+</tr>
+<tr>
+<td>slope</td>
+<td style="text-align:center">rw</td>
+<td>线性温度调节曲线的斜率，Used by thermal zone drivers</td>
+</tr>
+<tr>
+<td>sustainable_power</td>
+<td style="text-align:center">rw</td>
+<td>该thermal-zone可耗散的可持续功率（热量），单位mW</td>
+</tr>
+<tr>
+<td>temp</td>
+<td style="text-align:center">r</td>
+<td>当前温度，向emul_temp中写的值也体现在这里</td>
+</tr>
+<tr>
+<td>trip_point_0_hyst</td>
+<td style="text-align:center">r</td>
+<td>滞后温度，来自设备树trips下的子节点0的hysteresis字段</td>
+</tr>
+<tr>
+<td>trip_point_0_temp</td>
+<td style="text-align:center">r</td>
+<td>触发温度，来自设备树trips下的子节点0的temperature字段</td>
+</tr>
+<tr>
+<td>trip_point_0_type</td>
+<td style="text-align:center">r</td>
+<td>触发温度类型，来自设备树trips下的子节点0的type字段</td>
+</tr>
+<tr>
+<td>trip_point_N_xxx</td>
+<td style="text-align:center">r</td>
+<td>来自设备树trips下的子节点N的字段</td>
+</tr>
+<tr>
+<td>type</td>
+<td style="text-align:center">r</td>
+<td>该thermal-zone的名称，对应于设备树thermal-zones下子节点的名字</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="82-cooling_devicex目录" data-numberify>8.2. cooling_deviceX目录<a class="anchor ms-1" href="#82-cooling_devicex目录"></a></h2>
+<table>
+<thead>
+<tr>
+<th>file</th>
+<th style="text-align:center">perm</th>
+<th>desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cur_state</td>
+<td style="text-align:center">rw</td>
+<td>当前的cooling state</td>
+</tr>
+<tr>
+<td>max_state</td>
+<td style="text-align:center">r</td>
+<td>最大的cooling state</td>
+</tr>
+<tr>
+<td>type</td>
+<td style="text-align:center">r</td>
+<td>cooling device的名称</td>
+</tr>
+<tr>
+<td>stats/reset</td>
+<td style="text-align:center">w</td>
+<td>对统计状态进行复位</td>
+</tr>
+<tr>
+<td>stats/time_in_state_ms</td>
+<td style="text-align:center">r</td>
+<td>在每个state下停留的时间</td>
+</tr>
+<tr>
+<td>stats/total_trans</td>
+<td style="text-align:center">r</td>
+<td>不同state之间转换的次数</td>
+</tr>
+<tr>
+<td>stats/trans_table</td>
+<td style="text-align:center">r</td>
+<td>记录各个state状态转换表</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div><div class="card-footer">
+  <div class="post-navs d-flex justify-content-evenly"><div class="post-nav post-prev">
+      <i class="fas fa-fw fa-chevron-down post-prev-icon me-1" data-fa-transform="rotate-90"></i>
+      <a href="/zh-cn/docs/04-kernel/linux-6.1/time/02-timekeeping/">Linux内核时间子系统（二）</a>
+    </div></div>
+</div></article><div class="post-copyright mb-3 row card component" id="post-copyright">
+    <div class="card-header">
+        <h2 class="card-title fs-4 my-2 text-surface">版权</h2>
+    </div>
+    <div class="card-body"><a class="d-flex align-items-center flex-column" target="_blank" rel="license noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh">
+  <span><i class="fab fa-fw fa-2x fa-creative-commons"></i><i class="fab fa-fw fa-2x fa-creative-commons-by"></i><i class="fab fa-fw fa-2x fa-creative-commons-nc"></i><i class="fab fa-fw fa-2x fa-creative-commons-nd"></i></span>
+  CC BY-NC-ND 4.0 
+</a>
+
+
+    </div>
+</div><section class="related-posts row card component">
+      <div class="card-header">
+        <h2 class="card-title fs-4 my-2 text-surface">
+          相关文章
+        </h2>
+      </div>
+      <div class="card-body slide px-1">
+        <div class="slide-inner row gx-0"><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="linux内核时间子系统（二）" src="https://kingdix10.github.io/covers/vintage_retro_camera_126517_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.1/time/02-timekeeping/">
+    Linux内核时间子系统（二）
+  </a>
+  <div class="post-meta mb-0">
+    2023/02/05
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="linux内核时间子系统（一）" src="https://kingdix10.github.io/covers/desert_sand_wavy_141026_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.1/time/01-tim/">
+    Linux内核时间子系统（一）
+  </a>
+  <div class="post-meta mb-0">
+    2023/02/02
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="Linux内核驱动模型（四）核心结构体" src="https://kingdix10.github.io/covers/cockpit_panel_display_169481_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.1/device_driver/device_model/">
+    Linux内核驱动模型（四）核心结构体
+  </a>
+  <div class="post-meta mb-0">
+    2022/08/15
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="Linux内核驱动模型（三）驱动初始化" src="https://kingdix10.github.io/covers/paint_canvas_stains_124156_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.1/device_driver/initcall/">
+    Linux内核驱动模型（三）驱动初始化
+  </a>
+  <div class="post-meta mb-0">
+    2022/08/12
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="Linux内核驱动模型（二）设备树转换" src="https://kingdix10.github.io/covers/background_texture_surface_50343_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.1/fdt/dt_to_dt/">
+    Linux内核驱动模型（二）设备树转换
+  </a>
+  <div class="post-meta mb-0">
+    2022/08/09
+
+  </div>
+</div>
+
+          </div></div>
+        <button class="slide-control-left">
+          <i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-90"></i>
+          <span class="visually-hidden">Left</span>
+        </button>
+        <button class="slide-control-right">
+          <i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-270"></i>
+          <span class="visually-hidden">Right</span>
+        </button>
+      </div>
+    </section></div>
+</div>
+<aside class="sidebar d-flex docs-sidebar col-xxl-3 position-sticky order-xxl-5">
+  <div class="container">
+    
+<div class="row component card">
+    <div class="card-body">
+        <form action="/zh-cn/search/">
+            <div class="input-group">
+                <input name="q" class="form-control rounded" placeholder="搜索">
+                <button class="btn btn-sm btn-search position-absolute end-0 border-0 border-start border-secondary p-2" type="submit">
+                    <i class="fas fa-fw fa-search text-primary"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    <div class="accordion post-toc d-none d-lg-block">
+  <div class="accordion-item row mb-4 card component" id="postTOC">
+    <div class="card-header accordion-header">
+      <h2 class="card-title fs-4 my-2 text-surface d-none d-lg-block">目录</h2>
+      <a class="accordion-button d-lg-none mb-1 collapsed shadow-none p-0 bg-transparent" role="button" data-bs-toggle="collapse" href="#post-toc" aria-expanded="false" aria-controls="post-toc">
+        目录
+      </a>
+    </div>
+    <div class="card-body collapse accordion-collapse accordion-body d-lg-block" id="post-toc">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-thermal简介">1. thermal简介</a></li>
+    <li><a href="#2-thermal子系统初始化">2. thermal子系统初始化</a>
+      <ul>
+        <li><a href="#21-thermal_governor注册">2.1. thermal_governor注册</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-thermal_zone_device">3. thermal_zone_device</a>
+      <ul>
+        <li><a href="#31-thermal_zone_device注册">3.1. thermal_zone_device注册</a></li>
+        <li><a href="#32-thermal_of_zone_register">3.2. thermal_of_zone_register</a></li>
+        <li><a href="#33-thermal-sensor注册">3.3. thermal-sensor注册</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-cooling-device-register">4. cooling device register</a></li>
+    <li><a href="#5-tz和cdev的绑定">5. tz和cdev的绑定</a></li>
+    <li><a href="#6-温度调节">6. 温度调节</a>
+      <ul>
+        <li><a href="#61-温度调节的时机">6.1. 温度调节的时机</a></li>
+        <li><a href="#62-核心函数thermal_zone_device_update">6.2. 核心函数：thermal_zone_device_update</a>
+          <ul>
+            <li><a href="#621-handle_thermal_trip">6.2.1. handle_thermal_trip</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#7-部分dts节点说明">7. 部分dts节点说明</a></li>
+    <li><a href="#8-sysfs下的文件">8. sysfs下的文件</a>
+      <ul>
+        <li><a href="#81-thermal_zonex目录">8.1. thermal_zoneX目录</a></li>
+        <li><a href="#82-cooling_devicex目录">8.2. cooling_deviceX目录</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+  </div>
+</div>
+    
+
+
+
+
+
+
+  </div>
+</aside>
+
+      </div>
+    </main><footer class="footer mt-auto py-3 text-center container"><div class="offcanvas offcanvas-bottom h-auto" tabindex="-1" id="offcanvasActionsPanel"
+  aria-labelledby="offcanvasActionsPanelLabel">
+  <div class="offcanvas-header">
+    <div class="offcanvas-title h5" id="offcanvasActionsPanelLabel">
+      <i class="fas fa-fw fa-th-large me-1"></i>
+      操作
+    </div>
+    <button type="button" class="btn-close ms-auto" data-bs-dismiss="offcanvas" data-bs-target="offcanvasActionsPanel" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body mt-2"><div class="actions d-flex overflow-auto align-items-center">
+      <a role="button" class="action action-go-back d-flex flex-column align-items-center me-3" href="javascript: window.history.back();">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-90"></i></span> 返回
+      </a>
+      <a role="button" class="action action-reload-page d-flex flex-column align-items-center me-3">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-redo-alt"></i></span> 刷新
+      </a>
+      <a role="button" class="action action-copy-url d-flex flex-column align-items-center me-3">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-link"></i></span> 复制链接
+      </a>
+    </div>
+  </div>
+</div><div class="row text-center text-lg-start">
+  <div class="col-12 mt-2 col-lg-3">
+    <p class="mb-2">kingdix10&#39;s site</p>
+    <p class="text-secondary mb-2"><small>kingdix10 @ 拾月国度</small></p><div class="copyright mb-2 text-secondary">
+  <small>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</small>
+</div>
+
+
+
+<nav class="social-links nav justify-content-center justify-content-between mb-2 mt-3">
+      <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="https://github.com/kingdix10" title="GitHub" rel="me">
+        <i class="fa-fw fab fa-github"
+          ></i>
+      </a>
+      <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="https://www.zhihu.com/people/kingdix10" title="知乎" rel="me">
+        <i class="fa-fw fab fa-zhihu"
+           style="color: #056de8;"></i>
+      </a>
+  <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="/zh-cn/index.xml" title="RSS" rel="me">
+    <i class="fas fa-fw fa-rss" style="color: #ea6221;"></i>
+  </a>
+</nav>
+</div>
+  <div class="col-12 col-lg-8 offset-0 offset-lg-1"><ul class="nav justify-content-between footer-memu mb-3 row"><li class="nav-item col-12 col-md-6 col-lg-3 px-0"><ul class="nav flex-column align-items-start">
+      <li class="nav-item w-100"><a class="nav-link fw-bold fs-lg" href="javascript: void(0);">链接</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+GitHub"
+  href="https://github.com/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-github text-primary"></i></span>GitHub</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+Gitee"
+  href="https://gitee.com/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-github text-primary"></i></span>Gitee</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+Zhihu"
+  href="https://www.zhihu.com/people/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-zhihu text-primary"></i></span>Zhihu</a></li></ul></li></ul></div>
+</div>
+</footer>
+<script data-precache src="/assets/main/bundle.min.01351680f89e0e34293b6918c75261e88f5ff72804497fa7dea58b4190d564e6.js" integrity="sha256-ATUWgPieDjQpO2kYx1Jh6I9f9ygESX&#43;n3qWLQZDVZOY=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
+<script data-precache src="/assets/viewer/bundle.min.ffafad0d121aa7d1fb443510086dac514a0b152826cf094f02a1f3dec1f37918.js" integrity="sha256-/6&#43;tDRIap9H7RDUQCG2sUUoLFSgmzwlPAqHz3sHzeRg=" crossorigin="anonymous" defer></script><script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?8e042c957455c462d9b4c9da3ab642b0";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<script src="/js/sw-register.js" defer></script>
+
+  </body>
+</html>

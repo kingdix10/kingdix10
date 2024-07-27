@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>u-boot on kingdix10&#39;s site</title>
+    <link>https://kingdix10.github.io/zh-cn/tags/u-boot/</link>
+    <description>Recent content in u-boot on kingdix10&#39;s site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</copyright>
+    <lastBuildDate>Fri, 10 Apr 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/u-boot/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>U-Boot和Linux内核的CRC函数</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/crc32_fu/</link>
+      <pubDate>Fri, 10 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/crc32_fu/</guid>
+      <description><![CDATA[测试的时候，发现内核驱动里用crc32_le计算出的值和u-boot里用crc32计算出的值不一样。 又用python的zlib.crc32和]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/squares_colorful_texture_133972_300x168.jpg" length="17371" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>U-Boot从dtb获取内存布局并传递到内核</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_m/</link>
+      <pubDate>Tue, 10 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_m/</guid>
+      <description><![CDATA[1. U-Boot获取布局内存 在DDR控制器初始化完成之后，就要确定系统中有多少可用内存，这通常是由dram_init_banksize来实现的]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/backlight_neon_electronics_144683_300x168.jpg" length="9613" type="image/.jpg" />
+    </item>
+    
+  </channel>
+</rss>
+

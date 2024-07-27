@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>杂项 on kingdix10&#39;s site</title>
+    <link>https://kingdix10.github.io/zh-cn/docs/99-jottings/</link>
+    <description>Recent content in 杂项 on kingdix10&#39;s site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</copyright>
+    <lastBuildDate>Tue, 02 Jun 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/docs/99-jottings/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>多维数组作为函数参数</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/99-jottings/01-c/array_fu/</link>
+      <pubDate>Tue, 02 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/99-jottings/01-c/array_fu/</guid>
+      <description><![CDATA[1. 方法一：传递数组 C语言对多维数组的存储是按照一维数组来处理的，数组的每个维度在内存中按顺序存储。所以将多维数组作为参数传递时，必须指定多维]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/cameras_photography_accessories_197110_300x168.jpg" length="15246" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>数组a、&amp;a、&amp;a[0]、&amp;a[0][0]的区别与联系</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/99-jottings/01-c/array_typ/</link>
+      <pubDate>Mon, 01 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/99-jottings/01-c/array_typ/</guid>
+      <description><![CDATA[1. 测试结果 分别声明一个一维数组a1[8]和二维数组a2[4][8]，查看各个表达式的类型、地址、与首地址的差值，以及内存地址内存储的int变]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/wall_brick_neon_150470_300x168.jpg" length="13857" type="image/.jpg" />
+    </item>
+    
+  </channel>
+</rss>
+

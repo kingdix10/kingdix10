@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>内核基础 on kingdix10&#39;s site</title>
+    <link>https://kingdix10.github.io/zh-cn/categories/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/</link>
+    <description>Recent content in 内核基础 on kingdix10&#39;s site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</copyright>
+    <lastBuildDate>Sun, 05 Apr 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Linux的errno简介</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/other/linux-err-retur/</link>
+      <pubDate>Sun, 05 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/other/linux-err-retur/</guid>
+      <description><![CDATA[1. Linux的errno和指针 常见的Linux函数返回值类型包括整型和指针，内核中这两种返回值类型的函数会互相调用。Linux的errno为]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/wavy_motley_metallic_139065_300x168.jpg" length="26579" type="image/.jpg" />
+    </item>
+    
+  </channel>
+</rss>
+

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>系统调用 on kingdix10&#39;s site</title>
+    <link>https://kingdix10.github.io/zh-cn/series/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/</link>
+    <description>Recent content in 系统调用 on kingdix10&#39;s site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</copyright>
+    <lastBuildDate>Sun, 21 Apr 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/series/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/</link>
+      <pubDate>Sun, 21 Apr 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/</guid>
+      <description><![CDATA[深度分析系统调用从用户程序到内核的流程]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/paint_canvas_stains_124156_300x168.jpg" length="18821" type="image/.jpg" />
+    </item>
+    
+  </channel>
+</rss>
+

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Linux on kingdix10&#39;s site</title>
+    <link>https://kingdix10.github.io/zh-cn/tags/linux/</link>
+    <description>Recent content in Linux on kingdix10&#39;s site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</copyright>
+    <lastBuildDate>Fri, 18 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Linux进程状态与生命周期</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/07-task_stat/</link>
+      <pubDate>Fri, 18 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/07-task_stat/</guid>
+      <description><![CDATA[1. 进程状态切换 state value desc TASK_NEW 0x00000800 新建 TASK_RUNNING 0x00000000 就绪或占有cpu运行 TASK_INTERRUPTIBLE 0x00000001 可中断睡眠 TASK_UNINTERRUPTIBLE 0x00000002 不可中断睡眠 TASK_WAKEKILL 0x00000100 可以在stopped/traced/killable的]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/walls_floor_light_50837_300x168.jpg" length="14340" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux内核copy_process分析（三）</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_3/</link>
+      <pubDate>Tue, 15 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_3/</guid>
+      <description><![CDATA[1. stackleak_task_init 需要编译器和体系结构支持，见CONFIG_GCC_PLUGIN_STACKLEAK，ARM64默认未使能。 如果使能，会设置lowest_]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/iridescent_colorful_lines_130978_300x168.jpg" length="11918" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux内核copy_process分析（二）</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_2/</link>
+      <pubDate>Mon, 14 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_2/</guid>
+      <description><![CDATA[1. shm_init_task 在使能SYSVIPC的情况下，初始化task-&gt;sysvshm.shm_clist。 1 /* copy all the process information */ 2 shm_init_task(p); 2. security_task_alloc 1 retval = security_task_alloc(p, clone_flags); /// Allocate a task&#39;s LSM blob]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_texture_127524_300x168.jpg" length="18901" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux内核copy_process分析（一）</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_1/</link>
+      <pubDate>Sun, 13 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_1/</guid>
+      <description><![CDATA[1. copy_process原型 1/// kernel/fork.c 2/* 3 * This creates a new process as a copy of the old one, 4 * but does not actually start it yet. 5 * 6 * It copies the registers, and all the appropriate 7 * parts of the process environment (as per the clone 8 * flags). The actual kick-off]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/gradient_blur_blending_130648_300x168.jpg" length="2927" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux进程命名空间（pid namespace）</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/05-pid_namespa/</link>
+      <pubDate>Fri, 11 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/05-pid_namespa/</guid>
+      <description><![CDATA[1. namespace简介 namespace是Linux提供的一种内核级别环境隔离的方法，很多编程语言也有namespace这样的功能，例如C]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lines_obliquely_stripes_123801_300x168.jpg" length="18016" type="image/.jpg" />
+    </item>
+    
+  </channel>
+</rss>
+

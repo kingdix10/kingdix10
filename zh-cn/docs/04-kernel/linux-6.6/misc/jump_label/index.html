@@ -1,0 +1,1450 @@
+<!doctype html>
+<html class="position-relative" itemscope itemtype="https://schema.org/WebPage" lang="zh-cn"
+  data-bs-theme="auto" data-palette="purple">
+  <head><script src="/assets/init/bundle.min.17bb1d3aa57be1ea17bd5f48fa2a59b44cab5fd5291efdf44dad530987335a4a.js" integrity="sha256-F7sdOqV74eoXvV9I&#43;ipZtEyrX9UpHv30Ta1TCYczWko=" crossorigin="anonymous"></script>
+<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ARM64 jump label源码分析 - kingdix10&#39;s site</title>
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_16x16_resize_box_3.png" sizes="16x16" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_32x32_resize_box_3.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_150x150_resize_box_3.png" sizes="150x150" type="image/png">
+    <link rel="apple-touch-icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_180x180_resize_box_3.png" sizes="180x180" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_192x192_resize_box_3.png" sizes="192x192" type="image/png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#6f42c1">
+<meta name="keywords" content="优化技巧" />
+  <meta name="description" content="1. 背景 引入jump label的背景，参考Linux: Jump label实现简析 在内核代码中，有很多分支判断条件，它们在绝大多数情形下，都是不成立的" />
+    <meta name="robots" content="index, follow" /><meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://kingdix10.github.io/covers/lines_intersection_oblique_153331_300x168.jpg"/>
+
+<meta name="twitter:title" content="ARM64 jump label源码分析"/>
+<meta name="twitter:description" content="1. 背景 引入jump label的背景，参考Linux: Jump label实现简析 在内核代码中，有很多分支判断条件，它们在绝大多数情形下，都是不成立的"/>
+<meta property="og:title" content="ARM64 jump label源码分析" />
+<meta property="og:description" content="1. 背景 引入jump label的背景，参考Linux: Jump label实现简析 在内核代码中，有很多分支判断条件，它们在绝大多数情形下，都是不成立的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/jump_label/" /><meta property="og:image" content="https://kingdix10.github.io/covers/lines_intersection_oblique_153331_300x168.jpg" /><meta property="article:section" content="docs" />
+<meta property="article:published_time" content="2024-05-24T00:00:00+00:00" />
+<meta property="article:modified_time" content="2024-05-24T00:00:00+00:00" /><meta property="og:site_name" content="kingdix10&#39;s site" />
+
+
+<meta itemprop="name" content="ARM64 jump label源码分析">
+<meta itemprop="description" content="1. 背景 引入jump label的背景，参考Linux: Jump label实现简析 在内核代码中，有很多分支判断条件，它们在绝大多数情形下，都是不成立的"><meta itemprop="datePublished" content="2024-05-24T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2024-05-24T00:00:00+00:00" />
+<meta itemprop="wordCount" content="5396"><meta itemprop="image" content="https://kingdix10.github.io/covers/lines_intersection_oblique_153331_300x168.jpg">
+<meta itemprop="keywords" content="linux内核,代码技巧," />
+  <meta property="og:image:alt" content="ARM64 jump label源码分析" />
+  <meta name="twitter:image:alt" content="ARM64 jump label源码分析" />
+  <link rel="manifest" href="/zh-cn/manifest.json">
+
+<link data-precache rel="stylesheet" href="/assets/main/bundle.min.03fda061e9fca038de4b9a0a9f07d0f48b8bb6231de98a9cf415bf6818d719cd.css" integrity="sha256-A/2gYen8oDjeS5oKnwfQ9IuLtiMd6Yqc9BW/aBjXGc0=" crossorigin="anonymous">
+
+    <link data-precache rel="stylesheet" href="/assets/viewer/bundle.min.8c1002839fa22c1350d6ae1eef6593120e108f973c41348be9b5065430566aaf.css" integrity="sha256-jBACg5&#43;iLBNQ1q4e72WTEg4Qj5c8QTSL6bUGVDBWaq8=" crossorigin="anonymous">
+
+
+</head>
+  <body><header class="mb-4 sticky-top">
+  
+<nav class="top-app-bar shadow navbar navbar-expand-xxl">
+  <div class="container">
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDocsNav"
+      aria-expanded="false" aria-label="Toggle docs navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+<a class="navbar-brand d-flex align-items-center flex-grow-1 flex-xxl-grow-0 justify-content-xxl-start justify-content-center ms-2 ms-xxl-0 mx-auto me-xxl-2"
+    href="https://kingdix10.github.io/zh-cn/">
+    <picture><img class="logo " alt="Logo" src="https://kingdix10.github.io/images/icon_yellow_transparent_72x72.png" loading="lazy" width="72" height="72" />
+</picture>
+kingdix10
+</a>
+
+    <div class="offcanvas-xxl offcanvas-end flex-grow-1" data-bs-scroll="true" tabindex="-1" id="navbarMenus" aria-labelledby="navbarMenusLabel">
+      <div class="offcanvas-header px-4 pb-0">
+        <div class="offcanvas-title h5" id="navbarMenusLabel">kingdix10</div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#navbarMenus" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body p-4 pt-0 p-xxl-0">
+        <hr class="d-xxl-none">
+        <ul class="navbar-nav flex-row flex-wrap align-items-center me-auto"><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn">
+<span class="menu-icon me-1"><i class="fas fa-home"></i></span>主页
+            </a>
+          </li><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn/news/">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-newspaper"></i></span>新闻
+            </a>
+          </li><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn/docs/">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-folder"></i></span>文档
+            </a>
+          </li>
+          <li class="nav-item col-12 col-xxl-auto dropdown px-0">
+            <a href="#"
+              class="nav-link dropdown-toggle"
+              id="navbarDropdownBlog" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-blog"></i></span>博客
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog" data-bs-popper="none">
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/archives/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-file-archive text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">归档</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/series/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-columns"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">专栏</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of series.</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/categories/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-folder text-success"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">分类</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of categories.</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/tags/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-tags"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">标签</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of tags.</p>
+                  </div></a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item col-12 col-xxl-auto dropdown px-0">
+            <a href="#"
+              class="nav-link dropdown-toggle"
+              id="navbarDropdownLinks" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-link"></i></span>链接
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownLinks" data-bs-popper="none">
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://github.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-github text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">GitHub</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">github.com/kingdix10</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://gitee.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-github text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">Gitee</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">gitee.com/kingdix10</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://www.zhihu.com/people/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-zhihu text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">Zhihu</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://www.cnblogs.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">博客园</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://blog.csdn.net/u014001096" target="_blank" rel="noopener noreferrer">
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">CSDN</p>
+                  </div></a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+            </ul>
+          </li>
+        </ul>
+        
+    <hr class="d-xxl-none">
+    <form class="search-bar ms-auto my-auto" action="/zh-cn/search/" novalidate>
+      <div class="input-group align-items-center">
+        <span class="btn btn-search disabled position-absolute left-0 border-0 px-1">
+          <i class="fas fa-fw fa-search fa-lg"></i>
+        </span>
+        <input
+          class="my-1 form-control border-white rounded-5 search-input bg-body"
+          name="q"
+          type="search"
+          placeholder="搜索"
+          aria-label="Search"
+          required>
+          <span class="search-shortcut position-absolute end-0 top-0 me-2">
+            <kbd class="text-dark bg-white opacity-75 rounded-3 shadow border border-primary py-1 fw-bold">/</kbd>
+          </span>
+      </div>
+    </form><hr class="d-xxl-none">
+        <ul class="navbar-nav flex-row flex-wrap align-items-center ms-md-auto">
+<li class="nav-item py-2 py-xxl-1 col-12 col-xxl-auto">
+
+
+<nav class="social-links nav justify-content-center flex-row">
+      <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="https://github.com/kingdix10" title="GitHub" rel="me">
+        <i class="fa-fw fab fa-github"
+          ></i>
+        <span class="ms-1 d-xxl-none">Github</span>
+      </a>
+      <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="https://www.zhihu.com/people/kingdix10" title="知乎" rel="me">
+        <i class="fa-fw fab fa-zhihu"
+          ></i>
+        <span class="ms-1 d-xxl-none">Zhihu</span>
+      </a>
+  <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="/zh-cn/index.xml" title="RSS" rel="me">
+    <i class="fas fa-fw fa-rss"></i>
+    <span class="ms-1 d-xxl-none">RSS</span>
+  </a>
+</nav>
+
+</li>
+<li class="nav-item py-2 py-xxl-1 col-12 col-xxl-auto">
+  <div class="vr d-none d-xxl-flex h-100 mx-xxl-2 text-white"></div>
+  <hr class="d-xxl-none my-2">
+</li>
+<li class="nav-item dropdown py-1 py-xxl-1 col-6 col-xxl-auto">
+    <a class="nav-link px-0 px-xxl-1" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-globe"></i>
+        <span class="d-xxl-none">语言</span>
+    </a>
+    <ul class="language-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+        <li>
+        <a class="dropdown-item active" href="/zh-cn/">
+            简体中文
+        </a>
+        </li>
+        <li>
+        <a class="dropdown-item" href="/en/">
+            English
+        </a>
+        </li></ul>
+</li>
+<li class="nav-item py-1 col-12 col-xxl-auto">
+  <div class="vr d-none d-xxl-flex h-100 mx-xxl-2 text-white"></div>
+  <hr class="d-xxl-none my-2">
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="fontSizeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-font"></i>
+        <span class="d-xxl-none">字体大小</span>
+    </a>
+    <ul class="font-size-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="fontSizeDropdown">
+        <li>
+            <button class="font-size-item dropdown-item" data-size="xs">
+                特小号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="sm">
+                小号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item active" data-size="md">
+                中等
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="lg">
+                大号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="xl">
+                特大号
+            </button>
+        </li>
+    </ul>
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="paletteDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-palette"></i>
+        <span class="d-xxl-none">配色</span>
+    </a>
+    <ul class="palette-dropdown-menu dropdown-menu dropdown-menu-end px-2 row g-2" aria-labelledby="paletteDropdown">
+            <li class="col-4 my-1">
+                <a role="button" id="palette-blue" aria-label="蓝色"
+                    class="btn btn-sm w-100 palette text-bg-blue" data-palette="blue">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-blue-gray" aria-label="蓝灰色"
+                    class="btn btn-sm w-100 palette text-bg-blue-gray" data-palette="blue-gray">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-brown" aria-label="棕色"
+                    class="btn btn-sm w-100 palette text-bg-brown" data-palette="brown">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-cyan" aria-label="青色"
+                    class="btn btn-sm w-100 palette text-bg-cyan" data-palette="cyan">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-green" aria-label="绿色"
+                    class="btn btn-sm w-100 palette text-bg-green" data-palette="green">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-indigo" aria-label="靛青色"
+                    class="btn btn-sm w-100 palette text-bg-indigo" data-palette="indigo">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-orange" aria-label="橙色"
+                    class="btn btn-sm w-100 palette text-bg-orange" data-palette="orange">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-pink" aria-label="粉色"
+                    class="btn btn-sm w-100 palette text-bg-pink" data-palette="pink">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-purple" aria-label="紫色"
+                    class="btn btn-sm w-100 palette text-bg-purple" data-palette="purple">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-red" aria-label="红色"
+                    class="btn btn-sm w-100 palette text-bg-red" data-palette="red">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-teal" aria-label="蓝绿色"
+                    class="btn btn-sm w-100 palette text-bg-teal" data-palette="teal">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-yellow" aria-label="黄色"
+                    class="btn btn-sm w-100 palette text-bg-yellow" data-palette="yellow">
+                </a>
+            </li>
+    </ul>
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="modeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="mode-icon fas fa-fw fa-adjust" id="modeIcon"></i>
+        <span class="d-xxl-none">模式</span>
+    </a>
+    <ul class="mode-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="modeDropdown">
+        <li class="mode-item" data-color-mode="light" data-icon="sun">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-sun"></i> 浅色
+            </button>
+        </li>
+        <li class="mode-item" data-color-mode="dark" data-icon="moon">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-moon"></i> 深色
+            </button>
+        </li>
+        <li class="mode-item active" data-color-mode="auto" data-icon="adjust">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-adjust"></i> 自动
+            </button>
+        </li>
+    </ul>
+</li>
+        </ul>
+      </div>
+    </div>
+    <div class="d-flex">
+      <button class="navbar-toggler order-5 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarMenus"
+        aria-controls="navbarMenus" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-ellipsis-h"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+</header>
+
+    <main class="container">
+      <div class="row content"><noscript>
+    <div class="alert alert-danger" role="alert">你的浏览器不支持 JavaScript。</div>
+</noscript>
+<aside class="docs-nav col-xxl-2" tabindex="-1" data-bs-hide="focusout">
+  <div class="offcanvas-xxl offcanvas-start" id="offcanvasDocsNav" aria-labelledby="offcanvasDocsNavLabel">
+    <div class="offcanvas-header border-bottom">
+      <div class="offcanvas-title h5" id="offcanvasDocsNavLabel">浏览文档</div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#offcanvasDocsNav"></button>
+    </div>
+    <div class="offcanvas-body pt-2 flex-column"><div class="mb-3" style="margin-left: -0.5rem;">
+</div>
+<ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3 text-primary">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/"><span class="docs-nav-title">Linux内核分析</span></a>
+            <a class="btn-toggle ms-1" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-8d43cfa49df325f277d6f4234a021467" aria-expanded="true" aria-controls="nav-8d43cfa49df325f277d6f4234a021467">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse  show border-primary" id="nav-8d43cfa49df325f277d6f4234a021467">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/"><span class="docs-nav-title">linux-6.1</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-8ea97fb7a0a0d68cedef1b63b4664daa" aria-expanded="false" aria-controls="nav-8ea97fb7a0a0d68cedef1b63b4664daa">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-8ea97fb7a0a0d68cedef1b63b4664daa">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/01-task_0/"><span class="docs-nav-title">Linux 0号线程swapper简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/02-task_1/"><span class="docs-nav-title">Linux 1号线程init简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/03-task_2/"><span class="docs-nav-title">Linux 2号线程kthreadd简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/"><span class="docs-nav-title">linux thermal子系统简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/other/linux-err-retur/"><span class="docs-nav-title">Linux的errno简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/fdt/dt_to_dt/"><span class="docs-nav-title">Linux内核驱动模型（二）设备树转换</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/device_driver/initcall/"><span class="docs-nav-title">Linux内核驱动模型（三）驱动初始化</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/device_driver/device_model/"><span class="docs-nav-title">Linux内核驱动模型（四）核心结构体</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/fdt/fdt_dt/"><span class="docs-nav-title">Linux内核驱动模型（一）设备树展开</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/02-timekeeping/"><span class="docs-nav-title">linux内核时间子系统（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/01-tim/"><span class="docs-nav-title">linux内核时间子系统（一）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/kobject/kobject/"><span class="docs-nav-title">Linux内核数据结构kobject/kset/ktype</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/boot/01-entry/"><span class="docs-nav-title">内核启动流程（一）</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3 text-primary">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/"><span class="docs-nav-title">linux-6.6</span></a>
+            <a class="btn-toggle ms-1" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c105b2ef486b2fc777c1f47c8c02d8c9" aria-expanded="true" aria-controls="nav-c105b2ef486b2fc777c1f47c8c02d8c9">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse  show border-primary" id="nav-c105b2ef486b2fc777c1f47c8c02d8c9">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/"><span class="docs-nav-title">【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/arm64_setup/"><span class="docs-nav-title">ARM64 Crash调试环境搭建</span></a>
+        </li><li class="mb-2 py-1 ms-3 text-primary" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/jump_label/"><span class="docs-nav-title">ARM64 jump label源码分析</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/"><span class="docs-nav-title">ARM64 Linux中断入口</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/help/"><span class="docs-nav-title">Crash帮助信息</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtabl/"><span class="docs-nav-title">Linux ARM64页面大小和虚拟地址位数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/drm/drm_/"><span class="docs-nav-title">Linux drm mm分析</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-a-fork/"><span class="docs-nav-title">Linux fork进程/线程简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/04-relationship/"><span class="docs-nav-title">Linux进程和线程关系</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/05-pid_namespa/"><span class="docs-nav-title">Linux进程命名空间（pid namespace）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/07-task_stat/"><span class="docs-nav-title">Linux进程状态与生命周期</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_2/"><span class="docs-nav-title">Linux内核copy_process分析（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_3/"><span class="docs-nav-title">Linux内核copy_process分析（三）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_1/"><span class="docs-nav-title">Linux内核copy_process分析（一）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_tabl/"><span class="docs-nav-title">Linux内核sched_class汇总</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/optimize_tips/"><span class="docs-nav-title">Linux内核代码的编写和优化技巧</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/boot/01-entry/"><span class="docs-nav-title">内核启动流程（一）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/03-irq_create_mapping/"><span class="docs-nav-title">设备中断注册</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/04-request_irq/"><span class="docs-nav-title">申请中断request_irq</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/05-handler_entry/"><span class="docs-nav-title">中断处理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/02-irq_domain_a/"><span class="docs-nav-title">中断子系统domain注册</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/01-init/"><span class="docs-nav-title">中断子系统软硬件初始化</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/"><span class="docs-nav-title">开发环境</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-fd57bc387b9c3a4d19f1801fc65cd5b4" aria-expanded="false" aria-controls="nav-fd57bc387b9c3a4d19f1801fc65cd5b4">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-fd57bc387b9c3a4d19f1801fc65cd5b4">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/eel_env/eel_readm/"><span class="docs-nav-title">嵌入式学习环境快速搭建（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/eel_env/env_setup/"><span class="docs-nav-title">嵌入式学习环境快速搭建（一）</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/"><span class="docs-nav-title">启动</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-05b799579ad52d4ccfa92fd6313b23f7" aria-expanded="false" aria-controls="nav-05b799579ad52d4ccfa92fd6313b23f7">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-05b799579ad52d4ccfa92fd6313b23f7">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/uboot_m/"><span class="docs-nav-title">U-Boot从dtb获取内存布局并传递到内核</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/crc32_fu/"><span class="docs-nav-title">U-Boot和Linux内核的CRC函数</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/"><span class="docs-nav-title">系统工具</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-eb1c5d775f73e30b3a27244e12a84f81" aria-expanded="false" aria-controls="nav-eb1c5d775f73e30b3a27244e12a84f81">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-eb1c5d775f73e30b3a27244e12a84f81">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/git/git_mis/"><span class="docs-nav-title">git配置和操作</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_tips/"><span class="docs-nav-title">Linux Bash技巧</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_decorat/"><span class="docs-nav-title">Linux Bash终端美化</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/resizefs/"><span class="docs-nav-title">磁盘和文件系统扩容/缩容</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/win_python3/"><span class="docs-nav-title">解决Windows不能使用python3.10的问题</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/"><span class="docs-nav-title">杂项</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-4967b62f3b1964eee9739b39b25cd3eb" aria-expanded="false" aria-controls="nav-4967b62f3b1964eee9739b39b25cd3eb">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-4967b62f3b1964eee9739b39b25cd3eb">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/01-c/array_fu/"><span class="docs-nav-title">多维数组作为函数参数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/01-c/array_typ/"><span class="docs-nav-title">数组a、&amp;a、&amp;a[0]、&amp;a[0][0]的区别与联系</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/"><span class="docs-nav-title">4412</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-0cca8bc16c798175efb847597812f8c0" aria-expanded="false" aria-controls="nav-0cca8bc16c798175efb847597812f8c0">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-0cca8bc16c798175efb847597812f8c0">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/exynos4412/"><span class="docs-nav-title">Exynos4412启动介绍</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/mkbl1/"><span class="docs-nav-title">Exynos4412自制BL1</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/mkbl2/"><span class="docs-nav-title">Exynos4412自制BL2</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul></div>
+  </div>
+</aside><div class="col-xxl-7 ms-auto">
+  <div class="container-fluid"><nav class="row card component" aria-label="breadcrumb">
+  <div class="card-body pb-0">
+    <ol class="hbs-breadcrumb breadcrumb flex-nowrap"><li class="breadcrumb-item text-surface"><a href="/zh-cn/">主页</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/">文档</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/04-kernel/">Linux内核分析</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/04-kernel/linux-6.6/">linux-6.6</a></li><li class="breadcrumb-item active">ARM64 Jump Label源码分析</li></ol>
+  </div>
+</nav><div class="post-panel-wrapper position-relative d-flex justify-content-center">
+  <div class="d-flex flex-row justify-content-center rounded-5 border post-panel position-fixed px-3 py-1 surface shadow-1">
+    
+    
+
+    
+    
+    
+<a class="action action-toc d-block d-xxl-none" href="#post-toc-container" role="button" title="目录">
+  <i class="fas fa-fw fa-list-alt"></i>
+</a>
+    <a class="action action-copyright" href="#post-copyright" role="button" aria-label="Copyright" title="版权">
+  <i class="fas fa-fw fa-copyright"></i>
+</a>
+    
+    
+<a id="sidebarToggler" class="action action-sidebar-toggler d-none d-xxl-block" role="button" title="切换侧边栏">
+  <i class="fas fa-fw fa-expand-alt" data-fa-transform="rotate-45"></i>
+</a>
+
+    
+  </div>
+</div><article class="row card component mb-4 post">
+<div class="card-header ">
+    <h1 class="card-title post-title my-2">ARM64 Jump Label源码分析</h1>
+</div>
+<div class="card-body"><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2024-05-24 08:00:00 &#43;0800 CST。">2024/05/24</span><span class="post-reading-time me-1 mb-1">11 分钟阅读</span><a href="/zh-cn/categories/%E4%BB%A3%E7%A0%81%E6%8A%80%E5%B7%A7/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>代码技巧</a><a href="/zh-cn/series/%E4%BB%A3%E7%A0%81%E6%8A%80%E5%B7%A7/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
+      <i class="fas fa-fw fa-columns me-1"></i>代码技巧</a><a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux内核</a><a href="/zh-cn/tags/%E4%BB%A3%E7%A0%81%E6%8A%80%E5%B7%A7/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">代码技巧</a>
+</div>
+<picture class="d-flex justify-content-center"><img class="post-featured-img h-auto w-auto mb-3" alt="ARM64 jump label源码分析" src="https://kingdix10.github.io/covers/lines_intersection_oblique_153331_300x168.jpg"/>
+    </picture>
+<div class="mt-2 mb-3 d-block d-xxl-none">
+    <h2 class="text-surface mb-3">目录</h2>
+    <div id="post-toc-container">
+        </div>
+    <hr class="text-secondary">
+</div><div class="post-content mb-3" data-bs-spy="scroll" data-bs-target="#TableOfContents" tabindex="0">
+        <div id="post-content-body">
+<h1 id="1-背景" data-numberify>1. 背景<a class="anchor ms-1" href="#1-背景"></a></h1>
+<p>引入jump label的背景，参考<a href="https://blog.csdn.net/JiMoKuangXiangQu/article/details/128239338" target="_blank" rel="noopener noreferrer">Linux: Jump label实现简析<i class="fas fa-external-link-square-alt ms-1"></i></a></p>
+<blockquote>
+<p>在内核代码中，有很多分支判断条件，它们在绝大多数情形下，都是不成立的。尽管我们已经加上unlikely修饰来进行优化，但是，读取 condition 仍然要访问内存，仍然需要用到cache；另外，也会CPU分支预测失败。虽然少数这样的代码影响不大，但当这样的条件判断代码（如内核中大量的tracepoint）增多的时候，将对cache会造成很大压力，所有这些代码导致的cache miss，以及CPU分支预测失败，所造成的性能损失，就变得可观起来。因此，内核需要一种方案，来解决这样的问题。这个解决方案，就是本文描述的 Jump label。</p>
+</blockquote>
+
+<h1 id="2-原理简介" data-numberify>2. 原理简介<a class="anchor ms-1" href="#2-原理简介"></a></h1>
+<p><code>struct jump_entry</code>的code记录要修改的地址，target记录需要跳转的地址。</p>
+<p>以<code>arch_static_branch</code>为例，code指向的地址默认为<code>nop</code>指令。当修改<code>struct static_key</code>的值时，从<code>entries</code>找到<code>struct jump_entry</code>，构造一条<code>b l_yes</code>指令，然后写入到code指向的地址。<code>arch_static_branch_jump</code>则正好相反，code指向的地址默认为<code>b l_yes</code>。</p>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.6/misc/jump_label/jump_label.png" loading="lazy" width="851" height="347" />
+</picture>
+
+</p>
+<table>
+<thead>
+<tr>
+<th>数据</th>
+<th>存储位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>struct static_key</td>
+<td>.bss</td>
+</tr>
+<tr>
+<td>struct jump_entry</td>
+<td>.rodata</td>
+</tr>
+<tr>
+<td>code</td>
+<td>.text</td>
+</tr>
+</tbody>
+</table>
+<p>静态分析时，只能通过反汇编得到<code>struct jump_entry</code>，然后得到<code>struct static_key</code>和代码的地址。如果只知道代码的地址或者<code>struct static_key</code>变量名，没有直接的办法来得到<code>struct jump_entry</code>的地址，只能通过遍历jump_table来找到对应的<code>struct jump_entry</code>。</p>
+<p>动态分析时，可以通过<code>struct static_key</code>，找到<code>struct jump_entry</code>。</p>
+
+<h1 id="3-struct-jump_entry" data-numberify>3. struct jump_entry<a class="anchor ms-1" href="#3-struct-jump_entry"></a></h1>
+<p>ARM64使能了CONFIG_HAVE_ARCH_JUMP_LABEL_RELATIVE，<code>struct jump_entry</code>中记录的是偏移量。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// include/linux/jump_label.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cp">#ifdef CONFIG_HAVE_ARCH_JUMP_LABEL_RELATIVE
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="k">struct</span> <span class="n">jump_entry</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">    <span class="n">s32</span> <span class="n">code</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    <span class="n">s32</span> <span class="n">target</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="kt">long</span> <span class="n">key</span><span class="p">;</span>	<span class="c1">// key may be far away from the core kernel under KASLR
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="c1"></span><span class="p">};</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="k">static</span> <span class="kr">inline</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="nf">jump_entry_code</span><span class="p">(</span><span class="k">const</span> <span class="k">struct</span> <span class="n">jump_entry</span> <span class="o">*</span><span class="n">entry</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="k">return</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="o">&amp;</span><span class="n">entry</span><span class="o">-&gt;</span><span class="n">code</span> <span class="o">+</span> <span class="n">entry</span><span class="o">-&gt;</span><span class="n">code</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">
+</span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="k">static</span> <span class="kr">inline</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="nf">jump_entry_target</span><span class="p">(</span><span class="k">const</span> <span class="k">struct</span> <span class="n">jump_entry</span> <span class="o">*</span><span class="n">entry</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">    <span class="k">return</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="o">&amp;</span><span class="n">entry</span><span class="o">-&gt;</span><span class="n">target</span> <span class="o">+</span> <span class="n">entry</span><span class="o">-&gt;</span><span class="n">target</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">
+</span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="k">static</span> <span class="kr">inline</span> <span class="k">struct</span> <span class="n">static_key</span> <span class="o">*</span><span class="nf">jump_entry_key</span><span class="p">(</span><span class="k">const</span> <span class="k">struct</span> <span class="n">jump_entry</span> <span class="o">*</span><span class="n">entry</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">    <span class="kt">long</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">entry</span><span class="o">-&gt;</span><span class="n">key</span> <span class="o">&amp;</span> <span class="o">~</span><span class="mi">3L</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl">
+</span></span><span class="line"><span class="ln">24</span><span class="cl">    <span class="k">return</span> <span class="p">(</span><span class="k">struct</span> <span class="n">static_key</span> <span class="o">*</span><span class="p">)((</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="o">&amp;</span><span class="n">entry</span><span class="o">-&gt;</span><span class="n">key</span> <span class="o">+</span> <span class="n">offset</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">26</span><span class="cl">
+</span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="cp">#else
+</span></span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="cp"></span><span class="c1">/// struct jump_entry在arch/$ARCH/include/asm/jump_label.h中定义
+</span></span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="kr">inline</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="nf">jump_entry_code</span><span class="p">(</span><span class="k">const</span> <span class="k">struct</span> <span class="n">jump_entry</span> <span class="o">*</span><span class="n">entry</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">31</span><span class="cl">    <span class="k">return</span> <span class="n">entry</span><span class="o">-&gt;</span><span class="n">code</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">33</span><span class="cl">
+</span></span><span class="line"><span class="ln">34</span><span class="cl"><span class="k">static</span> <span class="kr">inline</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="nf">jump_entry_target</span><span class="p">(</span><span class="k">const</span> <span class="k">struct</span> <span class="n">jump_entry</span> <span class="o">*</span><span class="n">entry</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">35</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">36</span><span class="cl">    <span class="k">return</span> <span class="n">entry</span><span class="o">-&gt;</span><span class="n">target</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">37</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">38</span><span class="cl">
+</span></span><span class="line"><span class="ln">39</span><span class="cl"><span class="k">static</span> <span class="kr">inline</span> <span class="k">struct</span> <span class="n">static_key</span> <span class="o">*</span><span class="nf">jump_entry_key</span><span class="p">(</span><span class="k">const</span> <span class="k">struct</span> <span class="n">jump_entry</span> <span class="o">*</span><span class="n">entry</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">40</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">41</span><span class="cl">    <span class="k">return</span> <span class="p">(</span><span class="k">struct</span> <span class="n">static_key</span> <span class="o">*</span><span class="p">)((</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="n">entry</span><span class="o">-&gt;</span><span class="n">key</span> <span class="o">&amp;</span> <span class="o">~</span><span class="mi">3UL</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">42</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">43</span><span class="cl">
+</span></span><span class="line"><span class="ln">44</span><span class="cl"><span class="cp">#endif
+</span></span></span></code></pre></div>
+<h1 id="4-arch_static_branch和arch_static_branch_jump" data-numberify>4. arch_static_branch和arch_static_branch_jump<a class="anchor ms-1" href="#4-arch_static_branch和arch_static_branch_jump"></a></h1>
+<p>默认情况下，<code>arch_static_branch</code>总是返回<code>false</code>，<code>arch_static_branch_jump</code>总是返回<code>true</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// arch/arm64/include/asm/jump_label.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="n">__always_inline</span> <span class="kt">bool</span> <span class="nf">arch_static_branch</span><span class="p">(</span><span class="k">struct</span> <span class="n">static_key</span> <span class="o">*</span> <span class="k">const</span> <span class="n">key</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">                           <span class="k">const</span> <span class="kt">bool</span> <span class="n">branch</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">    <span class="nf">asm_volatile_goto</span><span class="p">(</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">        <span class="c1">/// 声明标号1，对应指令为nop，编译时会优化，运行时直接执行后续代码
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="c1"></span>        <span class="s">&#34;1:     nop                                     </span><span class="se">\n\t</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">        <span class="c1">/// 链接时放到__jump_table段
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="c1"></span>        <span class="s">&#34;      .pushsection    __jump_table, </span><span class="se">\&#34;</span><span class="s">aw</span><span class="se">\&#34;</span><span class="s">    </span><span class="se">\n\t</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">        <span class="c1">/// struct jump_entry地址按8字节对齐，不同处理器架构可能不一样，但地址都是偶数
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="c1"></span>        <span class="s">&#34;      .align          3                       </span><span class="se">\n\t</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">        <span class="c1">/// jump_entry.code记录标号1和当前地址的差值，可能为负值
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="c1"></span>        <span class="c1">/// jump_entry.target记录当前地址和l_yes的差值，可能为负值
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="c1"></span>        <span class="s">&#34;      .long           1b - ., %l[l_yes] - .   </span><span class="se">\n\t</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">        <span class="c1">/// jump_entry.target记录struct static_key和当前地址的差值，低位记录branch
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="c1"></span>        <span class="c1">/// 运行时可以使用jump_entry_key获取struct static_key的地址
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="c1"></span>        <span class="s">&#34;      .quad           %c0 - .                 </span><span class="se">\n\t</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">        <span class="s">&#34;      .popsection                             </span><span class="se">\n\t</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">        <span class="o">:</span>  <span class="o">:</span>   <span class="s">&#34;i&#34;</span><span class="p">(</span><span class="o">&amp;</span><span class="p">((</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">key</span><span class="p">)[</span><span class="n">branch</span><span class="p">])</span> <span class="o">:</span>  <span class="o">:</span> <span class="n">l_yes</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">
+</span></span><span class="line"><span class="ln">21</span><span class="cl">    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="nl">l_yes</span><span class="p">:</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl">    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl">
+</span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="k">static</span> <span class="n">__always_inline</span> <span class="kt">bool</span> <span class="nf">arch_static_branch_jump</span><span class="p">(</span><span class="k">struct</span> <span class="n">static_key</span> <span class="o">*</span> <span class="k">const</span> <span class="n">key</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">27</span><span class="cl">                            <span class="k">const</span> <span class="kt">bool</span> <span class="n">branch</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">29</span><span class="cl">    <span class="nf">asm_volatile_goto</span><span class="p">(</span>
+</span></span><span class="line"><span class="ln">30</span><span class="cl">        <span class="c1">/// 编译时会优化，直接跳转到l_yes执行代码
+</span></span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="c1"></span>        <span class="s">&#34;1:     b               %l[l_yes]               </span><span class="se">\n\t</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl">        <span class="s">&#34;       .pushsection    __jump_table, </span><span class="se">\&#34;</span><span class="s">aw</span><span class="se">\&#34;</span><span class="s">    </span><span class="se">\n\t</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="ln">33</span><span class="cl">        <span class="s">&#34;       .align           3                      </span><span class="se">\n\t</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="ln">34</span><span class="cl">        <span class="s">&#34;       .long           1b - ., %l[l_yes] - .   </span><span class="se">\n\t</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="ln">35</span><span class="cl">        <span class="s">&#34;       .quad           %c0 - .                 </span><span class="se">\n\t</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="ln">36</span><span class="cl">        <span class="s">&#34;       .popsection                             </span><span class="se">\n\t</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="ln">37</span><span class="cl">        <span class="o">:</span>  <span class="o">:</span>    <span class="s">&#34;i&#34;</span><span class="p">(</span><span class="o">&amp;</span><span class="p">((</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">key</span><span class="p">)[</span><span class="n">branch</span><span class="p">])</span> <span class="o">:</span>  <span class="o">:</span> <span class="n">l_yes</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">38</span><span class="cl">
+</span></span><span class="line"><span class="ln">39</span><span class="cl">    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">40</span><span class="cl"><span class="nl">l_yes</span><span class="p">:</span>
+</span></span><span class="line"><span class="ln">41</span><span class="cl">    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">42</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>特别说明下<code>(&amp;((char *)key)[branch])</code>，这个是取key的地址，并强制转为<code>char *</code>类型。</p>
+<ul>
+<li>当<code>branch = false</code>时，<code>%c0 - .</code>就是<code>key</code>的地址与当前位置的差值。</li>
+<li>当<code>branch = true</code>时，<code>%c0 - .</code>是<code>key</code>的地址与当前位置的差值再加1（<code>char *</code>偏移量为1）。</li>
+</ul>
+<p>这样最低位就记录了branch的值。</p>
+
+<h2 id="41-struct-jump_entry存储位置" data-numberify>4.1. struct jump_entry存储位置<a class="anchor ms-1" href="#41-struct-jump_entry存储位置"></a></h2>
+<p>从<code>vmlinux.lds</code>可以看到<code>__jump_table</code>在<code>.rodata</code>段。这是链接时的布局，在Linux启动时，<code>jump_label_init</code>会重新对<code>jump_table</code>进行排序。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// aarch64-linux-gnu-objdump -d  -j .rodata vmlinux | less
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="n">ffff80008137de00</span> <span class="o">&lt;</span><span class="n">__start___jump_table</span><span class="o">&gt;:</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="nl">ffff80008137de00</span><span class="p">:</span>       <span class="n">fec96fd4</span>        <span class="p">.</span><span class="n">word</span>   <span class="mh">0xfec96fd4</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="nl">ffff80008137de04</span><span class="p">:</span>       <span class="n">fec96fd8</span>        <span class="p">.</span><span class="n">word</span>   <span class="mh">0xfec96fd8</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="nl">ffff80008137de08</span><span class="p">:</span>       <span class="mo">00</span><span class="n">b132a8</span>        <span class="p">.</span><span class="n">word</span>   <span class="mh">0x00b132a8</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="nl">ffff80008137de0c</span><span class="p">:</span>       <span class="mo">00000000</span>        <span class="p">.</span><span class="n">word</span>   <span class="mh">0x00000000</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="nl">ffff80008137de10</span><span class="p">:</span>       <span class="n">fec9707c</span>        <span class="p">.</span><span class="n">word</span>   <span class="mh">0xfec9707c</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="nl">ffff80008137de14</span><span class="p">:</span>       <span class="n">fec97090</span>        <span class="p">.</span><span class="n">word</span>   <span class="mh">0xfec97090</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="nl">ffff80008137de18</span><span class="p">:</span>       <span class="mo">00</span><span class="n">a56881</span>        <span class="p">.</span><span class="n">word</span>   <span class="mh">0x00a56881</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="nl">ffff80008137de1c</span><span class="p">:</span>       <span class="mo">00000000</span>        <span class="p">.</span><span class="n">word</span>   <span class="mh">0x00000000</span>
+</span></span></code></pre></div>
+<h1 id="5-从struct-jump_entry到struct-static_key" data-numberify>5. 从struct jump_entry到struct static_key<a class="anchor ms-1" href="#5-从struct-jump_entry到struct-static_key"></a></h1>
+<p>根据前边的<code>jump_entry_code</code>、<code>jump_entry_target</code>和<code>jump_entry_key</code>的实现，计算如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="n">python3</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="nf">hex</span><span class="p">(</span><span class="mh">0xffff80008137de00</span> <span class="o">-</span> <span class="mh">0x100000000</span> <span class="o">+</span> <span class="mh">0xfec96fd4</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="err">&#39;</span><span class="mh">0xffff800080014dd4</span><span class="err">&#39;</span>    <span class="c1">/// code
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="c1"></span><span class="o">&gt;&gt;&gt;</span> <span class="nf">hex</span><span class="p">(</span><span class="mh">0xffff80008137de04</span> <span class="o">-</span> <span class="mh">0x100000000</span> <span class="o">+</span> <span class="mh">0xfec96fd8</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="err">&#39;</span><span class="mh">0xffff800080014ddc</span><span class="err">&#39;</span>    <span class="c1">/// target
+</span></span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="c1"></span><span class="o">&gt;&gt;&gt;</span> <span class="nf">hex</span><span class="p">(</span><span class="mh">0xffff80008137de08</span> <span class="o">+</span> <span class="mh">0x00b132a8</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">7</span><span class="cl"><span class="err">&#39;</span><span class="mh">0xffff800081e910b0</span><span class="err">&#39;</span>    <span class="c1">/// key
+</span></span></span></code></pre></div><p>可以看到<code>struct static_key</code>在bss段。使用<code>DEFINE_STATIC_KEY_TRUE</code>和<code>DEFINE_STATIC_KEY_FALSE</code>声明的变量都会在bss段。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1">/// readelf -S vmlinux
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="c1"></span><span class="p">[</span><span class="mi">29</span><span class="p">]</span> <span class="p">.</span><span class="n">bss</span>              <span class="n">NOBITS</span>           <span class="n">ffff800081e2a000</span>  <span class="mf">01e39</span><span class="n">a00</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl">
+</span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="c1">/// aarch64-linux-gnu-nm -n  vmlinux  | grep -w gic_nonsecure_priorities
+</span></span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="c1"></span><span class="n">ffff800081e910b0</span> <span class="n">B</span> <span class="n">gic_nonsecure_priorities</span>
+</span></span></code></pre></div><p>根据反汇编和<code>0xffff800080014dd4</code>这个地址，可以找到代码对应的是<code>arch_local_irq_disable</code>函数。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">grep -C <span class="m">20</span> ffff800080014dd4  vmlinux.dis
+</span></span></code></pre></div>
+<h1 id="6-arch_local_irq_disable源码" data-numberify>6. arch_local_irq_disable源码<a class="anchor ms-1" href="#6-arch_local_irq_disable源码"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// arch/arm64/include/asm/irqflags.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="nf">arch_local_irq_enable</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nf">__irqflags_uses_pmr</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">        <span class="nf">__pmr_local_irq_enable</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">        <span class="nf">__daif_local_irq_enable</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="k">static</span> <span class="n">__always_inline</span> <span class="kt">void</span> <span class="nf">__daif_local_irq_disable</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">    <span class="nf">barrier</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">    <span class="k">asm</span> <span class="k">volatile</span><span class="p">(</span><span class="s">&#34;msr daifset, #3&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">    <span class="nf">barrier</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">
+</span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="k">static</span> <span class="n">__always_inline</span> <span class="kt">void</span> <span class="nf">__pmr_local_irq_disable</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nf">IS_ENABLED</span><span class="p">(</span><span class="n">CONFIG_ARM64_DEBUG_PRIORITY_MASKING</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl">        <span class="n">u32</span> <span class="n">pmr</span> <span class="o">=</span> <span class="nf">read_sysreg_s</span><span class="p">(</span><span class="n">SYS_ICC_PMR_EL1</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">        <span class="nf">WARN_ON_ONCE</span><span class="p">(</span><span class="n">pmr</span> <span class="o">!=</span> <span class="n">GIC_PRIO_IRQON</span> <span class="o">&amp;&amp;</span> <span class="n">pmr</span> <span class="o">!=</span> <span class="n">GIC_PRIO_IRQOFF</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl">
+</span></span><span class="line"><span class="ln">25</span><span class="cl">    <span class="nf">barrier</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln">26</span><span class="cl">    <span class="nf">write_sysreg_s</span><span class="p">(</span><span class="n">GIC_PRIO_IRQOFF</span><span class="p">,</span> <span class="n">SYS_ICC_PMR_EL1</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">27</span><span class="cl">    <span class="nf">barrier</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">29</span><span class="cl">
+</span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="k">static</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="nf">arch_local_irq_disable</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nf">__irqflags_uses_pmr</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">33</span><span class="cl">        <span class="nf">__pmr_local_irq_disable</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln">34</span><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">35</span><span class="cl">        <span class="nf">__daif_local_irq_disable</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln">36</span><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="ln">37</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>关注<code>write_sysreg_s(GIC_PRIO_IRQOFF, SYS_ICC_PMR_EL1);</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1">/// arch/arm64/include/asm/sysreg.h
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="c1"></span><span class="cp">#define write_sysreg_s(v, r) do {					\
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="cp">    u64 __val = (u64)(v);						\
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="cp">    u32 __maybe_unused __check_r = (u32)(r);			\
+</span></span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="cp">    asm volatile(__msr_s(r, &#34;%x0&#34;) : : &#34;rZ&#34; (__val));		\
+</span></span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="cp">} while (0)
+</span></span></span></code></pre></div><p><code>GIC_PRIO_IRQOFF</code>用到了<code>static_branch_unlikely</code>，实际走的是<code>branch = arch_static_branch(&amp;(x)-&gt;key, false)</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// arch/arm64/include/asm/ptrace.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * PMR values used to mask/unmask interrupts.
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> * GIC priority masking works as follows: if an IRQ&#39;s priority is a higher value
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> * than the value held in PMR, that IRQ is masked. Lowering the value of PMR
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> * means masking more IRQs (or at least that the same IRQs remain masked).
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> * To mask interrupts, we clear the most significant bit of PMR.
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cm"> * Some code sections either automatically switch back to PSR.I or explicitly
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cm"> * require to not use priority masking. If bit GIC_PRIO_PSR_I_SET is included
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cm"> * in the priority mask, it indicates that PSR.I should be set and
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cm"> * interrupt disabling temporarily does not rely on IRQ priorities.
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cp">#define GIC_PRIO_IRQON			0xe0
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cp">#define __GIC_PRIO_IRQOFF		(GIC_PRIO_IRQON &amp; ~0x80)
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="cp">#define __GIC_PRIO_IRQOFF_NS		0xa0
+</span></span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="cp">#define GIC_PRIO_PSR_I_SET		(1 &lt;&lt; 4)
+</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="cp">#define GIC_PRIO_IRQOFF							\
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="cp">    ({								\
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="cp">        extern struct static_key_false gic_nonsecure_priorities;\
+</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="cp">        u8 __prio = __GIC_PRIO_IRQOFF;				\
+</span></span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="cp">                                    \
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="cp">        if (static_branch_unlikely(&amp;gic_nonsecure_priorities))	\
+</span></span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="cp">            __prio = __GIC_PRIO_IRQOFF_NS;			\
+</span></span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="cp">                                    \
+</span></span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="cp">        __prio;							\
+</span></span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="cp">    })
+</span></span></span></code></pre></div>
+<h1 id="7-static_branch_likely和static_branch_unlikely" data-numberify>7. static_branch_likely和static_branch_unlikely<a class="anchor ms-1" href="#7-static_branch_likely和static_branch_unlikely"></a></h1>
+<p>内核文档<code>Documentation/staging/static-keys.rst</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln"> 1</span><span class="cl">   DEPRECATED API:
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">   The use of &#39;struct static_key&#39; directly, is now DEPRECATED. In addition
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">   static_key_{true,false}() is also DEPRECATED. IE DO NOT use the following::
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">        struct static_key false = STATIC_KEY_INIT_FALSE;
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">        struct static_key true = STATIC_KEY_INIT_TRUE;
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">        static_key_true()
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">        static_key_false()
+</span></span><span class="line"><span class="ln">10</span><span class="cl">
+</span></span><span class="line"><span class="ln">11</span><span class="cl">   The updated API replacements are::
+</span></span><span class="line"><span class="ln">12</span><span class="cl">
+</span></span><span class="line"><span class="ln">13</span><span class="cl">        DEFINE_STATIC_KEY_TRUE(key);
+</span></span><span class="line"><span class="ln">14</span><span class="cl">        DEFINE_STATIC_KEY_FALSE(key);
+</span></span><span class="line"><span class="ln">15</span><span class="cl">        DEFINE_STATIC_KEY_ARRAY_TRUE(keys, count);
+</span></span><span class="line"><span class="ln">16</span><span class="cl">        DEFINE_STATIC_KEY_ARRAY_FALSE(keys, count);
+</span></span><span class="line"><span class="ln">17</span><span class="cl">        static_branch_likely()
+</span></span><span class="line"><span class="ln">18</span><span class="cl">        static_branch_unlikely()
+</span></span></code></pre></div><p><code>static_branch_likely</code>和<code>static_branch_unlikely</code>实现，以如下示例代码进行分析。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">    <span class="n">codeA</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl">    <span class="n">codeB</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>详见注释。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// include/linux/jump_label.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cp">#ifdef CONFIG_JUMP_LABEL
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> * Combine the right initial value (type) with the right branch order
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> * to generate the desired result.
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> * type\branch| likely (1)            | unlikely (0)
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> * -----------+-----------------------+------------------
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cm"> *            |                       |
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cm"> *  true (1)  |    ...                |   ...
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cm"> *            |    NOP                |   JMP L
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cm"> *            |    &lt;br-stmts&gt;         | 1: ...
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cm"> *            | L: ...                |
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cm"> *            |                       |
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cm"> *            |                       | L: &lt;br-stmts&gt;
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="cm"> *            |                       |    jmp 1b
+</span></span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="cm"> *            |                       |
+</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="cm"> * -----------+-----------------------+------------------
+</span></span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="cm"> *            |                       |
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="cm"> *  false (0) |    ...                |    ...
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="cm"> *            |    JMP L              |    NOP
+</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="cm"> *            |    &lt;br-stmts&gt;         | 1: ...
+</span></span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="cm"> *            | L: ...                |
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="cm"> *            |                       |
+</span></span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="cm"> *            |                       | L: &lt;br-stmts&gt;
+</span></span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="cm"> *            |                       |    jmp 1b
+</span></span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="cm"> *            |                       |
+</span></span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="cm"> * -----------+-----------------------+------------------
+</span></span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="cm"> * The initial value is encoded in the LSB of static_key::entries,
+</span></span></span><span class="line"><span class="ln">33</span><span class="cl"><span class="cm"> * type: 0 = false, 1 = true.
+</span></span></span><span class="line"><span class="ln">34</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">35</span><span class="cl"><span class="cm"> * The branch type is encoded in the LSB of jump_entry::key,
+</span></span></span><span class="line"><span class="ln">36</span><span class="cl"><span class="cm"> * branch: 0 = unlikely, 1 = likely.
+</span></span></span><span class="line"><span class="ln">37</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">38</span><span class="cl"><span class="cm"> * This gives the following logic table:
+</span></span></span><span class="line"><span class="ln">39</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">40</span><span class="cl"><span class="cm"> *      enabled type    branch   instuction
+</span></span></span><span class="line"><span class="ln">41</span><span class="cl"><span class="cm"> * -----------------------------+-----------
+</span></span></span><span class="line"><span class="ln">42</span><span class="cl"><span class="cm"> *      0        0        0     | NOP
+</span></span></span><span class="line"><span class="ln">43</span><span class="cl"><span class="cm"> *      0        0        1     | JMP
+</span></span></span><span class="line"><span class="ln">44</span><span class="cl"><span class="cm"> *      0        1        0     | NOP
+</span></span></span><span class="line"><span class="ln">45</span><span class="cl"><span class="cm"> *      0        1        1     | JMP
+</span></span></span><span class="line"><span class="ln">46</span><span class="cl"><span class="cm">
+</span></span></span><span class="line"><span class="ln">47</span><span class="cl"><span class="cm"> *      1        0        0     | JMP
+</span></span></span><span class="line"><span class="ln">48</span><span class="cl"><span class="cm"> *      1        0        1     | NOP
+</span></span></span><span class="line"><span class="ln">49</span><span class="cl"><span class="cm"> *      1        1        0     | JMP
+</span></span></span><span class="line"><span class="ln">50</span><span class="cl"><span class="cm"> *      1        1        1     | NOP
+</span></span></span><span class="line"><span class="ln">51</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">52</span><span class="cl"><span class="cm"> * Which gives the following functions:
+</span></span></span><span class="line"><span class="ln">53</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">54</span><span class="cl"><span class="cm"> *   dynamic: instruction = enabled ^ branch
+</span></span></span><span class="line"><span class="ln">55</span><span class="cl"><span class="cm"> *   static:  instruction = type ^ branch
+</span></span></span><span class="line"><span class="ln">56</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">57</span><span class="cl"><span class="cm"> * See jump_label_type() / jump_label_init_type().
+</span></span></span><span class="line"><span class="ln">58</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">59</span><span class="cl">
+</span></span><span class="line"><span class="ln">60</span><span class="cl"><span class="cp">#define static_branch_likely(x)							\
+</span></span></span><span class="line"><span class="ln">61</span><span class="cl"><span class="cp">({										\
+</span></span></span><span class="line"><span class="ln">62</span><span class="cl"><span class="cp">    bool branch;								\
+</span></span></span><span class="line"><span class="ln">63</span><span class="cl"><span class="cp">    if (__builtin_types_compatible_p(typeof(*x), struct static_key_true))	\
+</span></span></span><span class="line"><span class="ln">64</span><span class="cl"><span class="cp">        </span><span class="c1">/// 1	1	1	| NOP
+</span></span></span><span class="line"><span class="ln">65</span><span class="cl"><span class="c1"></span>        <span class="c1">/// x为true的可能性大，直接执行codeA
+</span></span></span><span class="line"><span class="ln">66</span><span class="cl"><span class="c1"></span>        <span class="n">branch</span> <span class="o">=</span> <span class="o">!</span><span class="nf">arch_static_branch</span><span class="p">(</span><span class="o">&amp;</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">key</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>			\
+</span></span><span class="line"><span class="ln">67</span><span class="cl">    <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="nf">__builtin_types_compatible_p</span><span class="p">(</span><span class="nf">typeof</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span> <span class="k">struct</span> <span class="n">static_key_false</span><span class="p">))</span> \
+</span></span><span class="line"><span class="ln">68</span><span class="cl">        <span class="c1">/// 0	0	1	| JMP
+</span></span></span><span class="line"><span class="ln">69</span><span class="cl"><span class="c1"></span>        <span class="c1">/// x为false的可能性大，更可能直接跳转到codeB，可能把codeB放到codeA之前进行编译
+</span></span></span><span class="line"><span class="ln">70</span><span class="cl"><span class="c1"></span>        <span class="n">branch</span> <span class="o">=</span> <span class="o">!</span><span class="nf">arch_static_branch_jump</span><span class="p">(</span><span class="o">&amp;</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">key</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>		\
+</span></span><span class="line"><span class="ln">71</span><span class="cl">    <span class="k">else</span>									\
+</span></span><span class="line"><span class="ln">72</span><span class="cl">        <span class="n">branch</span> <span class="o">=</span> <span class="nf">____wrong_branch_error</span><span class="p">();</span>				\
+</span></span><span class="line"><span class="ln">73</span><span class="cl">    <span class="nf">likely_notrace</span><span class="p">(</span><span class="n">branch</span><span class="p">);</span>								\
+</span></span><span class="line"><span class="ln">74</span><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="ln">75</span><span class="cl">
+</span></span><span class="line"><span class="ln">76</span><span class="cl"><span class="cp">#define static_branch_unlikely(x)						\
+</span></span></span><span class="line"><span class="ln">77</span><span class="cl"><span class="cp">({										\
+</span></span></span><span class="line"><span class="ln">78</span><span class="cl"><span class="cp">    bool branch;								\
+</span></span></span><span class="line"><span class="ln">79</span><span class="cl"><span class="cp">    if (__builtin_types_compatible_p(typeof(*x), struct static_key_true))	\
+</span></span></span><span class="line"><span class="ln">80</span><span class="cl"><span class="cp">        </span><span class="c1">/// 1	1	0	| JMP
+</span></span></span><span class="line"><span class="ln">81</span><span class="cl"><span class="c1"></span>        <span class="c1">/// x为true的可能性小，直接跳转到codeB的可能性大，可能把codeB放到codeA之前进行编译
+</span></span></span><span class="line"><span class="ln">82</span><span class="cl"><span class="c1"></span>        <span class="n">branch</span> <span class="o">=</span> <span class="nf">arch_static_branch_jump</span><span class="p">(</span><span class="o">&amp;</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">key</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span>		\
+</span></span><span class="line"><span class="ln">83</span><span class="cl">    <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="nf">__builtin_types_compatible_p</span><span class="p">(</span><span class="nf">typeof</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">),</span> <span class="k">struct</span> <span class="n">static_key_false</span><span class="p">))</span> \
+</span></span><span class="line"><span class="ln">84</span><span class="cl">        <span class="c1">/// 0	0	0	| NOP
+</span></span></span><span class="line"><span class="ln">85</span><span class="cl"><span class="c1"></span>        <span class="c1">/// x为false的可能性小，执行codeB的可能性小
+</span></span></span><span class="line"><span class="ln">86</span><span class="cl"><span class="c1"></span>        <span class="n">branch</span> <span class="o">=</span> <span class="nf">arch_static_branch</span><span class="p">(</span><span class="o">&amp;</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">key</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span>			\
+</span></span><span class="line"><span class="ln">87</span><span class="cl">    <span class="k">else</span>									\
+</span></span><span class="line"><span class="ln">88</span><span class="cl">        <span class="n">branch</span> <span class="o">=</span> <span class="nf">____wrong_branch_error</span><span class="p">();</span>				\
+</span></span><span class="line"><span class="ln">89</span><span class="cl">    <span class="nf">unlikely_notrace</span><span class="p">(</span><span class="n">branch</span><span class="p">);</span>							\
+</span></span><span class="line"><span class="ln">90</span><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="ln">91</span><span class="cl">
+</span></span><span class="line"><span class="ln">92</span><span class="cl"><span class="cp">#else </span><span class="cm">/* !CONFIG_JUMP_LABEL */</span><span class="cp">
+</span></span></span></code></pre></div>
+<h1 id="8-反汇编分析" data-numberify>8. 反汇编分析<a class="anchor ms-1" href="#8-反汇编分析"></a></h1>
+<p>这里额外做一下说明：</p>
+<ol>
+<li>
+<p>使用<code>grep -C2 -w arch_local_irq_disable  vmlinux.dis</code>可以看到反汇编中有很多<code>bl arch_local_irq_disable</code>，并不是每次调用都进行了内联，而是在单个文件中只有一份汇编指令，函数调用时使用<code>bl</code>指令。
+<code>static inline</code>会在<code>.c</code>文件中生成一份指令，inline只是建议编译器进行内联，并不保证内联。</p>
+</li>
+<li>
+<p><code>__irqflags_uses_pmr</code>内有<code>alternative_has_cap_unlikely</code>，编译器进行了代码重排，反汇编中<code>__daif_local_irq_disable</code>在<code>__pmr_local_irq_disable</code>之前。<code>alternative_has_cap_unlikely</code>与<code>arch_static_branch</code>类似，优先返回<code>false</code>。<code>ALTERNATIVE</code>宏也是一种动态代码替换的技术，详见<a href="https://blog.csdn.net/weixin_45030965/article/details/132108379" target="_blank" rel="noopener noreferrer">Linux ARM64架构 动态替换 altinstructions<i class="fas fa-external-link-square-alt ms-1"></i></a>。</p>
+</li>
+</ol>
+<p>重点关注<code>__pmr_local_irq_disable</code>部分汇编代码即可。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// grep -C 20 ffff800080014dd4   vmlinux.dis
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="n">ffff800080014dc8</span> <span class="o">&lt;</span><span class="n">arch_local_irq_disable</span><span class="o">&gt;:</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="nf">alternative_has_cap_unlikely</span><span class="p">()</span><span class="o">:</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">eel</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">linux</span><span class="o">-</span><span class="mf">6.6</span><span class="o">/</span><span class="n">arch</span><span class="o">/</span><span class="n">arm64</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="k">asm</span><span class="o">/</span><span class="n">alternative</span><span class="o">-</span><span class="n">macros</span><span class="p">.</span><span class="nl">h</span><span class="p">:</span><span class="mi">250</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="nl">ffff800080014dc8</span><span class="p">:</span>       <span class="n">d503201f</span>        <span class="n">nop</span>         <span class="c1">/// __irqflags_uses_pmr
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="c1"></span><span class="nf">__daif_local_irq_disable</span><span class="p">()</span><span class="o">:</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">eel</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">linux</span><span class="o">-</span><span class="mf">6.6</span><span class="o">/</span><span class="n">arch</span><span class="o">/</span><span class="n">arm64</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="k">asm</span><span class="o">/</span><span class="n">irqflags</span><span class="p">.</span><span class="nl">h</span><span class="p">:</span><span class="mi">62</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="nl">ffff800080014dcc</span><span class="p">:</span>       <span class="n">d50343df</span>        <span class="n">msr</span>     <span class="n">daifset</span><span class="p">,</span> <span class="err">#</span><span class="mh">0x3</span>       <span class="c1">/// __daif_local_irq_disable
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="c1"></span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">eel</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">linux</span><span class="o">-</span><span class="mf">6.6</span><span class="o">/</span><span class="n">arch</span><span class="o">/</span><span class="n">arm64</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="k">asm</span><span class="o">/</span><span class="n">irqflags</span><span class="p">.</span><span class="nl">h</span><span class="p">:</span><span class="mi">64</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="nl">ffff800080014dd0</span><span class="p">:</span>       <span class="mi">14000008</span>        <span class="n">b</span>       <span class="n">ffff800080014df0</span> <span class="o">&lt;</span><span class="n">arch_local_irq_disable</span><span class="o">+</span><span class="mh">0x28</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="c1">/// 以下开始是__pmr_local_irq_disable的指令
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="c1"></span><span class="nf">arch_static_branch</span><span class="p">()</span><span class="o">:</span>       <span class="c1">/// 对应GIC_PRIO_IRQOFF宏，由static_branch_unlikely调用
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="c1"></span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">eel</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">linux</span><span class="o">-</span><span class="mf">6.6</span><span class="o">/</span><span class="n">arch</span><span class="o">/</span><span class="n">arm64</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="k">asm</span><span class="o">/</span><span class="n">jump_label</span><span class="p">.</span><span class="nl">h</span><span class="p">:</span><span class="mi">21</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="c1">/// gic_nonsecure_priorities为struct static_key_false，默认取__GIC_PRIO_IRQOFF(0x60)
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="c1">/// 使能时，ffff800080014dd4处替换为 b ffff800080014ddc，取__GIC_PRIO_IRQOFF_NS(0xa0)
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="c1"></span><span class="nl">ffff800080014dd4</span><span class="p">:</span>       <span class="n">d503201f</span>        <span class="n">nop</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="nl">ffff800080014dd8</span><span class="p">:</span>       <span class="mi">14000003</span>        <span class="n">b</span>       <span class="n">ffff800080014de4</span> <span class="o">&lt;</span><span class="n">arch_local_irq_disable</span><span class="o">+</span><span class="mh">0x1c</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="nf">__pmr_local_irq_disable</span><span class="p">()</span><span class="o">:</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">eel</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">linux</span><span class="o">-</span><span class="mf">6.6</span><span class="o">/</span><span class="n">arch</span><span class="o">/</span><span class="n">arm64</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="k">asm</span><span class="o">/</span><span class="n">irqflags</span><span class="p">.</span><span class="nl">h</span><span class="p">:</span><span class="mi">74</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="nl">ffff800080014ddc</span><span class="p">:</span>       <span class="mi">52801400</span>        <span class="n">mov</span>     <span class="n">w0</span><span class="p">,</span> <span class="err">#</span><span class="mh">0xa0</span>                       <span class="c1">// #160
+</span></span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="c1"></span><span class="nl">ffff800080014de0</span><span class="p">:</span>       <span class="mi">14000002</span>        <span class="n">b</span>       <span class="n">ffff800080014de8</span> <span class="o">&lt;</span><span class="n">arch_local_irq_disable</span><span class="o">+</span><span class="mh">0x20</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="nl">ffff800080014de4</span><span class="p">:</span>       <span class="mi">52800</span><span class="n">c00</span>        <span class="n">mov</span>     <span class="n">w0</span><span class="p">,</span> <span class="err">#</span><span class="mh">0x60</span>                       <span class="c1">// #96
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="c1"></span><span class="nl">ffff800080014de8</span><span class="p">:</span>       <span class="mi">92401</span><span class="n">c00</span>        <span class="n">and</span>     <span class="n">x0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="err">#</span><span class="mh">0xff</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="nl">ffff800080014dec</span><span class="p">:</span>       <span class="n">d5184600</span>        <span class="n">msr</span>     <span class="n">s3_0_c4_c6_0</span><span class="p">,</span> <span class="n">x0</span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="nf">arch_local_irq_disable</span><span class="p">()</span><span class="o">:</span>
+</span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">eel</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">linux</span><span class="o">-</span><span class="mf">6.6</span><span class="o">/</span><span class="n">arch</span><span class="o">/</span><span class="n">arm64</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="k">asm</span><span class="o">/</span><span class="n">irqflags</span><span class="p">.</span><span class="nl">h</span><span class="p">:</span><span class="mi">85</span>
+</span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="nl">ffff800080014df0</span><span class="p">:</span>       <span class="n">d65f03c0</span>        <span class="n">ret</span>
+</span></span></code></pre></div><p>与示例代码进行对应：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nf">static_branch_unlikely</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="nl">ffff800080014dd4</span><span class="p">:</span>    <span class="n">b</span> <span class="n">ffff800080014ddc</span>  <span class="c1">/// 默认为nop，需要运行时替换
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="c1"></span><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="nl">ffff800080014dd8</span><span class="p">:</span>    <span class="n">b</span> <span class="n">ffff800080014de4</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div>
+<h2 id="81-执行流" data-numberify>8.1. 执行流<a class="anchor ms-1" href="#81-执行流"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// 这部分本质上是__pmr_local_irq_enable的指令
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1">/// gic_nonsecure_priorities为struct static_key_false，默认取__GIC_PRIO_IRQOFF(0x60)
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="c1">/// 使能时，ffff800080014dd4处替换为 b ffff800080014ddc，取__GIC_PRIO_IRQOFF_NS(0xa0)
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="c1"></span><span class="err">默认</span>                <span class="err">替换后</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="n">ffff800080014dd4</span>    <span class="n">ffff800080014dd4</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="n">ffff800080014dd8</span>    <span class="n">ffff800080014ddc</span> <span class="o">*</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="n">ffff800080014de4</span>    <span class="n">ffff800080014de0</span> <span class="o">*</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="n">ffff800080014de8</span>    <span class="n">ffff800080014de8</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="n">ffff800080014dec</span>    <span class="n">ffff800080014dec</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="err">写入</span><span class="mh">0x60</span>            <span class="err">写入</span><span class="mh">0xa0</span>
+</span></span></code></pre></div>
+<h1 id="9-jump_label_init" data-numberify>9. jump_label_init<a class="anchor ms-1" href="#9-jump_label_init"></a></h1>
+<p>启动过程中，在<code>jump_label_init</code>中，根据<code>jump_table</code>来初始化<code>static_key</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// kernel/jump_label.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="n">__init</span> <span class="nf">jump_label_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">    <span class="k">struct</span> <span class="n">jump_entry</span> <span class="o">*</span><span class="n">iter_start</span> <span class="o">=</span> <span class="n">__start___jump_table</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">    <span class="k">struct</span> <span class="n">jump_entry</span> <span class="o">*</span><span class="n">iter_stop</span> <span class="o">=</span> <span class="n">__stop___jump_table</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    <span class="k">struct</span> <span class="n">static_key</span> <span class="o">*</span><span class="n">key</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="k">struct</span> <span class="n">jump_entry</span> <span class="o">*</span><span class="n">iter</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    <span class="cm">/*
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm">     * Since we are initializing the static_key.enabled field with
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cm">     * with the &#39;raw&#39; int values (to avoid pulling in atomic.h) in
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cm">     * jump_label.h, let&#39;s make sure that is safe. There are only two
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cm">     * cases to check since we initialize to 0 or 1.
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">    <span class="nf">BUILD_BUG_ON</span><span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="nf">ATOMIC_INIT</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl">    <span class="nf">BUILD_BUG_ON</span><span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="nf">ATOMIC_INIT</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">
+</span></span><span class="line"><span class="ln">18</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">static_key_initialized</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">        <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">
+</span></span><span class="line"><span class="ln">21</span><span class="cl">    <span class="nf">cpus_read_lock</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">    <span class="nf">jump_label_lock</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl">    <span class="c1">/// 按jump_entry指向static_key的地址，将jump_entry进行升序排列
+</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="c1"></span>    <span class="nf">jump_label_sort_entries</span><span class="p">(</span><span class="n">iter_start</span><span class="p">,</span> <span class="n">iter_stop</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl">
+</span></span><span class="line"><span class="ln">26</span><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">iter</span> <span class="o">=</span> <span class="n">iter_start</span><span class="p">;</span> <span class="n">iter</span> <span class="o">&lt;</span> <span class="n">iter_stop</span><span class="p">;</span> <span class="n">iter</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">27</span><span class="cl">        <span class="k">struct</span> <span class="n">static_key</span> <span class="o">*</span><span class="n">iterk</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl">        <span class="kt">bool</span> <span class="n">in_init</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">29</span><span class="cl">
+</span></span><span class="line"><span class="ln">30</span><span class="cl">        <span class="cm">/* rewrite NOPs */</span>
+</span></span><span class="line"><span class="ln">31</span><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nf">jump_label_type</span><span class="p">(</span><span class="n">iter</span><span class="p">)</span> <span class="o">==</span> <span class="n">JUMP_LABEL_NOP</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl">            <span class="nf">arch_jump_label_transform_static</span><span class="p">(</span><span class="n">iter</span><span class="p">,</span> <span class="n">JUMP_LABEL_NOP</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">33</span><span class="cl">
+</span></span><span class="line"><span class="ln">34</span><span class="cl">        <span class="c1">/// 是不是在__init_begin, __init_end之间
+</span></span></span><span class="line"><span class="ln">35</span><span class="cl"><span class="c1"></span>        <span class="n">in_init</span> <span class="o">=</span> <span class="nf">init_section_contains</span><span class="p">((</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="nf">jump_entry_code</span><span class="p">(</span><span class="n">iter</span><span class="p">),</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">36</span><span class="cl">        <span class="c1">/// in_init的static_key只能在初始化阶段update，见jump_label_update和__jump_label_update
+</span></span></span><span class="line"><span class="ln">37</span><span class="cl"><span class="c1"></span>        <span class="nf">jump_entry_set_init</span><span class="p">(</span><span class="n">iter</span><span class="p">,</span> <span class="n">in_init</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">38</span><span class="cl">
+</span></span><span class="line"><span class="ln">39</span><span class="cl">        <span class="n">iterk</span> <span class="o">=</span> <span class="nf">jump_entry_key</span><span class="p">(</span><span class="n">iter</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">40</span><span class="cl">        <span class="c1">/// 排序后，指向同一static_key的jump_entry会连续存放
+</span></span></span><span class="line"><span class="ln">41</span><span class="cl"><span class="c1"></span>        <span class="c1">/// static_key只需记录第一个jump_entry
+</span></span></span><span class="line"><span class="ln">42</span><span class="cl"><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">iterk</span> <span class="o">==</span> <span class="n">key</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">43</span><span class="cl">            <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">44</span><span class="cl">
+</span></span><span class="line"><span class="ln">45</span><span class="cl">        <span class="n">key</span> <span class="o">=</span> <span class="n">iterk</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">46</span><span class="cl">        <span class="nf">static_key_set_entries</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">iter</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">47</span><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="ln">48</span><span class="cl">    <span class="n">static_key_initialized</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">49</span><span class="cl">    <span class="nf">jump_label_unlock</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln">50</span><span class="cl">    <span class="nf">cpus_read_unlock</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln">51</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div>
+<h2 id="91-static_key_set_entries" data-numberify>9.1. static_key_set_entries<a class="anchor ms-1" href="#91-static_key_set_entries"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// kernel/jump_label.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cm">/***
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * A &#39;struct static_key&#39; uses a union such that it either points directly
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> * to a table of &#39;struct jump_entry&#39; or to a linked list of modules which in
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> * turn point to &#39;struct jump_entry&#39; tables.
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> * The two lower bits of the pointer are used to keep track of which pointer
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> * type is in use and to store the initial branch direction, we use an access
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> * function which preserves these bits.
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="k">static</span> <span class="kt">void</span> <span class="nf">static_key_set_entries</span><span class="p">(</span><span class="k">struct</span> <span class="n">static_key</span> <span class="o">*</span><span class="n">key</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">                   <span class="k">struct</span> <span class="n">jump_entry</span> <span class="o">*</span><span class="n">entries</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">type</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">
+</span></span><span class="line"><span class="ln">16</span><span class="cl">    <span class="nf">WARN_ON_ONCE</span><span class="p">((</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="n">entries</span> <span class="o">&amp;</span> <span class="n">JUMP_TYPE_MASK</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">    <span class="n">type</span> <span class="o">=</span> <span class="n">key</span><span class="o">-&gt;</span><span class="n">type</span> <span class="o">&amp;</span> <span class="n">JUMP_TYPE_MASK</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">    <span class="n">key</span><span class="o">-&gt;</span><span class="n">entries</span> <span class="o">=</span> <span class="n">entries</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">    <span class="n">key</span><span class="o">-&gt;</span><span class="n">type</span> <span class="o">|=</span> <span class="n">type</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p><code>entries</code>和<code>type</code>在union中，这里用低位记录<code>type</code>，高位记录<code>entries</code>。取值时使用掩码进行运算。见<code>static_key_entries</code>、<code>static_key_type</code>、<code>static_key_set_entries</code>等函数。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// include/linux/jump_label.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="k">struct</span> <span class="n">static_key</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">    <span class="kt">atomic_t</span> <span class="n">enabled</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cp">#ifdef CONFIG_JUMP_LABEL
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cp"></span><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> * Note:
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> *   To make anonymous unions work with old compilers, the static
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> *   initialization of them requires brackets. This creates a dependency
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> *   on the order of the struct with the initializers. If any fields
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> *   are added, STATIC_KEY_INIT_TRUE and STATIC_KEY_INIT_FALSE may need
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cm"> *   to be modified.
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cm"> * bit 0 =&gt; 1 if key is initially true
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cm"> *	    0 if initially false
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cm"> * bit 1 =&gt; 1 if points to struct static_key_mod
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cm"> *	    0 if points to struct jump_entry
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">    <span class="k">union</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">        <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">type</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">        <span class="k">struct</span> <span class="n">jump_entry</span> <span class="o">*</span><span class="n">entries</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl">        <span class="k">struct</span> <span class="n">static_key_mod</span> <span class="o">*</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="cp">#endif	</span><span class="cm">/* CONFIG_JUMP_LABEL */</span><span class="cp">
+</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="cp"></span><span class="p">};</span>
+</span></span></code></pre></div>
+<h1 id="10-参考资料" data-numberify>10. 参考资料<a class="anchor ms-1" href="#10-参考资料"></a></h1>
+<ol>
+<li>内核文档<code>Documentation/staging/static-keys.rst</code></li>
+<li><a href="https://blog.csdn.net/JiMoKuangXiangQu/article/details/128239338" target="_blank" rel="noopener noreferrer">Linux: Jump label实现简析<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li><a href="https://tinylab.org/riscv-jump-label-part1/" target="_blank" rel="noopener noreferrer">RISC-V jump_label详解，第 1 部分：技术背景<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li><a href="https://tinylab.org/riscv-jump-label-part2/" target="_blank" rel="noopener noreferrer">RISC-V jump_label详解，第2部分：指令编码<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li><a href="https://tinylab.org/riscv-jump-label-part3/" target="_blank" rel="noopener noreferrer">RISC-V jump_label详解，第3部分：核心实现<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li><a href="https://tinylab.org/riscv-jump-label-part4/" target="_blank" rel="noopener noreferrer">RISC-V jump_label详解，第4部分：运行时代码改写<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li><a href="https://tinylab.org/jump-label-part5/" target="_blank" rel="noopener noreferrer">RISC-V jump_label详解，第5部分：优化案例<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li><a href="https://tinylab.org/riscv-tracepoint-jump-label-part6-rvc/" target="_blank" rel="noopener noreferrer">RISC-V jump_label详解，第6部分：分析RVC支持<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+</ol>
+</div>
+</div>
+</div><div class="card-footer">
+  <div class="post-navs d-flex justify-content-evenly"><div class="post-nav post-prev">
+      <i class="fas fa-fw fa-chevron-down post-prev-icon me-1" data-fa-transform="rotate-90"></i>
+      <a href="/zh-cn/docs/04-kernel/linux-6.6/drm/drm_/">Linux Drm Mm分析</a>
+    </div><div class="post-nav post-next">
+      <a href="/zh-cn/docs/04-kernel/linux-6.6/optimize_tips/">Linux内核代码的编写和优化技巧</a>
+      <i class="fas fa-fw fa-chevron-down post-next-icon ms-1" data-fa-transform="rotate-270"></i>
+    </div></div>
+</div></article><div class="post-copyright mb-3 row card component" id="post-copyright">
+    <div class="card-header">
+        <h2 class="card-title fs-4 my-2 text-surface">版权</h2>
+    </div>
+    <div class="card-body"><a class="d-flex align-items-center flex-column" target="_blank" rel="license noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh">
+  <span><i class="fab fa-fw fa-2x fa-creative-commons"></i><i class="fab fa-fw fa-2x fa-creative-commons-by"></i><i class="fab fa-fw fa-2x fa-creative-commons-nc"></i><i class="fab fa-fw fa-2x fa-creative-commons-nd"></i></span>
+  CC BY-NC-ND 4.0 
+</a>
+
+
+    </div>
+</div><section class="related-posts row card component">
+      <div class="card-header">
+        <h2 class="card-title fs-4 my-2 text-surface">
+          相关文章
+        </h2>
+      </div>
+      <div class="card-body slide px-1">
+        <div class="slide-inner row gx-0"><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="Linux drm mm分析" src="https://kingdix10.github.io/covers/laptop_dj_equipment_212416_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/drm/drm_/">
+    Linux Drm Mm分析
+  </a>
+  <div class="post-meta mb-0">
+    2024/04/24
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程" src="https://kingdix10.github.io/covers/paint_canvas_stains_124156_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/">
+    【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程
+  </a>
+  <div class="post-meta mb-0">
+    2024/04/21
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="ARM64 Crash调试环境搭建" src="https://kingdix10.github.io/covers/wood_texture_logs_159793_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/arm64_setup/">
+    ARM64 Crash调试环境搭建
+  </a>
+  <div class="post-meta mb-0">
+    2023/10/03
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="linux thermal子系统简介" src="https://kingdix10.github.io/covers/camera_photographer_smoke_126548_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/">
+    Linux Thermal子系统简介
+  </a>
+  <div class="post-meta mb-0">
+    2023/05/05
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="linux内核时间子系统（二）" src="https://kingdix10.github.io/covers/vintage_retro_camera_126517_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.1/time/02-timekeeping/">
+    Linux内核时间子系统（二）
+  </a>
+  <div class="post-meta mb-0">
+    2023/02/05
+
+  </div>
+</div>
+
+          </div></div>
+        <button class="slide-control-left">
+          <i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-90"></i>
+          <span class="visually-hidden">Left</span>
+        </button>
+        <button class="slide-control-right">
+          <i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-270"></i>
+          <span class="visually-hidden">Right</span>
+        </button>
+      </div>
+    </section></div>
+</div>
+<aside class="sidebar d-flex docs-sidebar col-xxl-3 position-sticky order-xxl-5">
+  <div class="container">
+    
+<div class="row component card">
+    <div class="card-body">
+        <form action="/zh-cn/search/">
+            <div class="input-group">
+                <input name="q" class="form-control rounded" placeholder="搜索">
+                <button class="btn btn-sm btn-search position-absolute end-0 border-0 border-start border-secondary p-2" type="submit">
+                    <i class="fas fa-fw fa-search text-primary"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    <div class="accordion post-toc d-none d-lg-block">
+  <div class="accordion-item row mb-4 card component" id="postTOC">
+    <div class="card-header accordion-header">
+      <h2 class="card-title fs-4 my-2 text-surface d-none d-lg-block">目录</h2>
+      <a class="accordion-button d-lg-none mb-1 collapsed shadow-none p-0 bg-transparent" role="button" data-bs-toggle="collapse" href="#post-toc" aria-expanded="false" aria-controls="post-toc">
+        目录
+      </a>
+    </div>
+    <div class="card-body collapse accordion-collapse accordion-body d-lg-block" id="post-toc">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-背景">1. 背景</a></li>
+    <li><a href="#2-原理简介">2. 原理简介</a></li>
+    <li><a href="#3-struct-jump_entry">3. struct jump_entry</a></li>
+    <li><a href="#4-arch_static_branch和arch_static_branch_jump">4. arch_static_branch和arch_static_branch_jump</a>
+      <ul>
+        <li><a href="#41-struct-jump_entry存储位置">4.1. struct jump_entry存储位置</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-从struct-jump_entry到struct-static_key">5. 从struct jump_entry到struct static_key</a></li>
+    <li><a href="#6-arch_local_irq_disable源码">6. <code>arch_local_irq_disable</code>源码</a></li>
+    <li><a href="#7-static_branch_likely和static_branch_unlikely">7. static_branch_likely和static_branch_unlikely</a></li>
+    <li><a href="#8-反汇编分析">8. 反汇编分析</a>
+      <ul>
+        <li><a href="#81-执行流">8.1. 执行流</a></li>
+      </ul>
+    </li>
+    <li><a href="#9-jump_label_init">9. jump_label_init</a>
+      <ul>
+        <li><a href="#91-static_key_set_entries">9.1. static_key_set_entries</a></li>
+      </ul>
+    </li>
+    <li><a href="#10-参考资料">10. 参考资料</a></li>
+  </ul>
+</nav>
+    </div>
+  </div>
+</div>
+    
+
+
+
+
+
+
+  </div>
+</aside>
+
+      </div>
+    </main><footer class="footer mt-auto py-3 text-center container"><div class="offcanvas offcanvas-bottom h-auto" tabindex="-1" id="offcanvasActionsPanel"
+  aria-labelledby="offcanvasActionsPanelLabel">
+  <div class="offcanvas-header">
+    <div class="offcanvas-title h5" id="offcanvasActionsPanelLabel">
+      <i class="fas fa-fw fa-th-large me-1"></i>
+      操作
+    </div>
+    <button type="button" class="btn-close ms-auto" data-bs-dismiss="offcanvas" data-bs-target="offcanvasActionsPanel" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body mt-2"><div class="actions d-flex overflow-auto align-items-center">
+      <a role="button" class="action action-go-back d-flex flex-column align-items-center me-3" href="javascript: window.history.back();">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-90"></i></span> 返回
+      </a>
+      <a role="button" class="action action-reload-page d-flex flex-column align-items-center me-3">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-redo-alt"></i></span> 刷新
+      </a>
+      <a role="button" class="action action-copy-url d-flex flex-column align-items-center me-3">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-link"></i></span> 复制链接
+      </a>
+    </div>
+  </div>
+</div><div class="row text-center text-lg-start">
+  <div class="col-12 mt-2 col-lg-3">
+    <p class="mb-2">kingdix10&#39;s site</p>
+    <p class="text-secondary mb-2"><small>kingdix10 @ 拾月国度</small></p><div class="copyright mb-2 text-secondary">
+  <small>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</small>
+</div>
+
+
+
+<nav class="social-links nav justify-content-center justify-content-between mb-2 mt-3">
+      <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="https://github.com/kingdix10" title="GitHub" rel="me">
+        <i class="fa-fw fab fa-github"
+          ></i>
+      </a>
+      <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="https://www.zhihu.com/people/kingdix10" title="知乎" rel="me">
+        <i class="fa-fw fab fa-zhihu"
+           style="color: #056de8;"></i>
+      </a>
+  <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="/zh-cn/index.xml" title="RSS" rel="me">
+    <i class="fas fa-fw fa-rss" style="color: #ea6221;"></i>
+  </a>
+</nav>
+</div>
+  <div class="col-12 col-lg-8 offset-0 offset-lg-1"><ul class="nav justify-content-between footer-memu mb-3 row"><li class="nav-item col-12 col-md-6 col-lg-3 px-0"><ul class="nav flex-column align-items-start">
+      <li class="nav-item w-100"><a class="nav-link fw-bold fs-lg" href="javascript: void(0);">链接</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+GitHub"
+  href="https://github.com/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-github text-primary"></i></span>GitHub</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+Gitee"
+  href="https://gitee.com/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-github text-primary"></i></span>Gitee</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+Zhihu"
+  href="https://www.zhihu.com/people/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-zhihu text-primary"></i></span>Zhihu</a></li></ul></li></ul></div>
+</div>
+</footer>
+<script data-precache src="/assets/main/bundle.min.01351680f89e0e34293b6918c75261e88f5ff72804497fa7dea58b4190d564e6.js" integrity="sha256-ATUWgPieDjQpO2kYx1Jh6I9f9ygESX&#43;n3qWLQZDVZOY=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
+<script data-precache src="/assets/viewer/bundle.min.ffafad0d121aa7d1fb443510086dac514a0b152826cf094f02a1f3dec1f37918.js" integrity="sha256-/6&#43;tDRIap9H7RDUQCG2sUUoLFSgmzwlPAqHz3sHzeRg=" crossorigin="anonymous" defer></script><script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?8e042c957455c462d9b4c9da3ab642b0";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<script src="/js/sw-register.js" defer></script>
+
+  </body>
+</html>

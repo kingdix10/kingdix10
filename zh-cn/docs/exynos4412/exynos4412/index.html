@@ -1,0 +1,1090 @@
+<!doctype html>
+<html class="position-relative" itemscope itemtype="https://schema.org/WebPage" lang="zh-cn"
+  data-bs-theme="auto" data-palette="purple">
+  <head><script src="/assets/init/bundle.min.17bb1d3aa57be1ea17bd5f48fa2a59b44cab5fd5291efdf44dad530987335a4a.js" integrity="sha256-F7sdOqV74eoXvV9I&#43;ipZtEyrX9UpHv30Ta1TCYczWko=" crossorigin="anonymous"></script>
+<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Exynos4412启动介绍 - kingdix10&#39;s site</title>
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_16x16_resize_box_3.png" sizes="16x16" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_32x32_resize_box_3.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_150x150_resize_box_3.png" sizes="150x150" type="image/png">
+    <link rel="apple-touch-icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_180x180_resize_box_3.png" sizes="180x180" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_192x192_resize_box_3.png" sizes="192x192" type="image/png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#6f42c1">
+<meta name="keywords" content="启动流程" />
+  <meta name="description" content="启动流程，BL1是8k还是15k" />
+    <meta name="robots" content="index, follow" /><meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://kingdix10.github.io/covers/keyboard_backlight_purple_212155_300x168.jpg"/>
+
+<meta name="twitter:title" content="Exynos4412启动介绍"/>
+<meta name="twitter:description" content="启动流程，BL1是8k还是15k"/>
+<meta property="og:title" content="Exynos4412启动介绍" />
+<meta property="og:description" content="启动流程，BL1是8k还是15k" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kingdix10.github.io/zh-cn/docs/exynos4412/exynos4412/" /><meta property="og:image" content="https://kingdix10.github.io/covers/keyboard_backlight_purple_212155_300x168.jpg" /><meta property="article:section" content="docs" />
+<meta property="article:published_time" content="2020-03-05T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-03-05T10:00:00+00:00" /><meta property="og:site_name" content="kingdix10&#39;s site" />
+
+<meta itemprop="name" content="Exynos4412启动介绍">
+<meta itemprop="description" content="启动流程，BL1是8k还是15k"><meta itemprop="datePublished" content="2020-03-05T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2020-03-05T10:00:00+00:00" />
+<meta itemprop="wordCount" content="2647"><meta itemprop="image" content="https://kingdix10.github.io/covers/keyboard_backlight_purple_212155_300x168.jpg">
+<meta itemprop="keywords" content="4412,启动流程," />
+  <meta property="og:image:alt" content="Exynos4412启动介绍" />
+  <meta name="twitter:image:alt" content="Exynos4412启动介绍" />
+  <link rel="manifest" href="/zh-cn/manifest.json">
+
+<link data-precache rel="stylesheet" href="/assets/main/bundle.min.03fda061e9fca038de4b9a0a9f07d0f48b8bb6231de98a9cf415bf6818d719cd.css" integrity="sha256-A/2gYen8oDjeS5oKnwfQ9IuLtiMd6Yqc9BW/aBjXGc0=" crossorigin="anonymous">
+
+    <link data-precache rel="stylesheet" href="/assets/viewer/bundle.min.8c1002839fa22c1350d6ae1eef6593120e108f973c41348be9b5065430566aaf.css" integrity="sha256-jBACg5&#43;iLBNQ1q4e72WTEg4Qj5c8QTSL6bUGVDBWaq8=" crossorigin="anonymous">
+
+
+</head>
+  <body><header class="mb-4 sticky-top">
+  
+<nav class="top-app-bar shadow navbar navbar-expand-xxl">
+  <div class="container">
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDocsNav"
+      aria-expanded="false" aria-label="Toggle docs navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+<a class="navbar-brand d-flex align-items-center flex-grow-1 flex-xxl-grow-0 justify-content-xxl-start justify-content-center ms-2 ms-xxl-0 mx-auto me-xxl-2"
+    href="https://kingdix10.github.io/zh-cn/">
+    <picture><img class="logo " alt="Logo" src="https://kingdix10.github.io/images/icon_yellow_transparent_72x72.png" loading="lazy" width="72" height="72" />
+</picture>
+kingdix10
+</a>
+
+    <div class="offcanvas-xxl offcanvas-end flex-grow-1" data-bs-scroll="true" tabindex="-1" id="navbarMenus" aria-labelledby="navbarMenusLabel">
+      <div class="offcanvas-header px-4 pb-0">
+        <div class="offcanvas-title h5" id="navbarMenusLabel">kingdix10</div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#navbarMenus" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body p-4 pt-0 p-xxl-0">
+        <hr class="d-xxl-none">
+        <ul class="navbar-nav flex-row flex-wrap align-items-center me-auto"><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn">
+<span class="menu-icon me-1"><i class="fas fa-home"></i></span>主页
+            </a>
+          </li><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn/news/">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-newspaper"></i></span>新闻
+            </a>
+          </li><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn/docs/">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-folder"></i></span>文档
+            </a>
+          </li>
+          <li class="nav-item col-12 col-xxl-auto dropdown px-0">
+            <a href="#"
+              class="nav-link dropdown-toggle"
+              id="navbarDropdownBlog" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-blog"></i></span>博客
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog" data-bs-popper="none">
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/archives/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-file-archive text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">归档</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/series/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-columns"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">专栏</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of series.</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/categories/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-folder text-success"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">分类</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of categories.</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/tags/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-tags"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">标签</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of tags.</p>
+                  </div></a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item col-12 col-xxl-auto dropdown px-0">
+            <a href="#"
+              class="nav-link dropdown-toggle"
+              id="navbarDropdownLinks" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-link"></i></span>链接
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownLinks" data-bs-popper="none">
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://github.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-github text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">GitHub</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">github.com/kingdix10</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://gitee.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-github text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">Gitee</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">gitee.com/kingdix10</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://www.zhihu.com/people/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-zhihu text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">Zhihu</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://www.cnblogs.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">博客园</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://blog.csdn.net/u014001096" target="_blank" rel="noopener noreferrer">
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">CSDN</p>
+                  </div></a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+            </ul>
+          </li>
+        </ul>
+        
+    <hr class="d-xxl-none">
+    <form class="search-bar ms-auto my-auto" action="/zh-cn/search/" novalidate>
+      <div class="input-group align-items-center">
+        <span class="btn btn-search disabled position-absolute left-0 border-0 px-1">
+          <i class="fas fa-fw fa-search fa-lg"></i>
+        </span>
+        <input
+          class="my-1 form-control border-white rounded-5 search-input bg-body"
+          name="q"
+          type="search"
+          placeholder="搜索"
+          aria-label="Search"
+          required>
+          <span class="search-shortcut position-absolute end-0 top-0 me-2">
+            <kbd class="text-dark bg-white opacity-75 rounded-3 shadow border border-primary py-1 fw-bold">/</kbd>
+          </span>
+      </div>
+    </form><hr class="d-xxl-none">
+        <ul class="navbar-nav flex-row flex-wrap align-items-center ms-md-auto">
+<li class="nav-item py-2 py-xxl-1 col-12 col-xxl-auto">
+
+
+<nav class="social-links nav justify-content-center flex-row">
+      <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="https://github.com/kingdix10" title="GitHub" rel="me">
+        <i class="fa-fw fab fa-github"
+          ></i>
+        <span class="ms-1 d-xxl-none">Github</span>
+      </a>
+      <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="https://www.zhihu.com/people/kingdix10" title="知乎" rel="me">
+        <i class="fa-fw fab fa-zhihu"
+          ></i>
+        <span class="ms-1 d-xxl-none">Zhihu</span>
+      </a>
+  <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="/zh-cn/index.xml" title="RSS" rel="me">
+    <i class="fas fa-fw fa-rss"></i>
+    <span class="ms-1 d-xxl-none">RSS</span>
+  </a>
+</nav>
+
+</li>
+<li class="nav-item py-2 py-xxl-1 col-12 col-xxl-auto">
+  <div class="vr d-none d-xxl-flex h-100 mx-xxl-2 text-white"></div>
+  <hr class="d-xxl-none my-2">
+</li>
+<li class="nav-item dropdown py-1 py-xxl-1 col-6 col-xxl-auto">
+    <a class="nav-link px-0 px-xxl-1" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-globe"></i>
+        <span class="d-xxl-none">语言</span>
+    </a>
+    <ul class="language-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+        <li>
+        <a class="dropdown-item active" href="/zh-cn/">
+            简体中文
+        </a>
+        </li>
+        <li>
+        <a class="dropdown-item" href="/en/">
+            English
+        </a>
+        </li></ul>
+</li>
+<li class="nav-item py-1 col-12 col-xxl-auto">
+  <div class="vr d-none d-xxl-flex h-100 mx-xxl-2 text-white"></div>
+  <hr class="d-xxl-none my-2">
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="fontSizeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-font"></i>
+        <span class="d-xxl-none">字体大小</span>
+    </a>
+    <ul class="font-size-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="fontSizeDropdown">
+        <li>
+            <button class="font-size-item dropdown-item" data-size="xs">
+                特小号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="sm">
+                小号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item active" data-size="md">
+                中等
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="lg">
+                大号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="xl">
+                特大号
+            </button>
+        </li>
+    </ul>
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="paletteDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-palette"></i>
+        <span class="d-xxl-none">配色</span>
+    </a>
+    <ul class="palette-dropdown-menu dropdown-menu dropdown-menu-end px-2 row g-2" aria-labelledby="paletteDropdown">
+            <li class="col-4 my-1">
+                <a role="button" id="palette-blue" aria-label="蓝色"
+                    class="btn btn-sm w-100 palette text-bg-blue" data-palette="blue">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-blue-gray" aria-label="蓝灰色"
+                    class="btn btn-sm w-100 palette text-bg-blue-gray" data-palette="blue-gray">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-brown" aria-label="棕色"
+                    class="btn btn-sm w-100 palette text-bg-brown" data-palette="brown">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-cyan" aria-label="青色"
+                    class="btn btn-sm w-100 palette text-bg-cyan" data-palette="cyan">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-green" aria-label="绿色"
+                    class="btn btn-sm w-100 palette text-bg-green" data-palette="green">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-indigo" aria-label="靛青色"
+                    class="btn btn-sm w-100 palette text-bg-indigo" data-palette="indigo">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-orange" aria-label="橙色"
+                    class="btn btn-sm w-100 palette text-bg-orange" data-palette="orange">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-pink" aria-label="粉色"
+                    class="btn btn-sm w-100 palette text-bg-pink" data-palette="pink">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-purple" aria-label="紫色"
+                    class="btn btn-sm w-100 palette text-bg-purple" data-palette="purple">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-red" aria-label="红色"
+                    class="btn btn-sm w-100 palette text-bg-red" data-palette="red">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-teal" aria-label="蓝绿色"
+                    class="btn btn-sm w-100 palette text-bg-teal" data-palette="teal">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-yellow" aria-label="黄色"
+                    class="btn btn-sm w-100 palette text-bg-yellow" data-palette="yellow">
+                </a>
+            </li>
+    </ul>
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="modeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="mode-icon fas fa-fw fa-adjust" id="modeIcon"></i>
+        <span class="d-xxl-none">模式</span>
+    </a>
+    <ul class="mode-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="modeDropdown">
+        <li class="mode-item" data-color-mode="light" data-icon="sun">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-sun"></i> 浅色
+            </button>
+        </li>
+        <li class="mode-item" data-color-mode="dark" data-icon="moon">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-moon"></i> 深色
+            </button>
+        </li>
+        <li class="mode-item active" data-color-mode="auto" data-icon="adjust">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-adjust"></i> 自动
+            </button>
+        </li>
+    </ul>
+</li>
+        </ul>
+      </div>
+    </div>
+    <div class="d-flex">
+      <button class="navbar-toggler order-5 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarMenus"
+        aria-controls="navbarMenus" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-ellipsis-h"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+</header>
+
+    <main class="container">
+      <div class="row content"><noscript>
+    <div class="alert alert-danger" role="alert">你的浏览器不支持 JavaScript。</div>
+</noscript>
+<aside class="docs-nav col-xxl-2" tabindex="-1" data-bs-hide="focusout">
+  <div class="offcanvas-xxl offcanvas-start" id="offcanvasDocsNav" aria-labelledby="offcanvasDocsNavLabel">
+    <div class="offcanvas-header border-bottom">
+      <div class="offcanvas-title h5" id="offcanvasDocsNavLabel">浏览文档</div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#offcanvasDocsNav"></button>
+    </div>
+    <div class="offcanvas-body pt-2 flex-column"><div class="mb-3" style="margin-left: -0.5rem;">
+</div>
+<ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/"><span class="docs-nav-title">Linux内核分析</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-8d43cfa49df325f277d6f4234a021467" aria-expanded="false" aria-controls="nav-8d43cfa49df325f277d6f4234a021467">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-8d43cfa49df325f277d6f4234a021467">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/"><span class="docs-nav-title">linux-6.1</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-8ea97fb7a0a0d68cedef1b63b4664daa" aria-expanded="false" aria-controls="nav-8ea97fb7a0a0d68cedef1b63b4664daa">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-8ea97fb7a0a0d68cedef1b63b4664daa">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/01-task_0/"><span class="docs-nav-title">Linux 0号线程swapper简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/02-task_1/"><span class="docs-nav-title">Linux 1号线程init简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/03-task_2/"><span class="docs-nav-title">Linux 2号线程kthreadd简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/"><span class="docs-nav-title">linux thermal子系统简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/other/linux-err-retur/"><span class="docs-nav-title">Linux的errno简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/fdt/dt_to_dt/"><span class="docs-nav-title">Linux内核驱动模型（二）设备树转换</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/device_driver/initcall/"><span class="docs-nav-title">Linux内核驱动模型（三）驱动初始化</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/device_driver/device_model/"><span class="docs-nav-title">Linux内核驱动模型（四）核心结构体</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/fdt/fdt_dt/"><span class="docs-nav-title">Linux内核驱动模型（一）设备树展开</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/02-timekeeping/"><span class="docs-nav-title">linux内核时间子系统（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/01-tim/"><span class="docs-nav-title">linux内核时间子系统（一）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/kobject/kobject/"><span class="docs-nav-title">Linux内核数据结构kobject/kset/ktype</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/boot/01-entry/"><span class="docs-nav-title">内核启动流程（一）</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/"><span class="docs-nav-title">linux-6.6</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c105b2ef486b2fc777c1f47c8c02d8c9" aria-expanded="false" aria-controls="nav-c105b2ef486b2fc777c1f47c8c02d8c9">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-c105b2ef486b2fc777c1f47c8c02d8c9">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/"><span class="docs-nav-title">【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/arm64_setup/"><span class="docs-nav-title">ARM64 Crash调试环境搭建</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/jump_label/"><span class="docs-nav-title">ARM64 jump label源码分析</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/"><span class="docs-nav-title">ARM64 Linux中断入口</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/help/"><span class="docs-nav-title">Crash帮助信息</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtabl/"><span class="docs-nav-title">Linux ARM64页面大小和虚拟地址位数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/drm/drm_/"><span class="docs-nav-title">Linux drm mm分析</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-a-fork/"><span class="docs-nav-title">Linux fork进程/线程简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/04-relationship/"><span class="docs-nav-title">Linux进程和线程关系</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/05-pid_namespa/"><span class="docs-nav-title">Linux进程命名空间（pid namespace）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/07-task_stat/"><span class="docs-nav-title">Linux进程状态与生命周期</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_2/"><span class="docs-nav-title">Linux内核copy_process分析（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_3/"><span class="docs-nav-title">Linux内核copy_process分析（三）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_1/"><span class="docs-nav-title">Linux内核copy_process分析（一）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_tabl/"><span class="docs-nav-title">Linux内核sched_class汇总</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/optimize_tips/"><span class="docs-nav-title">Linux内核代码的编写和优化技巧</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/boot/01-entry/"><span class="docs-nav-title">内核启动流程（一）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/03-irq_create_mapping/"><span class="docs-nav-title">设备中断注册</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/04-request_irq/"><span class="docs-nav-title">申请中断request_irq</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/05-handler_entry/"><span class="docs-nav-title">中断处理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/02-irq_domain_a/"><span class="docs-nav-title">中断子系统domain注册</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/01-init/"><span class="docs-nav-title">中断子系统软硬件初始化</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/"><span class="docs-nav-title">开发环境</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-fd57bc387b9c3a4d19f1801fc65cd5b4" aria-expanded="false" aria-controls="nav-fd57bc387b9c3a4d19f1801fc65cd5b4">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-fd57bc387b9c3a4d19f1801fc65cd5b4">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/eel_env/eel_readm/"><span class="docs-nav-title">嵌入式学习环境快速搭建（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/eel_env/env_setup/"><span class="docs-nav-title">嵌入式学习环境快速搭建（一）</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/"><span class="docs-nav-title">启动</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-05b799579ad52d4ccfa92fd6313b23f7" aria-expanded="false" aria-controls="nav-05b799579ad52d4ccfa92fd6313b23f7">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-05b799579ad52d4ccfa92fd6313b23f7">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/uboot_m/"><span class="docs-nav-title">U-Boot从dtb获取内存布局并传递到内核</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/crc32_fu/"><span class="docs-nav-title">U-Boot和Linux内核的CRC函数</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/"><span class="docs-nav-title">系统工具</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-eb1c5d775f73e30b3a27244e12a84f81" aria-expanded="false" aria-controls="nav-eb1c5d775f73e30b3a27244e12a84f81">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-eb1c5d775f73e30b3a27244e12a84f81">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/git/git_mis/"><span class="docs-nav-title">git配置和操作</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_tips/"><span class="docs-nav-title">Linux Bash技巧</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_decorat/"><span class="docs-nav-title">Linux Bash终端美化</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/resizefs/"><span class="docs-nav-title">磁盘和文件系统扩容/缩容</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/win_python3/"><span class="docs-nav-title">解决Windows不能使用python3.10的问题</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/"><span class="docs-nav-title">杂项</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-4967b62f3b1964eee9739b39b25cd3eb" aria-expanded="false" aria-controls="nav-4967b62f3b1964eee9739b39b25cd3eb">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-4967b62f3b1964eee9739b39b25cd3eb">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/01-c/array_fu/"><span class="docs-nav-title">多维数组作为函数参数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/01-c/array_typ/"><span class="docs-nav-title">数组a、&amp;a、&amp;a[0]、&amp;a[0][0]的区别与联系</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3 text-primary">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/"><span class="docs-nav-title">4412</span></a>
+            <a class="btn-toggle ms-1" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-0cca8bc16c798175efb847597812f8c0" aria-expanded="true" aria-controls="nav-0cca8bc16c798175efb847597812f8c0">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse  show border-primary" id="nav-0cca8bc16c798175efb847597812f8c0">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3 text-primary" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/exynos4412/"><span class="docs-nav-title">Exynos4412启动介绍</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/mkbl1/"><span class="docs-nav-title">Exynos4412自制BL1</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/mkbl2/"><span class="docs-nav-title">Exynos4412自制BL2</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul></div>
+  </div>
+</aside><div class="col-xxl-7 ms-auto">
+  <div class="container-fluid"><nav class="row card component" aria-label="breadcrumb">
+  <div class="card-body pb-0">
+    <ol class="hbs-breadcrumb breadcrumb flex-nowrap"><li class="breadcrumb-item text-surface"><a href="/zh-cn/">主页</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/">文档</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/exynos4412/">4412</a></li><li class="breadcrumb-item active">Exynos4412启动介绍</li></ol>
+  </div>
+</nav><div class="post-panel-wrapper position-relative d-flex justify-content-center">
+  <div class="d-flex flex-row justify-content-center rounded-5 border post-panel position-fixed px-3 py-1 surface shadow-1">
+    
+    
+
+    
+    
+    
+<a class="action action-toc d-block d-xxl-none" href="#post-toc-container" role="button" title="目录">
+  <i class="fas fa-fw fa-list-alt"></i>
+</a>
+    <a class="action action-copyright" href="#post-copyright" role="button" aria-label="Copyright" title="版权">
+  <i class="fas fa-fw fa-copyright"></i>
+</a>
+    
+    
+<a id="sidebarToggler" class="action action-sidebar-toggler d-none d-xxl-block" role="button" title="切换侧边栏">
+  <i class="fas fa-fw fa-expand-alt" data-fa-transform="rotate-45"></i>
+</a>
+
+    
+  </div>
+</div><article class="row card component mb-4 post">
+<div class="card-header ">
+    <h1 class="card-title post-title my-2">Exynos4412启动介绍</h1>
+</div>
+<div class="card-body"><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2020-03-05 08:00:00 &#43;0800 CST，更新于 2020-03-05 18:00:00 &#43;0800 CST。">2020/03/05</span><span class="post-reading-time me-1 mb-1">6 分钟阅读</span><a href="/zh-cn/categories/4412/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>4412</a><a href="/zh-cn/categories/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>启动流程</a><a href="/zh-cn/tags/4412/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">4412</a><a href="/zh-cn/tags/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">启动流程</a>
+</div>
+<picture class="d-flex justify-content-center"><img class="post-featured-img h-auto w-auto mb-3" alt="Exynos4412启动介绍" src="https://kingdix10.github.io/covers/keyboard_backlight_purple_212155_300x168.jpg"/>
+    </picture>
+      <p class="lead mb-3 text-body-emphasis">启动流程，BL1是8k还是15k</p>
+<div class="mt-2 mb-3 d-block d-xxl-none">
+    <h2 class="text-surface mb-3">目录</h2>
+    <div id="post-toc-container">
+        </div>
+    <hr class="text-secondary">
+</div><div class="post-content mb-3" data-bs-spy="scroll" data-bs-target="#TableOfContents" tabindex="0">
+        <div id="post-content-body">
+<h1 id="1-两种大小的bl1是怎么回事" data-numberify>1. 两种大小的BL1是怎么回事<a class="anchor ms-1" href="#1-两种大小的bl1是怎么回事"></a></h1>
+<p>关于4412的BL1，有说8k的，也有说15k的，到底哪一个是对的呢？</p>
+<p>这要追溯一下4412的版本，Exynos4412一共有两个版本，一个是Exynos 4412，另一个是Exynos 4412 Prime。网上大多数文章都是基于8k来介绍BL1的。我只在<a href="https://chasinglulu.github.io/2019/05/28/%E5%85%B3%E4%BA%8EExynos4412-SoC%E7%9A%84%E5%90%AF%E5%8A%A8%E5%88%86%E6%9E%90/" target="_blank" rel="noopener noreferrer">关于Exynos4412 SoC的启动分析 | 点滴汇聚 (chasinglulu.github.io)<i class="fas fa-external-link-square-alt ms-1"></i></a>和<a href="https://blog.csdn.net/u012867916/article/details/119619545" target="_blank" rel="noopener noreferrer">Exynos4412 的启动过程详解（四）<i class="fas fa-external-link-square-alt ms-1"></i></a>看到过关于Exynos 4412 Prime的介绍，但是没到找到对应的官方资料。两者的主要差异就在于BL1的大小。Exynos 4412 Prime可以支持15k的BL1，也向后兼容，支持8k的BL1。</p>
+<table>
+<thead>
+<tr>
+<th>desc</th>
+<th>8k</th>
+<th>size</th>
+<th>15k</th>
+<th>size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ProductID, iROM version, function pointer</td>
+<td>0x0202_0000</td>
+<td></td>
+<td>0x0202_0000</td>
+<td></td>
+</tr>
+<tr>
+<td>iROM stack</td>
+<td>0x0202_0100</td>
+<td>1.75K</td>
+<td>0x0202_0100</td>
+<td>1.75K</td>
+</tr>
+<tr>
+<td>iROM ZI/RW</td>
+<td>0x0202_0800</td>
+<td>3KiB</td>
+<td>0x0202_0800</td>
+<td>3K</td>
+</tr>
+<tr>
+<td>BL1</td>
+<td>0x0202_1400</td>
+<td>8K</td>
+<td>0x0202_1400</td>
+<td>15K</td>
+</tr>
+<tr>
+<td>BL2+padding</td>
+<td>0x0202_3400</td>
+<td>16K</td>
+<td>0x0202_5000</td>
+<td>16K</td>
+</tr>
+<tr>
+<td>free space</td>
+<td>0x0202_7400</td>
+<td></td>
+<td>0x0202_9000</td>
+<td></td>
+</tr>
+<tr>
+<td>END</td>
+<td>0x0206_0000</td>
+<td></td>
+<td>0x0206_0000</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><picture><img class="img-fluid " alt="1685873254889" src="/zh-cn/docs/exynos4412/exynos4412/1685873254889.png" loading="lazy" width="592" height="719" />
+</picture>
+
+</p>
+<p><picture><img class="img-fluid " alt="1685873213003" src="/zh-cn/docs/exynos4412/exynos4412/1685873213003.png" loading="lazy" width="467" height="545" />
+</picture>
+
+
+1.1. 维基百科给出的介绍</p>
+<p>这里摘抄一下维基百科介绍：</p>
+<p>2011年推出的Exynos 4210才是Exynos系列的第一款产品，它之前被人熟知的名字是Orion（猎户座）。Exynos 4210采用45nm制程，拥有两枚主频为1.2 GHz的Cortex-A9通用处理核心，拥有32/32 KB I/D Cache, 1 MB L2 Cache，并且集成ARM Mali-400 MP图形处理核心。在视频方面，Exynos 4210支持单路WXGA和双路WSVGA视频输出，支持HDMI v1.3a高清标准，可以拍摄1080p、30fps标准高清视频；Exynos 4210提供了6.4GB/s的内存带宽，支持LPDDR2/DDR2/DDR3内存。代表产品有<a href="https://zh.wikipedia.org/wiki/%E4%B8%89%E6%98%9FGalaxy_Tab_7.7" title="三星Galaxy Tab 7.7" target="_blank" rel="noopener noreferrer">三星Galaxy Tab 7.7<i class="fas fa-external-link-square-alt ms-1"></i></a>、Galaxy S II（i9100）、<a href="https://zh.wikipedia.org/wiki/Galaxy_Note" title="Galaxy Note" target="_blank" rel="noopener noreferrer">Galaxy Note<i class="fas fa-external-link-square-alt ms-1"></i></a>和<a href="https://zh.wikipedia.org/wiki/%E9%AD%85%E6%97%8FMX" title="魅族MX" target="_blank" rel="noopener noreferrer">魅族MX<i class="fas fa-external-link-square-alt ms-1"></i></a>等。
+2011年9月发布的Exynos 4212在Exynos 4210的基础上再加改进：首先制程变为32nm，比起之前的45nm能够节省超过50%的能源。而且虽然同样为Cortex-A9架构，但Exynos 4212主频升至1.5GHz，比起4210更为强劲，3D性能约为后者的2倍，可用在<a href="https://zh.wikipedia.org/wiki/%E6%89%8B%E6%9C%BA" title="手机" target="_blank" rel="noopener noreferrer">手机<i class="fas fa-external-link-square-alt ms-1"></i></a>及<a href="https://zh.wikipedia.org/wiki/%E5%B9%B3%E6%9D%BF%E9%9B%BB%E8%85%A6" title="平板电脑" target="_blank" rel="noopener noreferrer">平板电脑<i class="fas fa-external-link-square-alt ms-1"></i></a>上。
+2012年初，<a href="https://zh.wikipedia.org/wiki/%E4%B8%89%E6%98%9F%E9%9B%BB%E5%AD%90" title="三星电子" target="_blank" rel="noopener noreferrer">三星<i class="fas fa-external-link-square-alt ms-1"></i></a>正式推出了自家的首款<a href="https://zh.wikipedia.org/w/index.php?title=%E5%9B%9B%E6%A0%B8%E7%A7%BB%E5%8A%A8%E5%A4%84%E7%90%86%E5%99%A8&amp;action=edit&amp;redlink=1" title="四核移动处理器（页面不存在）" target="_blank" rel="noopener noreferrer">四核移动处理器<i class="fas fa-external-link-square-alt ms-1"></i></a>Exynos 4412。这款新Exynos四核<a href="https://zh.wikipedia.org/wiki/%E5%A4%84%E7%90%86%E5%99%A8" title="处理器" target="_blank" rel="noopener noreferrer">处理器<i class="fas fa-external-link-square-alt ms-1"></i></a>，拥有32nm HKMG（高K金属栅极技术）制程，支持双通道LPDDR2 1066。新的32nm HKMG技术可以帮助降低<a href="https://zh.wikipedia.org/w/index.php?title=%E5%8A%9F%E8%80%97&amp;action=edit&amp;redlink=1" title="功耗（页面不存在）" target="_blank" rel="noopener noreferrer">功耗<i class="fas fa-external-link-square-alt ms-1"></i></a>，按照官方的说法，和其前代比会减低20% 的功耗。三星Exynos 4412四核处理器仍然集成Mali-400MP<a href="https://zh.wikipedia.org/wiki/%E5%9C%96%E5%BD%A2%E8%99%95%E7%90%86%E5%99%A8" title="图形处理器" target="_blank" rel="noopener noreferrer">图形处理器<i class="fas fa-external-link-square-alt ms-1"></i></a>，但<a href="https://zh.wikipedia.org/wiki/%E4%B8%89%E6%98%9F%E5%85%AC%E5%8F%B8" title="三星公司" target="_blank" rel="noopener noreferrer">三星公司<i class="fas fa-external-link-square-alt ms-1"></i></a>已将这颗图形处理器主频由此前的266MHz提升至400MHz，新闻稿指出会比现有的双核机型整体性能提升60%，图像处理提升 50%。2012年5月，首款采用Exynos 4412处理器的智能手机<a href="https://zh.wikipedia.org/wiki/%E4%B8%89%E6%98%9FGalaxy_S_III" title="三星Galaxy S III" target="_blank" rel="noopener noreferrer">三星Galaxy S III<i class="fas fa-external-link-square-alt ms-1"></i></a>正式上市，以及于6月上市的魅族MX四核版和12月上市的纽曼N2。</p>
+<table>
+<thead>
+<tr>
+<th>SoC</th>
+<th>CPU</th>
+<th>GPU</th>
+<th>内存技术</th>
+<th>供货时间</th>
+<th>应用设备</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>型号</td>
+<td><a href="https://zh.wikipedia.org/wiki/%E8%A3%BD%E7%A8%8B" title="制程" target="_blank" rel="noopener noreferrer">制程<i class="fas fa-external-link-square-alt ms-1"></i></a></td>
+<td><a href="https://zh.wikipedia.org/wiki/%E6%8C%87%E4%BB%A4%E9%9B%86" title="指令集" target="_blank" rel="noopener noreferrer">指令集<i class="fas fa-external-link-square-alt ms-1"></i></a></td>
+<td>架构</td>
+<td>核心</td>
+<td>频率 (<a href="https://zh.wikipedia.org/wiki/GHz" title="GHz" target="_blank" rel="noopener noreferrer">GHz<i class="fas fa-external-link-square-alt ms-1"></i></a>)</td>
+</tr>
+<tr>
+<td>Exynos 4 Dual 45 nm``<em>(Exynos 4210)</em> ^<a href="https://zh.wikipedia.org/zh-cn/%E4%B8%89%E6%98%9FExynos#cite_note-4212page-7" target="_blank" rel="noopener noreferrer">[7]<i class="fas fa-external-link-square-alt ms-1"></i></a>^</td>
+<td>45 nm</td>
+<td><a href="https://zh.wikipedia.org/wiki/ARMv7" title="ARMv7" target="_blank" rel="noopener noreferrer">ARMv7<i class="fas fa-external-link-square-alt ms-1"></i></a></td>
+<td><a href="https://zh.wikipedia.org/w/index.php?title=ARM_Cortex-A9_MPCore&amp;action=edit&amp;redlink=1" title="ARM Cortex-A9 MPCore（页面不存在）" target="_blank" rel="noopener noreferrer">Cortex-A9<i class="fas fa-external-link-square-alt ms-1"></i></a></td>
+<td>2</td>
+<td>1.2 <code>或</code>1.4</td>
+</tr>
+<tr>
+<td>Exynos 4 Dual 32 nm``<em>(Exynos 4212)</em> ^<a href="https://zh.wikipedia.org/zh-cn/%E4%B8%89%E6%98%9FExynos#cite_note-4212page-7" target="_blank" rel="noopener noreferrer">[7]<i class="fas fa-external-link-square-alt ms-1"></i></a>^</td>
+<td><a href="https://zh.wikipedia.org/w/index.php?title=32_nanometer&amp;action=edit&amp;redlink=1" title="32 nanometer（页面不存在）" target="_blank" rel="noopener noreferrer">32 nm<i class="fas fa-external-link-square-alt ms-1"></i></a> <a href="https://zh.wikipedia.org/w/index.php?title=High-k_dielectric&amp;action=edit&amp;redlink=1" title="High-k dielectric（页面不存在）" target="_blank" rel="noopener noreferrer">HKMG<i class="fas fa-external-link-square-alt ms-1"></i></a></td>
+<td><a href="https://zh.wikipedia.org/w/index.php?title=ARM_Cortex-A9_MPCore&amp;action=edit&amp;redlink=1" title="ARM Cortex-A9 MPCore（页面不存在）" target="_blank" rel="noopener noreferrer">Cortex-A9<i class="fas fa-external-link-square-alt ms-1"></i></a></td>
+<td>2</td>
+<td>1.5</td>
+<td>Mali-400MP4^<a href="https://zh.wikipedia.org/zh-cn/%E4%B8%89%E6%98%9FExynos#cite_note-10" target="_blank" rel="noopener noreferrer">[10]<i class="fas fa-external-link-square-alt ms-1"></i></a>^ (quad-core) @ 400 MHz; 16 GFLOPS</td>
+</tr>
+<tr>
+<td>Exynos 4 Quad^<a href="https://zh.wikipedia.org/zh-cn/%E4%B8%89%E6%98%9FExynos#cite_note-SE4Quad-13" target="_blank" rel="noopener noreferrer">[13]<i class="fas fa-external-link-square-alt ms-1"></i></a>^`` <em>(Exynos 4412)</em> ^<a href="https://zh.wikipedia.org/zh-cn/%E4%B8%89%E6%98%9FExynos#cite_note-SGSIII-14" target="_blank" rel="noopener noreferrer">[14]<i class="fas fa-external-link-square-alt ms-1"></i></a>^</td>
+<td>32 nm HKMG</td>
+<td><a href="https://zh.wikipedia.org/w/index.php?title=ARM_Cortex-A9_MPCore&amp;action=edit&amp;redlink=1" title="ARM Cortex-A9 MPCore（页面不存在）" target="_blank" rel="noopener noreferrer">Cortex-A9<i class="fas fa-external-link-square-alt ms-1"></i></a></td>
+<td>4</td>
+<td>1.4</td>
+<td>ARM Mali-400MP4^<a href="https://zh.wikipedia.org/zh-cn/%E4%B8%89%E6%98%9FExynos#cite_note-4412Manual-15" target="_blank" rel="noopener noreferrer">[15]<i class="fas fa-external-link-square-alt ms-1"></i></a>^ (quad-core) @ 440 MHz ; 17.6 GFLOPS</td>
+</tr>
+<tr>
+<td>Exynos 4 Quad^<a href="https://zh.wikipedia.org/zh-cn/%E4%B8%89%E6%98%9FExynos#cite_note-SE4Quad-13" target="_blank" rel="noopener noreferrer">[13]<i class="fas fa-external-link-square-alt ms-1"></i></a>^`` <em>(Exynos 4412 Prime)</em> ^<a href="https://zh.wikipedia.org/zh-cn/%E4%B8%89%E6%98%9FExynos#cite_note-SGSIII-14" target="_blank" rel="noopener noreferrer">[14]<i class="fas fa-external-link-square-alt ms-1"></i></a>^</td>
+<td>32 nm HKMG</td>
+<td><a href="https://zh.wikipedia.org/w/index.php?title=ARM_Cortex-A9_MPCore&amp;action=edit&amp;redlink=1" title="ARM Cortex-A9 MPCore（页面不存在）" target="_blank" rel="noopener noreferrer">Cortex-A9<i class="fas fa-external-link-square-alt ms-1"></i></a></td>
+<td>4</td>
+<td>1.6</td>
+<td>ARM Mali-400MP4^<a href="https://zh.wikipedia.org/zh-cn/%E4%B8%89%E6%98%9FExynos#cite_note-4412Manual-15" target="_blank" rel="noopener noreferrer">[15]<i class="fas fa-external-link-square-alt ms-1"></i></a>^ (quad-core) @ 533 MHz; 21.32 GFLOPS</td>
+</tr>
+</tbody>
+</table>
+
+<h1 id="2-exynos4412的启动流程" data-numberify>2. Exynos4412的启动流程<a class="anchor ms-1" href="#2-exynos4412的启动流程"></a></h1>
+<p>关于Exynos4412的启动模式、启动流程、文件布局等，在Android_Exynos4412_iROM_Secure_Booting_Guide_Ver.1.00.00.pdf介绍的很清楚。</p>
+<p>关于文件布局，Exynos 4412对BL1进行了限定，如果是使用官方的BL1，则BL2也需要满足指定的要求。如果是自制的BL1，只需要关心BL1的限定即可，BL2可以根据自制的BL1来进行布局。官方给出的布局是BL1+BL1+u-boot+tzsw。</p>
+<p>BL1和BL2在存储介质中的block小结。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>SD(8k)</th>
+<th>eMMC(8k)</th>
+<th>SD(15k)</th>
+<th>eMMC(15k)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BL1</td>
+<td>1~16</td>
+<td>0~15</td>
+<td>1~30</td>
+<td>0~29</td>
+</tr>
+<tr>
+<td>BL2</td>
+<td>17~48</td>
+<td>16~47</td>
+<td>31~62</td>
+<td>30~61</td>
+</tr>
+</tbody>
+</table>
+
+<h1 id="3-函数介绍" data-numberify>3. 函数介绍<a class="anchor ms-1" href="#3-函数介绍"></a></h1>
+<p>三星提供了一组从外部介质加载数据的函数，可以在BL1或BL2中直接使用，相关介绍在Android_Exynos4412_iROM_Secure_Booting_Guide_Ver.1.00.00.pdf。</p>
+<p>看一下文档中提到的注意事项：</p>
+<ol>
+<li>在启动时提供给SDMMC和eMMC的时钟是20Mhz，MPLL是这些时钟的源头。</li>
+<li>如果SDMMC和eMMC被选中为启动设备，那么iROM中SDMMC或eMMC拷贝函数在BL1和BL2阶段是可以使用的。如果你要使用这两函数，那么在使用前请不要修改SDMMC或eMMC的时钟。</li>
+</ol>
+<p>另外不要修改SDMMC或eMMC相关的PLL时钟配置。如果你修改了SDMMC或eMMC相关的时钟配置，那么正确的拷贝我们无法保证。</p>
+<table>
+<thead>
+<tr>
+<th>addr</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x02020030</td>
+<td>SDMMC_ReadBlocks</td>
+</tr>
+<tr>
+<td>0x0202003C</td>
+<td>LoadBL2FromEmmc43Ch0</td>
+</tr>
+<tr>
+<td>0x02020044</td>
+<td>MSH_ReadFromFIFO_eMMC</td>
+</tr>
+<tr>
+<td>0x02020048</td>
+<td>MSH_EndBootOp_eMMC</td>
+</tr>
+<tr>
+<td>0x02020070</td>
+<td>LoadImageFromUsb</td>
+</tr>
+</tbody>
+</table>
+<p>这里特别说明一下MSH_ReadFromFIFO_eMMC和MSH_EndBootOp_eMMC。</p>
+<p><strong>MSH_EndBootOp_eMMC是从eMMC中复制数据到指定位置，这个函数首先从eMMC偏移为0的位置读取，再次调用时，会以上一次读取的结尾为偏移再进行读取。</strong></p>
+<p>MSH_EndBootOp_eMMC是所有读取动作完成后调用的。Exynos4412要求启动时从eMMC的boot分区读取数据，个人猜测这个函数是用来将eMMC的读写分区切换到userdata的。如果要烧录boot分区，可以用U-Boot的 <code>mmc partconf</code>命令来切换要读写的物理分区或设置eMMC上电后的默认读写分区。</p>
+<p>如设置为boot0分区启动：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">mmc partconf <span class="m">0</span> <span class="m">1</span> <span class="m">1</span> <span class="m">1</span>
+</span></span></code></pre></div>
+<h3 id="31-sdmmc_readblocks" data-numberify>3.1. SDMMC_ReadBlocks<a class="anchor ms-1" href="#31-sdmmc_readblocks"></a></h3>
+<p>这个接口功能是从SD或MMC类型设备拷贝数据到目的地址中；</p>
+<p>返回1=True，0=False；参数(u32 SrcBlock，u32 NumofSrcBlock，void * DstByte)</p>
+<p>SrcBlock：start block number.(0 ~ n)拷贝起始块的编号从0开始</p>
+<p>NumofSrcBlock：拷贝块的数目</p>
+<p>DstByte：目的地址(System Memory)</p>
+
+<h3 id="32-loadbl2fromemmc43ch0" data-numberify>3.2. LoadBL2FromEmmc43Ch0<a class="anchor ms-1" href="#32-loadbl2fromemmc43ch0"></a></h3>
+<p>这个接口从emmc 4.3拷贝BL2启动区数据到内部RAM；</p>
+<p>返回1=True，0=False；参数(u32 SrcBlock，u32 * DstByte )</p>
+<p>0x02020040 Emmc43_EndBootOp_eMMC
+这个接口结束emmc 4.3启动模式；</p>
+<p>返回和参数都是void</p>
+
+<h3 id="33-msh_readfromfifo_emmc" data-numberify>3.3. MSH_ReadFromFIFO_eMMC<a class="anchor ms-1" href="#33-msh_readfromfifo_emmc"></a></h3>
+<p>这个接口从emmc 4.4拷贝启动区数据到目的地址；</p>
+<p>返回1=True，0=False；参数(u32 uNumofBlocks，void * uDstAddr)</p>
+<p>uNumofBlocks：传输的总块数，1块=512B</p>
+<p>uDstAddr：目的地址(System Memory)</p>
+
+<h3 id="34-msh_endbootop_emmc" data-numberify>3.4. MSH_EndBootOp_eMMC<a class="anchor ms-1" href="#34-msh_endbootop_emmc"></a></h3>
+<p>这个接口结束emmc 4.4启动模式；</p>
+<p>返回和参数都是void，这个函数会等待上面读函数的结束。</p>
+
+<h3 id="35-loadimagefromusb" data-numberify>3.5. LoadImageFromUsb<a class="anchor ms-1" href="#35-loadimagefromusb"></a></h3>
+<p>这个接口从USB拷贝数据，如果在iROM中枚举成功，这个功能就能用；</p>
+<p>返回1=True，0=False；参数void</p>
+</div>
+</div>
+</div><div class="card-footer">
+  <div class="post-navs d-flex justify-content-evenly"><div class="post-nav post-prev">
+      <i class="fas fa-fw fa-chevron-down post-prev-icon me-1" data-fa-transform="rotate-90"></i>
+      <a href="/zh-cn/docs/exynos4412/mkbl1/">Exynos4412自制BL1</a>
+    </div></div>
+</div></article><div class="post-copyright mb-3 row card component" id="post-copyright">
+    <div class="card-header">
+        <h2 class="card-title fs-4 my-2 text-surface">版权</h2>
+    </div>
+    <div class="card-body"><a class="d-flex align-items-center flex-column" target="_blank" rel="license noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh">
+  <span><i class="fab fa-fw fa-2x fa-creative-commons"></i><i class="fab fa-fw fa-2x fa-creative-commons-by"></i><i class="fab fa-fw fa-2x fa-creative-commons-nc"></i><i class="fab fa-fw fa-2x fa-creative-commons-nd"></i></span>
+  CC BY-NC-ND 4.0 
+</a>
+
+
+    </div>
+</div><section class="related-posts row card component">
+      <div class="card-header">
+        <h2 class="card-title fs-4 my-2 text-surface">
+          相关文章
+        </h2>
+      </div>
+      <div class="card-body slide px-1">
+        <div class="slide-inner row gx-0"><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="Exynos4412自制BL1" src="https://kingdix10.github.io/covers/chip_circuit_processor_140251_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/exynos4412/mkbl1/">
+    Exynos4412自制BL1
+  </a>
+  <div class="post-meta mb-0">
+    2020/03/05
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="Exynos4412自制BL2" src="https://kingdix10.github.io/covers/squares_structure_glow_140857_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/exynos4412/mkbl2/">
+    Exynos4412自制BL2
+  </a>
+  <div class="post-meta mb-0">
+    2020/03/05
+
+  </div>
+</div>
+
+          </div></div>
+        <button class="slide-control-left">
+          <i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-90"></i>
+          <span class="visually-hidden">Left</span>
+        </button>
+        <button class="slide-control-right">
+          <i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-270"></i>
+          <span class="visually-hidden">Right</span>
+        </button>
+      </div>
+    </section></div>
+</div>
+<aside class="sidebar d-flex docs-sidebar col-xxl-3 position-sticky order-xxl-5">
+  <div class="container">
+    
+<div class="row component card">
+    <div class="card-body">
+        <form action="/zh-cn/search/">
+            <div class="input-group">
+                <input name="q" class="form-control rounded" placeholder="搜索">
+                <button class="btn btn-sm btn-search position-absolute end-0 border-0 border-start border-secondary p-2" type="submit">
+                    <i class="fas fa-fw fa-search text-primary"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    <div class="accordion post-toc d-none d-lg-block">
+  <div class="accordion-item row mb-4 card component" id="postTOC">
+    <div class="card-header accordion-header">
+      <h2 class="card-title fs-4 my-2 text-surface d-none d-lg-block">目录</h2>
+      <a class="accordion-button d-lg-none mb-1 collapsed shadow-none p-0 bg-transparent" role="button" data-bs-toggle="collapse" href="#post-toc" aria-expanded="false" aria-controls="post-toc">
+        目录
+      </a>
+    </div>
+    <div class="card-body collapse accordion-collapse accordion-body d-lg-block" id="post-toc">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-两种大小的bl1是怎么回事">1. 两种大小的BL1是怎么回事</a></li>
+    <li><a href="#2-exynos4412的启动流程">2. Exynos4412的启动流程</a></li>
+    <li><a href="#3-函数介绍">3. 函数介绍</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#31-sdmmc_readblocks">3.1. SDMMC_ReadBlocks</a></li>
+            <li><a href="#32-loadbl2fromemmc43ch0">3.2. LoadBL2FromEmmc43Ch0</a></li>
+            <li><a href="#33-msh_readfromfifo_emmc">3.3. MSH_ReadFromFIFO_eMMC</a></li>
+            <li><a href="#34-msh_endbootop_emmc">3.4. MSH_EndBootOp_eMMC</a></li>
+            <li><a href="#35-loadimagefromusb">3.5. LoadImageFromUsb</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+  </div>
+</div>
+    
+
+
+
+
+
+
+  </div>
+</aside>
+
+      </div>
+    </main><footer class="footer mt-auto py-3 text-center container"><div class="offcanvas offcanvas-bottom h-auto" tabindex="-1" id="offcanvasActionsPanel"
+  aria-labelledby="offcanvasActionsPanelLabel">
+  <div class="offcanvas-header">
+    <div class="offcanvas-title h5" id="offcanvasActionsPanelLabel">
+      <i class="fas fa-fw fa-th-large me-1"></i>
+      操作
+    </div>
+    <button type="button" class="btn-close ms-auto" data-bs-dismiss="offcanvas" data-bs-target="offcanvasActionsPanel" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body mt-2"><div class="actions d-flex overflow-auto align-items-center">
+      <a role="button" class="action action-go-back d-flex flex-column align-items-center me-3" href="javascript: window.history.back();">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-90"></i></span> 返回
+      </a>
+      <a role="button" class="action action-reload-page d-flex flex-column align-items-center me-3">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-redo-alt"></i></span> 刷新
+      </a>
+      <a role="button" class="action action-copy-url d-flex flex-column align-items-center me-3">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-link"></i></span> 复制链接
+      </a>
+    </div>
+  </div>
+</div><div class="row text-center text-lg-start">
+  <div class="col-12 mt-2 col-lg-3">
+    <p class="mb-2">kingdix10&#39;s site</p>
+    <p class="text-secondary mb-2"><small>kingdix10 @ 拾月国度</small></p><div class="copyright mb-2 text-secondary">
+  <small>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</small>
+</div>
+
+
+
+<nav class="social-links nav justify-content-center justify-content-between mb-2 mt-3">
+      <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="https://github.com/kingdix10" title="GitHub" rel="me">
+        <i class="fa-fw fab fa-github"
+          ></i>
+      </a>
+      <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="https://www.zhihu.com/people/kingdix10" title="知乎" rel="me">
+        <i class="fa-fw fab fa-zhihu"
+           style="color: #056de8;"></i>
+      </a>
+  <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="/zh-cn/index.xml" title="RSS" rel="me">
+    <i class="fas fa-fw fa-rss" style="color: #ea6221;"></i>
+  </a>
+</nav>
+</div>
+  <div class="col-12 col-lg-8 offset-0 offset-lg-1"><ul class="nav justify-content-between footer-memu mb-3 row"><li class="nav-item col-12 col-md-6 col-lg-3 px-0"><ul class="nav flex-column align-items-start">
+      <li class="nav-item w-100"><a class="nav-link fw-bold fs-lg" href="javascript: void(0);">链接</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+GitHub"
+  href="https://github.com/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-github text-primary"></i></span>GitHub</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+Gitee"
+  href="https://gitee.com/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-github text-primary"></i></span>Gitee</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+Zhihu"
+  href="https://www.zhihu.com/people/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-zhihu text-primary"></i></span>Zhihu</a></li></ul></li></ul></div>
+</div>
+</footer>
+<script data-precache src="/assets/main/bundle.min.01351680f89e0e34293b6918c75261e88f5ff72804497fa7dea58b4190d564e6.js" integrity="sha256-ATUWgPieDjQpO2kYx1Jh6I9f9ygESX&#43;n3qWLQZDVZOY=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
+<script data-precache src="/assets/viewer/bundle.min.ffafad0d121aa7d1fb443510086dac514a0b152826cf094f02a1f3dec1f37918.js" integrity="sha256-/6&#43;tDRIap9H7RDUQCG2sUUoLFSgmzwlPAqHz3sHzeRg=" crossorigin="anonymous" defer></script><script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?8e042c957455c462d9b4c9da3ab642b0";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<script src="/js/sw-register.js" defer></script>
+
+  </body>
+</html>

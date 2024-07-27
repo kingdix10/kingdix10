@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>内存管理 on kingdix10&#39;s site</title>
+    <link>https://kingdix10.github.io/zh-cn/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</link>
+    <description>Recent content in 内存管理 on kingdix10&#39;s site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</copyright>
+    <lastBuildDate>Wed, 24 Apr 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Linux drm mm分析</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/drm/drm_/</link>
+      <pubDate>Wed, 24 Apr 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/drm/drm_/</guid>
+      <description><![CDATA[使用drm mm管理虚拟内存和物理内存]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/laptop_dj_equipment_212416_300x168.jpg" length="9857" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>U-Boot从dtb获取内存布局并传递到内核</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_m/</link>
+      <pubDate>Tue, 10 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_m/</guid>
+      <description><![CDATA[1. U-Boot获取布局内存 在DDR控制器初始化完成之后，就要确定系统中有多少可用内存，这通常是由dram_init_banksize来实现的]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/backlight_neon_electronics_144683_300x168.jpg" length="9613" type="image/.jpg" />
+    </item>
+    
+  </channel>
+</rss>
+

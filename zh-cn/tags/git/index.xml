@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>git on kingdix10&#39;s site</title>
+    <link>https://kingdix10.github.io/zh-cn/tags/git/</link>
+    <description>Recent content in git on kingdix10&#39;s site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</copyright>
+    <lastBuildDate>Sun, 01 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/git/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>git配置和操作</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/git/git_mis/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/git/git_mis/</guid>
+      <description><![CDATA[官方资料：Git Community Book 中文版 1. 支持显示中文 参考git 显示中文和解决中文乱码 1git config --global core.quotepath false 2. git统计每个人的代码量 1git log --format=&#39;%aN&#39; | sort -u | while read name; do echo -en &#34;${name}\t&#34;; git log]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/desert_sand_wavy_141026_300x168.jpg" length="13782" type="image/.jpg" />
+    </item>
+    
+  </channel>
+</rss>
+

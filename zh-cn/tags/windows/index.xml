@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Windows on kingdix10&#39;s site</title>
+    <link>https://kingdix10.github.io/zh-cn/tags/windows/</link>
+    <description>Recent content in Windows on kingdix10&#39;s site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</copyright>
+    <lastBuildDate>Sun, 01 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/windows/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>解决Windows不能使用python3.10的问题</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/01-os/win/win_python3/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/win/win_python3/</guid>
+      <description><![CDATA[1. 现象 Windows上输入python3 test.py后，脚本没有执行。 单独输入python3，会启动Microsoft Store，搜索Py]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/laptop_dj_equipment_212416_300x168.jpg" length="9857" type="image/.jpg" />
+    </item>
+    
+  </channel>
+</rss>
+

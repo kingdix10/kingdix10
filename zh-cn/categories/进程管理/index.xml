@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>进程管理 on kingdix10&#39;s site</title>
+    <link>https://kingdix10.github.io/zh-cn/categories/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</link>
+    <description>Recent content in 进程管理 on kingdix10&#39;s site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</copyright>
+    <lastBuildDate>Tue, 22 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Linux内核sched_class汇总</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_tabl/</link>
+      <pubDate>Tue, 22 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_tabl/</guid>
+      <description><![CDATA[1/// kernel/sched/sched.h 2/* 3 * Helper to define a sched_class instance; each one is placed in a separate 4 * section which is ordered by the linker script: 5 * 6 * include/asm-generic/vmlinux.lds.h 7 * 8 * *CAREFUL* they are laid out in *REVERSE* order!!! 9 * 10 * Also enforce alignment on the instance, not the type, to guarantee layout. 11 */ 12#define DEFINE_SCHED_CLASS(name) \ 13const struct sched_class name##_sched_class]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/camera_photographer_smoke_126548_300x168.jpg" length="9088" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux进程状态与生命周期</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/07-task_stat/</link>
+      <pubDate>Fri, 18 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/07-task_stat/</guid>
+      <description><![CDATA[1. 进程状态切换 state value desc TASK_NEW 0x00000800 新建 TASK_RUNNING 0x00000000 就绪或占有cpu运行 TASK_INTERRUPTIBLE 0x00000001 可中断睡眠 TASK_UNINTERRUPTIBLE 0x00000002 不可中断睡眠 TASK_WAKEKILL 0x00000100 可以在stopped/traced/killable的]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/walls_floor_light_50837_300x168.jpg" length="14340" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux内核copy_process分析（三）</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_3/</link>
+      <pubDate>Tue, 15 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_3/</guid>
+      <description><![CDATA[1. stackleak_task_init 需要编译器和体系结构支持，见CONFIG_GCC_PLUGIN_STACKLEAK，ARM64默认未使能。 如果使能，会设置lowest_]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/iridescent_colorful_lines_130978_300x168.jpg" length="11918" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux内核copy_process分析（二）</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_2/</link>
+      <pubDate>Mon, 14 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_2/</guid>
+      <description><![CDATA[1. shm_init_task 在使能SYSVIPC的情况下，初始化task-&gt;sysvshm.shm_clist。 1 /* copy all the process information */ 2 shm_init_task(p); 2. security_task_alloc 1 retval = security_task_alloc(p, clone_flags); /// Allocate a task&#39;s LSM blob]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_texture_127524_300x168.jpg" length="18901" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux内核copy_process分析（一）</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_1/</link>
+      <pubDate>Sun, 13 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_1/</guid>
+      <description><![CDATA[1. copy_process原型 1/// kernel/fork.c 2/* 3 * This creates a new process as a copy of the old one, 4 * but does not actually start it yet. 5 * 6 * It copies the registers, and all the appropriate 7 * parts of the process environment (as per the clone 8 * flags). The actual kick-off]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/gradient_blur_blending_130648_300x168.jpg" length="2927" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux fork进程/线程简介</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/06-a-fork/</link>
+      <pubDate>Sat, 12 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/06-a-fork/</guid>
+      <description><![CDATA[1. kernel_clone kernel_clone是内核创建进程/线程的核心函数，如下功能都是通过调用kernel_clone实现的。 kernel_thread：]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/stars_figure_pattern_178502_300x168.jpg" length="18670" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux进程命名空间（pid namespace）</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/05-pid_namespa/</link>
+      <pubDate>Fri, 11 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/05-pid_namespa/</guid>
+      <description><![CDATA[1. namespace简介 namespace是Linux提供的一种内核级别环境隔离的方法，很多编程语言也有namespace这样的功能，例如C]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lines_obliquely_stripes_123801_300x168.jpg" length="18016" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux进程和线程关系</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/04-relationship/</link>
+      <pubDate>Thu, 10 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/04-relationship/</guid>
+      <description><![CDATA[1. 基本概念 Linux内核中没有使用单独的数据结构来描述进程和线程，而是将它们统一起来，使用task_struct结构体来描述，这就是“Lin]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/trunk_tree_texture_119590_300x168.jpg" length="18828" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux 2号线程kthreadd简介</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/03-task_2/</link>
+      <pubDate>Mon, 07 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/03-task_2/</guid>
+      <description><![CDATA[1. 2号线程kthreadd Linux内核规定，所有的线程必须由已存在的线程创建出来，也就是要求所有的task_struct都需要在已有的ta]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/pixels_circles_colorful_121100_300x168.jpg" length="23064" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux 1号线程init简介</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/02-task_1/</link>
+      <pubDate>Sun, 06 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/02-task_1/</guid>
+      <description><![CDATA[1. 1号进程的内核态 1号进程首先运行在内核态，其函数是kernel_init，这里简单介绍一下其工作： 非bootcpu相关初始化 页分配器初始化]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_texture_127524_300x168.jpg" length="18901" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux 0号线程swapper简介</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/01-task_0/</link>
+      <pubDate>Sat, 05 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/01-task_0/</guid>
+      <description><![CDATA[1. 总览 这里以ARM64为例。 在内核的起始阶段，还没有进程和线程的概念，在开启MMU之后，__primary_switched的第一步就是将i]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/pattern_frosty_frost_134125_300x168.jpg" length="18643" type="image/.jpg" />
+    </item>
+    
+  </channel>
+</rss>
+

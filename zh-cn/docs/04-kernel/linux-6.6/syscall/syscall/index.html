@@ -1,0 +1,1485 @@
+<!doctype html>
+<html class="position-relative" itemscope itemtype="https://schema.org/WebPage" lang="zh-cn"
+  data-bs-theme="auto" data-palette="purple">
+  <head><script src="/assets/init/bundle.min.17bb1d3aa57be1ea17bd5f48fa2a59b44cab5fd5291efdf44dad530987335a4a.js" integrity="sha256-F7sdOqV74eoXvV9I&#43;ipZtEyrX9UpHv30Ta1TCYczWko=" crossorigin="anonymous"></script>
+<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程 - kingdix10&#39;s site</title>
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_16x16_resize_box_3.png" sizes="16x16" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_32x32_resize_box_3.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_150x150_resize_box_3.png" sizes="150x150" type="image/png">
+    <link rel="apple-touch-icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_180x180_resize_box_3.png" sizes="180x180" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_192x192_resize_box_3.png" sizes="192x192" type="image/png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#6f42c1">
+<meta name="keywords" content="系统调用" />
+  <meta name="description" content="深度分析系统调用从用户程序到内核的流程" />
+    <meta name="robots" content="index, follow" /><meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://kingdix10.github.io/covers/paint_canvas_stains_124156_300x168.jpg"/>
+
+<meta name="twitter:title" content="【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程"/>
+<meta name="twitter:description" content="深度分析系统调用从用户程序到内核的流程"/>
+<meta property="og:title" content="【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程" />
+<meta property="og:description" content="深度分析系统调用从用户程序到内核的流程" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/" /><meta property="og:image" content="https://kingdix10.github.io/covers/paint_canvas_stains_124156_300x168.jpg" /><meta property="article:section" content="docs" />
+<meta property="article:published_time" content="2024-04-21T00:00:00+00:00" />
+<meta property="article:modified_time" content="2024-04-21T10:00:00+00:00" /><meta property="og:site_name" content="kingdix10&#39;s site" />
+
+
+<meta itemprop="name" content="【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程">
+<meta itemprop="description" content="深度分析系统调用从用户程序到内核的流程"><meta itemprop="datePublished" content="2024-04-21T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2024-04-21T10:00:00+00:00" />
+<meta itemprop="wordCount" content="4733"><meta itemprop="image" content="https://kingdix10.github.io/covers/paint_canvas_stains_124156_300x168.jpg">
+<meta itemprop="keywords" content="linux内核,linux-6.6," />
+  <meta property="og:image:alt" content="【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程" />
+  <meta name="twitter:image:alt" content="【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程" />
+  <link rel="manifest" href="/zh-cn/manifest.json">
+
+<link data-precache rel="stylesheet" href="/assets/main/bundle.min.03fda061e9fca038de4b9a0a9f07d0f48b8bb6231de98a9cf415bf6818d719cd.css" integrity="sha256-A/2gYen8oDjeS5oKnwfQ9IuLtiMd6Yqc9BW/aBjXGc0=" crossorigin="anonymous">
+
+    <link data-precache rel="stylesheet" href="/assets/viewer/bundle.min.8c1002839fa22c1350d6ae1eef6593120e108f973c41348be9b5065430566aaf.css" integrity="sha256-jBACg5&#43;iLBNQ1q4e72WTEg4Qj5c8QTSL6bUGVDBWaq8=" crossorigin="anonymous">
+
+
+</head>
+  <body><header class="mb-4 sticky-top">
+  
+<nav class="top-app-bar shadow navbar navbar-expand-xxl">
+  <div class="container">
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDocsNav"
+      aria-expanded="false" aria-label="Toggle docs navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+<a class="navbar-brand d-flex align-items-center flex-grow-1 flex-xxl-grow-0 justify-content-xxl-start justify-content-center ms-2 ms-xxl-0 mx-auto me-xxl-2"
+    href="https://kingdix10.github.io/zh-cn/">
+    <picture><img class="logo " alt="Logo" src="https://kingdix10.github.io/images/icon_yellow_transparent_72x72.png" loading="lazy" width="72" height="72" />
+</picture>
+kingdix10
+</a>
+
+    <div class="offcanvas-xxl offcanvas-end flex-grow-1" data-bs-scroll="true" tabindex="-1" id="navbarMenus" aria-labelledby="navbarMenusLabel">
+      <div class="offcanvas-header px-4 pb-0">
+        <div class="offcanvas-title h5" id="navbarMenusLabel">kingdix10</div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#navbarMenus" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body p-4 pt-0 p-xxl-0">
+        <hr class="d-xxl-none">
+        <ul class="navbar-nav flex-row flex-wrap align-items-center me-auto"><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn">
+<span class="menu-icon me-1"><i class="fas fa-home"></i></span>主页
+            </a>
+          </li><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn/news/">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-newspaper"></i></span>新闻
+            </a>
+          </li><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn/docs/">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-folder"></i></span>文档
+            </a>
+          </li>
+          <li class="nav-item col-12 col-xxl-auto dropdown px-0">
+            <a href="#"
+              class="nav-link dropdown-toggle"
+              id="navbarDropdownBlog" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-blog"></i></span>博客
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog" data-bs-popper="none">
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/archives/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-file-archive text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">归档</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/series/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-columns"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">专栏</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of series.</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/categories/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-folder text-success"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">分类</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of categories.</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/tags/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-tags"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">标签</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of tags.</p>
+                  </div></a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item col-12 col-xxl-auto dropdown px-0">
+            <a href="#"
+              class="nav-link dropdown-toggle"
+              id="navbarDropdownLinks" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-link"></i></span>链接
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownLinks" data-bs-popper="none">
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://github.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-github text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">GitHub</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">github.com/kingdix10</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://gitee.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-github text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">Gitee</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">gitee.com/kingdix10</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://www.zhihu.com/people/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-zhihu text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">Zhihu</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://www.cnblogs.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">博客园</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://blog.csdn.net/u014001096" target="_blank" rel="noopener noreferrer">
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">CSDN</p>
+                  </div></a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+            </ul>
+          </li>
+        </ul>
+        
+    <hr class="d-xxl-none">
+    <form class="search-bar ms-auto my-auto" action="/zh-cn/search/" novalidate>
+      <div class="input-group align-items-center">
+        <span class="btn btn-search disabled position-absolute left-0 border-0 px-1">
+          <i class="fas fa-fw fa-search fa-lg"></i>
+        </span>
+        <input
+          class="my-1 form-control border-white rounded-5 search-input bg-body"
+          name="q"
+          type="search"
+          placeholder="搜索"
+          aria-label="Search"
+          required>
+          <span class="search-shortcut position-absolute end-0 top-0 me-2">
+            <kbd class="text-dark bg-white opacity-75 rounded-3 shadow border border-primary py-1 fw-bold">/</kbd>
+          </span>
+      </div>
+    </form><hr class="d-xxl-none">
+        <ul class="navbar-nav flex-row flex-wrap align-items-center ms-md-auto">
+<li class="nav-item py-2 py-xxl-1 col-12 col-xxl-auto">
+
+
+<nav class="social-links nav justify-content-center flex-row">
+      <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="https://github.com/kingdix10" title="GitHub" rel="me">
+        <i class="fa-fw fab fa-github"
+          ></i>
+        <span class="ms-1 d-xxl-none">Github</span>
+      </a>
+      <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="https://www.zhihu.com/people/kingdix10" title="知乎" rel="me">
+        <i class="fa-fw fab fa-zhihu"
+          ></i>
+        <span class="ms-1 d-xxl-none">Zhihu</span>
+      </a>
+  <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="/zh-cn/index.xml" title="RSS" rel="me">
+    <i class="fas fa-fw fa-rss"></i>
+    <span class="ms-1 d-xxl-none">RSS</span>
+  </a>
+</nav>
+
+</li>
+<li class="nav-item py-2 py-xxl-1 col-12 col-xxl-auto">
+  <div class="vr d-none d-xxl-flex h-100 mx-xxl-2 text-white"></div>
+  <hr class="d-xxl-none my-2">
+</li>
+<li class="nav-item dropdown py-1 py-xxl-1 col-6 col-xxl-auto">
+    <a class="nav-link px-0 px-xxl-1" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-globe"></i>
+        <span class="d-xxl-none">语言</span>
+    </a>
+    <ul class="language-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+        <li>
+        <a class="dropdown-item active" href="/zh-cn/">
+            简体中文
+        </a>
+        </li>
+        <li>
+        <a class="dropdown-item" href="/en/">
+            English
+        </a>
+        </li></ul>
+</li>
+<li class="nav-item py-1 col-12 col-xxl-auto">
+  <div class="vr d-none d-xxl-flex h-100 mx-xxl-2 text-white"></div>
+  <hr class="d-xxl-none my-2">
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="fontSizeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-font"></i>
+        <span class="d-xxl-none">字体大小</span>
+    </a>
+    <ul class="font-size-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="fontSizeDropdown">
+        <li>
+            <button class="font-size-item dropdown-item" data-size="xs">
+                特小号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="sm">
+                小号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item active" data-size="md">
+                中等
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="lg">
+                大号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="xl">
+                特大号
+            </button>
+        </li>
+    </ul>
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="paletteDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-palette"></i>
+        <span class="d-xxl-none">配色</span>
+    </a>
+    <ul class="palette-dropdown-menu dropdown-menu dropdown-menu-end px-2 row g-2" aria-labelledby="paletteDropdown">
+            <li class="col-4 my-1">
+                <a role="button" id="palette-blue" aria-label="蓝色"
+                    class="btn btn-sm w-100 palette text-bg-blue" data-palette="blue">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-blue-gray" aria-label="蓝灰色"
+                    class="btn btn-sm w-100 palette text-bg-blue-gray" data-palette="blue-gray">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-brown" aria-label="棕色"
+                    class="btn btn-sm w-100 palette text-bg-brown" data-palette="brown">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-cyan" aria-label="青色"
+                    class="btn btn-sm w-100 palette text-bg-cyan" data-palette="cyan">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-green" aria-label="绿色"
+                    class="btn btn-sm w-100 palette text-bg-green" data-palette="green">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-indigo" aria-label="靛青色"
+                    class="btn btn-sm w-100 palette text-bg-indigo" data-palette="indigo">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-orange" aria-label="橙色"
+                    class="btn btn-sm w-100 palette text-bg-orange" data-palette="orange">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-pink" aria-label="粉色"
+                    class="btn btn-sm w-100 palette text-bg-pink" data-palette="pink">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-purple" aria-label="紫色"
+                    class="btn btn-sm w-100 palette text-bg-purple" data-palette="purple">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-red" aria-label="红色"
+                    class="btn btn-sm w-100 palette text-bg-red" data-palette="red">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-teal" aria-label="蓝绿色"
+                    class="btn btn-sm w-100 palette text-bg-teal" data-palette="teal">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-yellow" aria-label="黄色"
+                    class="btn btn-sm w-100 palette text-bg-yellow" data-palette="yellow">
+                </a>
+            </li>
+    </ul>
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="modeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="mode-icon fas fa-fw fa-adjust" id="modeIcon"></i>
+        <span class="d-xxl-none">模式</span>
+    </a>
+    <ul class="mode-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="modeDropdown">
+        <li class="mode-item" data-color-mode="light" data-icon="sun">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-sun"></i> 浅色
+            </button>
+        </li>
+        <li class="mode-item" data-color-mode="dark" data-icon="moon">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-moon"></i> 深色
+            </button>
+        </li>
+        <li class="mode-item active" data-color-mode="auto" data-icon="adjust">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-adjust"></i> 自动
+            </button>
+        </li>
+    </ul>
+</li>
+        </ul>
+      </div>
+    </div>
+    <div class="d-flex">
+      <button class="navbar-toggler order-5 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarMenus"
+        aria-controls="navbarMenus" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-ellipsis-h"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+</header>
+
+    <main class="container">
+      <div class="row content"><noscript>
+    <div class="alert alert-danger" role="alert">你的浏览器不支持 JavaScript。</div>
+</noscript>
+<aside class="docs-nav col-xxl-2" tabindex="-1" data-bs-hide="focusout">
+  <div class="offcanvas-xxl offcanvas-start" id="offcanvasDocsNav" aria-labelledby="offcanvasDocsNavLabel">
+    <div class="offcanvas-header border-bottom">
+      <div class="offcanvas-title h5" id="offcanvasDocsNavLabel">浏览文档</div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#offcanvasDocsNav"></button>
+    </div>
+    <div class="offcanvas-body pt-2 flex-column"><div class="mb-3" style="margin-left: -0.5rem;">
+</div>
+<ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3 text-primary">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/"><span class="docs-nav-title">Linux内核分析</span></a>
+            <a class="btn-toggle ms-1" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-8d43cfa49df325f277d6f4234a021467" aria-expanded="true" aria-controls="nav-8d43cfa49df325f277d6f4234a021467">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse  show border-primary" id="nav-8d43cfa49df325f277d6f4234a021467">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/"><span class="docs-nav-title">linux-6.1</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-8ea97fb7a0a0d68cedef1b63b4664daa" aria-expanded="false" aria-controls="nav-8ea97fb7a0a0d68cedef1b63b4664daa">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-8ea97fb7a0a0d68cedef1b63b4664daa">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/01-task_0/"><span class="docs-nav-title">Linux 0号线程swapper简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/02-task_1/"><span class="docs-nav-title">Linux 1号线程init简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/03-task_2/"><span class="docs-nav-title">Linux 2号线程kthreadd简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/"><span class="docs-nav-title">linux thermal子系统简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/other/linux-err-retur/"><span class="docs-nav-title">Linux的errno简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/fdt/dt_to_dt/"><span class="docs-nav-title">Linux内核驱动模型（二）设备树转换</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/device_driver/initcall/"><span class="docs-nav-title">Linux内核驱动模型（三）驱动初始化</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/device_driver/device_model/"><span class="docs-nav-title">Linux内核驱动模型（四）核心结构体</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/fdt/fdt_dt/"><span class="docs-nav-title">Linux内核驱动模型（一）设备树展开</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/02-timekeeping/"><span class="docs-nav-title">linux内核时间子系统（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/01-tim/"><span class="docs-nav-title">linux内核时间子系统（一）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/kobject/kobject/"><span class="docs-nav-title">Linux内核数据结构kobject/kset/ktype</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/boot/01-entry/"><span class="docs-nav-title">内核启动流程（一）</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3 text-primary">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/"><span class="docs-nav-title">linux-6.6</span></a>
+            <a class="btn-toggle ms-1" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c105b2ef486b2fc777c1f47c8c02d8c9" aria-expanded="true" aria-controls="nav-c105b2ef486b2fc777c1f47c8c02d8c9">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse  show border-primary" id="nav-c105b2ef486b2fc777c1f47c8c02d8c9">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3 text-primary" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/"><span class="docs-nav-title">【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/arm64_setup/"><span class="docs-nav-title">ARM64 Crash调试环境搭建</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/jump_label/"><span class="docs-nav-title">ARM64 jump label源码分析</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/"><span class="docs-nav-title">ARM64 Linux中断入口</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/help/"><span class="docs-nav-title">Crash帮助信息</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtabl/"><span class="docs-nav-title">Linux ARM64页面大小和虚拟地址位数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/drm/drm_/"><span class="docs-nav-title">Linux drm mm分析</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-a-fork/"><span class="docs-nav-title">Linux fork进程/线程简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/04-relationship/"><span class="docs-nav-title">Linux进程和线程关系</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/05-pid_namespa/"><span class="docs-nav-title">Linux进程命名空间（pid namespace）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/07-task_stat/"><span class="docs-nav-title">Linux进程状态与生命周期</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_2/"><span class="docs-nav-title">Linux内核copy_process分析（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_3/"><span class="docs-nav-title">Linux内核copy_process分析（三）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_1/"><span class="docs-nav-title">Linux内核copy_process分析（一）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_tabl/"><span class="docs-nav-title">Linux内核sched_class汇总</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/optimize_tips/"><span class="docs-nav-title">Linux内核代码的编写和优化技巧</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/boot/01-entry/"><span class="docs-nav-title">内核启动流程（一）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/03-irq_create_mapping/"><span class="docs-nav-title">设备中断注册</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/04-request_irq/"><span class="docs-nav-title">申请中断request_irq</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/05-handler_entry/"><span class="docs-nav-title">中断处理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/02-irq_domain_a/"><span class="docs-nav-title">中断子系统domain注册</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/01-init/"><span class="docs-nav-title">中断子系统软硬件初始化</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/"><span class="docs-nav-title">开发环境</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-fd57bc387b9c3a4d19f1801fc65cd5b4" aria-expanded="false" aria-controls="nav-fd57bc387b9c3a4d19f1801fc65cd5b4">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-fd57bc387b9c3a4d19f1801fc65cd5b4">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/eel_env/eel_readm/"><span class="docs-nav-title">嵌入式学习环境快速搭建（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/eel_env/env_setup/"><span class="docs-nav-title">嵌入式学习环境快速搭建（一）</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/"><span class="docs-nav-title">启动</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-05b799579ad52d4ccfa92fd6313b23f7" aria-expanded="false" aria-controls="nav-05b799579ad52d4ccfa92fd6313b23f7">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-05b799579ad52d4ccfa92fd6313b23f7">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/uboot_m/"><span class="docs-nav-title">U-Boot从dtb获取内存布局并传递到内核</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/crc32_fu/"><span class="docs-nav-title">U-Boot和Linux内核的CRC函数</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/"><span class="docs-nav-title">系统工具</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-eb1c5d775f73e30b3a27244e12a84f81" aria-expanded="false" aria-controls="nav-eb1c5d775f73e30b3a27244e12a84f81">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-eb1c5d775f73e30b3a27244e12a84f81">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/git/git_mis/"><span class="docs-nav-title">git配置和操作</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_tips/"><span class="docs-nav-title">Linux Bash技巧</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_decorat/"><span class="docs-nav-title">Linux Bash终端美化</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/resizefs/"><span class="docs-nav-title">磁盘和文件系统扩容/缩容</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/win_python3/"><span class="docs-nav-title">解决Windows不能使用python3.10的问题</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/"><span class="docs-nav-title">杂项</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-4967b62f3b1964eee9739b39b25cd3eb" aria-expanded="false" aria-controls="nav-4967b62f3b1964eee9739b39b25cd3eb">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-4967b62f3b1964eee9739b39b25cd3eb">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/01-c/array_fu/"><span class="docs-nav-title">多维数组作为函数参数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/01-c/array_typ/"><span class="docs-nav-title">数组a、&amp;a、&amp;a[0]、&amp;a[0][0]的区别与联系</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/"><span class="docs-nav-title">4412</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-0cca8bc16c798175efb847597812f8c0" aria-expanded="false" aria-controls="nav-0cca8bc16c798175efb847597812f8c0">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-0cca8bc16c798175efb847597812f8c0">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/exynos4412/"><span class="docs-nav-title">Exynos4412启动介绍</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/mkbl1/"><span class="docs-nav-title">Exynos4412自制BL1</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/mkbl2/"><span class="docs-nav-title">Exynos4412自制BL2</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul></div>
+  </div>
+</aside><div class="col-xxl-7 ms-auto">
+  <div class="container-fluid"><nav class="row card component" aria-label="breadcrumb">
+  <div class="card-body pb-0">
+    <ol class="hbs-breadcrumb breadcrumb flex-nowrap"><li class="breadcrumb-item text-surface"><a href="/zh-cn/">主页</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/">文档</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/04-kernel/">Linux内核分析</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/04-kernel/linux-6.6/">linux-6.6</a></li><li class="breadcrumb-item active">【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程</li></ol>
+  </div>
+</nav><div class="post-panel-wrapper position-relative d-flex justify-content-center">
+  <div class="d-flex flex-row justify-content-center rounded-5 border post-panel position-fixed px-3 py-1 surface shadow-1">
+    
+    
+
+    
+    
+    
+<a class="action action-toc d-block d-xxl-none" href="#post-toc-container" role="button" title="目录">
+  <i class="fas fa-fw fa-list-alt"></i>
+</a>
+    <a class="action action-copyright" href="#post-copyright" role="button" aria-label="Copyright" title="版权">
+  <i class="fas fa-fw fa-copyright"></i>
+</a>
+    
+    
+<a id="sidebarToggler" class="action action-sidebar-toggler d-none d-xxl-block" role="button" title="切换侧边栏">
+  <i class="fas fa-fw fa-expand-alt" data-fa-transform="rotate-45"></i>
+</a>
+
+    
+  </div>
+</div><article class="row card component mb-4 post">
+<div class="card-header ">
+    <h1 class="card-title post-title my-2">【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程</h1>
+</div>
+<div class="card-body"><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2024-04-21 08:00:00 &#43;0800 CST，更新于 2024-04-21 18:00:00 &#43;0800 CST。">2024/04/21</span><span class="post-reading-time me-1 mb-1">10 分钟阅读</span><a href="/zh-cn/categories/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>系统调用</a><a href="/zh-cn/series/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
+      <i class="fas fa-fw fa-columns me-1"></i>系统调用</a><a href="/zh-cn/tags/linux-6.6/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux-6.6</a><a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux内核</a>
+</div>
+<picture class="d-flex justify-content-center"><img class="post-featured-img h-auto w-auto mb-3" alt="【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程" src="https://kingdix10.github.io/covers/paint_canvas_stains_124156_300x168.jpg"/>
+    </picture>
+<div class="mt-2 mb-3 d-block d-xxl-none">
+    <h2 class="text-surface mb-3">目录</h2>
+    <div id="post-toc-container">
+        </div>
+    <hr class="text-secondary">
+</div><div class="post-content mb-3" data-bs-spy="scroll" data-bs-target="#TableOfContents" tabindex="0">
+        <div id="post-content-body">
+<h1 id="1-简介" data-numberify>1. 简介<a class="anchor ms-1" href="#1-简介"></a></h1>
+<p>Linux操作系统提供多种服务，这些服务由内核提供，用户态程序通过系统调用与内核进行交互。</p>
+<p>通常来说，标准C库中会为每个系统调用设置一个具有相同名字的函数。从应用程序的角度，可以将系统调用视为C函数。</p>
+<p>系统调用的基本流程如下：</p>
+<ol>
+<li>c库中的函数将参数写入通用寄存器</li>
+<li>通过软中断陷入到内核</li>
+<li>内核保存寄存器和一些其他上下文</li>
+<li>内核根据系统调用号，找到对应的系统调用处理函数，并执行。</li>
+<li>执行完成后，再将上下文恢复，并记录返回值，最后返回用户态。</li>
+</ol>
+
+<h1 id="2-用户态的系统调用分析" data-numberify>2. 用户态的系统调用分析<a class="anchor ms-1" href="#2-用户态的系统调用分析"></a></h1>
+<p>musl是一个c标准函数库，这里以<code>musl-v1.2.5</code>的<code>ioctl</code>为例来介绍系统调用的原理。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// src/misc/ioctl.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="kt">int</span> <span class="nf">ioctl</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">int</span> <span class="n">req</span><span class="p">,</span> <span class="p">...)</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">    <span class="kt">void</span> <span class="o">*</span><span class="n">arg</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">    <span class="n">va_list</span> <span class="n">ap</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    <span class="nf">va_start</span><span class="p">(</span><span class="n">ap</span><span class="p">,</span> <span class="n">req</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="n">arg</span> <span class="o">=</span> <span class="nf">va_arg</span><span class="p">(</span><span class="n">ap</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">    <span class="nf">va_end</span><span class="p">(</span><span class="n">ap</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="nf">__syscall</span><span class="p">(</span><span class="n">SYS_ioctl</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="n">arg</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">SIOCGSTAMP</span> <span class="o">!=</span> <span class="n">SIOCGSTAMP_OLD</span> <span class="o">&amp;&amp;</span> <span class="n">req</span> <span class="o">&amp;&amp;</span> <span class="n">r</span><span class="o">==-</span><span class="n">ENOTTY</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="k">sizeof</span> <span class="n">compat_map</span><span class="o">/</span><span class="k">sizeof</span> <span class="o">*</span><span class="n">compat_map</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">compat_map</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">new_req</span> <span class="o">!=</span> <span class="n">req</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">            <span class="k">union</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">                <span class="kt">long</span> <span class="kt">long</span> <span class="n">align</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">                <span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl">            <span class="p">}</span> <span class="n">u</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">            <span class="nf">convert_ioctl_struct</span><span class="p">(</span><span class="o">&amp;</span><span class="n">compat_map</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">u</span><span class="p">.</span><span class="n">buf</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">W</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">            <span class="n">r</span> <span class="o">=</span> <span class="nf">__syscall</span><span class="p">(</span><span class="n">SYS_ioctl</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">compat_map</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">old_req</span><span class="p">,</span> <span class="n">u</span><span class="p">.</span><span class="n">buf</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">            <span class="nf">convert_ioctl_struct</span><span class="p">(</span><span class="o">&amp;</span><span class="n">compat_map</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">u</span><span class="p">.</span><span class="n">buf</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">R</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl">            <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl">    <span class="k">return</span> <span class="nf">__syscall_ret</span><span class="p">(</span><span class="n">r</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div>
+<h2 id="21-sys_ioctl从何而来" data-numberify>2.1. SYS_ioctl从何而来<a class="anchor ms-1" href="#21-sys_ioctl从何而来"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-makefile" data-lang="makefile"><span class="line"><span class="ln">1</span><span class="cl"><span class="err">///</span> <span class="err">./Makefile</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="nf">obj/include/bits/syscall.h</span><span class="o">:</span> <span class="k">$(</span><span class="nv">srcdir</span><span class="k">)</span>/<span class="n">arch</span>/<span class="k">$(</span><span class="nv">ARCH</span><span class="k">)</span>/<span class="n">bits</span>/<span class="n">syscall</span>.<span class="n">h</span>.<span class="n">in</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl">    cp $&lt; <span class="nv">$@</span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl">    sed -n -e s/__NR_/SYS_/p &lt; $&lt; &gt;&gt; <span class="nv">$@</span>
+</span></span></code></pre></div><p>以aarch64为例，ioctl的系统调用号为29，这个值和内核头文件中的定义一致。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1">/// arch/aarch64/bits/syscall.h.in
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="c1"></span><span class="cp">#define __NR_ioctl 29
+</span></span></span></code></pre></div>
+<h2 id="22-宏展开__syscall" data-numberify>2.2. 宏展开__syscall<a class="anchor ms-1" href="#22-宏展开__syscall"></a></h2>
+<p>下面来一步步展开<code>__syscall</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="nf">__syscall</span><span class="p">(</span><span class="n">SYS_ioctl</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">
+</span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="c1">/// __VA_ARGS__: SYS_ioctl, fd, req, arg
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="c1"></span><span class="nf">__SYSCALL_CONCAT</span><span class="p">(</span><span class="n">__syscall</span><span class="p">,</span> <span class="nf">__SYSCALL_NARGS</span><span class="p">(</span><span class="n">SYS_ioctl</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="n">arg</span><span class="p">))(</span><span class="n">SYS_ioctl</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+</span></span></code></pre></div><p>再看<code>__SYSCALL_NARGS</code>，它的作用是返回参数个数</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="nf">__SYSCALL_NARGS</span><span class="p">(</span><span class="n">SYS_ioctl</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="c1">/// __VA_ARGS__: SYS_ioctl, fd, req, arg，分别对应a/b/c/d
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="c1">///                  a       b    c   d   e f g h n
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="c1"></span><span class="nf">__SYSCALL_NARGS_X</span><span class="p">(</span><span class="n">SYS_ioctl</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,)</span>
+</span></span></code></pre></div><p>最后转换<code>__SYSCALL_CONCAT_X</code>，这是将两个符号连接起来。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="nf">__SYSCALL_CONCAT_X</span><span class="p">(</span><span class="n">__syscall</span><span class="p">,</span> <span class="mi">3</span><span class="p">)(</span><span class="n">SYS_ioctl</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="nf">__syscall3</span><span class="p">(</span><span class="n">SYS_ioctl</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+</span></span></code></pre></div><p><code>__syscall3</code>是一个与体系结构相关的函数，具体参考后边内容。</p>
+
+<h2 id="23-函数__syscall_ret" data-numberify>2.3. 函数__syscall_ret<a class="anchor ms-1" href="#23-函数__syscall_ret"></a></h2>
+<p><code>__syscall_ret</code>的声明在<code>src/internal/syscall.h</code>，实现在<code>src/internal/syscall_ret.c</code>。</p>
+<p>其作用就是返回系统调用的返回值，并对范围做了限定。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// src/internal/syscall.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cp">#ifndef __scc
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cp">#define __scc(X) ((long) (X))
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cp"></span><span class="k">typedef</span> <span class="kt">long</span> <span class="kt">syscall_arg_t</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="c1">/// 看不懂是什么写法，但gcc可以识别，可能只是个函数声明吧
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="c1"></span><span class="n">hidden</span> <span class="kt">long</span> <span class="nf">__syscall_ret</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">),</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    <span class="nf">__syscall_cp</span><span class="p">(</span><span class="kt">syscall_arg_t</span><span class="p">,</span> <span class="kt">syscall_arg_t</span><span class="p">,</span> <span class="kt">syscall_arg_t</span><span class="p">,</span> <span class="kt">syscall_arg_t</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">                 <span class="kt">syscall_arg_t</span><span class="p">,</span> <span class="kt">syscall_arg_t</span><span class="p">,</span> <span class="kt">syscall_arg_t</span><span class="p">);</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1">/// src/internal/syscall_ret.c
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="c1"></span><span class="kt">long</span> <span class="nf">__syscall_ret</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">r</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">4096UL</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl">        <span class="n">errno</span> <span class="o">=</span> <span class="o">-</span><span class="n">r</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">6</span><span class="cl">        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">7</span><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="ln">8</span><span class="cl">    <span class="k">return</span> <span class="n">r</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">9</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div>
+<h1 id="3-用户态与内核态界面" data-numberify>3. 用户态与内核态界面<a class="anchor ms-1" href="#3-用户态与内核态界面"></a></h1>
+<p>用户态通过软中断来陷入到内核态，但是在触发软中断前，还有一些工作要做。</p>
+
+<h2 id="31-通用宏__syscall" data-numberify>3.1. 通用宏__syscall<a class="anchor ms-1" href="#31-通用宏__syscall"></a></h2>
+<p>以<code>__syscall1</code>为例，左侧的<code>__syscall1</code>是宏名称，而右侧的是函数名，这里对用<code>__scc</code>对参数做了强制转换。<code>__syscall0</code>没有参数，直接使用各体系结构定义的函数。注意有些体系结构不支持<code>__syscall7</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// src/internal/syscall.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cp">#ifndef __scc
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cp">#define __scc(X) ((long) (X))
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cp"></span><span class="k">typedef</span> <span class="kt">long</span> <span class="kt">syscall_arg_t</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cp"></span><span class="c1">/// ... ...
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="c1"></span><span class="cp">#define __syscall1(n,a) __syscall1(n,__scc(a))
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cp">#define __syscall2(n,a,b) __syscall2(n,__scc(a),__scc(b))
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cp">#define __syscall3(n,a,b,c) __syscall3(n,__scc(a),__scc(b),__scc(c))
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cp">#define __syscall4(n,a,b,c,d) __syscall4(n,__scc(a),__scc(b),__scc(c),__scc(d))
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cp">#define __syscall5(n,a,b,c,d,e) __syscall5(n,__scc(a),__scc(b),__scc(c),__scc(d),__scc(e))
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cp">#define __syscall6(n,a,b,c,d,e,f) __syscall6(n,__scc(a),__scc(b),__scc(c),__scc(d),__scc(e),__scc(f))
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cp">#define __syscall7(n,a,b,c,d,e,f,g) __syscall7(n,__scc(a),__scc(b),__scc(c),__scc(d),__scc(e),__scc(f),__scc(g))
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cp">#define __SYSCALL_NARGS_X(a,b,c,d,e,f,g,h,n,...) n
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cp">#define __SYSCALL_NARGS(...) __SYSCALL_NARGS_X(__VA_ARGS__,7,6,5,4,3,2,1,0,)
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cp">#define __SYSCALL_CONCAT_X(a,b) a##b
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="cp">#define __SYSCALL_CONCAT(a,b) __SYSCALL_CONCAT_X(a,b)
+</span></span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="cp">#define __SYSCALL_DISP(b,...) __SYSCALL_CONCAT(b,__SYSCALL_NARGS(__VA_ARGS__))(__VA_ARGS__)
+</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="cp">#define __syscall(...) __SYSCALL_DISP(__syscall,__VA_ARGS__)
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="cp">#define syscall(...) __syscall_ret(__syscall(__VA_ARGS__))
+</span></span></span></code></pre></div><p>再来分析<code>__syscall3(SYS_ioctl, fd, req, arg)</code>，这个最终调用体系结构的<code>__syscall3</code>函数。</p>
+
+<h2 id="32-aarch64" data-numberify>3.2. aarch64<a class="anchor ms-1" href="#32-aarch64"></a></h2>
+<p>系统调用本质上就是填寄存器，之后再调用<code>svc</code>。内核约定使用arm64的x8寄存器来传递系统调用号。</p>
+<p>这些代码的本质就是将系统调用号n放到x8，其他参数按顺序放到<code>x0~x5</code>，然后调用<code>svc 0</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// arch/aarch64/syscall_arch.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cp">#define __SYSCALL_LL_E(x) (x)
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cp">#define __SYSCALL_LL_O(x) (x)
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cp">#define __asm_syscall(...) do { \
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cp">    __asm__ __volatile__ ( &#34;svc 0&#34; \
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cp">    : &#34;=r&#34;(x0) : __VA_ARGS__ : &#34;memory&#34;, &#34;cc&#34;); \
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cp">    return x0; \
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cp">    } while (0)
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="k">static</span> <span class="kr">inline</span> <span class="kt">long</span> <span class="nf">__syscall0</span><span class="p">(</span><span class="kt">long</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">x8</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;x8&#34;</span><span class="p">)</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">x0</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;x0&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">    <span class="nf">__asm_syscall</span><span class="p">(</span><span class="s">&#34;r&#34;</span><span class="p">(</span><span class="n">x8</span><span class="p">));</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">
+</span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="k">static</span> <span class="kr">inline</span> <span class="kt">long</span> <span class="nf">__syscall1</span><span class="p">(</span><span class="kt">long</span> <span class="n">n</span><span class="p">,</span> <span class="kt">long</span> <span class="n">a</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">x8</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;x8&#34;</span><span class="p">)</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">x0</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;x0&#34;</span><span class="p">)</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">    <span class="nf">__asm_syscall</span><span class="p">(</span><span class="s">&#34;r&#34;</span><span class="p">(</span><span class="n">x8</span><span class="p">),</span> <span class="s">&#34;0&#34;</span><span class="p">(</span><span class="n">x0</span><span class="p">));</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl">
+</span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="k">static</span> <span class="kr">inline</span> <span class="kt">long</span> <span class="nf">__syscall2</span><span class="p">(</span><span class="kt">long</span> <span class="n">n</span><span class="p">,</span> <span class="kt">long</span> <span class="n">a</span><span class="p">,</span> <span class="kt">long</span> <span class="n">b</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">27</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">x8</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;x8&#34;</span><span class="p">)</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">x0</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;x0&#34;</span><span class="p">)</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">29</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">x1</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;x1&#34;</span><span class="p">)</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">30</span><span class="cl">    <span class="nf">__asm_syscall</span><span class="p">(</span><span class="s">&#34;r&#34;</span><span class="p">(</span><span class="n">x8</span><span class="p">),</span> <span class="s">&#34;0&#34;</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span> <span class="s">&#34;r&#34;</span><span class="p">(</span><span class="n">x1</span><span class="p">));</span>
+</span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="c1">/// ... ...
+</span></span></span><span class="line"><span class="ln">33</span><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="kr">inline</span> <span class="kt">long</span> <span class="nf">__syscall6</span><span class="p">(</span><span class="kt">long</span> <span class="n">n</span><span class="p">,</span> <span class="kt">long</span> <span class="n">a</span><span class="p">,</span> <span class="kt">long</span> <span class="n">b</span><span class="p">,</span> <span class="kt">long</span> <span class="n">c</span><span class="p">,</span> <span class="kt">long</span> <span class="n">d</span><span class="p">,</span> <span class="kt">long</span> <span class="n">e</span><span class="p">,</span> <span class="kt">long</span> <span class="n">f</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">34</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">35</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">x8</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;x8&#34;</span><span class="p">)</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">36</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">x0</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;x0&#34;</span><span class="p">)</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">37</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">x1</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;x1&#34;</span><span class="p">)</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">38</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">x2</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;x2&#34;</span><span class="p">)</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">39</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">x3</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;x3&#34;</span><span class="p">)</span> <span class="o">=</span> <span class="n">d</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">40</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">x4</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;x4&#34;</span><span class="p">)</span> <span class="o">=</span> <span class="n">e</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">41</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">x5</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;x5&#34;</span><span class="p">)</span> <span class="o">=</span> <span class="n">f</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">42</span><span class="cl">    <span class="nf">__asm_syscall</span><span class="p">(</span><span class="s">&#34;r&#34;</span><span class="p">(</span><span class="n">x8</span><span class="p">),</span> <span class="s">&#34;0&#34;</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span> <span class="s">&#34;r&#34;</span><span class="p">(</span><span class="n">x1</span><span class="p">),</span> <span class="s">&#34;r&#34;</span><span class="p">(</span><span class="n">x2</span><span class="p">),</span> <span class="s">&#34;r&#34;</span><span class="p">(</span><span class="n">x3</span><span class="p">),</span> <span class="s">&#34;r&#34;</span><span class="p">(</span><span class="n">x4</span><span class="p">),</span> <span class="s">&#34;r&#34;</span><span class="p">(</span><span class="n">x5</span><span class="p">));</span>
+</span></span><span class="line"><span class="ln">43</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div>
+<h2 id="33-arm" data-numberify>3.3. arm<a class="anchor ms-1" href="#33-arm"></a></h2>
+<p>早期的arm使用<code>swi</code>指令来触发软中断，现在也改成了<code>svc</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// arch/arm/syscall_arch.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cp">#define __SYSCALL_LL_E(x) \
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cp">((union { long long ll; long l[2]; }){ .ll = x }).l[0], \
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cp">((union { long long ll; long l[2]; }){ .ll = x }).l[1]
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cp">#define __SYSCALL_LL_O(x) 0, __SYSCALL_LL_E((x))
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cp">#ifdef __thumb__
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm">/* Avoid use of r7 in asm constraints when producing thumb code,
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> * since it&#39;s reserved as frame pointer and might not be supported. */</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cp">#define __ASM____R7__
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cp">#define __asm_syscall(...) do { \
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cp">    __asm__ __volatile__ ( &#34;mov %1,r7 ; mov r7,%2 ; svc 0 ; mov r7,%1&#34; \
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cp">    : &#34;=r&#34;(r0), &#34;=&amp;r&#34;((int){0}) : __VA_ARGS__ : &#34;memory&#34;); \
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cp">    return r0; \
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cp">    } while (0)
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="cp">#else
+</span></span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="cp">#define __ASM____R7__ __asm__(&#34;r7&#34;)
+</span></span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="cp">#define __asm_syscall(...) do { \
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="cp">    __asm__ __volatile__ ( &#34;svc 0&#34; \
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="cp">    : &#34;=r&#34;(r0) : __VA_ARGS__ : &#34;memory&#34;); \
+</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="cp">    return r0; \
+</span></span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="cp">    } while (0)
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="cm">/* For thumb2, we can allow 8-bit immediate syscall numbers, saving a
+</span></span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="cm"> * register in the above dance around r7. Does not work for thumb1 where
+</span></span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="cm"> * only movs, not mov, supports immediates, and we can&#39;t use movs because
+</span></span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="cm"> * it doesn&#39;t support high regs. */</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="cp">#ifdef __thumb2__
+</span></span></span><span class="line"><span class="ln">33</span><span class="cl"><span class="cp">#define R7_OPERAND &#34;rI&#34;(r7)
+</span></span></span><span class="line"><span class="ln">34</span><span class="cl"><span class="cp">#else
+</span></span></span><span class="line"><span class="ln">35</span><span class="cl"><span class="cp">#define R7_OPERAND &#34;r&#34;(r7)
+</span></span></span><span class="line"><span class="ln">36</span><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="ln">37</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">38</span><span class="cl"><span class="k">static</span> <span class="kr">inline</span> <span class="kt">long</span> <span class="nf">__syscall0</span><span class="p">(</span><span class="kt">long</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">39</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">40</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">r7</span> <span class="n">__ASM____R7__</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">41</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">r0</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;r0&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">42</span><span class="cl">    <span class="nf">__asm_syscall</span><span class="p">(</span><span class="n">R7_OPERAND</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">43</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">44</span><span class="cl">
+</span></span><span class="line"><span class="ln">45</span><span class="cl"><span class="k">static</span> <span class="kr">inline</span> <span class="kt">long</span> <span class="nf">__syscall1</span><span class="p">(</span><span class="kt">long</span> <span class="n">n</span><span class="p">,</span> <span class="kt">long</span> <span class="n">a</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">46</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">47</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">r7</span> <span class="n">__ASM____R7__</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">48</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">r0</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;r0&#34;</span><span class="p">)</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">49</span><span class="cl">    <span class="nf">__asm_syscall</span><span class="p">(</span><span class="n">R7_OPERAND</span><span class="p">,</span> <span class="s">&#34;0&#34;</span><span class="p">(</span><span class="n">r0</span><span class="p">));</span>
+</span></span><span class="line"><span class="ln">50</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">51</span><span class="cl">
+</span></span><span class="line"><span class="ln">52</span><span class="cl"><span class="k">static</span> <span class="kr">inline</span> <span class="kt">long</span> <span class="nf">__syscall2</span><span class="p">(</span><span class="kt">long</span> <span class="n">n</span><span class="p">,</span> <span class="kt">long</span> <span class="n">a</span><span class="p">,</span> <span class="kt">long</span> <span class="n">b</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">53</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">54</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">r7</span> <span class="n">__ASM____R7__</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">55</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">r0</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;r0&#34;</span><span class="p">)</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">56</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">r1</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;r1&#34;</span><span class="p">)</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">57</span><span class="cl">    <span class="nf">__asm_syscall</span><span class="p">(</span><span class="n">R7_OPERAND</span><span class="p">,</span> <span class="s">&#34;0&#34;</span><span class="p">(</span><span class="n">r0</span><span class="p">),</span> <span class="s">&#34;r&#34;</span><span class="p">(</span><span class="n">r1</span><span class="p">));</span>
+</span></span><span class="line"><span class="ln">58</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">59</span><span class="cl"><span class="c1">/// ... ...
+</span></span></span><span class="line"><span class="ln">60</span><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="kr">inline</span> <span class="kt">long</span> <span class="nf">__syscall6</span><span class="p">(</span><span class="kt">long</span> <span class="n">n</span><span class="p">,</span> <span class="kt">long</span> <span class="n">a</span><span class="p">,</span> <span class="kt">long</span> <span class="n">b</span><span class="p">,</span> <span class="kt">long</span> <span class="n">c</span><span class="p">,</span> <span class="kt">long</span> <span class="n">d</span><span class="p">,</span> <span class="kt">long</span> <span class="n">e</span><span class="p">,</span> <span class="kt">long</span> <span class="n">f</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">61</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">62</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">r7</span> <span class="n">__ASM____R7__</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">63</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">r0</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;r0&#34;</span><span class="p">)</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">64</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">r1</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;r1&#34;</span><span class="p">)</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">65</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">r2</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;r2&#34;</span><span class="p">)</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">66</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">r3</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;r3&#34;</span><span class="p">)</span> <span class="o">=</span> <span class="n">d</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">67</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">r4</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;r4&#34;</span><span class="p">)</span> <span class="o">=</span> <span class="n">e</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">68</span><span class="cl">    <span class="k">register</span> <span class="kt">long</span> <span class="n">r5</span> <span class="nf">__asm__</span><span class="p">(</span><span class="s">&#34;r5&#34;</span><span class="p">)</span> <span class="o">=</span> <span class="n">f</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">69</span><span class="cl">    <span class="nf">__asm_syscall</span><span class="p">(</span><span class="n">R7_OPERAND</span><span class="p">,</span> <span class="s">&#34;0&#34;</span><span class="p">(</span><span class="n">r0</span><span class="p">),</span> <span class="s">&#34;r&#34;</span><span class="p">(</span><span class="n">r1</span><span class="p">),</span> <span class="s">&#34;r&#34;</span><span class="p">(</span><span class="n">r2</span><span class="p">),</span> <span class="s">&#34;r&#34;</span><span class="p">(</span><span class="n">r3</span><span class="p">),</span> <span class="s">&#34;r&#34;</span><span class="p">(</span><span class="n">r4</span><span class="p">),</span> <span class="s">&#34;r&#34;</span><span class="p">(</span><span class="n">r5</span><span class="p">));</span>
+</span></span><span class="line"><span class="ln">70</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div>
+<h1 id="4-内核入口到invoke_syscall" data-numberify>4. 内核入口到invoke_syscall<a class="anchor ms-1" href="#4-内核入口到invoke_syscall"></a></h1>
+<p>在汇编阶段，内核会将通用寄存器的值保存到栈空间上的<code>struct pt_regs</code>，在c函数中，会使用栈上的值。</p>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/syscall.png" loading="lazy" width="488" height="635" />
+</picture>
+
+</p>
+<p>这里注意<code>local_daif_restore(DAIF_PROCCTX)</code>，与外设产生的中断不同，系统调用在处理过程中会取消中断屏蔽，也就是说系统调用的处理函数是可以睡眠的。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// arch/arm64/kernel/entry-common.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="kt">void</span> <span class="n">noinstr</span> <span class="nf">el0_svc</span><span class="p">(</span><span class="k">struct</span> <span class="n">pt_regs</span> <span class="o">*</span><span class="n">regs</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">    <span class="nf">enter_from_user_mode</span><span class="p">(</span><span class="n">regs</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">    <span class="nf">cortex_a76_erratum_1463225_svc_handler</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    <span class="nf">fp_user_discard</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="nf">local_daif_restore</span><span class="p">(</span><span class="n">DAIF_PROCCTX</span><span class="p">);</span>       <span class="c1">/// 取消DAIF屏蔽，允许中断和异常
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="c1"></span>    <span class="nf">do_el0_svc</span><span class="p">(</span><span class="n">regs</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    <span class="nf">exit_to_user_mode</span><span class="p">(</span><span class="n">regs</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>以arm64为例，最终就是通过系统调用号和<code>syscall_table</code>找到处理函数，然后调用。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// arch/arm64/kernel/syscall.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="kt">long</span> <span class="nf">__invoke_syscall</span><span class="p">(</span><span class="k">struct</span> <span class="n">pt_regs</span> <span class="o">*</span><span class="n">regs</span><span class="p">,</span> <span class="kt">syscall_fn_t</span> <span class="n">syscall_fn</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">    <span class="k">return</span> <span class="nf">syscall_fn</span><span class="p">(</span><span class="n">regs</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="k">static</span> <span class="kt">void</span> <span class="nf">invoke_syscall</span><span class="p">(</span><span class="k">struct</span> <span class="n">pt_regs</span> <span class="o">*</span><span class="n">regs</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">scno</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">               <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">sc_nr</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">               <span class="k">const</span> <span class="kt">syscall_fn_t</span> <span class="n">syscall_table</span><span class="p">[])</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">    <span class="kt">long</span> <span class="n">ret</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">
+</span></span><span class="line"><span class="ln">13</span><span class="cl">    <span class="nf">add_random_kstack_offset</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">
+</span></span><span class="line"><span class="ln">15</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">scno</span> <span class="o">&lt;</span> <span class="n">sc_nr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl">        <span class="kt">syscall_fn_t</span> <span class="n">syscall_fn</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">        <span class="n">syscall_fn</span> <span class="o">=</span> <span class="n">syscall_table</span><span class="p">[</span><span class="nf">array_index_nospec</span><span class="p">(</span><span class="n">scno</span><span class="p">,</span> <span class="n">sc_nr</span><span class="p">)];</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">        <span class="n">ret</span> <span class="o">=</span> <span class="nf">__invoke_syscall</span><span class="p">(</span><span class="n">regs</span><span class="p">,</span> <span class="n">syscall_fn</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">        <span class="n">ret</span> <span class="o">=</span> <span class="nf">do_ni_syscall</span><span class="p">(</span><span class="n">regs</span><span class="p">,</span> <span class="n">scno</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">
+</span></span><span class="line"><span class="ln">23</span><span class="cl">    <span class="nf">syscall_set_return_value</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">regs</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ret</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl">
+</span></span><span class="line"><span class="ln">25</span><span class="cl">    <span class="cm">/*
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="cm">     * Ultimately, this value will get limited by KSTACK_OFFSET_MAX(),
+</span></span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="cm">     * but not enough for arm64 stack utilization comfort. To keep
+</span></span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="cm">     * reasonable stack head room, reduce the maximum offset to 9 bits.
+</span></span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="cm">     *
+</span></span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="cm">     * The actual entropy will be further reduced by the compiler when
+</span></span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="cm">     * applying stack alignment constraints: the AAPCS mandates a
+</span></span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="cm">     * 16-byte (i.e. 4-bit) aligned SP at function boundaries.
+</span></span></span><span class="line"><span class="ln">33</span><span class="cl"><span class="cm">     *
+</span></span></span><span class="line"><span class="ln">34</span><span class="cl"><span class="cm">     * The resulting 5 bits of entropy is seen in SP[8:4].
+</span></span></span><span class="line"><span class="ln">35</span><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="ln">36</span><span class="cl">    <span class="nf">choose_random_kstack_offset</span><span class="p">(</span><span class="nf">get_random_u16</span><span class="p">()</span> <span class="o">&amp;</span> <span class="mh">0x1FF</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">37</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>系统调用的返回值记录在<code>regs-&gt;regs[0]</code>中，在返回用户态时，会将其写入到寄存器，这样用户程序就可以拿到返回值了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// arch/arm64/include/asm/syscall.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="nf">syscall_set_return_value</span><span class="p">(</span><span class="k">struct</span> <span class="n">task_struct</span> <span class="o">*</span><span class="n">task</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">                        <span class="k">struct</span> <span class="n">pt_regs</span> <span class="o">*</span><span class="n">regs</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">                        <span class="kt">int</span> <span class="n">error</span><span class="p">,</span> <span class="kt">long</span> <span class="n">val</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">        <span class="n">val</span> <span class="o">=</span> <span class="n">error</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nf">is_compat_thread</span><span class="p">(</span><span class="nf">task_thread_info</span><span class="p">(</span><span class="n">task</span><span class="p">)))</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">        <span class="n">val</span> <span class="o">=</span> <span class="nf">lower_32_bits</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">
+</span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="n">regs</span><span class="o">-&gt;</span><span class="n">regs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div>
+<h1 id="5-系统调用表" data-numberify>5. 系统调用表<a class="anchor ms-1" href="#5-系统调用表"></a></h1>
+<p>内核约定使用arm64的x8寄存器来传递系统调用号，由用户态负责填充。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// arch/arm64/kernel/syscall.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">do_el0_svc</span><span class="p">(</span><span class="k">struct</span> <span class="n">pt_regs</span> <span class="o">*</span><span class="n">regs</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">    <span class="nf">el0_svc_common</span><span class="p">(</span><span class="n">regs</span><span class="p">,</span> <span class="n">regs</span><span class="o">-&gt;</span><span class="n">regs</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">__NR_syscalls</span><span class="p">,</span> <span class="n">sys_call_table</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cp">#ifdef CONFIG_COMPAT
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cp"></span><span class="kt">void</span> <span class="nf">do_el0_svc_compat</span><span class="p">(</span><span class="k">struct</span> <span class="n">pt_regs</span> <span class="o">*</span><span class="n">regs</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">    <span class="nf">el0_svc_common</span><span class="p">(</span><span class="n">regs</span><span class="p">,</span> <span class="n">regs</span><span class="o">-&gt;</span><span class="n">regs</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">__NR_compat_syscalls</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">               <span class="n">compat_sys_call_table</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cp">#endif
+</span></span></span></code></pre></div>
+<h2 id="51-sys_call_table" data-numberify>5.1. sys_call_table<a class="anchor ms-1" href="#51-sys_call_table"></a></h2>
+<p>系统调用函数表的实现巧妙的借助了C语言中的宏来实现，通过对同一个宏进行不同的定义，使得编译器在预处理阶段产生不同的代码，使用尽量少的代码来实现不同的功能。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// arch/arm64/kernel/sys.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cp">#undef __SYSCALL
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cp">#define __SYSCALL(nr, sym)	asmlinkage long __arm64_##sym(const struct pt_regs *);
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;asm/unistd.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cp">#undef __SYSCALL
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cp">#define __SYSCALL(nr, sym)	[nr] = __arm64_##sym,
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="k">const</span> <span class="kt">syscall_fn_t</span> <span class="n">sys_call_table</span><span class="p">[</span><span class="n">__NR_syscalls</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">    <span class="p">[</span><span class="mi">0</span> <span class="p">...</span> <span class="n">__NR_syscalls</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">__arm64_sys_ni_syscall</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;asm/unistd.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cp"></span><span class="p">};</span>
+</span></span></code></pre></div><p>这里<code>__SYSCALL</code>的定义和<code>#include &lt;asm/unistd.h&gt;</code>是关键。</p>
+<p>以ARM64为例，<code>asm/unistd.h</code>涉及3个文件，三个头文件会依次被上一文件include。</p>
+<ol>
+<li>arch/arm64/include/asm/unistd.h</li>
+<li>arch/arm64/include/uapi/asm/unistd.h，被1包含</li>
+<li>include/uapi/asm-generic/unistd.h，被2包含</li>
+</ol>
+<p>核心的内容在<code>include/uapi/asm-generic/unistd.h</code>，在包含此文件前，如果定义了<code>__SYSCALL</code>，会按定义的格式生成相关代码。如果没有定义，则<code>__SYSCALL</code>不会有任何代码生成。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// include/uapi/asm-generic/unistd.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * This file contains the system call numbers, based on the
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> * layout of the x86-64 architecture, which embeds the
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> * pointer to the syscall in the table.
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> * As a basic principle, no duplication of functionality
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> * should be added, e.g. we don&#39;t use lseek when llseek
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> * is present. New architectures should use this file
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> * and implement the less feature-full calls in user space.
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cp">#ifndef __SYSCALL
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cp">#define __SYSCALL(x, y)
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cp">#if __BITS_PER_LONG == 32 || defined(__SYSCALL_COMPAT)
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="cp">#define __SC_3264(_nr, _32, _64) __SYSCALL(_nr, _32)
+</span></span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="cp">#else
+</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="cp">#define __SC_3264(_nr, _32, _64) __SYSCALL(_nr, _64)
+</span></span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="cp">#ifdef __SYSCALL_COMPAT
+</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="cp">#define __SC_COMP(_nr, _sys, _comp) __SYSCALL(_nr, _comp)
+</span></span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="cp">#define __SC_COMP_3264(_nr, _32, _64, _comp) __SYSCALL(_nr, _comp)
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="cp">#else
+</span></span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="cp">#define __SC_COMP(_nr, _sys, _comp) __SYSCALL(_nr, _sys)
+</span></span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="cp">#define __SC_COMP_3264(_nr, _32, _64, _comp) __SC_3264(_nr, _32, _64)
+</span></span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="cp">#endif
+</span></span></span></code></pre></div><p>以ioctl为例解释上述代码</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="cp">#define __NR_ioctl 29
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="cp"></span><span class="nf">__SC_COMP</span><span class="p">(</span><span class="n">__NR_ioctl</span><span class="p">,</span> <span class="n">sys_ioctl</span><span class="p">,</span> <span class="n">compat_sys_ioctl</span><span class="p">)</span>
+</span></span></code></pre></div><p>分别展开两次宏定义。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// #undef __SYSCALL
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1">/// #define __SYSCALL(nr, sym)	asmlinkage long __arm64_##sym(const struct pt_regs *);
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="c1">/// #include &lt;asm/unistd.h&gt;
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="c1"></span><span class="n">asmlinkage</span> <span class="kt">long</span> <span class="nf">__arm64_sys_ioctl</span><span class="p">(</span><span class="k">const</span> <span class="k">struct</span> <span class="n">pt_regs</span> <span class="o">*</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cp">#undef __SYSCALL
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cp">#define __SYSCALL(nr, sym)	[nr] = __arm64_##sym,
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="k">const</span> <span class="kt">syscall_fn_t</span> <span class="n">sys_call_table</span><span class="p">[</span><span class="n">__NR_syscalls</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">    <span class="p">[</span><span class="mi">0</span> <span class="p">...</span> <span class="n">__NR_syscalls</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">__arm64_sys_ni_syscall</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="c1">/// #include &lt;asm/unistd.h&gt;
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="c1"></span>    <span class="p">[</span><span class="mi">29</span><span class="p">]</span> <span class="o">=</span> <span class="n">__arm64_sys_ioctl</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">    <span class="p">[</span><span class="mi">30</span><span class="p">]</span> <span class="o">=</span> <span class="p">...;</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>总结来说，就是通过两次分别做了一次函数声明，和一次函数指针数组中特定索引赋值。函数声明防止编译器警告或报错，数组赋值是可以使invoke_syscall调用到真正的函数。</p>
+
+<h1 id="6-系统调用封装" data-numberify>6. 系统调用封装<a class="anchor ms-1" href="#6-系统调用封装"></a></h1>
+<p>还是以ioctl为例，其实现在<code>fs/ioctl.c</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// fs/ioctl.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="nf">SYSCALL_DEFINE3</span><span class="p">(</span><span class="n">ioctl</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">    <span class="k">struct</span> <span class="n">fd</span> <span class="n">f</span> <span class="o">=</span> <span class="nf">fdget</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">    <span class="kt">int</span> <span class="n">error</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">f</span><span class="p">.</span><span class="n">file</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">        <span class="k">return</span> <span class="o">-</span><span class="n">EBADF</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">
+</span></span><span class="line"><span class="ln">10</span><span class="cl">    <span class="n">error</span> <span class="o">=</span> <span class="nf">security_file_ioctl</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">file</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">arg</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">        <span class="k">goto</span> <span class="n">out</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">
+</span></span><span class="line"><span class="ln">14</span><span class="cl">    <span class="n">error</span> <span class="o">=</span> <span class="nf">do_vfs_ioctl</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">file</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">arg</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">error</span> <span class="o">==</span> <span class="o">-</span><span class="n">ENOIOCTLCMD</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl">        <span class="n">error</span> <span class="o">=</span> <span class="nf">vfs_ioctl</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">file</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">arg</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">
+</span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="nl">out</span><span class="p">:</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">    <span class="nf">fdput</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">    <span class="k">return</span> <span class="n">error</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>从<code>__invoke_syscall</code>的代码可以看到，系统调用的入参都是<code>struct pt_regs</code>指针，而我们看到<code>ioctl</code>没有用到这个指针，这里需要从<code>SYSCALL_DEFINE3</code>的实现来找答案了。</p>
+
+<h2 id="61-syscall_definex" data-numberify>6.1. SYSCALL_DEFINEx<a class="anchor ms-1" href="#61-syscall_definex"></a></h2>
+<p><code>SYSCALL_DEFINEx</code>是系统调用的宏定义，其定义在<code>include/linux/syscalls.h</code>中，体系结构体也可以通过定义<code>__SYSCALL_DEFINEx</code>来改变默认的行为。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// include/linux/syscalls.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cp">#ifndef SYSCALL_DEFINE0
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cp">#define SYSCALL_DEFINE0(sname)					\
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cp">    SYSCALL_METADATA(_##sname, 0);				\
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cp">    asmlinkage long sys_##sname(void);			\
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cp">    ALLOW_ERROR_INJECTION(sys_##sname, ERRNO);		\
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cp">    asmlinkage long sys_##sname(void)
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cp">#endif </span><span class="cm">/* SYSCALL_DEFINE0 */</span><span class="cp">
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cp">#define SYSCALL_DEFINE1(name, ...) SYSCALL_DEFINEx(1, _##name, __VA_ARGS__)
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cp">#define SYSCALL_DEFINE2(name, ...) SYSCALL_DEFINEx(2, _##name, __VA_ARGS__)
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cp">#define SYSCALL_DEFINE3(name, ...) SYSCALL_DEFINEx(3, _##name, __VA_ARGS__)
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cp">#define SYSCALL_DEFINE4(name, ...) SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cp">#define SYSCALL_DEFINE5(name, ...) SYSCALL_DEFINEx(5, _##name, __VA_ARGS__)
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cp">#define SYSCALL_DEFINE6(name, ...) SYSCALL_DEFINEx(6, _##name, __VA_ARGS__)
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cp">#define SYSCALL_DEFINE_MAXARGS	6
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="cp">#define SYSCALL_DEFINEx(x, sname, ...)				\
+</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="cp">    SYSCALL_METADATA(sname, x, __VA_ARGS__)			\
+</span></span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="cp">    __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+</span></span></span></code></pre></div><p>以ARM64为例，<code>__SYSCALL_DEFINEx</code>在<code>arch/arm64/include/asm/syscall_wrapper.h</code>中进行了定义。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// arch/arm64/include/asm/syscall_wrapper.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cp">#define __SYSCALL_DEFINEx(x, name, ...)						\
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cp">    asmlinkage long __arm64_sys##name(const struct pt_regs *regs);		\
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cp">    ALLOW_ERROR_INJECTION(__arm64_sys##name, ERRNO);			\
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cp">    static long __se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__));		\
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cp">    static inline long __do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__));	\
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cp">    asmlinkage long __arm64_sys##name(const struct pt_regs *regs);		\
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cp">    asmlinkage long __arm64_sys##name(const struct pt_regs *regs)		\
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cp">    {									\
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cp">        return __se_sys##name(SC_ARM64_REGS_TO_ARGS(x,__VA_ARGS__));	\
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cp">    }									\
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cp">    static long __se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__))		\
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cp">    {									\
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cp">        long ret = __do_sys##name(__MAP(x,__SC_CAST,__VA_ARGS__));	\
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cp">        __MAP(x,__SC_TEST,__VA_ARGS__);					\
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cp">        __PROTECT(x, ret,__MAP(x,__SC_ARGS,__VA_ARGS__));		\
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cp">        return ret;							\
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="cp">    }									\
+</span></span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="cp">    static inline long __do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))
+</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="cp">#define SYSCALL_DEFINE0(sname)							\
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="cp">    SYSCALL_METADATA(_##sname, 0);						\
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="cp">    asmlinkage long __arm64_sys_##sname(const struct pt_regs *__unused);	\
+</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="cp">    ALLOW_ERROR_INJECTION(__arm64_sys_##sname, ERRNO);			\
+</span></span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="cp">    asmlinkage long __arm64_sys_##sname(const struct pt_regs *__unused)
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="cp">#define COND_SYSCALL(name)							\
+</span></span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="cp">    asmlinkage long __arm64_sys_##name(const struct pt_regs *regs);		\
+</span></span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="cp">    asmlinkage long __weak __arm64_sys_##name(const struct pt_regs *regs)	\
+</span></span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="cp">    {									\
+</span></span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="cp">        return sys_ni_syscall();					\
+</span></span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="cp">    }
+</span></span></span><span class="line"><span class="ln">33</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">34</span><span class="cl"><span class="n">asmlinkage</span> <span class="kt">long</span> <span class="nf">__arm64_sys_ni_syscall</span><span class="p">(</span><span class="k">const</span> <span class="k">struct</span> <span class="n">pt_regs</span> <span class="o">*</span><span class="n">__unused</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">35</span><span class="cl"><span class="cp">#define SYS_NI(name) SYSCALL_ALIAS(__arm64_sys_##name, sys_ni_posix_timers);
+</span></span></span></code></pre></div>
+<h2 id="62-ioctl的syscall_define3展开" data-numberify>6.2. ioctl的SYSCALL_DEFINE3展开<a class="anchor ms-1" href="#62-ioctl的syscall_define3展开"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// SYSCALL_DEFINE3(ioctl, unsigned int, fd, unsigned int, cmd, unsigned long, arg)
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cp">#define __SYSCALL_DEFINEx(3, _ioctl, unsigned int, fd, unsigned int, cmd, unsigned long, arg)
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="c1">/// __arm64_sys_ioctl函数声明，sys_call_table记录的就是这个函数指针。
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="c1"></span><span class="n">asmlinkage</span> <span class="kt">long</span> <span class="nf">__arm64_sys_ioctl</span><span class="p">(</span><span class="k">const</span> <span class="k">struct</span> <span class="n">pt_regs</span> <span class="o">*</span><span class="n">regs</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="c1">/// 定义CONFIG_FUNCTION_ERROR_INJECTION时会声明一个struct error_injection_entry变量，
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="c1">/// 对分析系统调用代码没有影响
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="c1"></span><span class="nf">ALLOW_ERROR_INJECTION</span><span class="p">(</span><span class="n">__arm64_sys</span><span class="err">##</span><span class="n">name</span><span class="p">,</span> <span class="n">ERRNO</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="c1">/// 3个函数声明
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="kt">long</span> <span class="nf">__se_sys_ioctl</span><span class="p">(</span><span class="nf">__MAP</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">__SC_LONG</span><span class="p">,</span><span class="n">__VA_ARGS__</span><span class="p">));</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="k">static</span> <span class="kr">inline</span> <span class="kt">long</span> <span class="nf">__do_sys_ioctl</span><span class="p">(</span><span class="nf">__MAP</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">__SC_DECL</span><span class="p">,</span><span class="n">__VA_ARGS__</span><span class="p">));</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="n">asmlinkage</span> <span class="kt">long</span> <span class="nf">__arm64_sys_ioctl</span><span class="p">(</span><span class="k">const</span> <span class="k">struct</span> <span class="n">pt_regs</span> <span class="o">*</span><span class="n">regs</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="c1">/// __arm64_sys_ioctl函数实现，这里入参是struct pt_regs
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="c1"></span><span class="n">asmlinkage</span> <span class="kt">long</span> <span class="nf">__arm64_sys_ioctl</span><span class="p">(</span><span class="k">const</span> <span class="k">struct</span> <span class="n">pt_regs</span> <span class="o">*</span><span class="n">regs</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">    <span class="c1">/// SC_ARM64_REGS_TO_ARGS展开参数，见下边分析
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="c1"></span>    <span class="k">return</span> <span class="nf">__se_sys_ioctl</span><span class="p">(</span><span class="nf">SC_ARM64_REGS_TO_ARGS</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">__VA_ARGS__</span><span class="p">));</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="c1">/// 这个函数的参数列表都是long或者long long型的，这里目的是要转换成实际的函数参数类型
+</span></span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="kt">long</span> <span class="nf">__se_sys_ioctl</span><span class="p">(</span><span class="nf">__MAP</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">__SC_LONG</span><span class="p">,</span><span class="n">__VA_ARGS__</span><span class="p">))</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl">    <span class="c1">/// __SC_CAST将long型的参数转为代码中声明的实际类型的参数
+</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="c1"></span>    <span class="c1">/// 统一将函数返回值转为long
+</span></span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="c1"></span>    <span class="kt">long</span> <span class="n">ret</span> <span class="o">=</span> <span class="nf">__do_sys_ioctl</span><span class="p">(</span><span class="nf">__MAP</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">__SC_CAST</span><span class="p">,</span><span class="n">__VA_ARGS__</span><span class="p">));</span>
+</span></span><span class="line"><span class="ln">26</span><span class="cl">    <span class="c1">/// 如果参数类型不是ll或者ull，并且sizeof(t) &gt; sizeof(long)，编译报错
+</span></span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="c1"></span>    <span class="nf">__MAP</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">__SC_TEST</span><span class="p">,</span><span class="n">__VA_ARGS__</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl">    <span class="c1">/// 默认为空操作
+</span></span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="c1"></span>    <span class="nf">__PROTECT</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">ret</span><span class="p">,</span><span class="nf">__MAP</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">__SC_ARGS</span><span class="p">,</span><span class="n">__VA_ARGS__</span><span class="p">));</span>
+</span></span><span class="line"><span class="ln">30</span><span class="cl">    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="c1">/// 实际函数体定义
+</span></span></span><span class="line"><span class="ln">33</span><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="kr">inline</span> <span class="kt">long</span> <span class="nf">__do_sys_ioctl</span><span class="p">(</span><span class="nf">__MAP</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">__SC_DECL</span><span class="p">,</span><span class="n">__VA_ARGS__</span><span class="p">))</span>
+</span></span></code></pre></div><p>注意最后的<code>static inline long __do_sys_ioctl(__MAP(x,__SC_DECL,__VA_ARGS__))</code>，这个后边没有<code>;</code>，在ioctl的源码中，它的下一个字符是<code>{</code>，是函数体的开始。</p>
+
+<h2 id="63-宏展开__map" data-numberify>6.3. 宏展开__MAP<a class="anchor ms-1" href="#63-宏展开__map"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// arch/arm64/include/asm/syscall_wrapper.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * __MAP - apply a macro to syscall arguments
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> * __MAP(n, m, t1, a1, t2, a2, ..., tn, an) will expand to
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> *    m(t1, a1), m(t2, a2), ..., m(tn, an)
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> * The first argument must be equal to the amount of type/name
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> * pairs given.  Note that this list of pairs (i.e. the arguments
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> * of __MAP starting at the third one) is in the same format as
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> * for SYSCALL_DEFINE&lt;n&gt;/COMPAT_SYSCALL_DEFINE&lt;n&gt;
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cp">#define __MAP0(m,...)
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cp">#define __MAP1(m,t,a,...) m(t,a)
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cp">#define __MAP2(m,t,a,...) m(t,a), __MAP1(m,__VA_ARGS__)
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cp">#define __MAP3(m,t,a,...) m(t,a), __MAP2(m,__VA_ARGS__)
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cp">#define __MAP4(m,t,a,...) m(t,a), __MAP3(m,__VA_ARGS__)
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cp">#define __MAP5(m,t,a,...) m(t,a), __MAP4(m,__VA_ARGS__)
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cp">#define __MAP6(m,t,a,...) m(t,a), __MAP5(m,__VA_ARGS__)
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="cp">#define __MAP(n,...) __MAP##n(__VA_ARGS__)
+</span></span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="cp">#define __SC_DECL(t, a)	t a
+</span></span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="cp">#define __TYPE_AS(t, v)	__same_type((__force t)0, v)
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="cp">#define __TYPE_IS_L(t)	(__TYPE_AS(t, 0L))
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="cp">#define __TYPE_IS_UL(t)	(__TYPE_AS(t, 0UL))
+</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="cp">#define __TYPE_IS_LL(t) (__TYPE_AS(t, 0LL) || __TYPE_AS(t, 0ULL))
+</span></span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="cp">#define __SC_LONG(t, a) __typeof(__builtin_choose_expr(__TYPE_IS_LL(t), 0LL, 0L)) a
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="cp">#define __SC_CAST(t, a)	(__force t) a
+</span></span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="cp">#define __SC_ARGS(t, a)	a
+</span></span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="cp">#define __SC_TEST(t, a) (void)BUILD_BUG_ON_ZERO(!__TYPE_IS_LL(t) &amp;&amp; sizeof(t) &gt; sizeof(long))
+</span></span></span></code></pre></div><p>以<code>ioctl</code>使用的<code>__MAP(3,__SC_DECL,__VA_ARGS__)</code>来解释<code>__MAP</code>宏的作用。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1">/// __MAP(n,     m,      ...)
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="c1">/// __MAP(3,__SC_DECL,__VA_ARGS__)
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="c1"></span><span class="nf">__MAP</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">__SC_DECL</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="nf">__MAP3</span><span class="p">(</span><span class="n">__SC_DECL</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="nf">__SC_DECL</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">,</span> <span class="n">fd</span><span class="p">),</span> <span class="nf">__MAP2</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="nf">__SC_DECL</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">,</span> <span class="n">fd</span><span class="p">),</span> <span class="nf">__SC_DECL</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">,</span> <span class="n">cmd</span><span class="p">),</span> <span class="nf">__MAP1</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">7</span><span class="cl"><span class="nf">__SC_DECL</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">,</span> <span class="n">fd</span><span class="p">),</span> <span class="nf">__SC_DECL</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">,</span> <span class="n">cmd</span><span class="p">),</span> <span class="nf">__SC_DECL</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">8</span><span class="cl"><span class="c1">/// 最终结果
+</span></span></span><span class="line"><span class="ln">9</span><span class="cl"><span class="c1"></span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">cmd</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">arg</span>
+</span></span></code></pre></div>
+<h2 id="64-宏展开sc_arm64_regs_to_args" data-numberify>6.4. 宏展开SC_ARM64_REGS_TO_ARGS<a class="anchor ms-1" href="#64-宏展开sc_arm64_regs_to_args"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1">/// arch/arm64/include/asm/syscall_wrapper.h
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="c1"></span><span class="cp">#define SC_ARM64_REGS_TO_ARGS(x, ...)				\
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="cp">	__MAP(x,__SC_ARGS					\
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="cp">	      ,,regs-&gt;regs[0],,regs-&gt;regs[1],,regs-&gt;regs[2]	\
+</span></span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="cp">	      ,,regs-&gt;regs[3],,regs-&gt;regs[4],,regs-&gt;regs[5])
+</span></span></span></code></pre></div><p>这里把参数类型设为空，使用<code>__SC_ARGS</code>来获取变量名，而变量名使用<code>regs-&gt;regs[n]</code>，<code>-&gt;</code>左侧的<code>regs</code>来自<code>__arm64_sys_ioctl</code>的参数，这样就可以把值一个个传递给被调用的函数。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="nf">__se_sys_ioctl</span><span class="p">(</span><span class="n">regs</span><span class="o">-&gt;</span><span class="n">regs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">regs</span><span class="o">-&gt;</span><span class="n">regs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">regs</span><span class="o">-&gt;</span><span class="n">regs</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+</span></span></code></pre></div></div>
+</div>
+</div><div class="card-footer">
+  <div class="post-navs d-flex justify-content-evenly"><div class="post-nav post-prev">
+      <i class="fas fa-fw fa-chevron-down post-prev-icon me-1" data-fa-transform="rotate-90"></i>
+      <a href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/">ARM64 Linux中断入口</a>
+    </div><div class="post-nav post-next">
+      <a href="/zh-cn/docs/04-kernel/linux-6.6/drm/drm_/">Linux Drm Mm分析</a>
+      <i class="fas fa-fw fa-chevron-down post-next-icon ms-1" data-fa-transform="rotate-270"></i>
+    </div></div>
+</div></article><div class="post-copyright mb-3 row card component" id="post-copyright">
+    <div class="card-header">
+        <h2 class="card-title fs-4 my-2 text-surface">版权</h2>
+    </div>
+    <div class="card-body"><a class="d-flex align-items-center flex-column" target="_blank" rel="license noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh">
+  <span><i class="fab fa-fw fa-2x fa-creative-commons"></i><i class="fab fa-fw fa-2x fa-creative-commons-by"></i><i class="fab fa-fw fa-2x fa-creative-commons-nc"></i><i class="fab fa-fw fa-2x fa-creative-commons-nd"></i></span>
+  CC BY-NC-ND 4.0 
+</a>
+
+
+    </div>
+</div><section class="related-posts row card component">
+      <div class="card-header">
+        <h2 class="card-title fs-4 my-2 text-surface">
+          相关文章
+        </h2>
+      </div>
+      <div class="card-body slide px-1">
+        <div class="slide-inner row gx-0"><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="Linux ARM64页面大小和虚拟地址位数" src="https://kingdix10.github.io/covers/neon_lights_dark_133133_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtabl/">
+    Linux ARM64页面大小和虚拟地址位数
+  </a>
+  <div class="post-meta mb-0">
+    2022/04/05
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="Linux内核sched_class汇总" src="https://kingdix10.github.io/covers/camera_photographer_smoke_126548_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_tabl/">
+    Linux内核sched_class汇总
+  </a>
+  <div class="post-meta mb-0">
+    2022/02/22
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="Linux fork进程/线程简介" src="https://kingdix10.github.io/covers/stars_figure_pattern_178502_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-a-fork/">
+    Linux Fork进程/线程简介
+  </a>
+  <div class="post-meta mb-0">
+    2022/02/12
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="Linux进程和线程关系" src="https://kingdix10.github.io/covers/trunk_tree_texture_119590_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/sched/04-relationship/">
+    Linux进程和线程关系
+  </a>
+  <div class="post-meta mb-0">
+    2022/02/10
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="ARM64 Linux中断入口" src="https://kingdix10.github.io/covers/lens_camera_glare_147903_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/">
+    ARM64 Linux中断入口
+  </a>
+  <div class="post-meta mb-0">
+    2024/04/20
+
+  </div>
+</div>
+
+          </div></div>
+        <button class="slide-control-left">
+          <i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-90"></i>
+          <span class="visually-hidden">Left</span>
+        </button>
+        <button class="slide-control-right">
+          <i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-270"></i>
+          <span class="visually-hidden">Right</span>
+        </button>
+      </div>
+    </section></div>
+</div>
+<aside class="sidebar d-flex docs-sidebar col-xxl-3 position-sticky order-xxl-5">
+  <div class="container">
+    
+<div class="row component card">
+    <div class="card-body">
+        <form action="/zh-cn/search/">
+            <div class="input-group">
+                <input name="q" class="form-control rounded" placeholder="搜索">
+                <button class="btn btn-sm btn-search position-absolute end-0 border-0 border-start border-secondary p-2" type="submit">
+                    <i class="fas fa-fw fa-search text-primary"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    <div class="accordion post-toc d-none d-lg-block">
+  <div class="accordion-item row mb-4 card component" id="postTOC">
+    <div class="card-header accordion-header">
+      <h2 class="card-title fs-4 my-2 text-surface d-none d-lg-block">目录</h2>
+      <a class="accordion-button d-lg-none mb-1 collapsed shadow-none p-0 bg-transparent" role="button" data-bs-toggle="collapse" href="#post-toc" aria-expanded="false" aria-controls="post-toc">
+        目录
+      </a>
+    </div>
+    <div class="card-body collapse accordion-collapse accordion-body d-lg-block" id="post-toc">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-简介">1. 简介</a></li>
+    <li><a href="#2-用户态的系统调用分析">2. 用户态的系统调用分析</a>
+      <ul>
+        <li><a href="#21-sys_ioctl从何而来">2.1. SYS_ioctl从何而来</a></li>
+        <li><a href="#22-宏展开__syscall">2.2. 宏展开<code>__syscall</code></a></li>
+        <li><a href="#23-函数__syscall_ret">2.3. 函数<code>__syscall_ret</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#3-用户态与内核态界面">3. 用户态与内核态界面</a>
+      <ul>
+        <li><a href="#31-通用宏__syscall">3.1. 通用宏<code>__syscall</code></a></li>
+        <li><a href="#32-aarch64">3.2. aarch64</a></li>
+        <li><a href="#33-arm">3.3. arm</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-内核入口到invoke_syscall">4. 内核入口到invoke_syscall</a></li>
+    <li><a href="#5-系统调用表">5. 系统调用表</a>
+      <ul>
+        <li><a href="#51-sys_call_table">5.1. sys_call_table</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-系统调用封装">6. 系统调用封装</a>
+      <ul>
+        <li><a href="#61-syscall_definex">6.1. SYSCALL_DEFINEx</a></li>
+        <li><a href="#62-ioctl的syscall_define3展开">6.2. ioctl的SYSCALL_DEFINE3展开</a></li>
+        <li><a href="#63-宏展开__map">6.3. 宏展开<code>__MAP</code></a></li>
+        <li><a href="#64-宏展开sc_arm64_regs_to_args">6.4. 宏展开<code>SC_ARM64_REGS_TO_ARGS</code></a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+  </div>
+</div>
+    
+
+
+
+
+
+
+  </div>
+</aside>
+
+      </div>
+    </main><footer class="footer mt-auto py-3 text-center container"><div class="offcanvas offcanvas-bottom h-auto" tabindex="-1" id="offcanvasActionsPanel"
+  aria-labelledby="offcanvasActionsPanelLabel">
+  <div class="offcanvas-header">
+    <div class="offcanvas-title h5" id="offcanvasActionsPanelLabel">
+      <i class="fas fa-fw fa-th-large me-1"></i>
+      操作
+    </div>
+    <button type="button" class="btn-close ms-auto" data-bs-dismiss="offcanvas" data-bs-target="offcanvasActionsPanel" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body mt-2"><div class="actions d-flex overflow-auto align-items-center">
+      <a role="button" class="action action-go-back d-flex flex-column align-items-center me-3" href="javascript: window.history.back();">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-90"></i></span> 返回
+      </a>
+      <a role="button" class="action action-reload-page d-flex flex-column align-items-center me-3">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-redo-alt"></i></span> 刷新
+      </a>
+      <a role="button" class="action action-copy-url d-flex flex-column align-items-center me-3">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-link"></i></span> 复制链接
+      </a>
+    </div>
+  </div>
+</div><div class="row text-center text-lg-start">
+  <div class="col-12 mt-2 col-lg-3">
+    <p class="mb-2">kingdix10&#39;s site</p>
+    <p class="text-secondary mb-2"><small>kingdix10 @ 拾月国度</small></p><div class="copyright mb-2 text-secondary">
+  <small>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</small>
+</div>
+
+
+
+<nav class="social-links nav justify-content-center justify-content-between mb-2 mt-3">
+      <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="https://github.com/kingdix10" title="GitHub" rel="me">
+        <i class="fa-fw fab fa-github"
+          ></i>
+      </a>
+      <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="https://www.zhihu.com/people/kingdix10" title="知乎" rel="me">
+        <i class="fa-fw fab fa-zhihu"
+           style="color: #056de8;"></i>
+      </a>
+  <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="/zh-cn/index.xml" title="RSS" rel="me">
+    <i class="fas fa-fw fa-rss" style="color: #ea6221;"></i>
+  </a>
+</nav>
+</div>
+  <div class="col-12 col-lg-8 offset-0 offset-lg-1"><ul class="nav justify-content-between footer-memu mb-3 row"><li class="nav-item col-12 col-md-6 col-lg-3 px-0"><ul class="nav flex-column align-items-start">
+      <li class="nav-item w-100"><a class="nav-link fw-bold fs-lg" href="javascript: void(0);">链接</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+GitHub"
+  href="https://github.com/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-github text-primary"></i></span>GitHub</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+Gitee"
+  href="https://gitee.com/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-github text-primary"></i></span>Gitee</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+Zhihu"
+  href="https://www.zhihu.com/people/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-zhihu text-primary"></i></span>Zhihu</a></li></ul></li></ul></div>
+</div>
+</footer>
+<script data-precache src="/assets/main/bundle.min.01351680f89e0e34293b6918c75261e88f5ff72804497fa7dea58b4190d564e6.js" integrity="sha256-ATUWgPieDjQpO2kYx1Jh6I9f9ygESX&#43;n3qWLQZDVZOY=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
+<script data-precache src="/assets/viewer/bundle.min.ffafad0d121aa7d1fb443510086dac514a0b152826cf094f02a1f3dec1f37918.js" integrity="sha256-/6&#43;tDRIap9H7RDUQCG2sUUoLFSgmzwlPAqHz3sHzeRg=" crossorigin="anonymous" defer></script><script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?8e042c957455c462d9b4c9da3ab642b0";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<script src="/js/sw-register.js" defer></script>
+
+  </body>
+</html>

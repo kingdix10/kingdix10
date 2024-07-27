@@ -1,0 +1,1513 @@
+<!doctype html>
+<html class="position-relative" itemscope itemtype="https://schema.org/WebPage" lang="zh-cn"
+  data-bs-theme="auto" data-palette="purple">
+  <head><script src="/assets/init/bundle.min.17bb1d3aa57be1ea17bd5f48fa2a59b44cab5fd5291efdf44dad530987335a4a.js" integrity="sha256-F7sdOqV74eoXvV9I&#43;ipZtEyrX9UpHv30Ta1TCYczWko=" crossorigin="anonymous"></script>
+<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>内核启动流程（一） - kingdix10&#39;s site</title>
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_16x16_resize_box_3.png" sizes="16x16" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_32x32_resize_box_3.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_150x150_resize_box_3.png" sizes="150x150" type="image/png">
+    <link rel="apple-touch-icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_180x180_resize_box_3.png" sizes="180x180" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_192x192_resize_box_3.png" sizes="192x192" type="image/png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#6f42c1">
+<meta name="keywords" content="启动流程" />
+  <meta name="description" content="head.S分析" />
+    <meta name="robots" content="index, follow" /><meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://kingdix10.github.io/covers/fabric_texture_colorful_142186_300x168.jpg"/>
+
+<meta name="twitter:title" content="内核启动流程（一）"/>
+<meta name="twitter:description" content="head.S分析"/>
+<meta property="og:title" content="内核启动流程（一）" />
+<meta property="og:description" content="head.S分析" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/boot/01-entry/" /><meta property="og:image" content="https://kingdix10.github.io/covers/fabric_texture_colorful_142186_300x168.jpg" /><meta property="article:section" content="docs" />
+<meta property="article:published_time" content="2020-03-15T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-03-15T10:00:00+00:00" /><meta property="og:site_name" content="kingdix10&#39;s site" />
+
+<meta itemprop="name" content="内核启动流程（一）">
+<meta itemprop="description" content="head.S分析"><meta itemprop="datePublished" content="2020-03-15T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2020-03-15T10:00:00+00:00" />
+<meta itemprop="wordCount" content="7926"><meta itemprop="image" content="https://kingdix10.github.io/covers/fabric_texture_colorful_142186_300x168.jpg">
+<meta itemprop="keywords" content="linux内核,启动流程," />
+  <meta property="og:image:alt" content="内核启动流程（一）" />
+  <meta name="twitter:image:alt" content="内核启动流程（一）" />
+  <link rel="manifest" href="/zh-cn/manifest.json">
+
+<link data-precache rel="stylesheet" href="/assets/main/bundle.min.03fda061e9fca038de4b9a0a9f07d0f48b8bb6231de98a9cf415bf6818d719cd.css" integrity="sha256-A/2gYen8oDjeS5oKnwfQ9IuLtiMd6Yqc9BW/aBjXGc0=" crossorigin="anonymous">
+
+    <link data-precache rel="stylesheet" href="/assets/viewer/bundle.min.8c1002839fa22c1350d6ae1eef6593120e108f973c41348be9b5065430566aaf.css" integrity="sha256-jBACg5&#43;iLBNQ1q4e72WTEg4Qj5c8QTSL6bUGVDBWaq8=" crossorigin="anonymous">
+
+
+</head>
+  <body><header class="mb-4 sticky-top">
+  
+<nav class="top-app-bar shadow navbar navbar-expand-xxl">
+  <div class="container">
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDocsNav"
+      aria-expanded="false" aria-label="Toggle docs navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+<a class="navbar-brand d-flex align-items-center flex-grow-1 flex-xxl-grow-0 justify-content-xxl-start justify-content-center ms-2 ms-xxl-0 mx-auto me-xxl-2"
+    href="https://kingdix10.github.io/zh-cn/">
+    <picture><img class="logo " alt="Logo" src="https://kingdix10.github.io/images/icon_yellow_transparent_72x72.png" loading="lazy" width="72" height="72" />
+</picture>
+kingdix10
+</a>
+
+    <div class="offcanvas-xxl offcanvas-end flex-grow-1" data-bs-scroll="true" tabindex="-1" id="navbarMenus" aria-labelledby="navbarMenusLabel">
+      <div class="offcanvas-header px-4 pb-0">
+        <div class="offcanvas-title h5" id="navbarMenusLabel">kingdix10</div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#navbarMenus" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body p-4 pt-0 p-xxl-0">
+        <hr class="d-xxl-none">
+        <ul class="navbar-nav flex-row flex-wrap align-items-center me-auto"><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn">
+<span class="menu-icon me-1"><i class="fas fa-home"></i></span>主页
+            </a>
+          </li><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn/news/">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-newspaper"></i></span>新闻
+            </a>
+          </li><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn/docs/">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-folder"></i></span>文档
+            </a>
+          </li>
+          <li class="nav-item col-12 col-xxl-auto dropdown px-0">
+            <a href="#"
+              class="nav-link dropdown-toggle"
+              id="navbarDropdownBlog" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-blog"></i></span>博客
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog" data-bs-popper="none">
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/archives/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-file-archive text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">归档</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/series/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-columns"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">专栏</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of series.</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/categories/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-folder text-success"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">分类</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of categories.</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/tags/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-tags"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">标签</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of tags.</p>
+                  </div></a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item col-12 col-xxl-auto dropdown px-0">
+            <a href="#"
+              class="nav-link dropdown-toggle"
+              id="navbarDropdownLinks" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-link"></i></span>链接
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownLinks" data-bs-popper="none">
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://github.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-github text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">GitHub</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">github.com/kingdix10</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://gitee.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-github text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">Gitee</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">gitee.com/kingdix10</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://www.zhihu.com/people/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-zhihu text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">Zhihu</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://www.cnblogs.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">博客园</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://blog.csdn.net/u014001096" target="_blank" rel="noopener noreferrer">
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">CSDN</p>
+                  </div></a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+            </ul>
+          </li>
+        </ul>
+        
+    <hr class="d-xxl-none">
+    <form class="search-bar ms-auto my-auto" action="/zh-cn/search/" novalidate>
+      <div class="input-group align-items-center">
+        <span class="btn btn-search disabled position-absolute left-0 border-0 px-1">
+          <i class="fas fa-fw fa-search fa-lg"></i>
+        </span>
+        <input
+          class="my-1 form-control border-white rounded-5 search-input bg-body"
+          name="q"
+          type="search"
+          placeholder="搜索"
+          aria-label="Search"
+          required>
+          <span class="search-shortcut position-absolute end-0 top-0 me-2">
+            <kbd class="text-dark bg-white opacity-75 rounded-3 shadow border border-primary py-1 fw-bold">/</kbd>
+          </span>
+      </div>
+    </form><hr class="d-xxl-none">
+        <ul class="navbar-nav flex-row flex-wrap align-items-center ms-md-auto">
+<li class="nav-item py-2 py-xxl-1 col-12 col-xxl-auto">
+
+
+<nav class="social-links nav justify-content-center flex-row">
+      <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="https://github.com/kingdix10" title="GitHub" rel="me">
+        <i class="fa-fw fab fa-github"
+          ></i>
+        <span class="ms-1 d-xxl-none">Github</span>
+      </a>
+      <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="https://www.zhihu.com/people/kingdix10" title="知乎" rel="me">
+        <i class="fa-fw fab fa-zhihu"
+          ></i>
+        <span class="ms-1 d-xxl-none">Zhihu</span>
+      </a>
+  <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="/zh-cn/index.xml" title="RSS" rel="me">
+    <i class="fas fa-fw fa-rss"></i>
+    <span class="ms-1 d-xxl-none">RSS</span>
+  </a>
+</nav>
+
+</li>
+<li class="nav-item py-2 py-xxl-1 col-12 col-xxl-auto">
+  <div class="vr d-none d-xxl-flex h-100 mx-xxl-2 text-white"></div>
+  <hr class="d-xxl-none my-2">
+</li>
+<li class="nav-item dropdown py-1 py-xxl-1 col-6 col-xxl-auto">
+    <a class="nav-link px-0 px-xxl-1" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-globe"></i>
+        <span class="d-xxl-none">语言</span>
+    </a>
+    <ul class="language-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+        <li>
+        <a class="dropdown-item active" href="/zh-cn/">
+            简体中文
+        </a>
+        </li>
+        <li>
+        <a class="dropdown-item" href="/en/">
+            English
+        </a>
+        </li></ul>
+</li>
+<li class="nav-item py-1 col-12 col-xxl-auto">
+  <div class="vr d-none d-xxl-flex h-100 mx-xxl-2 text-white"></div>
+  <hr class="d-xxl-none my-2">
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="fontSizeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-font"></i>
+        <span class="d-xxl-none">字体大小</span>
+    </a>
+    <ul class="font-size-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="fontSizeDropdown">
+        <li>
+            <button class="font-size-item dropdown-item" data-size="xs">
+                特小号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="sm">
+                小号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item active" data-size="md">
+                中等
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="lg">
+                大号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="xl">
+                特大号
+            </button>
+        </li>
+    </ul>
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="paletteDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-palette"></i>
+        <span class="d-xxl-none">配色</span>
+    </a>
+    <ul class="palette-dropdown-menu dropdown-menu dropdown-menu-end px-2 row g-2" aria-labelledby="paletteDropdown">
+            <li class="col-4 my-1">
+                <a role="button" id="palette-blue" aria-label="蓝色"
+                    class="btn btn-sm w-100 palette text-bg-blue" data-palette="blue">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-blue-gray" aria-label="蓝灰色"
+                    class="btn btn-sm w-100 palette text-bg-blue-gray" data-palette="blue-gray">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-brown" aria-label="棕色"
+                    class="btn btn-sm w-100 palette text-bg-brown" data-palette="brown">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-cyan" aria-label="青色"
+                    class="btn btn-sm w-100 palette text-bg-cyan" data-palette="cyan">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-green" aria-label="绿色"
+                    class="btn btn-sm w-100 palette text-bg-green" data-palette="green">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-indigo" aria-label="靛青色"
+                    class="btn btn-sm w-100 palette text-bg-indigo" data-palette="indigo">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-orange" aria-label="橙色"
+                    class="btn btn-sm w-100 palette text-bg-orange" data-palette="orange">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-pink" aria-label="粉色"
+                    class="btn btn-sm w-100 palette text-bg-pink" data-palette="pink">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-purple" aria-label="紫色"
+                    class="btn btn-sm w-100 palette text-bg-purple" data-palette="purple">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-red" aria-label="红色"
+                    class="btn btn-sm w-100 palette text-bg-red" data-palette="red">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-teal" aria-label="蓝绿色"
+                    class="btn btn-sm w-100 palette text-bg-teal" data-palette="teal">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-yellow" aria-label="黄色"
+                    class="btn btn-sm w-100 palette text-bg-yellow" data-palette="yellow">
+                </a>
+            </li>
+    </ul>
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="modeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="mode-icon fas fa-fw fa-adjust" id="modeIcon"></i>
+        <span class="d-xxl-none">模式</span>
+    </a>
+    <ul class="mode-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="modeDropdown">
+        <li class="mode-item" data-color-mode="light" data-icon="sun">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-sun"></i> 浅色
+            </button>
+        </li>
+        <li class="mode-item" data-color-mode="dark" data-icon="moon">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-moon"></i> 深色
+            </button>
+        </li>
+        <li class="mode-item active" data-color-mode="auto" data-icon="adjust">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-adjust"></i> 自动
+            </button>
+        </li>
+    </ul>
+</li>
+        </ul>
+      </div>
+    </div>
+    <div class="d-flex">
+      <button class="navbar-toggler order-5 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarMenus"
+        aria-controls="navbarMenus" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-ellipsis-h"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+</header>
+
+    <main class="container">
+      <div class="row content"><noscript>
+    <div class="alert alert-danger" role="alert">你的浏览器不支持 JavaScript。</div>
+</noscript>
+<aside class="docs-nav col-xxl-2" tabindex="-1" data-bs-hide="focusout">
+  <div class="offcanvas-xxl offcanvas-start" id="offcanvasDocsNav" aria-labelledby="offcanvasDocsNavLabel">
+    <div class="offcanvas-header border-bottom">
+      <div class="offcanvas-title h5" id="offcanvasDocsNavLabel">浏览文档</div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#offcanvasDocsNav"></button>
+    </div>
+    <div class="offcanvas-body pt-2 flex-column"><div class="mb-3" style="margin-left: -0.5rem;">
+</div>
+<ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3 text-primary">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/"><span class="docs-nav-title">Linux内核分析</span></a>
+            <a class="btn-toggle ms-1" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-8d43cfa49df325f277d6f4234a021467" aria-expanded="true" aria-controls="nav-8d43cfa49df325f277d6f4234a021467">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse  show border-primary" id="nav-8d43cfa49df325f277d6f4234a021467">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3 text-primary">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/"><span class="docs-nav-title">linux-6.1</span></a>
+            <a class="btn-toggle ms-1" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-8ea97fb7a0a0d68cedef1b63b4664daa" aria-expanded="true" aria-controls="nav-8ea97fb7a0a0d68cedef1b63b4664daa">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse  show border-primary" id="nav-8ea97fb7a0a0d68cedef1b63b4664daa">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/01-task_0/"><span class="docs-nav-title">Linux 0号线程swapper简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/02-task_1/"><span class="docs-nav-title">Linux 1号线程init简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/03-task_2/"><span class="docs-nav-title">Linux 2号线程kthreadd简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/"><span class="docs-nav-title">linux thermal子系统简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/other/linux-err-retur/"><span class="docs-nav-title">Linux的errno简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/fdt/dt_to_dt/"><span class="docs-nav-title">Linux内核驱动模型（二）设备树转换</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/device_driver/initcall/"><span class="docs-nav-title">Linux内核驱动模型（三）驱动初始化</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/device_driver/device_model/"><span class="docs-nav-title">Linux内核驱动模型（四）核心结构体</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/fdt/fdt_dt/"><span class="docs-nav-title">Linux内核驱动模型（一）设备树展开</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/02-timekeeping/"><span class="docs-nav-title">linux内核时间子系统（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/01-tim/"><span class="docs-nav-title">linux内核时间子系统（一）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/kobject/kobject/"><span class="docs-nav-title">Linux内核数据结构kobject/kset/ktype</span></a>
+        </li><li class="mb-2 py-1 ms-3 text-primary" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/boot/01-entry/"><span class="docs-nav-title">内核启动流程（一）</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/"><span class="docs-nav-title">linux-6.6</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c105b2ef486b2fc777c1f47c8c02d8c9" aria-expanded="false" aria-controls="nav-c105b2ef486b2fc777c1f47c8c02d8c9">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-c105b2ef486b2fc777c1f47c8c02d8c9">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/"><span class="docs-nav-title">【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/arm64_setup/"><span class="docs-nav-title">ARM64 Crash调试环境搭建</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/jump_label/"><span class="docs-nav-title">ARM64 jump label源码分析</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/"><span class="docs-nav-title">ARM64 Linux中断入口</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/help/"><span class="docs-nav-title">Crash帮助信息</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtabl/"><span class="docs-nav-title">Linux ARM64页面大小和虚拟地址位数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/drm/drm_/"><span class="docs-nav-title">Linux drm mm分析</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-a-fork/"><span class="docs-nav-title">Linux fork进程/线程简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/04-relationship/"><span class="docs-nav-title">Linux进程和线程关系</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/05-pid_namespa/"><span class="docs-nav-title">Linux进程命名空间（pid namespace）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/07-task_stat/"><span class="docs-nav-title">Linux进程状态与生命周期</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_2/"><span class="docs-nav-title">Linux内核copy_process分析（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_3/"><span class="docs-nav-title">Linux内核copy_process分析（三）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_1/"><span class="docs-nav-title">Linux内核copy_process分析（一）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_tabl/"><span class="docs-nav-title">Linux内核sched_class汇总</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/optimize_tips/"><span class="docs-nav-title">Linux内核代码的编写和优化技巧</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/boot/01-entry/"><span class="docs-nav-title">内核启动流程（一）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/03-irq_create_mapping/"><span class="docs-nav-title">设备中断注册</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/04-request_irq/"><span class="docs-nav-title">申请中断request_irq</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/05-handler_entry/"><span class="docs-nav-title">中断处理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/02-irq_domain_a/"><span class="docs-nav-title">中断子系统domain注册</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/01-init/"><span class="docs-nav-title">中断子系统软硬件初始化</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/"><span class="docs-nav-title">开发环境</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-fd57bc387b9c3a4d19f1801fc65cd5b4" aria-expanded="false" aria-controls="nav-fd57bc387b9c3a4d19f1801fc65cd5b4">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-fd57bc387b9c3a4d19f1801fc65cd5b4">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/eel_env/eel_readm/"><span class="docs-nav-title">嵌入式学习环境快速搭建（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/eel_env/env_setup/"><span class="docs-nav-title">嵌入式学习环境快速搭建（一）</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/"><span class="docs-nav-title">启动</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-05b799579ad52d4ccfa92fd6313b23f7" aria-expanded="false" aria-controls="nav-05b799579ad52d4ccfa92fd6313b23f7">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-05b799579ad52d4ccfa92fd6313b23f7">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/uboot_m/"><span class="docs-nav-title">U-Boot从dtb获取内存布局并传递到内核</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/crc32_fu/"><span class="docs-nav-title">U-Boot和Linux内核的CRC函数</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/"><span class="docs-nav-title">系统工具</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-eb1c5d775f73e30b3a27244e12a84f81" aria-expanded="false" aria-controls="nav-eb1c5d775f73e30b3a27244e12a84f81">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-eb1c5d775f73e30b3a27244e12a84f81">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/git/git_mis/"><span class="docs-nav-title">git配置和操作</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_tips/"><span class="docs-nav-title">Linux Bash技巧</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_decorat/"><span class="docs-nav-title">Linux Bash终端美化</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/resizefs/"><span class="docs-nav-title">磁盘和文件系统扩容/缩容</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/win_python3/"><span class="docs-nav-title">解决Windows不能使用python3.10的问题</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/"><span class="docs-nav-title">杂项</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-4967b62f3b1964eee9739b39b25cd3eb" aria-expanded="false" aria-controls="nav-4967b62f3b1964eee9739b39b25cd3eb">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-4967b62f3b1964eee9739b39b25cd3eb">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/01-c/array_fu/"><span class="docs-nav-title">多维数组作为函数参数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/01-c/array_typ/"><span class="docs-nav-title">数组a、&amp;a、&amp;a[0]、&amp;a[0][0]的区别与联系</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/"><span class="docs-nav-title">4412</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-0cca8bc16c798175efb847597812f8c0" aria-expanded="false" aria-controls="nav-0cca8bc16c798175efb847597812f8c0">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-0cca8bc16c798175efb847597812f8c0">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/exynos4412/"><span class="docs-nav-title">Exynos4412启动介绍</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/mkbl1/"><span class="docs-nav-title">Exynos4412自制BL1</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/mkbl2/"><span class="docs-nav-title">Exynos4412自制BL2</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul></div>
+  </div>
+</aside><div class="col-xxl-7 ms-auto">
+  <div class="container-fluid"><nav class="row card component" aria-label="breadcrumb">
+  <div class="card-body pb-0">
+    <ol class="hbs-breadcrumb breadcrumb flex-nowrap"><li class="breadcrumb-item text-surface"><a href="/zh-cn/">主页</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/">文档</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/04-kernel/">Linux内核分析</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/04-kernel/linux-6.1/">linux-6.1</a></li><li class="breadcrumb-item active">内核启动流程（一）</li></ol>
+  </div>
+</nav><div class="post-panel-wrapper position-relative d-flex justify-content-center">
+  <div class="d-flex flex-row justify-content-center rounded-5 border post-panel position-fixed px-3 py-1 surface shadow-1">
+    
+    
+
+    
+    
+    
+<a class="action action-toc d-block d-xxl-none" href="#post-toc-container" role="button" title="目录">
+  <i class="fas fa-fw fa-list-alt"></i>
+</a>
+    <a class="action action-copyright" href="#post-copyright" role="button" aria-label="Copyright" title="版权">
+  <i class="fas fa-fw fa-copyright"></i>
+</a>
+    
+    
+<a id="sidebarToggler" class="action action-sidebar-toggler d-none d-xxl-block" role="button" title="切换侧边栏">
+  <i class="fas fa-fw fa-expand-alt" data-fa-transform="rotate-45"></i>
+</a>
+
+    
+  </div>
+</div><article class="row card component mb-4 post">
+<div class="card-header ">
+    <h1 class="card-title post-title my-2">内核启动流程（一）</h1>
+</div>
+<div class="card-body"><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2020-03-15 08:00:00 &#43;0800 CST，更新于 2020-03-15 18:00:00 &#43;0800 CST。">2020/03/15</span><span class="post-reading-time me-1 mb-1">16 分钟阅读</span><a href="/zh-cn/categories/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>启动流程</a><a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux内核</a><a href="/zh-cn/tags/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">启动流程</a>
+</div>
+<picture class="d-flex justify-content-center"><img class="post-featured-img h-auto w-auto mb-3" alt="内核启动流程（一）" src="https://kingdix10.github.io/covers/fabric_texture_colorful_142186_300x168.jpg"/>
+    </picture>
+      <p class="lead mb-3 text-body-emphasis">head.S分析</p>
+<div class="mt-2 mb-3 d-block d-xxl-none">
+    <h2 class="text-surface mb-3">目录</h2>
+    <div id="post-toc-container">
+        </div>
+    <hr class="text-secondary">
+</div><div class="post-content mb-3" data-bs-spy="scroll" data-bs-target="#TableOfContents" tabindex="0">
+        <div id="post-content-body">
+<h1 id="1-内核启动入口" data-numberify>1. 内核启动入口<a class="anchor ms-1" href="#1-内核启动入口"></a></h1>
+<p>根据Makefile对KBUILD_LDS的定义，链接vmlinux使用的连接脚本为 <code>arch/$(SRCARCH)/kernel/vmlinux.lds</code>，实际上这个脚本是在编译过程中生成的。从链接脚本 <code>arch/arm64/kernel/vmlinux.lds</code>可以查到，程序的入口为 <code>_text</code>，镜像起始位置存放的是 <code>.head.text</code>段生成的指令。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="nf">OUTPUT_ARCH</span><span class="p">(</span><span class="n">aarch64</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="nf">ENTRY</span><span class="p">(</span><span class="n">_text</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="n">SECTIONS</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl"> <span class="p">.</span> <span class="o">=</span> <span class="p">((((((</span><span class="o">-</span><span class="p">(((</span><span class="mi">1</span><span class="p">))</span> <span class="o">&lt;&lt;</span> <span class="p">((((</span><span class="mi">48</span><span class="p">)))</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))))</span> <span class="o">+</span> <span class="p">(</span><span class="mh">0x08000000</span><span class="p">)))</span> <span class="o">+</span> <span class="p">(</span><span class="mh">0x08000000</span><span class="p">)));</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"> <span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="nl">text</span> <span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">  <span class="n">_text</span> <span class="o">=</span> <span class="p">.;</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">  <span class="nf">KEEP</span><span class="p">(</span><span class="o">*</span><span class="p">(.</span><span class="n">head</span><span class="p">.</span><span class="n">text</span><span class="p">))</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"> <span class="p">}</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"> <span class="p">...</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>也就是说，内核镜像的起始位置是 <code>.head.text</code>段生成的指令。</p>
+<p>搜索 <code>.head.text</code>，可以找到 <code>include/linux/init.h</code>对 <code>__HEAD</code>定义 <code>.section    &quot;.head.text&quot;,&quot;ax&quot;</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="cm">/* For assembly routines */</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="cp">#define __HEAD      .section    &#34;.head.text&#34;,&#34;ax&#34;
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="cp">#define __INIT      .section    &#34;.init.text&#34;,&#34;ax&#34;
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="cp">#define __FINIT     .previous
+</span></span></span></code></pre></div><p>再看一下 <code>arch/arm64/kernel/vmlinux.lds</code>是怎么生成的，编译日志中，会有 <code>LDS     arch/arm64/kernel/vmlinux.lds</code>，<code>scripts/Makefile.build</code>中可以看到是对 <code>arch/arm64/kernel/vmlinux.lds.S</code>进行预处理得到了最终的链接脚本。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-makefile" data-lang="makefile"><span class="line"><span class="ln">1</span><span class="cl"><span class="c"># Linker scripts preprocessor (.lds.S -&gt; .lds)
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="c"># ---------------------------------------------------------------------------
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="c"></span><span class="nv">quiet_cmd_cpp_lds_S</span> <span class="o">=</span> LDS     <span class="nv">$@</span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl">      <span class="nv">cmd_cpp_lds_S</span> <span class="o">=</span> <span class="k">$(</span>CPP<span class="k">)</span> <span class="k">$(</span>cpp_flags<span class="k">)</span> -P -U<span class="k">$(</span>ARCH<span class="k">)</span> <span class="se">\
+</span></span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="se"></span>                             -D__ASSEMBLY__ -DLINKER_SCRIPT -o <span class="nv">$@</span> $&lt;
+</span></span><span class="line"><span class="ln">6</span><span class="cl">
+</span></span><span class="line"><span class="ln">7</span><span class="cl"><span class="nf">$(obj)/%.lds</span><span class="o">:</span> <span class="k">$(</span><span class="nv">src</span><span class="k">)</span>/%.<span class="n">lds</span>.<span class="n">S</span> <span class="n">FORCE</span>
+</span></span><span class="line"><span class="ln">8</span><span class="cl">        <span class="k">$(</span>call if_changed_dep,cpp_lds_S<span class="k">)</span>
+</span></span></code></pre></div><p>通过搜索 <code>__HEAD</code>，可以看到程序起始代码位于 <code>arch/arm64/kernel/head.S</code>。</p>
+
+<h1 id="2-heads总览" data-numberify>2. head.S总览<a class="anchor ms-1" href="#2-heads总览"></a></h1>
+<p>head.S可以分为三段，分别为 <code>.head.text</code>、<code>.init.text</code>和 <code>.idmap.text</code>。各个段包含的符号可以通过objdump或nm查看。</p>
+<p><code>arch/arm64/boot/head.S</code>开始的注释简单说明了内核启动的条件。更详细的内容可以查看内核文档 <code>Documentation/arm64/booting.rst</code>或 <code>Documentation/translations/zh_CN/arm64/booting.txt</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cm"> * Kernel startup entry point.
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * ---------------------------
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> * The requirements are:
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> *   MMU = off, D-cache = off, I-cache = on or off,
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> *   x0 = physical address to the FDT blob.
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> * Note that the callee-saved registers are used for storing variables
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> * that are useful before the MMU is enabled. The allocations are described
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cm"> * in the entry routines.
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cm"> */</span>
+</span></span></code></pre></div>
+<h2 id="21-headtext" data-numberify>2.1. .head.text<a class="anchor ms-1" href="#21-headtext"></a></h2>
+<p>顾名思义，这部分为头部内容，根据是否使能 <code>CONFIG_EFI</code>而有所不同，在未定义 <code>CONFIG_EFI</code>的情况下，实际工作只是跳转到 <code>primary_entry</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl">    <span class="n">__HEAD</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">    <span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm">     * DO NOT MODIFY. Image header expected by Linux boot-loaders.
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">    <span class="n">efi_signature_nop</span>			<span class="c1">// special NOP to identity as PE/COFF executable
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="c1"></span>    <span class="n">b</span>	<span class="n">primary_entry</span>			<span class="c1">// branch to kernel start, magic
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="c1"></span>    <span class="p">.</span><span class="n">quad</span>	<span class="mi">0</span>				<span class="c1">// Image load offset from start of RAM, little-endian
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="c1"></span>    <span class="n">le64sym</span>	<span class="n">_kernel_size_le</span>			<span class="c1">// Effective size of kernel image, little-endian
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="c1"></span>    <span class="n">le64sym</span>	<span class="n">_kernel_flags_le</span>		<span class="c1">// Informative flags, little-endian
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="c1"></span>    <span class="p">.</span><span class="n">quad</span>	<span class="mi">0</span>				<span class="c1">// reserved
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="c1"></span>    <span class="p">.</span><span class="n">quad</span>	<span class="mi">0</span>				<span class="c1">// reserved
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="c1"></span>    <span class="p">.</span><span class="n">quad</span>	<span class="mi">0</span>				<span class="c1">// reserved
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="c1"></span>    <span class="p">.</span><span class="n">ascii</span>	<span class="n">ARM64_IMAGE_MAGIC</span>		<span class="c1">// Magic number
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="c1"></span>    <span class="p">.</span><span class="kt">long</span>	<span class="p">.</span><span class="n">Lpe_header_offset</span>		<span class="c1">// Offset to the PE header.
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl">    <span class="n">__EFI_PE_HEADER</span>
+</span></span></code></pre></div>
+<h2 id="22-inittext" data-numberify>2.2. .init.text<a class="anchor ms-1" href="#22-inittext"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="n">primary_entry</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="n">preserve_boot_args</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="n">clear_page_tables</span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="n">remap_region</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="n">create_idmap</span>
+</span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="n">create_kernel_mapping</span>
+</span></span><span class="line"><span class="ln">7</span><span class="cl"><span class="n">__primary_switched</span>
+</span></span></code></pre></div>
+<h2 id="23-idmaptext" data-numberify>2.3. .idmap.text<a class="anchor ms-1" href="#23-idmaptext"></a></h2>
+<p>用于恒等映射，需要编译为位置无关码。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="n">init_kernel_el</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="n">init_el1</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="n">init_el2</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="n">set_cpu_boot_mode_flag</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="n">secondary_holding_pen</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="n">secondary_entry</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="n">secondary_startup</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="n">__secondary_switched</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="n">__secondary_too_slow</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="n">__enable_mmu</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="n">__cpu_secondary_check52bitva</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="n">__no_granule_support</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="n">__primary_switch</span>
+</span></span></code></pre></div>
+<h1 id="3-概览从入口到start_kernel" data-numberify>3. 概览：从入口到start_kernel<a class="anchor ms-1" href="#3-概览从入口到start_kernel"></a></h1>
+<p>从入口到start_kernel的部分主要是汇编代码，后续的很多子系统都会依赖这部分代码做的初始化。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="o">+--</span> <span class="nf">_text</span><span class="p">()</span>                                 <span class="c1">/// 内核启动入口
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span>    <span class="err">\</span><span class="o">--</span> <span class="nf">primary_entry</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">        <span class="o">+--</span> <span class="nf">preserve_boot_args</span><span class="p">()</span>            <span class="c1">/// 保存x0~x3到boot_args[0~3]
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="c1"></span>        <span class="o">+--</span> <span class="nf">init_kernel_el</span><span class="p">()</span>                <span class="c1">/// 根据内核运行异常等级进行配置，返回启动模式
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="c1"></span>        <span class="o">|</span>   <span class="o">+--</span> <span class="nf">init_el1</span><span class="p">()</span>                  <span class="c1">/// 通常情况下从EL1启动内核
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="c1"></span>        <span class="o">|</span>   <span class="err">\</span><span class="o">--</span> <span class="nf">init_el2</span><span class="p">()</span>                  <span class="c1">/// 从EL2启动内核，用于开启VHE(Virtualization Host Extensions)
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="c1"></span>        <span class="o">+--</span> <span class="nf">create_idmap</span><span class="p">()</span>                  <span class="c1">/// 建立恒等映射init_idmap_pg_dir和内核镜像映射init_pg_dir的页表
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="c1"></span>        <span class="o">+--</span> <span class="nf">__cpu_setup</span><span class="p">()</span>                   <span class="c1">/// 为开启MMU做的CPU初始化
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="c1"></span>        <span class="err">\</span><span class="o">--</span> <span class="nf">__primary_switch</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">            <span class="o">+--</span> <span class="nf">__enable_mmu</span><span class="p">()</span>              <span class="c1">/// 开启MMU，将init_idmap_pg_dir加载到ttbr0，reserved_pg_dir加载到ttbr1
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="c1"></span>            <span class="o">+--</span> <span class="nf">clear_page_tables</span><span class="p">()</span>         <span class="c1">/// 清空init_pg_dir
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="c1"></span>            <span class="o">+--</span> <span class="nf">create_kernel_mapping</span><span class="p">()</span>     <span class="c1">/// 填充init_pg_dir
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="c1"></span>            <span class="o">+--</span> <span class="nf">load_ttbr1</span><span class="p">()</span>                <span class="c1">/// 将init_pg_dir加载到ttbr1
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="c1"></span>            <span class="err">\</span><span class="o">--</span> <span class="nf">__primary_switched</span><span class="p">()</span>        <span class="c1">/// 初始化init_task栈，设置VBAR_EL1，保存FDT地址，计算kimage_voffset，清空bss段
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="c1"></span>                <span class="o">+--</span> <span class="nf">set_cpu_boot_mode_flag</span><span class="p">()</span><span class="c1">/// 设置__boot_cpu_mode变量
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="c1"></span>                <span class="o">+--</span> <span class="nf">early_fdt_map</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">                <span class="o">|</span>   <span class="o">+--</span> <span class="nf">early_fixmap_init</span><span class="p">()</span> <span class="c1">/// 尝试建立fixmap的页表，可能失败，后边init_feature_override会用到
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="c1"></span>                <span class="o">|</span>   <span class="err">\</span><span class="o">--</span> <span class="nf">fixmap_remap_fdt</span><span class="p">()</span>  <span class="c1">/// 如果成功建立fixmap页表，将fdt映射到fixmap的FIX_FDT区域
+</span></span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="c1"></span>                <span class="o">+--</span> <span class="nf">init_feature_override</span><span class="p">()</span> <span class="c1">/// 根据BootLoader传入的bootargs，对一些参数的改写
+</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="c1"></span>                <span class="o">+--</span> <span class="nf">finalise_el2</span><span class="p">()</span>          <span class="c1">/// Prefer VHE if possible
+</span></span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="c1"></span>                <span class="err">\</span><span class="o">--</span> <span class="nf">start_kernel</span><span class="p">()</span>          <span class="c1">/// 跳转到start_kernel执行
+</span></span></span></code></pre></div>
+<h1 id="4-mmu开启之前primary_entry" data-numberify>4. MMU开启之前：primary_entry<a class="anchor ms-1" href="#4-mmu开启之前primary_entry"></a></h1>
+<p>在内核启动入口直接跳转到primary_entry，这是MMU开启之前所有函数的总流程。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl">    <span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cm">     * The following callee saved general purpose registers are used on the
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm">     * primary lowlevel boot path:
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm">     *
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm">     *  Register   Scope                      Purpose
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm">     *  x20        primary_entry() .. __primary_switch()    CPU boot mode
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm">     *  x21        primary_entry() .. start_kernel()        FDT pointer passed at boot in x0
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm">     *  x22        create_idmap() .. start_kernel()         ID map VA of the DT blob
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm">     *  x23        primary_entry() .. start_kernel()        physical misalignment/KASLR offset
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm">     *  x24        __primary_switch()                       linear map KASLR seed
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cm">     *  x25        primary_entry() .. start_kernel()        supported VA size
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cm">     *  x28        create_idmap()                           callee preserved temp register
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="nf">SYM_CODE_START</span><span class="p">(</span><span class="n">primary_entry</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">    <span class="n">bl</span>	<span class="n">preserve_boot_args</span>  <span class="c1">/// 保存启动参数到boot_args数组
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="c1"></span>    <span class="n">bl</span>	<span class="n">init_kernel_el</span>      <span class="c1">/// 返回时，w0=cpu_boot_mode
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="c1"></span>    <span class="n">mov</span>	<span class="n">x20</span><span class="p">,</span> <span class="n">x0</span>             <span class="c1">/// 保存cpu_boot_mode到x20
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="c1"></span>    <span class="n">bl</span>	<span class="n">create_idmap</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">
+</span></span><span class="line"><span class="ln">20</span><span class="cl">    <span class="cm">/*
+</span></span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="cm">     * The following calls CPU setup code, see arch/arm64/mm/proc.S for
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="cm">     * details.
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="cm">     * On return, the CPU will be ready for the MMU to be turned on and
+</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="cm">     * the TCR will have been set.
+</span></span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="cp">#if VA_BITS &gt; 48
+</span></span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="cp"></span>    <span class="n">mrs_s</span>	<span class="n">x0</span><span class="p">,</span> <span class="n">SYS_ID_AA64MMFR2_EL1</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl">    <span class="n">tst</span>	<span class="n">x0</span><span class="p">,</span> <span class="err">#</span><span class="mh">0xf</span> <span class="o">&lt;&lt;</span> <span class="n">ID_AA64MMFR2_LVA_SHIFT</span>
+</span></span><span class="line"><span class="ln">29</span><span class="cl">    <span class="n">mov</span>	<span class="n">x0</span><span class="p">,</span> <span class="err">#</span><span class="n">VA_BITS</span>
+</span></span><span class="line"><span class="ln">30</span><span class="cl">    <span class="n">mov</span>	<span class="n">x25</span><span class="p">,</span> <span class="err">#</span><span class="n">VA_BITS_MIN</span>
+</span></span><span class="line"><span class="ln">31</span><span class="cl">    <span class="n">csel</span>	<span class="n">x25</span><span class="p">,</span> <span class="n">x25</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">eq</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl">    <span class="n">mov</span>	<span class="n">x0</span><span class="p">,</span> <span class="n">x25</span>
+</span></span><span class="line"><span class="ln">33</span><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="ln">34</span><span class="cl"><span class="cp"></span>    <span class="n">bl</span>	<span class="n">__cpu_setup</span>         <span class="c1">/// 为开启MMU做的CPU初始化
+</span></span></span><span class="line"><span class="ln">35</span><span class="cl"><span class="c1"></span>    <span class="n">b</span>	<span class="n">__primary_switch</span>
+</span></span><span class="line"><span class="ln">36</span><span class="cl"><span class="nf">SYM_CODE_END</span><span class="p">(</span><span class="n">primary_entry</span><span class="p">)</span>
+</span></span></code></pre></div>
+<h2 id="41-preserve_boot_args" data-numberify>4.1. preserve_boot_args<a class="anchor ms-1" href="#41-preserve_boot_args"></a></h2>
+<p>主要工作是将FDT的基地址保存到x21寄存器，将启动参数（x0~x3）保存到boot_args数组。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cm"> * Preserve the arguments passed by the bootloader in x0 .. x3
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="nf">SYM_CODE_START_LOCAL</span><span class="p">(</span><span class="n">preserve_boot_args</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">    <span class="n">mov</span>	<span class="n">x21</span><span class="p">,</span> <span class="n">x0</span>			<span class="c1">/// x21=FDT，x0是uboot传入的第一个参数，记录fdt的基地址，将x0的值保存到x21寄存器备份
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="n">adr_l</span>	<span class="n">x0</span><span class="p">,</span> <span class="n">boot_args</span>       <span class="c1">/// 读取boot_args变量的当前地址到x0，此时MMU处于关闭状态，访问的是物理地址
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="c1"></span>    <span class="n">stp</span>	<span class="n">x21</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="p">[</span><span class="n">x0</span><span class="p">]</span>       <span class="c1">/// record the contents of, x0 .. x3 at kernel entry
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="c1"></span>    <span class="n">stp</span>	<span class="n">x2</span><span class="p">,</span> <span class="n">x3</span><span class="p">,</span> <span class="p">[</span><span class="n">x0</span><span class="p">,</span> <span class="err">#</span><span class="mi">16</span><span class="p">]</span>   <span class="c1">/// 将x0~x3保存到boot_args[0~3]
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">    <span class="n">dmb</span>	<span class="n">sy</span>                  <span class="c1">/// 确保stp指令完成
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">    <span class="n">add</span>	<span class="n">x1</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="err">#</span><span class="mh">0x20</span>       <span class="c1">/// 4 x 8 bytes，boot_args数组的大小
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="c1"></span>    <span class="n">b</span>	<span class="n">dcache_inval_poc</span>    <span class="c1">/// 使boot_args[]数组对应的高速缓存失效
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="c1"></span><span class="nf">SYM_CODE_END</span><span class="p">(</span><span class="n">preserve_boot_args</span><span class="p">)</span>
+</span></span></code></pre></div><p>adr_l是在 <code>arch/arm64/include/asm/assembler.h</code>定义的一个宏，用于操作当前PC值前后4G范围内存。</p>
+<p><code>dmb sy</code>在全系统高速缓冲范围内做一次内存屏障，保证前面的stp指令运行顺序正确，保证stp在调用dcache_inval_poc前完成。
+<code>dcache_inval_poc</code>传入参数为boot_args数组的起始和结束地址，函数的作用是使boot_args数组对应的高速缓存失效，并清除这些缓存。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cm"> *	dcache_inval_poc(start, end)
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> * 	Ensure that any D-cache lines for the interval [start, end)
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> * 	are invalidated. Any partial lines at the ends of the interval are
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> *	also cleaned to PoC to prevent data loss.
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> *	- start   - kernel start address of region
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> *	- end     - kernel end address of region
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> */</span>
+</span></span></code></pre></div>
+<h2 id="42-init_kernel_el" data-numberify>4.2. init_kernel_el<a class="anchor ms-1" href="#42-init_kernel_el"></a></h2>
+<p>判断启动的模式是EL2还是非安全模式的EL1，并进行相关级别的系统配置(ARMv8中EL2是hypervisor模式，EL1是标准的内核模式)，然后使用w0返回启动模式（BOOT_CPU_MODE_EL1或BOOT_CPU_MODE_EL2）。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="cp">#define BOOT_CPU_MODE_EL1	(0xe11)
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="cp">#define BOOT_CPU_MODE_EL2	(0xe12)
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="cm">/* Current Exception Level values, as contained in CurrentEL */</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="cp">#define CurrentEL_EL1		(1 &lt;&lt; 2)
+</span></span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="cp">#define CurrentEL_EL2		(2 &lt;&lt; 2)
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cm"> * Starting from EL2 or EL1, configure the CPU to execute at the highest
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * reachable EL supported by the kernel in a chosen default state. If dropping
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> * from EL2 to EL1, configure EL2 before configuring EL1.
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> * Since we cannot always rely on ERET synchronizing writes to sysregs (e.g. if
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> * SCTLR_ELx.EOS is clear), we place an ISB prior to ERET.
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> * Returns either BOOT_CPU_MODE_EL1 or BOOT_CPU_MODE_EL2 in x0 if
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> * booted in EL1 or EL2 respectively, with the top 32 bits containing
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cm"> * potential context flags. These flags are *not* stored in __boot_cpu_mode.
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="nf">SYM_FUNC_START</span><span class="p">(</span><span class="n">init_kernel_el</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">    <span class="n">mrs</span>	<span class="n">x0</span><span class="p">,</span> <span class="n">CurrentEL</span>           <span class="c1">/// 读取当前EL等级
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="c1"></span>    <span class="n">cmp</span>	<span class="n">x0</span><span class="p">,</span> <span class="err">#</span><span class="n">CurrentEL_EL2</span>      <span class="c1">/// 如果是EL2则跳转到init_el2，否则继续向下执行init_el1的代码
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="c1"></span>    <span class="n">b</span><span class="p">.</span><span class="n">eq</span>	<span class="n">init_el2</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">
+</span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="nf">SYM_INNER_LABEL</span><span class="p">(</span><span class="n">init_el1</span><span class="p">,</span> <span class="n">SYM_L_LOCAL</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">    <span class="p">...</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">    <span class="n">eret</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="nf">SYM_INNER_LABEL</span><span class="p">(</span><span class="n">init_el2</span><span class="p">,</span> <span class="n">SYM_L_LOCAL</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">    <span class="p">...</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl">    <span class="n">eret</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="nf">SYM_FUNC_END</span><span class="p">(</span><span class="n">init_kernel_el</span><span class="p">)</span>
+</span></span></code></pre></div>
+<h3 id="421-init_el1" data-numberify>4.2.1. init_el1<a class="anchor ms-1" href="#421-init_el1"></a></h3>
+<p>配置CPU的大小端模式，将启动模式BOOT_CPU_MODE_EL1写入w0，然后返回到primary_entry。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="cp">#define INIT_SCTLR_EL1_MMU_OFF \
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="cp">    (ENDIAN_SET_EL1 | SCTLR_EL1_LSMAOE | SCTLR_EL1_nTLSMD | \
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="cp">     SCTLR_EL1_EIS  | SCTLR_EL1_TSCXT  | SCTLR_EL1_EOS)
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="cp">#define INIT_PSTATE_EL1 \
+</span></span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="cp">    (PSR_D_BIT | PSR_A_BIT | PSR_I_BIT | PSR_F_BIT | PSR_MODE_EL1h)
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="nf">SYM_INNER_LABEL</span><span class="p">(</span><span class="n">init_el1</span><span class="p">,</span> <span class="n">SYM_L_LOCAL</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">    <span class="n">mov_q</span>	<span class="n">x0</span><span class="p">,</span> <span class="n">INIT_SCTLR_EL1_MMU_OFF</span>      <span class="c1">/// MMU关闭时，对sctlr_el1的赋值
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="c1"></span>    <span class="n">msr</span>	<span class="n">sctlr_el1</span><span class="p">,</span> <span class="n">x0</span>                       <span class="c1">/// 配置CPU的大小端模式，EE域用来配置EL1，E0E域用来配置EL0
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="c1"></span>    <span class="n">isb</span>                                     <span class="c1">/// 配置CPU大小端模式后，确保前面的指令都运行完成
+</span></span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="c1"></span>    <span class="n">mov_q</span>	<span class="n">x0</span><span class="p">,</span> <span class="n">INIT_PSTATE_EL1</span>             <span class="c1">///
+</span></span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="c1"></span>    <span class="n">msr</span>	<span class="n">spsr_el1</span><span class="p">,</span> <span class="n">x0</span>                        <span class="c1">/// 将INIT_PSTATE_EL1写入spsr_el1
+</span></span></span><span class="line"><span class="ln">7</span><span class="cl"><span class="c1"></span>    <span class="n">msr</span>	<span class="n">elr_el1</span><span class="p">,</span> <span class="n">lr</span>                         <span class="c1">/// 将返回地址写入elr_el1，lr是primary_entry中`bl init_kernel_el`的下一条指令地址
+</span></span></span><span class="line"><span class="ln">8</span><span class="cl"><span class="c1"></span>    <span class="n">mov</span>	<span class="n">w0</span><span class="p">,</span> <span class="err">#</span><span class="n">BOOT_CPU_MODE_EL1</span>              <span class="c1">/// 记录启动模式
+</span></span></span><span class="line"><span class="ln">9</span><span class="cl"><span class="c1"></span>    <span class="n">eret</span>                                    <span class="c1">/// 通过eret来使用ELR_ELx和SPSR_ELx来恢复PC和PSTATE
+</span></span></span></code></pre></div>
+<h3 id="422-init_el2" data-numberify>4.2.2. init_el2<a class="anchor ms-1" href="#422-init_el2"></a></h3>
+<p>vhe的全称是Virtualization Host Extension support。是armv8.1的新特性，其最终要就是支持type-2的hypervisors 这种扩展让kernel直接跑在el2上，这样可以减少host和guest之间share的寄存器，并减少overhead of virtualization 具体实现如下面的<a href="https://lwn.net/Articles/650524" target="_blank" rel="noopener noreferrer">https://lwn.net/Articles/650524<i class="fas fa-external-link-square-alt ms-1"></i></a></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="nf">SYM_INNER_LABEL</span><span class="p">(</span><span class="n">init_el2</span><span class="p">,</span> <span class="n">SYM_L_LOCAL</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">    <span class="n">mov_q</span>	<span class="n">x0</span><span class="p">,</span> <span class="n">HCR_HOST_NVHE_FLAGS</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">    <span class="n">msr</span>	<span class="n">hcr_el2</span><span class="p">,</span> <span class="n">x0</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">    <span class="n">isb</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    <span class="n">init_el2_state</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">    <span class="cm">/* Hypervisor stub */</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    <span class="n">adr_l</span>	<span class="n">x0</span><span class="p">,</span> <span class="n">__hyp_stub_vectors</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">    <span class="n">msr</span>	<span class="n">vbar_el2</span><span class="p">,</span> <span class="n">x0</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">    <span class="n">isb</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">
+</span></span><span class="line"><span class="ln">13</span><span class="cl">    <span class="n">mov_q</span>	<span class="n">x1</span><span class="p">,</span> <span class="n">INIT_SCTLR_EL1_MMU_OFF</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">
+</span></span><span class="line"><span class="ln">15</span><span class="cl">    <span class="cm">/*
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cm">     * Fruity CPUs seem to have HCR_EL2.E2H set to RES1,
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cm">     * making it impossible to start in nVHE mode. Is that
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="cm">     * compliant with the architecture? Absolutely not!
+</span></span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">    <span class="n">mrs</span>	<span class="n">x0</span><span class="p">,</span> <span class="n">hcr_el2</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl">    <span class="n">and</span>	<span class="n">x0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="err">#</span><span class="n">HCR_E2H</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">    <span class="n">cbz</span>	<span class="n">x0</span><span class="p">,</span> <span class="mf">1f</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl">
+</span></span><span class="line"><span class="ln">24</span><span class="cl">    <span class="cm">/* Set a sane SCTLR_EL1, the VHE way */</span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl">    <span class="n">msr_s</span>	<span class="n">SYS_SCTLR_EL12</span><span class="p">,</span> <span class="n">x1</span>
+</span></span><span class="line"><span class="ln">26</span><span class="cl">    <span class="n">mov</span>	<span class="n">x2</span><span class="p">,</span> <span class="err">#</span><span class="n">BOOT_CPU_FLAG_E2H</span>
+</span></span><span class="line"><span class="ln">27</span><span class="cl">    <span class="n">b</span>	<span class="mf">2f</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl">
+</span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="mi">1</span><span class="o">:</span>
+</span></span><span class="line"><span class="ln">30</span><span class="cl">    <span class="n">msr</span>	<span class="n">sctlr_el1</span><span class="p">,</span> <span class="n">x1</span>
+</span></span><span class="line"><span class="ln">31</span><span class="cl">    <span class="n">mov</span>	<span class="n">x2</span><span class="p">,</span> <span class="n">xzr</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="mi">2</span><span class="o">:</span>
+</span></span><span class="line"><span class="ln">33</span><span class="cl">    <span class="n">msr</span>	<span class="n">elr_el2</span><span class="p">,</span> <span class="n">lr</span>
+</span></span><span class="line"><span class="ln">34</span><span class="cl">    <span class="n">mov</span>	<span class="n">w0</span><span class="p">,</span> <span class="err">#</span><span class="n">BOOT_CPU_MODE_EL2</span>
+</span></span><span class="line"><span class="ln">35</span><span class="cl">    <span class="n">orr</span>	<span class="n">x0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x2</span>
+</span></span><span class="line"><span class="ln">36</span><span class="cl">    <span class="n">eret</span>
+</span></span><span class="line"><span class="ln">37</span><span class="cl"><span class="nf">SYM_FUNC_END</span><span class="p">(</span><span class="n">init_kernel_el</span><span class="p">)</span>
+</span></span></code></pre></div>
+<h4 id="4221-init_el2_state" data-numberify>4.2.2.1. init_el2_state<a class="anchor ms-1" href="#4221-init_el2_state"></a></h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cm"> * Initialize EL2 registers to sane values. This should be called early on all
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * cores that were booted in EL2. Note that everything gets initialised as
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> * if VHE was not evailable. The kernel context will be upgraded to VHE
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> * if possible later on in the boot process
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> * Regs: x0, x1 and x2 are clobbered.
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="p">.</span><span class="n">macro</span> <span class="n">init_el2_state</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">    <span class="n">__init_el2_sctlr</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">    <span class="n">__init_el2_timers</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="n">__init_el2_debug</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">    <span class="n">__init_el2_lor</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">    <span class="n">__init_el2_stage2</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">    <span class="n">__init_el2_gicv3</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl">    <span class="n">__init_el2_hstr</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">    <span class="n">__init_el2_nvhe_idregs</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">    <span class="n">__init_el2_nvhe_cptr</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">    <span class="n">__init_el2_fgt</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">    <span class="n">__init_el2_nvhe_prepare_eret</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="p">.</span><span class="n">endm</span>
+</span></span></code></pre></div>
+<h2 id="43-create_idmap" data-numberify>4.3. create_idmap<a class="anchor ms-1" href="#43-create_idmap"></a></h2>
+<p>填充init_idmap_pg_dir和init_pg_dir页表，这个时候的映射是以块为单位的，每个块大小为2M。在开启MMU时，init_idmap_pg_dir会被加载到ttbr0。</p>
+<p>init_idmap_pg_dir用于恒等映射，就是虚拟地址和物理地址相同的映射。linux-6.1的init_idmap_pg_dir替代了早期版本的idmap_pg_dir。之前版本的idmap_pg_dir只会映射idmap.text段，而init_idmap_pg_dir会映射整个内核镜像，在内核镜像之后，还会映射FDT，所以init_idmap_pg_dir映射的空间会比内核镜像大一些。
+create_idmap首先将整个区间（包含内核镜像和FDT）映射为RX属性，再将init_pg_dir~init_pg_end重新映射为RW属性，最后把FDT以RW属性映射到内核镜像之后。</p>
+
+<h2 id="44-__cpu_setup" data-numberify>4.4. __cpu_setup<a class="anchor ms-1" href="#44-__cpu_setup"></a></h2>
+<p>代码位于 <code>arch/arm64/mm/proc.S</code>。是为开启MMU而初始化处理器相关的代码，配置MMU，配置访问权限，内存地址划分等。
+在虚拟地址小于48bit时，调用此函数前，x0记录虚拟地址位数。函数返回时x0记录了SCTLR_EL1要写入的值，最后传给__enable_mmu。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cm"> *	__cpu_setup
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> *	Initialise the processor for turning the MMU on.
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> * Input:
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> *	x0 - actual number of VA bits (ignored unless VA_BITS &gt; 48)
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> * Output:
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> *	Return in x0 the value of the SCTLR_EL1 register.
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> */</span>
+</span></span></code></pre></div>
+<h1 id="5-开启mmu__primary_switch" data-numberify>5. 开启MMU：__primary_switch<a class="anchor ms-1" href="#5-开启mmu__primary_switch"></a></h1>
+<p><code>__primary_switch</code>表示重要的切换，这个非常重要的切换就是开启MMU。开启MMU(<code>__enable_mmu</code>)前，CPU访问的是物理地址，<code>__enable_mmu</code>之后，CPU访问的是虚拟地址。这个虚拟地址最高位为0，使用的是TTBR0，而此时TTBR0执行的页表是init_idmap_pg_dir。而reserved_pg_dir这个时候还没有填充。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="nf">SYM_FUNC_START_LOCAL</span><span class="p">(</span><span class="n">__primary_switch</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">    <span class="n">adrp</span>	<span class="n">x1</span><span class="p">,</span> <span class="n">reserved_pg_dir</span>     <span class="c1">/// ttbr1
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="c1"></span>    <span class="n">adrp</span>	<span class="n">x2</span><span class="p">,</span> <span class="n">init_idmap_pg_dir</span>   <span class="c1">/// ttbr0
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="c1"></span>    <span class="n">bl</span>	<span class="n">__enable_mmu</span>                <span class="c1">/// 开启MMU
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="c1"></span><span class="cp">#ifdef CONFIG_RELOCATABLE
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cp"></span>    <span class="n">adrp</span>	<span class="n">x23</span><span class="p">,</span> <span class="n">KERNEL_START</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="n">and</span>	<span class="n">x23</span><span class="p">,</span> <span class="n">x23</span><span class="p">,</span> <span class="n">MIN_KIMG_ALIGN</span> <span class="o">-</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cp">#ifdef CONFIG_RANDOMIZE_BASE
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cp"></span>    <span class="n">mov</span>	<span class="n">x0</span><span class="p">,</span> <span class="n">x22</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">    <span class="n">adrp</span>	<span class="n">x1</span><span class="p">,</span> <span class="n">init_pg_end</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">    <span class="n">mov</span>	<span class="n">sp</span><span class="p">,</span> <span class="n">x1</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="n">mov</span>	<span class="n">x29</span><span class="p">,</span> <span class="n">xzr</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">    <span class="c1">/// kaslr_early_init@arch/arm64/kernel/pi/kaslr_early.c
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="c1"></span>    <span class="c1">/// OBJCOPYFLAGS := --prefix-symbols=__pi_
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="c1"></span>    <span class="n">bl</span>	<span class="n">__pi_kaslr_early_init</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl">    <span class="n">and</span>	<span class="n">x24</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="err">#</span><span class="n">SZ_2M</span> <span class="o">-</span> <span class="mi">1</span>		<span class="c1">// capture memstart offset seed
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="c1"></span>    <span class="n">bic</span>	<span class="n">x0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="err">#</span><span class="n">SZ_2M</span> <span class="o">-</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">    <span class="n">orr</span>	<span class="n">x23</span><span class="p">,</span> <span class="n">x23</span><span class="p">,</span> <span class="n">x0</span>			<span class="c1">// record kernel offset
+</span></span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="c1"></span><span class="cp">#endif
+</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="cp"></span>    <span class="n">bl</span>	<span class="n">clear_page_tables</span>           <span class="c1">/// 清空init_pg_dir
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="c1"></span>    <span class="n">bl</span>	<span class="n">create_kernel_mapping</span>       <span class="c1">/// 填充init_pg_dir
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl">    <span class="n">adrp</span>	<span class="n">x1</span><span class="p">,</span> <span class="n">init_pg_dir</span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl">    <span class="n">load_ttbr1</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span>           <span class="c1">/// 加载init_pg_dir到ttbr1，为跳转到新的地址做准备
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="c1"></span><span class="cp">#ifdef CONFIG_RELOCATABLE
+</span></span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="cp"></span>    <span class="n">bl</span>	<span class="n">__relocate_kernel</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="cp"></span>    <span class="n">ldr</span>	<span class="n">x8</span><span class="p">,</span> <span class="o">=</span><span class="n">__primary_switched</span>     <span class="c1">/// __primary_switched编译时的地址，如果使能了CONFIG_RELOCATABLE，__relocate_kernel会给__primary_switched加上一个偏移
+</span></span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="c1"></span>    <span class="n">adrp</span>	<span class="n">x0</span><span class="p">,</span> <span class="n">KERNEL_START</span>		<span class="c1">// __pa(KERNEL_START)   /// 运行时的物理地址
+</span></span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="c1"></span>    <span class="n">br</span>	<span class="n">x8</span>                          <span class="c1">/// 跳转到__primary_switched虚拟地址运行
+</span></span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="c1"></span><span class="nf">SYM_FUNC_END</span><span class="p">(</span><span class="n">__primary_switch</span><span class="p">)</span>
+</span></span></code></pre></div><p>在 <code>__primary_switch</code>的最后，使用 <code>adrp x0, KERNEL_START</code>记录了 <code>_text</code>的地址，也就是内核镜像起始的物理地址。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="cp">#define KERNEL_START		_text
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="cp">#define KERNEL_END		_end
+</span></span></span></code></pre></div>
+<h2 id="51-__enable_mmu" data-numberify>5.1. __enable_mmu<a class="anchor ms-1" href="#51-__enable_mmu"></a></h2>
+<p>主要工作：</p>
+<ol>
+<li>检查CPU是否支持软件设置的页面大小，如果不支持，CPU会在停止在这里。</li>
+<li>将init_idmap_pg_dir和reserved_pg_dir分别加载到TTBR0_EL1和TTBR1_EL1。</li>
+<li>开启MMU，并使本地icache失效。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cm"> * Enable the MMU.
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> *  x0  = SCTLR_EL1 value for turning on the MMU.
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> *  x1  = TTBR1_EL1 value
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> *  x2  = ID map root table address
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> * Returns to the caller via x30/lr. This requires the caller to be covered
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> * by the .idmap.text section.
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cm"> * Checks if the selected granule size is supported by the CPU.
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cm"> * If it isn&#39;t, park the CPU
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="nf">SYM_FUNC_START</span><span class="p">(</span><span class="n">__enable_mmu</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">    <span class="n">mrs</span>	<span class="n">x3</span><span class="p">,</span> <span class="n">ID_AA64MMFR0_EL1</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl">    <span class="n">ubfx</span>	<span class="n">x3</span><span class="p">,</span> <span class="n">x3</span><span class="p">,</span> <span class="err">#</span><span class="n">ID_AA64MMFR0_EL1_TGRAN_SHIFT</span><span class="p">,</span> <span class="mi">4</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">    <span class="n">cmp</span>     <span class="n">x3</span><span class="p">,</span> <span class="err">#</span><span class="n">ID_AA64MMFR0_EL1_TGRAN_SUPPORTED_MIN</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">    <span class="n">b</span><span class="p">.</span><span class="n">lt</span>    <span class="n">__no_granule_support</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">    <span class="n">cmp</span>     <span class="n">x3</span><span class="p">,</span> <span class="err">#</span><span class="n">ID_AA64MMFR0_EL1_TGRAN_SUPPORTED_MAX</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">    <span class="n">b</span><span class="p">.</span><span class="n">gt</span>    <span class="n">__no_granule_support</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl">    <span class="n">phys_to_ttbr</span> <span class="n">x2</span><span class="p">,</span> <span class="n">x2</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">    <span class="n">msr</span>	<span class="n">ttbr0_el1</span><span class="p">,</span> <span class="n">x2</span>			<span class="c1">// load TTBR0
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="c1"></span>    <span class="n">load_ttbr1</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x3</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl">
+</span></span><span class="line"><span class="ln">25</span><span class="cl">    <span class="n">set_sctlr_el1</span>	<span class="n">x0</span>
+</span></span><span class="line"><span class="ln">26</span><span class="cl">
+</span></span><span class="line"><span class="ln">27</span><span class="cl">    <span class="n">ret</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="nf">SYM_FUNC_END</span><span class="p">(</span><span class="n">__enable_mmu</span><span class="p">)</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="nf">SYM_FUNC_START_LOCAL</span><span class="p">(</span><span class="n">__no_granule_support</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">    <span class="cm">/* Indicate that this CPU can&#39;t boot and is stuck in the kernel */</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl">    <span class="n">update_early_cpu_boot_status</span> \
+</span></span><span class="line"><span class="ln">4</span><span class="cl">        <span class="n">CPU_STUCK_IN_KERNEL</span> <span class="o">|</span> <span class="n">CPU_STUCK_REASON_NO_GRAN</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="mi">1</span><span class="o">:</span>
+</span></span><span class="line"><span class="ln">6</span><span class="cl">    <span class="n">wfe</span>
+</span></span><span class="line"><span class="ln">7</span><span class="cl">    <span class="n">wfi</span>
+</span></span><span class="line"><span class="ln">8</span><span class="cl">    <span class="n">b</span>	<span class="mi">1</span><span class="n">b</span>
+</span></span><span class="line"><span class="ln">9</span><span class="cl"><span class="nf">SYM_FUNC_END</span><span class="p">(</span><span class="n">__no_granule_support</span><span class="p">)</span>
+</span></span></code></pre></div>
+<h2 id="52-clear_page_tables" data-numberify>5.2. clear_page_tables<a class="anchor ms-1" href="#52-clear_page_tables"></a></h2>
+<p>create_idmap填充了init_pg_dir，这里对init_pg_dir进行清零。</p>
+<p><code>memset(init_pg_dir, 0, init_pg_end - init_pg_dir)</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="nf">SYM_FUNC_START_LOCAL</span><span class="p">(</span><span class="n">clear_page_tables</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">    <span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm">     * Clear the init page tables.
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">    <span class="n">adrp</span>	<span class="n">x0</span><span class="p">,</span> <span class="n">init_pg_dir</span> <span class="c1">/// 起始地址
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="c1"></span>    <span class="n">adrp</span>	<span class="n">x1</span><span class="p">,</span> <span class="n">init_pg_end</span> <span class="c1">/// 结束地址
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="c1"></span>    <span class="n">sub</span>	<span class="n">x2</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x0</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">    <span class="n">mov</span>	<span class="n">x1</span><span class="p">,</span> <span class="n">xzr</span>             <span class="c1">/// xzr是一个特殊寄存器，读取时值为0
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="c1"></span>    <span class="n">b</span>	<span class="n">__pi_memset</span>			<span class="c1">// tail call
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="c1"></span><span class="nf">SYM_FUNC_END</span><span class="p">(</span><span class="n">clear_page_tables</span><span class="p">)</span>
+</span></span></code></pre></div>
+<h2 id="53-create_kernel_mapping" data-numberify>5.3. create_kernel_mapping<a class="anchor ms-1" href="#53-create_kernel_mapping"></a></h2>
+<p>创建内核镜像映射，填充init_pg_dir，注意此时还是使用的块映射。</p>
+
+<h1 id="6-开启mmu之后__primary_switched" data-numberify>6. 开启MMU之后：__primary_switched<a class="anchor ms-1" href="#6-开启mmu之后__primary_switched"></a></h1>
+<p>开启MMU之后，CPU访问的是虚拟地址。</p>
+<ol>
+<li>准备0号进程内核栈</li>
+<li>VBAR_EL1中断向量表配置</li>
+<li>计算kimage_voffset</li>
+<li>保存CPU启动模式</li>
+<li>清空BSS段</li>
+<li>尝试fixmap映射</li>
+<li>解析boot_args中CPU相关的一些特性，并修改默认值</li>
+<li>跳转到start_kernel。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="cm"> * The following fragment of code is executed with the MMU enabled.
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="cm"> *   x0 = __pa(KERNEL_START)
+</span></span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="nf">SYM_FUNC_START_LOCAL</span><span class="p">(</span><span class="n">__primary_switched</span><span class="p">)</span>
+</span></span></code></pre></div>
+<h2 id="61-初始化init_task栈空间" data-numberify>6.1. 初始化init_task栈空间<a class="anchor ms-1" href="#61-初始化init_task栈空间"></a></h2>
+<p>主要工作：</p>
+<ol>
+<li>设置SP_EL0、SP_ELx、x29(FP)寄存器，配置init_task的栈</li>
+<li>将per_cpu_offset写入TPIDR_ELx</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl">    <span class="n">adr_l</span>	<span class="n">x4</span><span class="p">,</span> <span class="n">init_task</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">    <span class="n">init_cpu_task</span> <span class="n">x4</span><span class="p">,</span> <span class="n">x5</span><span class="p">,</span> <span class="n">x6</span>
+</span></span></code></pre></div>
+<h3 id="611-init_cpu_task" data-numberify>6.1.1. init_cpu_task<a class="anchor ms-1" href="#611-init_cpu_task"></a></h3>
+<p>先看一下涉及到的几个宏。<code>arch/arm64/kernel/asm-offsets.c</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="cp">#define TSK_TI_CPU 16 </span><span class="cm">/* offsetof(struct task_struct, thread_info.cpu) */</span><span class="cp">
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="cp">#define TSK_STACK 32 </span><span class="cm">/* offsetof(struct task_struct, stack) */</span><span class="cp">
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="cp">#define S_STACKFRAME 304 </span><span class="cm">/* offsetof(struct pt_regs, stackframe) */</span><span class="cp">
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="cp">#define PT_REGS_SIZE 336 </span><span class="cm">/* sizeof(struct pt_regs) */</span><span class="cp">
+</span></span></span></code></pre></div><p>在task_pt_regs(current)-&gt;stackframe创建一个最终帧记录，这样unwinder就可以根据任务堆栈中的位置来识别任何任务的最终帧记录。保留整个pt_regs空间使用户任务和kthread保持一致性。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl">    <span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cm">     * Initialize CPU registers with task-specific and cpu-specific context.
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm">     *
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm">     * Create a final frame record at task_pt_regs(current)-&gt;stackframe, so
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm">     * that the unwinder can identify the final frame record of any task by
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm">     * its location in the task stack. We reserve the entire pt_regs space
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm">     * for consistency with user tasks and kthreads.
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    <span class="p">.</span><span class="n">macro</span>	<span class="n">init_cpu_task</span> <span class="n">tsk</span><span class="p">,</span> <span class="n">tmp1</span><span class="p">,</span> <span class="n">tmp2</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">    <span class="n">msr</span>	<span class="n">sp_el0</span><span class="p">,</span> <span class="err">\</span><span class="n">tsk</span>                    <span class="c1">/// 将init_task的地址写入sp_el0，内核运行于EL2或EL1，内核中会使用sp_el0来作为current
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="n">ldr</span>	<span class="err">\</span><span class="n">tmp1</span><span class="p">,</span> <span class="p">[</span><span class="err">\</span><span class="n">tsk</span><span class="p">,</span> <span class="err">#</span><span class="n">TSK_STACK</span><span class="p">]</span>       <span class="c1">/// 获取init_task的栈地址，offsetof(struct task_struct, stack)
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="c1"></span>    <span class="n">add</span>	<span class="n">sp</span><span class="p">,</span> <span class="err">\</span><span class="n">tmp1</span><span class="p">,</span> <span class="err">#</span><span class="n">THREAD_SIZE</span>         <span class="c1">/// 栈是由高地址向下生长的，所以SP_ELx要加上THREAD_SIZE，init_task的栈是静态分配的，它指向init_stack这是一个数组。
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="c1"></span>    <span class="n">sub</span>	<span class="n">sp</span><span class="p">,</span> <span class="n">sp</span><span class="p">,</span> <span class="err">#</span><span class="n">PT_REGS_SIZE</span>           <span class="c1">/// 为struct pt_regs留出空间
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl">    <span class="n">stp</span>	<span class="n">xzr</span><span class="p">,</span> <span class="n">xzr</span><span class="p">,</span> <span class="p">[</span><span class="n">sp</span><span class="p">,</span> <span class="err">#</span><span class="n">S_STACKFRAME</span><span class="p">]</span>   <span class="c1">/// 将struct pt_regs的u64 stackframe[2]清零
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="c1"></span>    <span class="n">add</span>	<span class="n">x29</span><span class="p">,</span> <span class="n">sp</span><span class="p">,</span> <span class="err">#</span><span class="n">S_STACKFRAME</span>          <span class="c1">/// x29(FP)指向栈中pt_regs的stackframe
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">    <span class="n">scs_load</span> <span class="err">\</span><span class="n">tsk</span>                       	<span class="c1">/// 此处为空操作，详细信息可以参考arch/Kconfig中的SHADOW_CALL_STACK
+</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl">    <span class="n">adr_l</span>	<span class="err">\</span><span class="n">tmp1</span><span class="p">,</span> <span class="n">__per_cpu_offset</span>     	<span class="c1">/// 读取__per_cpu_offset[NR_CPUS]数组基地址
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="c1"></span>    <span class="n">ldr</span>	<span class="n">w</span><span class="err">\</span><span class="n">tmp2</span><span class="p">,</span> <span class="p">[</span><span class="err">\</span><span class="n">tsk</span><span class="p">,</span> <span class="err">#</span><span class="n">TSK_TI_CPU</span><span class="p">]</span>     <span class="c1">/// offsetof(struct task_struct, thread_info.cpu)
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="c1"></span>    <span class="n">ldr</span>	<span class="err">\</span><span class="n">tmp1</span><span class="p">,</span> <span class="p">[</span><span class="err">\</span><span class="n">tmp1</span><span class="p">,</span> <span class="err">\</span><span class="n">tmp2</span><span class="p">,</span> <span class="n">lsl</span> <span class="err">#</span><span class="mi">3</span><span class="p">]</span>   <span class="c1">/// tmp1 = __per_cpu_offset[init_task.cpu &lt;&lt; 3]，通常来说，bootcpu为0
+</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="c1"></span>    <span class="n">set_this_cpu_offset</span> <span class="err">\</span><span class="n">tmp1</span>           	<span class="c1">/// 将当前cpu的per_cpu变量的offset值写入TPIDR_ELx
+</span></span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="c1"></span>    <span class="p">.</span><span class="n">endm</span>
+</span></span></code></pre></div><p>几个寄存器的最终结果：</p>
+<blockquote>
+<p>SP_EL0 = &amp;init_task
+SP_ELx = init_task.stack + THREAD_SIZE - sizeof(struct pt_regs)
+x29(FP) = SP_ELx + S_STACKFRAME</p>
+</blockquote>
+
+<h2 id="62-中断向量基地址寄存器配置" data-numberify>6.2. 中断向量基地址寄存器配置<a class="anchor ms-1" href="#62-中断向量基地址寄存器配置"></a></h2>
+<p>将中断向量表的起始虚拟地址写入到VBAR_EL1。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl">    <span class="n">adr_l</span>	<span class="n">x8</span><span class="p">,</span> <span class="n">vectors</span>			<span class="c1">// load VBAR_EL1 with virtual
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="c1"></span>    <span class="n">msr</span>	<span class="n">vbar_el1</span><span class="p">,</span> <span class="n">x8</span>			<span class="c1">// vector table address
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="c1"></span>    <span class="n">isb</span>
+</span></span></code></pre></div>
+<h2 id="63-备份fp和lr寄存器" data-numberify>6.3. 备份fp和lr寄存器<a class="anchor ms-1" href="#63-备份fp和lr寄存器"></a></h2>
+<p>此时sp的值为 <code>init_task.stack + THREAD_SIZE - sizeof(struct pt_regs)</code>。主要工作如下：</p>
+<ol>
+<li>将x29(FP)和x30(LR)分别保存到 <code>sp-16</code>和 <code>sp-8</code>的地址上，然后 <code>sp -= 16</code>。</li>
+<li>将sp的值写入到x29(FP)</li>
+</ol>
+<p>这是实现了ARM64函数调用标准规定的栈布局，为后续函数调用的入栈出栈做好了准备。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl">    <span class="n">stp</span>	<span class="n">x29</span><span class="p">,</span> <span class="n">x30</span><span class="p">,</span> <span class="p">[</span><span class="n">sp</span><span class="p">,</span> <span class="err">#</span><span class="o">-</span><span class="mi">16</span><span class="p">]</span><span class="o">!</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">    <span class="n">mov</span>	<span class="n">x29</span><span class="p">,</span> <span class="n">sp</span>
+</span></span></code></pre></div>
+<h2 id="64-保存设备树物理地址到__fdt_pointer" data-numberify>6.4. 保存设备树物理地址到__fdt_pointer<a class="anchor ms-1" href="#64-保存设备树物理地址到__fdt_pointer"></a></h2>
+<p><code>__fdt_pointer</code>是一个全局变量，在后续进行FDT映射时需要用到。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl">    <span class="n">str_l</span>	<span class="n">x21</span><span class="p">,</span> <span class="n">__fdt_pointer</span><span class="p">,</span> <span class="n">x5</span>		<span class="c1">// Save FDT pointer
+</span></span></span></code></pre></div>
+<h2 id="65-计算kimage_voffset" data-numberify>6.5. 计算kimage_voffset<a class="anchor ms-1" href="#65-计算kimage_voffset"></a></h2>
+<p><code>arch/arm64/mm/mmu.c</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="n">u64</span> <span class="n">kimage_vaddr</span> <span class="n">__ro_after_init</span> <span class="o">=</span> <span class="p">(</span><span class="n">u64</span><span class="p">)</span><span class="o">&amp;</span><span class="n">_text</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="nf">EXPORT_SYMBOL</span><span class="p">(</span><span class="n">kimage_vaddr</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl">
+</span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="n">u64</span> <span class="n">kimage_voffset</span> <span class="n">__ro_after_init</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="nf">EXPORT_SYMBOL</span><span class="p">(</span><span class="n">kimage_voffset</span><span class="p">);</span>
+</span></span></code></pre></div><p><code>kimage_voffset</code>记录了内核镜像映射后的虚拟地址与内核镜像在内存中的物理地址之间的差值。<code>kimage_vaddr</code>记录了 <code>_text</code>的链接地址，也就是最终 <code>_text</code>的虚拟地址（如果使能了CONFIG_RELOCATE，此值会在运行过程中改变），x0作为传入参数记录了 <code>_text</code>的物理地址，相减即可得到 <code>kimage_voffset</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl">    <span class="n">ldr_l</span>	<span class="n">x4</span><span class="p">,</span> <span class="n">kimage_vaddr</span>		<span class="c1">// Save the offset between
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="c1"></span>    <span class="n">sub</span>	<span class="n">x4</span><span class="p">,</span> <span class="n">x4</span><span class="p">,</span> <span class="n">x0</span>			<span class="c1">// the kernel virtual and
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="c1"></span>    <span class="n">str_l</span>	<span class="n">x4</span><span class="p">,</span> <span class="n">kimage_voffset</span><span class="p">,</span> <span class="n">x5</span>		<span class="c1">// physical mappings
+</span></span></span></code></pre></div>
+<h2 id="66-set_cpu_boot_mode_flag" data-numberify>6.6. set_cpu_boot_mode_flag<a class="anchor ms-1" href="#66-set_cpu_boot_mode_flag"></a></h2>
+<p>将启动时的特权级别保存到__boot_cpu_mode[2]全局数组。
+早期版本的内核set_cpu_boot_mode_flag会在primary_entry中执行，set_cpu_boot_mode_flag会在ret之前调用 <code>dmb sy</code>和 <code>dc  ivac, x1</code>来保证指令执行顺序和使高速缓存失效。
+6.1版本内核改到了在 <code>__primary_switched</code>中执行，等到清空bss段后，通过 <code>dsb	ishst</code>完成高速缓存的失效操作。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cm"> * Sets the __boot_cpu_mode flag depending on the CPU boot mode passed
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * in w0. See arch/arm64/include/asm/virt.h for more info.
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="nf">SYM_FUNC_START_LOCAL</span><span class="p">(</span><span class="n">set_cpu_boot_mode_flag</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    <span class="n">adr_l</span>	<span class="n">x1</span><span class="p">,</span> <span class="n">__boot_cpu_mode</span>     <span class="c1">/// x1记录__boot_cpu_mode[]的起始地址
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="c1"></span>    <span class="n">cmp</span>	<span class="n">w0</span><span class="p">,</span> <span class="err">#</span><span class="n">BOOT_CPU_MODE_EL2</span>      <span class="c1">/// w0记录启动时的异常等级
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="c1"></span>    <span class="n">b</span><span class="p">.</span><span class="n">ne</span>	<span class="mf">1f</span>                      <span class="c1">/// 如果不是从EL2启动，则跳转到1处
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="c1"></span>    <span class="n">add</span>	<span class="n">x1</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="err">#</span><span class="mi">4</span>                  <span class="c1">/// 如果是从EL2启动，地址指向__boot_cpu_mode[1]
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="c1"></span>    <span class="c1">/// 保存启动模式到x1指向的地址，如果是从EL1启动，地址指向__boot_cpu_mode[0]
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="c1"></span><span class="mi">1</span><span class="o">:</span>	<span class="n">str</span>	<span class="n">w0</span><span class="p">,</span> <span class="p">[</span><span class="n">x1</span><span class="p">]</span>			<span class="c1">// Save CPU boot mode
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="c1"></span>    <span class="n">ret</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="nf">SYM_FUNC_END</span><span class="p">(</span><span class="n">set_cpu_boot_mode_flag</span><span class="p">)</span>
+</span></span></code></pre></div><p>简化的C语言伪代码：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl">    <span class="n">u32</span> <span class="o">*</span><span class="n">x1</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">__boot_cpu_mode</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">w0</span> <span class="o">==</span> <span class="n">BOOT_CPU_MODE_EL2</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl">        <span class="n">x1</span><span class="o">++</span><span class="p">;</span>   <span class="c1">// *x1 = &amp;__boot_cpu_mode[1]
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="c1"></span>    <span class="p">}</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl">    <span class="o">*</span><span class="n">x1</span> <span class="o">=</span> <span class="n">w0</span><span class="p">;</span>
+</span></span></code></pre></div><p>最终结果与如下代码相同</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">w0</span> <span class="o">==</span> <span class="n">BOOT_CPU_MODE_EL2</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">        <span class="n">__boot_cpu_mode</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">BOOT_CPU_MODE_EL2</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl">        <span class="n">__boot_cpu_mode</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">BOOT_CPU_MODE_EL1</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl">    <span class="p">}</span>
+</span></span></code></pre></div>
+<h2 id="67-清空bss段" data-numberify>6.7. 清空BSS段<a class="anchor ms-1" href="#67-清空bss段"></a></h2>
+<p>清空BSS后，要使高速缓存失效。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl">    <span class="c1">// Clear BSS
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="c1"></span>    <span class="n">adr_l</span>	<span class="n">x0</span><span class="p">,</span> <span class="n">__bss_start</span> <span class="c1">/// 起始地址
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="c1"></span>    <span class="n">mov</span>	<span class="n">x1</span><span class="p">,</span> <span class="n">xzr</span>             <span class="c1">/// 要写入的值，xzr是一个特殊的寄存器，值为64位的0
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="c1"></span>    <span class="n">adr_l</span>	<span class="n">x2</span><span class="p">,</span> <span class="n">__bss_stop</span>  <span class="c1">/// 结束地址
+</span></span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="c1"></span>    <span class="n">sub</span>	<span class="n">x2</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">x0</span>          <span class="c1">/// size = __bss_stop - __bss_start
+</span></span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="c1"></span>    <span class="n">bl</span>	<span class="n">__pi_memset</span>         <span class="c1">/// memset(x0, x1, x2)
+</span></span></span><span class="line"><span class="ln">7</span><span class="cl"><span class="c1"></span>    <span class="n">dsb</span>	<span class="n">ishst</span>				<span class="c1">// Make zero page visible to PTW
+</span></span></span></code></pre></div>
+<h2 id="68-一些其他工作" data-numberify>6.8. 一些其他工作<a class="anchor ms-1" href="#68-一些其他工作"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cp">#if VA_BITS &gt; 48
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cp"></span>    <span class="n">adr_l</span>	<span class="n">x8</span><span class="p">,</span> <span class="n">vabits_actual</span>		<span class="c1">// Set this early so KASAN early init
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="c1"></span>    <span class="n">str</span>	<span class="n">x25</span><span class="p">,</span> <span class="p">[</span><span class="n">x8</span><span class="p">]</span>			<span class="c1">// ... observes the correct value
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="c1"></span>    <span class="n">dc</span>	<span class="n">civac</span><span class="p">,</span> <span class="n">x8</span>			<span class="c1">// Make visible to booting secondaries
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="c1"></span><span class="cp">#endif
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cp">#ifdef CONFIG_RANDOMIZE_BASE
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cp"></span>    <span class="n">adrp</span>	<span class="n">x5</span><span class="p">,</span> <span class="n">memstart_offset_seed</span>	<span class="c1">// Save KASLR linear map seed
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="c1"></span>    <span class="n">strh</span>	<span class="n">w24</span><span class="p">,</span> <span class="p">[</span><span class="n">x5</span><span class="p">,</span> <span class="o">:</span><span class="nl">lo12</span><span class="p">:</span><span class="n">memstart_offset_seed</span><span class="p">]</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cp">#if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cp"></span>    <span class="n">bl</span>	<span class="n">kasan_early_init</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cp">#endif
+</span></span></span></code></pre></div>
+<h2 id="69-early_fdt_map" data-numberify>6.9. early_fdt_map<a class="anchor ms-1" href="#69-early_fdt_map"></a></h2>
+<p>尝试建立fixmap的页表，可能失败，后边init_feature_override会用到。
+如果失败，会在setup_arch通过early_fixmap_init重新映射。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl">    <span class="n">mov</span>	<span class="n">x0</span><span class="p">,</span> <span class="n">x21</span>				<span class="c1">// pass FDT address in x0
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="c1"></span>    <span class="n">bl</span>	<span class="n">early_fdt_map</span>			<span class="c1">// Try mapping the FDT early
+</span></span></span></code></pre></div>
+<h2 id="610-init_feature_override" data-numberify>6.10. init_feature_override<a class="anchor ms-1" href="#610-init_feature_override"></a></h2>
+<p>根据BootLoader传入的bootargs参数，对一些参数的改写。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl">    <span class="n">mov</span>	<span class="n">x0</span><span class="p">,</span> <span class="n">x20</span>				<span class="c1">// pass the full boot status
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="c1"></span>    <span class="n">bl</span>	<span class="n">init_feature_override</span>		<span class="c1">// Parse cpu feature overrides
+</span></span></span></code></pre></div>
+<h2 id="611-finalise_el2" data-numberify>6.11. finalise_el2<a class="anchor ms-1" href="#611-finalise_el2"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl">    <span class="n">mov</span>	<span class="n">x0</span><span class="p">,</span> <span class="n">x20</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">    <span class="n">bl</span>	<span class="n">finalise_el2</span>			<span class="c1">// Prefer VHE if possible
+</span></span></span></code></pre></div>
+<h2 id="612-跳转start_kernel" data-numberify>6.12. 跳转start_kernel<a class="anchor ms-1" href="#612-跳转start_kernel"></a></h2>
+<p>从栈中恢复x29(FP)和x30(LR)，sp重新指向 <code>init_task.stack + THREAD_SIZE - sizeof(struct pt_regs)</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl">    <span class="n">ldp</span>	<span class="n">x29</span><span class="p">,</span> <span class="n">x30</span><span class="p">,</span> <span class="p">[</span><span class="n">sp</span><span class="p">],</span> <span class="err">#</span><span class="mi">16</span>     <span class="c1">/// 从栈中恢复x29(FP)和x30(LR)，sp += 16
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="c1"></span>    <span class="n">bl</span>	<span class="n">start_kernel</span>            <span class="c1">/// 跳转到start_kernel
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="c1"></span>    <span class="nf">ASM_BUG</span><span class="p">()</span>                   <span class="c1">/// 如果start_kernel返回到这里说明出错了
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="c1"></span><span class="nf">SYM_FUNC_END</span><span class="p">(</span><span class="n">__primary_switched</span><span class="p">)</span>
+</span></span></code></pre></div>
+<h1 id="7-参考资料" data-numberify>7. 参考资料<a class="anchor ms-1" href="#7-参考资料"></a></h1>
+<ol>
+<li><code>Documentation/arm64/booting.rst</code></li>
+<li><code>Documentation/translations/zh_CN/arm64/booting.txt</code></li>
+<li><a href="http://blog.chinaunix.net/uid-69947851-id-5830505.html" target="_blank" rel="noopener noreferrer">Linux 内核启动分析-BugMan-ChinaUnix博客<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li><a href="https://blog.csdn.net/jasonactions/article/details/115689462" target="_blank" rel="noopener noreferrer">中断管理基础学习笔记 - 5.1 ARM64底层中断处理<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li><a href="https://blog.csdn.net/m0_60626268/article/details/119812726" target="_blank" rel="noopener noreferrer">Linux kernel ARM64 寄存器tpidr_el1 的用处<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li><a href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f6f0c4362f070cab4a0cec432e82428d702ce0a6" target="_blank" rel="noopener noreferrer">arm64: Extract early FDT mapping from kaslr_early_init()<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li><a href="https://blog.csdn.net/jasonactions/article/details/111383235" target="_blank" rel="noopener noreferrer">kernel启动流程-head.S的执行_4.el2_setup_kernel5.10 内核流程<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+</ol>
+</div>
+</div>
+</div><div class="card-footer">
+  <div class="post-navs d-flex justify-content-evenly"><div class="post-nav post-next">
+      <a href="/zh-cn/docs/04-kernel/linux-6.1/other/linux-err-retur/">Linux的errno简介</a>
+      <i class="fas fa-fw fa-chevron-down post-next-icon ms-1" data-fa-transform="rotate-270"></i>
+    </div></div>
+</div></article><div class="post-copyright mb-3 row card component" id="post-copyright">
+    <div class="card-header">
+        <h2 class="card-title fs-4 my-2 text-surface">版权</h2>
+    </div>
+    <div class="card-body"><a class="d-flex align-items-center flex-column" target="_blank" rel="license noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh">
+  <span><i class="fab fa-fw fa-2x fa-creative-commons"></i><i class="fab fa-fw fa-2x fa-creative-commons-by"></i><i class="fab fa-fw fa-2x fa-creative-commons-nc"></i><i class="fab fa-fw fa-2x fa-creative-commons-nd"></i></span>
+  CC BY-NC-ND 4.0 
+</a>
+
+
+    </div>
+</div><section class="related-posts row card component">
+      <div class="card-header">
+        <h2 class="card-title fs-4 my-2 text-surface">
+          相关文章
+        </h2>
+      </div>
+      <div class="card-body slide px-1">
+        <div class="slide-inner row gx-0"><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="内核启动流程（一）" src="https://kingdix10.github.io/covers/texture_background_color_72786_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/boot/01-entry/">
+    内核启动流程（一）
+  </a>
+  <div class="post-meta mb-0">
+    2020/03/15
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="U-Boot从dtb获取内存布局并传递到内核" src="https://kingdix10.github.io/covers/backlight_neon_electronics_144683_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/03-boot/u-boot/uboot_m/">
+    U-Boot从dtb获取内存布局并传递到内核
+  </a>
+  <div class="post-meta mb-0">
+    2020/03/10
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="Exynos4412启动介绍" src="https://kingdix10.github.io/covers/keyboard_backlight_purple_212155_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/exynos4412/exynos4412/">
+    Exynos4412启动介绍
+  </a>
+  <div class="post-meta mb-0">
+    2020/03/05
+
+  </div>
+</div>
+
+          </div></div>
+        <button class="slide-control-left">
+          <i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-90"></i>
+          <span class="visually-hidden">Left</span>
+        </button>
+        <button class="slide-control-right">
+          <i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-270"></i>
+          <span class="visually-hidden">Right</span>
+        </button>
+      </div>
+    </section></div>
+</div>
+<aside class="sidebar d-flex docs-sidebar col-xxl-3 position-sticky order-xxl-5">
+  <div class="container">
+    
+<div class="row component card">
+    <div class="card-body">
+        <form action="/zh-cn/search/">
+            <div class="input-group">
+                <input name="q" class="form-control rounded" placeholder="搜索">
+                <button class="btn btn-sm btn-search position-absolute end-0 border-0 border-start border-secondary p-2" type="submit">
+                    <i class="fas fa-fw fa-search text-primary"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    <div class="accordion post-toc d-none d-lg-block">
+  <div class="accordion-item row mb-4 card component" id="postTOC">
+    <div class="card-header accordion-header">
+      <h2 class="card-title fs-4 my-2 text-surface d-none d-lg-block">目录</h2>
+      <a class="accordion-button d-lg-none mb-1 collapsed shadow-none p-0 bg-transparent" role="button" data-bs-toggle="collapse" href="#post-toc" aria-expanded="false" aria-controls="post-toc">
+        目录
+      </a>
+    </div>
+    <div class="card-body collapse accordion-collapse accordion-body d-lg-block" id="post-toc">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-内核启动入口">1. 内核启动入口</a></li>
+    <li><a href="#2-heads总览">2. head.S总览</a>
+      <ul>
+        <li><a href="#21-headtext">2.1. <code>.head.text</code></a></li>
+        <li><a href="#22-inittext">2.2. <code>.init.text</code></a></li>
+        <li><a href="#23-idmaptext">2.3. <code>.idmap.text</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#3-概览从入口到start_kernel">3. 概览：从入口到start_kernel</a></li>
+    <li><a href="#4-mmu开启之前primary_entry">4. MMU开启之前：primary_entry</a>
+      <ul>
+        <li><a href="#41-preserve_boot_args">4.1. preserve_boot_args</a></li>
+        <li><a href="#42-init_kernel_el">4.2. init_kernel_el</a>
+          <ul>
+            <li><a href="#421-init_el1">4.2.1. init_el1</a></li>
+            <li><a href="#422-init_el2">4.2.2. init_el2</a>
+              <ul>
+                <li><a href="#4221-init_el2_state">4.2.2.1. init_el2_state</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#43-create_idmap">4.3. create_idmap</a></li>
+        <li><a href="#44-__cpu_setup">4.4. __cpu_setup</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-开启mmu__primary_switch">5. 开启MMU：__primary_switch</a>
+      <ul>
+        <li><a href="#51-__enable_mmu">5.1. <code>__enable_mmu</code></a></li>
+        <li><a href="#52-clear_page_tables">5.2. clear_page_tables</a></li>
+        <li><a href="#53-create_kernel_mapping">5.3. create_kernel_mapping</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-开启mmu之后__primary_switched">6. 开启MMU之后：__primary_switched</a>
+      <ul>
+        <li><a href="#61-初始化init_task栈空间">6.1. 初始化init_task栈空间</a>
+          <ul>
+            <li><a href="#611-init_cpu_task">6.1.1. init_cpu_task</a></li>
+          </ul>
+        </li>
+        <li><a href="#62-中断向量基地址寄存器配置">6.2. 中断向量基地址寄存器配置</a></li>
+        <li><a href="#63-备份fp和lr寄存器">6.3. 备份fp和lr寄存器</a></li>
+        <li><a href="#64-保存设备树物理地址到__fdt_pointer">6.4. 保存设备树物理地址到__fdt_pointer</a></li>
+        <li><a href="#65-计算kimage_voffset">6.5. 计算kimage_voffset</a></li>
+        <li><a href="#66-set_cpu_boot_mode_flag">6.6. set_cpu_boot_mode_flag</a></li>
+        <li><a href="#67-清空bss段">6.7. 清空BSS段</a></li>
+        <li><a href="#68-一些其他工作">6.8. 一些其他工作</a></li>
+        <li><a href="#69-early_fdt_map">6.9. early_fdt_map</a></li>
+        <li><a href="#610-init_feature_override">6.10. init_feature_override</a></li>
+        <li><a href="#611-finalise_el2">6.11. finalise_el2</a></li>
+        <li><a href="#612-跳转start_kernel">6.12. 跳转start_kernel</a></li>
+      </ul>
+    </li>
+    <li><a href="#7-参考资料">7. 参考资料</a></li>
+  </ul>
+</nav>
+    </div>
+  </div>
+</div>
+    
+
+
+
+
+
+
+  </div>
+</aside>
+
+      </div>
+    </main><footer class="footer mt-auto py-3 text-center container"><div class="offcanvas offcanvas-bottom h-auto" tabindex="-1" id="offcanvasActionsPanel"
+  aria-labelledby="offcanvasActionsPanelLabel">
+  <div class="offcanvas-header">
+    <div class="offcanvas-title h5" id="offcanvasActionsPanelLabel">
+      <i class="fas fa-fw fa-th-large me-1"></i>
+      操作
+    </div>
+    <button type="button" class="btn-close ms-auto" data-bs-dismiss="offcanvas" data-bs-target="offcanvasActionsPanel" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body mt-2"><div class="actions d-flex overflow-auto align-items-center">
+      <a role="button" class="action action-go-back d-flex flex-column align-items-center me-3" href="javascript: window.history.back();">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-90"></i></span> 返回
+      </a>
+      <a role="button" class="action action-reload-page d-flex flex-column align-items-center me-3">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-redo-alt"></i></span> 刷新
+      </a>
+      <a role="button" class="action action-copy-url d-flex flex-column align-items-center me-3">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-link"></i></span> 复制链接
+      </a>
+    </div>
+  </div>
+</div><div class="row text-center text-lg-start">
+  <div class="col-12 mt-2 col-lg-3">
+    <p class="mb-2">kingdix10&#39;s site</p>
+    <p class="text-secondary mb-2"><small>kingdix10 @ 拾月国度</small></p><div class="copyright mb-2 text-secondary">
+  <small>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</small>
+</div>
+
+
+
+<nav class="social-links nav justify-content-center justify-content-between mb-2 mt-3">
+      <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="https://github.com/kingdix10" title="GitHub" rel="me">
+        <i class="fa-fw fab fa-github"
+          ></i>
+      </a>
+      <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="https://www.zhihu.com/people/kingdix10" title="知乎" rel="me">
+        <i class="fa-fw fab fa-zhihu"
+           style="color: #056de8;"></i>
+      </a>
+  <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="/zh-cn/index.xml" title="RSS" rel="me">
+    <i class="fas fa-fw fa-rss" style="color: #ea6221;"></i>
+  </a>
+</nav>
+</div>
+  <div class="col-12 col-lg-8 offset-0 offset-lg-1"><ul class="nav justify-content-between footer-memu mb-3 row"><li class="nav-item col-12 col-md-6 col-lg-3 px-0"><ul class="nav flex-column align-items-start">
+      <li class="nav-item w-100"><a class="nav-link fw-bold fs-lg" href="javascript: void(0);">链接</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+GitHub"
+  href="https://github.com/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-github text-primary"></i></span>GitHub</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+Gitee"
+  href="https://gitee.com/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-github text-primary"></i></span>Gitee</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+Zhihu"
+  href="https://www.zhihu.com/people/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-zhihu text-primary"></i></span>Zhihu</a></li></ul></li></ul></div>
+</div>
+</footer>
+<script data-precache src="/assets/main/bundle.min.01351680f89e0e34293b6918c75261e88f5ff72804497fa7dea58b4190d564e6.js" integrity="sha256-ATUWgPieDjQpO2kYx1Jh6I9f9ygESX&#43;n3qWLQZDVZOY=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
+<script data-precache src="/assets/viewer/bundle.min.ffafad0d121aa7d1fb443510086dac514a0b152826cf094f02a1f3dec1f37918.js" integrity="sha256-/6&#43;tDRIap9H7RDUQCG2sUUoLFSgmzwlPAqHz3sHzeRg=" crossorigin="anonymous" defer></script><script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?8e042c957455c462d9b4c9da3ab642b0";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<script src="/js/sw-register.js" defer></script>
+
+  </body>
+</html>

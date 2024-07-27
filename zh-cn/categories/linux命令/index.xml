@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>linux命令 on kingdix10&#39;s site</title>
+    <link>https://kingdix10.github.io/zh-cn/categories/linux%E5%91%BD%E4%BB%A4/</link>
+    <description>Recent content in linux命令 on kingdix10&#39;s site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</copyright>
+    <lastBuildDate>Sun, 01 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/linux%E5%91%BD%E4%BB%A4/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>git配置和操作</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/git/git_mis/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/git/git_mis/</guid>
+      <description><![CDATA[官方资料：Git Community Book 中文版 1. 支持显示中文 参考git 显示中文和解决中文乱码 1git config --global core.quotepath false 2. git统计每个人的代码量 1git log --format=&#39;%aN&#39; | sort -u | while read name; do echo -en &#34;${name}\t&#34;; git log]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/desert_sand_wavy_141026_300x168.jpg" length="13782" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux Bash技巧</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/bash_tips/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/bash_tips/</guid>
+      <description><![CDATA[1. shell语法 shell核心基础知识 进阶版 2. 忽略大小写 重新进入bash后生效。 1echo &#39;set completion-ignore-case on&#39; &gt; ~/.inputrc 3. 临时使用alias前的命令 参考LINUX下使用]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/pixels_cubes_shapes_127558_300x168.jpg" length="18339" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>磁盘和文件系统扩容/缩容</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/resizefs/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/resizefs/</guid>
+      <description><![CDATA[Linux磁盘和文件系统扩容/缩容]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/bubbles_drops_macro_126764_300x168.jpg" length="23506" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux Bash终端美化</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/bash_decorat/</link>
+      <pubDate>Sat, 01 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/bash_decorat/</guid>
+      <description><![CDATA[1. PS1示例 先说一下bash版本 1$ bash --version 2GNU bash, version 5.1.4(1)-release (x86_64-pc-linux-gnu) 3Copyright (C) 2020 Free Software Foundation, Inc. 4License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt; 5 6This is free software; you are free to change and redistribute it. 7There is NO WARRANTY, to the extent permitted by law. bash中的P]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/laptop_backlight_colorful_194324_300x168.jpg" length="7666" type="image/.jpg" />
+    </item>
+    
+  </channel>
+</rss>
+
