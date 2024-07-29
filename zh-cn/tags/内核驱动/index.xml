@@ -15,7 +15,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/</guid>
       <description><![CDATA[1. thermal简介 内核版本：linux-6.1 thermal子系统主要用来监测和调节CPU、GPU等芯片或设备的温度。三个主要结构体的关系]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/camera_photographer_smoke_126548_300x168.jpg" length="9088" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/paint_grunge_green_124502_300x168.jpg" length="5826" type="image/.jpg" />
     </item>
     
     <item>
@@ -25,7 +25,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/02-timekeeping/</guid>
       <description><![CDATA[1. timekeeping timekeeping是时间子系统用于从clocksource获取时间，维护墙上时间、单调递增时间、启动时间的模块，timekeepin]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/vintage_retro_camera_126517_300x168.jpg" length="11143" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/chip_circuit_processor_140251_300x168.jpg" length="19023" type="image/.jpg" />
     </item>
     
     <item>
@@ -35,7 +35,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/01-tim/</guid>
       <description><![CDATA[1. 简介 内核版本：linux-6.1 时间子系统的作用： 时间读取功能 定时器功能，有传统的定时器timer、高精度定时器hrtimer 提供用于调度]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/desert_sand_wavy_141026_300x168.jpg" length="13782" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" length="24563" type="image/.jpg" />
     </item>
     
     <item>
@@ -45,7 +45,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/device_driver/device_model/</guid>
       <description><![CDATA[1. sysfs中的bus/class/device/driver 首先通过实例来看bus/class/device/driver的关系。下图绘制]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/cockpit_panel_display_169481_300x168.jpg" length="10012" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/laptop_dj_equipment_212416_300x168.jpg" length="9857" type="image/.jpg" />
     </item>
     
     <item>
@@ -55,7 +55,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/device_driver/initcall/</guid>
       <description><![CDATA[1. module_init是什么 module_init是Linux内核开发和驱动开发中非常常见的宏，其定义在 include/linux/mod]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/paint_canvas_stains_124156_300x168.jpg" length="18821" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/vintage_retro_camera_126517_300x168.jpg" length="11143" type="image/.jpg" />
     </item>
     
     <item>
@@ -65,7 +65,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/fdt/dt_to_dt/</guid>
       <description><![CDATA[1. device_node tree到device tree device_node的层次结构建立之后，并没有struct device生成，那我们实现的驱动probe函数又是]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/background_texture_surface_50343_300x168.jpg" length="8903" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/lines_plexus_neon_128926_300x168.jpg" length="24964" type="image/.jpg" />
     </item>
     
     <item>
@@ -75,7 +75,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/fdt/fdt_dt/</guid>
       <description><![CDATA[1. DT和FDT 设备树（Device Tree，DT）是一种层次结构的文本数据表示方式，用于描述硬件设备的配置信息。扁平设备树（Flattene]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/gradient_orange_shades_131495_300x168.jpg" length="2713" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/hologram_scheme_scifi_139294_300x168.jpg" length="9556" type="image/.jpg" />
     </item>
     
     <item>
@@ -85,7 +85,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/kobject/kobject/</guid>
       <description><![CDATA[1. 数据结构简介 内核版本：linux-6.1 内核文档：Everything you never wanted to know about kobjects, ksets, and ktypes — The Linux Kernel documentation 在Linux内核中，kobject、k]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lens_camera_glare_147903_300x168.jpg" length="7000" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/squares_structure_glow_140857_300x168.jpg" length="22907" type="image/.jpg" />
     </item>
     
   </channel>

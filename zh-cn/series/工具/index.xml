@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>工具 on kingdix10&#39;s site</title>
+    <link>https://kingdix10.github.io/zh-cn/series/%E5%B7%A5%E5%85%B7/</link>
+    <description>Recent content in 工具 on kingdix10&#39;s site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</copyright>
+    <lastBuildDate>Sun, 01 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/series/%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>jupyter转Markdown</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/01-os/jupyter_to_markdow/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/jupyter_to_markdow/</guid>
+      <description><![CDATA[1apt install jupyter-core 或者 1python3 -m pip install jupyter 转换： 1jupyter nbconvert --to markdown xxx.ipynb]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" length="24563" type="image/.jpg" />
+    </item>
+    
+  </channel>
+</rss>
+

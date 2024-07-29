@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="position-relative" itemscope itemtype="https://schema.org/WebPage" lang="zh-cn"
   data-bs-theme="auto" data-palette="purple">
-  <head><script src="/assets/init/bundle.min.17bb1d3aa57be1ea17bd5f48fa2a59b44cab5fd5291efdf44dad530987335a4a.js" integrity="sha256-F7sdOqV74eoXvV9I&#43;ipZtEyrX9UpHv30Ta1TCYczWko=" crossorigin="anonymous"></script>
+  <head><script src="/assets/init/bundle.min.8d71c81fa13acef85c48121799b4c1fd1e6a01b801f227df02d60682a7167d8e.js" integrity="sha256-jXHIH6E6zvhcSBIXmbTB/R5qAbgB8iffAtYGgqcWfY4=" crossorigin="anonymous"></script>
 <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>git配置和操作 - kingdix10&#39;s site</title>
@@ -12,29 +12,30 @@
     <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_192x192_resize_box_3.png" sizes="192x192" type="image/png">
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#6f42c1">
 <meta name="keywords" content="git, 工具" />
-  <meta name="description" content="官方资料：Git Community Book 中文版 1. 支持显示中文 参考git 显示中文和解决中文乱码 1git config --global core.quotepath false 2. git统计每个人的代码量 1git log --format=&#39;%aN&#39; | sort -u | while read name; do echo -en &#34;${name}\t&#34;; git log" />
+  <meta name="description" content="官方资料：Git Community Book 中文版 1. 个人gitconfig 1# cat ~/.gitconfig 2 3[color] 4 ui = auto 5 6[safe] 7# directory = * 8 9[core] 10# 支持中文 11 quotepath = false 12 editor = vim 13# 14 pager = less -x1,5 15# 支持https下" />
     <meta name="robots" content="index, follow" /><meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://kingdix10.github.io/covers/desert_sand_wavy_141026_300x168.jpg"/>
+<meta name="twitter:image" content="https://kingdix10.github.io/covers/dots_light_background_50767_300x168.jpg"/>
 
 <meta name="twitter:title" content="git配置和操作"/>
-<meta name="twitter:description" content="官方资料：Git Community Book 中文版 1. 支持显示中文 参考git 显示中文和解决中文乱码 1git config --global core.quotepath false 2. git统计每个人的代码量 1git log --format=&#39;%aN&#39; | sort -u | while read name; do echo -en &#34;${name}\t&#34;; git log"/>
+<meta name="twitter:description" content="官方资料：Git Community Book 中文版 1. 个人gitconfig 1# cat ~/.gitconfig 2 3[color] 4 ui = auto 5 6[safe] 7# directory = * 8 9[core] 10# 支持中文 11 quotepath = false 12 editor = vim 13# 14 pager = less -x1,5 15# 支持https下"/>
 <meta property="og:title" content="git配置和操作" />
-<meta property="og:description" content="官方资料：Git Community Book 中文版 1. 支持显示中文 参考git 显示中文和解决中文乱码 1git config --global core.quotepath false 2. git统计每个人的代码量 1git log --format=&#39;%aN&#39; | sort -u | while read name; do echo -en &#34;${name}\t&#34;; git log" />
+<meta property="og:description" content="官方资料：Git Community Book 中文版 1. 个人gitconfig 1# cat ~/.gitconfig 2 3[color] 4 ui = auto 5 6[safe] 7# directory = * 8 9[core] 10# 支持中文 11 quotepath = false 12 editor = vim 13# 14 pager = less -x1,5 15# 支持https下" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://kingdix10.github.io/zh-cn/docs/01-os/linux/git/git_mis/" /><meta property="og:image" content="https://kingdix10.github.io/covers/desert_sand_wavy_141026_300x168.jpg" /><meta property="article:section" content="docs" />
+<meta property="og:url" content="https://kingdix10.github.io/zh-cn/docs/01-os/linux/git/git_mis/" /><meta property="og:image" content="https://kingdix10.github.io/covers/dots_light_background_50767_300x168.jpg" /><meta property="article:section" content="docs" />
 <meta property="article:published_time" content="2023-01-01T00:00:00+00:00" />
 <meta property="article:modified_time" content="2023-01-01T00:00:00+00:00" /><meta property="og:site_name" content="kingdix10&#39;s site" />
 
+
 <meta itemprop="name" content="git配置和操作">
-<meta itemprop="description" content="官方资料：Git Community Book 中文版 1. 支持显示中文 参考git 显示中文和解决中文乱码 1git config --global core.quotepath false 2. git统计每个人的代码量 1git log --format=&#39;%aN&#39; | sort -u | while read name; do echo -en &#34;${name}\t&#34;; git log"><meta itemprop="datePublished" content="2023-01-01T00:00:00+00:00" />
+<meta itemprop="description" content="官方资料：Git Community Book 中文版 1. 个人gitconfig 1# cat ~/.gitconfig 2 3[color] 4 ui = auto 5 6[safe] 7# directory = * 8 9[core] 10# 支持中文 11 quotepath = false 12 editor = vim 13# 14 pager = less -x1,5 15# 支持https下"><meta itemprop="datePublished" content="2023-01-01T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2023-01-01T00:00:00+00:00" />
-<meta itemprop="wordCount" content="530"><meta itemprop="image" content="https://kingdix10.github.io/covers/desert_sand_wavy_141026_300x168.jpg">
+<meta itemprop="wordCount" content="1002"><meta itemprop="image" content="https://kingdix10.github.io/covers/dots_light_background_50767_300x168.jpg">
 <meta itemprop="keywords" content="工具,git," />
   <meta property="og:image:alt" content="git配置和操作" />
   <meta name="twitter:image:alt" content="git配置和操作" />
   <link rel="manifest" href="/zh-cn/manifest.json">
 
-<link data-precache rel="stylesheet" href="/assets/main/bundle.min.03fda061e9fca038de4b9a0a9f07d0f48b8bb6231de98a9cf415bf6818d719cd.css" integrity="sha256-A/2gYen8oDjeS5oKnwfQ9IuLtiMd6Yqc9BW/aBjXGc0=" crossorigin="anonymous">
+<link data-precache rel="stylesheet" href="/assets/main/bundle.min.6e8e72e2fe73efb4b8d986e54f0d232c384007622b8c47a23864194fbd179af4.css" integrity="sha256-bo5y4v5z77S42YblTw0jLDhAB2IrjEeiOGQZT70XmvQ=" crossorigin="anonymous">
 
     <link data-precache rel="stylesheet" href="/assets/viewer/bundle.min.8c1002839fa22c1350d6ae1eef6593120e108f973c41348be9b5065430566aaf.css" integrity="sha256-jBACg5&#43;iLBNQ1q4e72WTEg4Qj5c8QTSL6bUGVDBWaq8=" crossorigin="anonymous">
 
@@ -402,7 +403,7 @@ kingdix10
 </div>
 <ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
           <div class="py-1 d-flex justify-content-between align-items-center ms-3">
-            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/"><span class="docs-nav-title">Linux内核分析</span></a>
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/"><span class="docs-nav-title-icon me-1"><i class="fas fa-fw fa-book"></i></span><span class="docs-nav-title">Linux内核分析</span></a>
             <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
               data-bs-target="#nav-8d43cfa49df325f277d6f4234a021467" aria-expanded="false" aria-controls="nav-8d43cfa49df325f277d6f4234a021467">
               <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
@@ -470,11 +471,19 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/help/"><span class="docs-nav-title">Crash帮助信息</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/crash_cmd_set/"><span class="docs-nav-title">Crash命令介绍</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmallo/"><span class="docs-nav-title">kmalloc分配内存的大小</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtabl/"><span class="docs-nav-title">Linux ARM64页面大小和虚拟地址位数</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/drm/drm_/"><span class="docs-nav-title">Linux drm mm分析</span></a>
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/atomi/"><span class="docs-nav-title">linux atomic接口简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_/"><span class="docs-nav-title">Linux drm mm分析(基于intel ivpu驱动)</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-a-fork/"><span class="docs-nav-title">Linux fork进程/线程简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/printk-formats/"><span class="docs-nav-title">Linux printk日志输出格式控制</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/04-relationship/"><span class="docs-nav-title">Linux进程和线程关系</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
@@ -488,21 +497,23 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_1/"><span class="docs-nav-title">Linux内核copy_process分析（一）</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/dynamic_debug/"><span class="docs-nav-title">linux内核dynamic_debug</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_tabl/"><span class="docs-nav-title">Linux内核sched_class汇总</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/optimize_tips/"><span class="docs-nav-title">Linux内核代码的编写和优化技巧</span></a>
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/optimize_tips/"><span class="docs-nav-title">Linux内核代码的编写和优化技巧</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/boot/01-entry/"><span class="docs-nav-title">内核启动流程（一）</span></a>
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/02-irq_domain_a/"><span class="docs-nav-title">Linux中断子系统（二）domain注册</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/03-irq_create_mapping/"><span class="docs-nav-title">设备中断注册</span></a>
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/03-irq_create_mapping/"><span class="docs-nav-title">Linux中断子系统（三）设备中断注册</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/04-request_irq/"><span class="docs-nav-title">申请中断request_irq</span></a>
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/04-request_irq/"><span class="docs-nav-title">Linux中断子系统（四）申请中断request_irq</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/05-handler_entry/"><span class="docs-nav-title">中断处理</span></a>
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/05-handler_entry/"><span class="docs-nav-title">Linux中断子系统（五）中断处理</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/02-irq_domain_a/"><span class="docs-nav-title">中断子系统domain注册</span></a>
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/01-init/"><span class="docs-nav-title">Linux中断子系统（一）软硬件初始化</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/01-init/"><span class="docs-nav-title">中断子系统软硬件初始化</span></a>
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/"><span class="docs-nav-title">printk的pr_fmt</span></a>
         </li></ul>
             </div>
           </div>
@@ -519,11 +530,7 @@ kingdix10
           </div>
           <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-fd57bc387b9c3a4d19f1801fc65cd5b4">
             <div class="btn-toggle-nav fw-normal ms-2 small">
-              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/eel_env/eel_readm/"><span class="docs-nav-title">嵌入式学习环境快速搭建（二）</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/eel_env/env_setup/"><span class="docs-nav-title">嵌入式学习环境快速搭建（一）</span></a>
-        </li></ul>
+              <ul class="list-unstyled mb-2 w-100"></ul>
             </div>
           </div>
         </li><li class="mb-2" tabindex="-1">
@@ -553,12 +560,32 @@ kingdix10
           </div>
           <div class="docs-nav-subnavs border-start mt-2 collapse  show border-primary" id="nav-eb1c5d775f73e30b3a27244e12a84f81">
             <div class="btn-toggle-nav fw-normal ms-2 small">
-              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3 text-primary" tabindex="-1">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/debian_setup/"><span class="docs-nav-title">Debian安装和配置</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/docker_setup/"><span class="docs-nav-title">Docker安装和配置</span></a>
+        </li><li class="mb-2 py-1 ms-3 text-primary" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/git/git_mis/"><span class="docs-nav-title">git配置和操作</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/jupyter_to_markdow/"><span class="docs-nav-title">jupyter转Markdown</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_tips/"><span class="docs-nav-title">Linux Bash技巧</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_decorat/"><span class="docs-nav-title">Linux Bash终端美化</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_network/"><span class="docs-nav-title">linux常用命令-网络</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_text/"><span class="docs-nav-title">linux常用命令-文本处理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_fil/"><span class="docs-nav-title">linux常用命令-文件管理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_sys/"><span class="docs-nav-title">linux常用命令-系统管理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_benchmark/"><span class="docs-nav-title">linux常用命令-性能</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/samba/"><span class="docs-nav-title">samba使用</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/ssh_wsl_ex/"><span class="docs-nav-title">ssh连接wsl后执行Windows程序</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/resizefs/"><span class="docs-nav-title">磁盘和文件系统扩容/缩容</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
@@ -607,7 +634,7 @@ kingdix10
 </aside><div class="col-xxl-7 ms-auto">
   <div class="container-fluid"><nav class="row card component" aria-label="breadcrumb">
   <div class="card-body pb-0">
-    <ol class="hbs-breadcrumb breadcrumb flex-nowrap"><li class="breadcrumb-item text-surface"><a href="/zh-cn/">主页</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/">文档</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/01-os/">系统工具</a></li><li class="breadcrumb-item active">Git配置和操作</li></ol>
+    <ol class="hbs-breadcrumb breadcrumb flex-nowrap"><li class="breadcrumb-item text-surface"><a href="/zh-cn/">主页</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/">文档</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/01-os/">系统工具</a></li><li class="breadcrumb-item active">git配置和操作</li></ol>
   </div>
 </nav><div class="post-panel-wrapper position-relative d-flex justify-content-center">
   <div class="d-flex flex-row justify-content-center rounded-5 border post-panel position-fixed px-3 py-1 surface shadow-1">
@@ -633,14 +660,14 @@ kingdix10
   </div>
 </div><article class="row card component mb-4 post">
 <div class="card-header ">
-    <h1 class="card-title post-title my-2">Git配置和操作</h1>
+    <h1 class="card-title post-title my-2">git配置和操作</h1>
 </div>
 <div class="card-body"><div class="post-meta mb-3">
   <span class="post-date me-1 mb-1" title="创建于 2023-01-01 08:00:00 &#43;0800 CST。">2023/01/01</span><span class="post-reading-time me-1 mb-1">2 分钟阅读</span><a href="/zh-cn/categories/linux%E5%91%BD%E4%BB%A4/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
-      <i class="fas fa-fw fa-folder me-1"></i>Linux命令</a><a href="/zh-cn/tags/git/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Git</a><a href="/zh-cn/tags/%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">工具</a>
+      <i class="fas fa-fw fa-folder me-1"></i>Linux命令</a><a href="/zh-cn/series/linux%E5%91%BD%E4%BB%A4/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
+      <i class="fas fa-fw fa-columns me-1"></i>Linux命令</a><a href="/zh-cn/tags/git/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Git</a><a href="/zh-cn/tags/%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">工具</a>
 </div>
-<picture class="d-flex justify-content-center"><img class="post-featured-img h-auto w-auto mb-3" alt="git配置和操作" src="https://kingdix10.github.io/covers/desert_sand_wavy_141026_300x168.jpg"/>
-    </picture>
+
 <div class="mt-2 mb-3 d-block d-xxl-none">
     <h2 class="text-surface mb-3">目录</h2>
     <div id="post-toc-container">
@@ -649,19 +676,46 @@ kingdix10
 </div><div class="post-content mb-3" data-bs-spy="scroll" data-bs-target="#TableOfContents" tabindex="0">
         <div id="post-content-body"><p>官方资料：<a href="http://gitbook.liuhui998.com/index.html" target="_blank" rel="noopener noreferrer">Git Community Book 中文版<i class="fas fa-external-link-square-alt ms-1"></i></a></p>
 
-<h1 id="1-支持显示中文" data-numberify>1. 支持显示中文<a class="anchor ms-1" href="#1-支持显示中文"></a></h1>
-<p>参考<a href="https://zhuanlan.zhihu.com/p/133706032" target="_blank" rel="noopener noreferrer">git 显示中文和解决中文乱码<i class="fas fa-external-link-square-alt ms-1"></i></a></p>
+<h1 id="1-个人gitconfig" data-numberify>1. 个人gitconfig<a class="anchor ms-1" href="#1-个人gitconfig"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln"> 1</span><span class="cl"># cat ~/.gitconfig
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">[color]
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">	ui = auto
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">[safe]
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">#	directory = *
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">[core]
+</span></span><span class="line"><span class="ln">10</span><span class="cl"># 支持中文
+</span></span><span class="line"><span class="ln">11</span><span class="cl">	quotepath = false
+</span></span><span class="line"><span class="ln">12</span><span class="cl">	editor = vim
+</span></span><span class="line"><span class="ln">13</span><span class="cl">#
+</span></span><span class="line"><span class="ln">14</span><span class="cl">	pager = less -x1,5
+</span></span><span class="line"><span class="ln">15</span><span class="cl"># 支持https下保存用户名密码
+</span></span><span class="line"><span class="ln">16</span><span class="cl">[credential]
+</span></span><span class="line"><span class="ln">17</span><span class="cl">	helper = store
+</span></span></code></pre></div><p>参考<a href="https://zhuanlan.zhihu.com/p/133706032" target="_blank" rel="noopener noreferrer">git 显示中文和解决中文乱码<i class="fas fa-external-link-square-alt ms-1"></i></a></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">git config --global core.quotepath <span class="nb">false</span>
 </span></span></code></pre></div>
-<h1 id="2-git统计每个人的代码量" data-numberify>2. git统计每个人的代码量<a class="anchor ms-1" href="#2-git统计每个人的代码量"></a></h1>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">git log --format<span class="o">=</span><span class="s1">&#39;%aN&#39;</span> <span class="p">|</span> sort -u <span class="p">|</span> <span class="k">while</span> <span class="nb">read</span> name<span class="p">;</span> <span class="k">do</span> <span class="nb">echo</span> -en <span class="s2">&#34;</span><span class="si">${</span><span class="nv">name</span><span class="si">}</span><span class="s2">\t&#34;</span><span class="p">;</span> git log --author<span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">name</span><span class="si">}</span><span class="s2">&#34;</span> --pretty<span class="o">=</span>tformat: --numstat <span class="p">|</span> awk <span class="s1">&#39;{add += $1; subs += $2; loc += $1 - $2 } END {printf &#34;add lines: %s, total lines: %s\n&#34;, add, subs, loc }&#39;</span> -<span class="p">;</span> <span class="k">done</span>
+<h1 id="3-使用git-grep快速搜索" data-numberify>3. 使用git grep快速搜索<a class="anchor ms-1" href="#3-使用git-grep快速搜索"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">git grep -Inw xxx
+</span></span><span class="line"><span class="ln">2</span><span class="cl">git grep -Inw -p xxx
+</span></span><span class="line"><span class="ln">3</span><span class="cl">git grep -Inw --heading xxx
 </span></span></code></pre></div>
-<h1 id="3-取消git-clone---depth1" data-numberify>3. 取消git clone &ndash;depth=1<a class="anchor ms-1" href="#3-取消git-clone---depth1"></a></h1>
+<h1 id="5-取消git-clone---depth1" data-numberify>5. 取消git clone &ndash;depth=1<a class="anchor ms-1" href="#5-取消git-clone---depth1"></a></h1>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">git pull --unshadow
 </span></span></code></pre></div>
-<h1 id="4-解决warning-refname-private-is-ambiguous" data-numberify>4. 解决warning: refname &lsquo;private&rsquo; is ambiguous<a class="anchor ms-1" href="#4-解决warning-refname-private-is-ambiguous"></a></h1>
+<h1 id="4-git统计每个人的代码量" data-numberify>4. git统计每个人的代码量<a class="anchor ms-1" href="#4-git统计每个人的代码量"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">git log --format<span class="o">=</span><span class="s1">&#39;%aN&#39;</span> <span class="p">|</span> sort -u <span class="se">\
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="se"></span>	<span class="p">|</span> <span class="k">while</span> <span class="nb">read</span> name<span class="p">;</span> <span class="k">do</span> <span class="se">\
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="se"></span>		<span class="nb">echo</span> -en <span class="s2">&#34;</span><span class="si">${</span><span class="nv">name</span><span class="si">}</span><span class="s2">\t&#34;</span><span class="p">;</span> <span class="se">\
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="se"></span>		git log --author<span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">name</span><span class="si">}</span><span class="s2">&#34;</span> --pretty<span class="o">=</span>tformat: --numstat <span class="se">\
+</span></span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="se"></span>		<span class="p">|</span> awk <span class="s1">&#39;{add += $1; subs += $2; loc += $1 - $2 } END {printf &#34;add lines: %s, total lines: %s\n&#34;, add, subs, loc }&#39;</span> -<span class="p">;</span> <span class="se">\
+</span></span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="se"></span>	<span class="k">done</span>
+</span></span></code></pre></div>
+<h1 id="6-解决warning-refname-private-is-ambiguous" data-numberify>6. 解决warning: refname &lsquo;private&rsquo; is ambiguous<a class="anchor ms-1" href="#6-解决warning-refname-private-is-ambiguous"></a></h1>
 
-<h2 id="41-现象" data-numberify>4.1. 现象<a class="anchor ms-1" href="#41-现象"></a></h2>
+<h2 id="61-现象" data-numberify>6.1. 现象<a class="anchor ms-1" href="#61-现象"></a></h2>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln"> 1</span><span class="cl">$ git checkout private
 </span></span><span class="line"><span class="ln"> 2</span><span class="cl">warning: refname <span class="s1">&#39;private&#39;</span> is ambiguous.
 </span></span><span class="line"><span class="ln"> 3</span><span class="cl">Switched to branch <span class="s1">&#39;private&#39;</span>
@@ -673,47 +727,81 @@ kingdix10
 </span></span><span class="line"><span class="ln"> 9</span><span class="cl">  remotes/origin/main
 </span></span><span class="line"><span class="ln">10</span><span class="cl">  remotes/private/HEAD -&gt; private/private
 </span></span><span class="line"><span class="ln">11</span><span class="cl">  remotes/private/private
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">$ find .git -name HEAD
+</span></span></code></pre></div>
+<h2 id="62-解决方法" data-numberify>6.2. 解决方法<a class="anchor ms-1" href="#62-解决方法"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">$ find .git -name HEAD
 </span></span><span class="line"><span class="ln">2</span><span class="cl">.git/logs/refs/remotes/private/HEAD
 </span></span><span class="line"><span class="ln">3</span><span class="cl">.git/logs/HEAD
 </span></span><span class="line"><span class="ln">4</span><span class="cl">.git/refs/remotes/private/HEAD
 </span></span><span class="line"><span class="ln">5</span><span class="cl">.git/HEAD
+</span></span><span class="line"><span class="ln">6</span><span class="cl">
+</span></span><span class="line"><span class="ln">7</span><span class="cl">find .git -name HEAD <span class="p">|</span> grep -w private <span class="p">|</span> xargs rm -f
 </span></span></code></pre></div>
-<h2 id="42-解决方法" data-numberify>4.2. 解决方法<a class="anchor ms-1" href="#42-解决方法"></a></h2>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">find .git -name HEAD <span class="p">|</span> grep -w private <span class="p">|</span> xargs rm -f
-</span></span></code></pre></div>
-<h2 id="43-处理后的现象" data-numberify>4.3. 处理后的现象<a class="anchor ms-1" href="#43-处理后的现象"></a></h2>
+<h2 id="63-处理后的现象" data-numberify>6.3. 处理后的现象<a class="anchor ms-1" href="#63-处理后的现象"></a></h2>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">$ git checkout private
 </span></span><span class="line"><span class="ln">2</span><span class="cl">Switched to branch <span class="s1">&#39;private&#39;</span>
 </span></span><span class="line"><span class="ln">3</span><span class="cl">Your branch is up to date with <span class="s1">&#39;private/private&#39;</span>.
 </span></span></code></pre></div>
-<h1 id="5-合并git仓库并保留commit记录" data-numberify>5. 合并git仓库并保留commit记录<a class="anchor ms-1" href="#5-合并git仓库并保留commit记录"></a></h1>
+<h1 id="7-合并git仓库并保留commit记录" data-numberify>7. 合并git仓库并保留commit记录<a class="anchor ms-1" href="#7-合并git仓库并保留commit记录"></a></h1>
 <p>参考<a href="https://www.cnblogs.com/msxh/p/11082246.html" target="_blank" rel="noopener noreferrer">【Git教程】如何清除git仓库的所有提交记录，成为一个新的干净仓库<i class="fas fa-external-link-square-alt ms-1"></i></a></p>
-
-<h2 id="51-切换到新的分支" data-numberify>5.1. 切换到新的分支<a class="anchor ms-1" href="#51-切换到新的分支"></a></h2>
-<p>git checkout &ndash;orphan latest_branch</p>
-
-<h2 id="52-缓存所有文件除了gitignore中声明排除的" data-numberify>5.2. 缓存所有文件（除了.gitignore中声明排除的）<a class="anchor ms-1" href="#52-缓存所有文件除了gitignore中声明排除的"></a></h2>
-<p>git add -A</p>
-
-<h2 id="53-提交跟踪过的文件commit-the-changes" data-numberify>5.3. 提交跟踪过的文件（Commit the changes）<a class="anchor ms-1" href="#53-提交跟踪过的文件commit-the-changes"></a></h2>
-<p>git commit -am &ldquo;commit message&rdquo;</p>
-
-<h2 id="54-删除master分支delete-the-branch" data-numberify>5.4. 删除master分支（Delete the branch）<a class="anchor ms-1" href="#54-删除master分支delete-the-branch"></a></h2>
-<p>git branch -D master</p>
-
-<h2 id="55-重命名当前分支为masterrename-the-current-branch-to-master" data-numberify>5.5. 重命名当前分支为master（Rename the current branch to master）<a class="anchor ms-1" href="#55-重命名当前分支为masterrename-the-current-branch-to-master"></a></h2>
-<p>git branch -m master</p>
-
-<h2 id="56-提交到远程master分支-finally-force-update-your-repository" data-numberify>5.6. 提交到远程master分支 （Finally, force update your repository）<a class="anchor ms-1" href="#56-提交到远程master分支-finally-force-update-your-repository"></a></h2>
-<p>git push -f origin master</p>
-<p>通过以上几步就可以简单地把一个Git仓库的历史提交记录清除掉了，不过最好还是在平时的开发中严格要求一下提交日志的规范，尽量避免在里面输入一些敏感信息进来。</p>
-</div>
+<p>从网上查到的使用git merge的方式不能满足需求。就改成了将一个仓库的历史记录生成patch，再在另一个仓库中使用git am应用patch来实现合并仓库。</p>
+<p>仓库目录结构如下，需要将repoBBB中的提交记录合并到repoAAA中，之后就可以删除repoBBB了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln">1</span><span class="cl">.
+</span></span><span class="line"><span class="ln">2</span><span class="cl">├── patch
+</span></span><span class="line"><span class="ln">3</span><span class="cl">├── repoAAA
+</span></span><span class="line"><span class="ln">4</span><span class="cl">└── repoBBB
+</span></span></code></pre></div>
+<h2 id="71-没有同名文件" data-numberify>7.1. 没有同名文件<a class="anchor ms-1" href="#71-没有同名文件"></a></h2>
+<p>两个参考下没有同名文件（包括.gitignore等以.开头的文件），或同名文件已经移动或重命名，并commit。</p>
+<p>需要注意，repoAAA中不能存在任何repoBBB历史中曾出现过的文件，否则会导致patch应用失败。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln"> 1</span><span class="cl">rm -f patch/*
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="nb">cd</span> repoAAA
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="c1"># 把$BRANCH分支所有commit都生成patch</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">git format-patch --root -o ../patch  <span class="nv">$BRANCH</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="nb">cd</span> repoBBB
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="c1"># 防止之前有未完成的操作</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">git am --abort
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="c1"># 应用所有patch</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">git am ../patch/*
+</span></span><span class="line"><span class="ln">12</span><span class="cl">git push
+</span></span></code></pre></div>
+<h2 id="72-存在同名文件" data-numberify>7.2. 存在同名文件<a class="anchor ms-1" href="#72-存在同名文件"></a></h2>
+<p>需要首先将同名文件用新仓库中的文件覆盖。</p>
+<p>需要注意，repoAAA中不能存在任何repoBBB历史中曾出现过的文件，否则会导致patch应用失败。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln"> 1</span><span class="cl">rm -f patch/*
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="nb">cd</span> repoAAA
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="nv">first_commit</span><span class="o">=</span><span class="k">$(</span>git rev-list --max-parents<span class="o">=</span><span class="m">0</span> HEAD<span class="k">)</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="c1"># first_commit=$(git log --reverse | head -1 | cut -d &#39; &#39; -f 2)</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="c1"># 除第一次提交之外，其他的commit都生成patch</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">git format-patch -o ../patch  <span class="si">${</span><span class="nv">first_commit</span><span class="si">}</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="c1"># 回退到第一次commit时的状态，为了后续覆盖repoBBB中的同名文件使用</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">git reset --hard  <span class="si">${</span><span class="nv">first_commit</span><span class="si">}</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">
+</span></span><span class="line"><span class="ln">12</span><span class="cl">
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="nb">cd</span> repoBBB
+</span></span><span class="line"><span class="ln">14</span><span class="cl">cp -fr ../repoAAA/*   ./
+</span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="c1"># 使用repoBBB中的文件覆盖当前目录的同名文件</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl">cp -fr ../repoAAA/.*  ./
+</span></span><span class="line"><span class="ln">17</span><span class="cl">git add .
+</span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="c1"># 这次commit是为了保证repoAAA中的文件与repoBBB的${first_commit}一致，以便后续应用patch</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">git commit -m <span class="s2">&#34;message&#34;</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">
+</span></span><span class="line"><span class="ln">21</span><span class="cl">git am --abort
+</span></span><span class="line"><span class="ln">22</span><span class="cl">git am ../patch/*
+</span></span><span class="line"><span class="ln">23</span><span class="cl">git push
+</span></span></code></pre></div></div>
 </div>
 </div><div class="card-footer">
   <div class="post-navs d-flex justify-content-evenly"><div class="post-nav post-prev">
       <i class="fas fa-fw fa-chevron-down post-prev-icon me-1" data-fa-transform="rotate-90"></i>
-      <a href="/zh-cn/docs/01-os/linux/shell/bash_tips/">Linux Bash技巧</a>
+      <a href="/zh-cn/docs/01-os/jupyter_to_markdow/">jupyter转Markdown</a>
+    </div><div class="post-nav post-next">
+      <a href="/zh-cn/docs/01-os/linux/docker_setup/">Docker安装和配置</a>
+      <i class="fas fa-fw fa-chevron-down post-next-icon ms-1" data-fa-transform="rotate-270"></i>
     </div></div>
 </div></article><div class="post-copyright mb-3 row card component" id="post-copyright">
     <div class="card-header">
@@ -736,7 +824,7 @@ kingdix10
         <div class="slide-inner row gx-0"><div class="col-12 col-md-6 col-lg-4 me-2">
             <div class="post-card card card-body p-0 border-0 surface">
   
-  <picture><img class="img-fluid" alt="Linux Bash技巧" src="https://kingdix10.github.io/covers/pixels_cubes_shapes_127558_300x168.jpg" loading="lazy"
+  <picture><img class="img-fluid" alt="Linux Bash技巧" src="https://kingdix10.github.io/covers/walls_floor_light_50837_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture>
@@ -753,13 +841,13 @@ kingdix10
           </div><div class="col-12 col-md-6 col-lg-4 me-2">
             <div class="post-card card card-body p-0 border-0 surface">
   
-  <picture><img class="img-fluid" alt="磁盘和文件系统扩容/缩容" src="https://kingdix10.github.io/covers/bubbles_drops_macro_126764_300x168.jpg" loading="lazy"
+  <picture><img class="img-fluid" alt="linux常用命令-性能" src="https://kingdix10.github.io/covers/wavy_motley_metallic_139065_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture>
 
-  <a class="post-title" href="/zh-cn/docs/01-os/linux/resizefs/">
-    磁盘和文件系统扩容/缩容
+  <a class="post-title" href="/zh-cn/docs/01-os/linux/shell/cmd_benchmark/">
+    linux常用命令-性能
   </a>
   <div class="post-meta mb-0">
     2023/01/01
@@ -770,16 +858,50 @@ kingdix10
           </div><div class="col-12 col-md-6 col-lg-4 me-2">
             <div class="post-card card card-body p-0 border-0 surface">
   
-  <picture><img class="img-fluid" alt="Linux Bash终端美化" src="https://kingdix10.github.io/covers/laptop_backlight_colorful_194324_300x168.jpg" loading="lazy"
+  <picture><img class="img-fluid" alt="Crash命令介绍" src="https://kingdix10.github.io/covers/walls_floor_light_50837_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture>
 
-  <a class="post-title" href="/zh-cn/docs/01-os/linux/shell/bash_decorat/">
-    Linux Bash终端美化
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/crash_cmd_set/">
+    Crash命令介绍
   </a>
   <div class="post-meta mb-0">
-    2020/02/01
+    2023/01/01
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="jupyter转Markdown" src="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/01-os/jupyter_to_markdow/">
+    jupyter转Markdown
+  </a>
+  <div class="post-meta mb-0">
+    2023/01/01
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="linux常用命令-文件管理" src="https://kingdix10.github.io/covers/lines_obliquely_stripes_123801_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/01-os/linux/shell/cmd_fil/">
+    linux常用命令-文件管理
+  </a>
+  <div class="post-meta mb-0">
+    2023/01/01
 
   </div>
 </div>
@@ -824,24 +946,21 @@ kingdix10
     <div class="card-body collapse accordion-collapse accordion-body d-lg-block" id="post-toc">
       <nav id="TableOfContents">
   <ul>
-    <li><a href="#1-支持显示中文">1. 支持显示中文</a></li>
-    <li><a href="#2-git统计每个人的代码量">2. git统计每个人的代码量</a></li>
-    <li><a href="#3-取消git-clone---depth1">3. 取消git clone &ndash;depth=1</a></li>
-    <li><a href="#4-解决warning-refname-private-is-ambiguous">4. 解决warning: refname &lsquo;private&rsquo; is ambiguous</a>
+    <li><a href="#1-个人gitconfig">1. 个人gitconfig</a></li>
+    <li><a href="#3-使用git-grep快速搜索">3. 使用git grep快速搜索</a></li>
+    <li><a href="#5-取消git-clone---depth1">5. 取消git clone &ndash;depth=1</a></li>
+    <li><a href="#4-git统计每个人的代码量">4. git统计每个人的代码量</a></li>
+    <li><a href="#6-解决warning-refname-private-is-ambiguous">6. 解决warning: refname &lsquo;private&rsquo; is ambiguous</a>
       <ul>
-        <li><a href="#41-现象">4.1. 现象</a></li>
-        <li><a href="#42-解决方法">4.2. 解决方法</a></li>
-        <li><a href="#43-处理后的现象">4.3. 处理后的现象</a></li>
+        <li><a href="#61-现象">6.1. 现象</a></li>
+        <li><a href="#62-解决方法">6.2. 解决方法</a></li>
+        <li><a href="#63-处理后的现象">6.3. 处理后的现象</a></li>
       </ul>
     </li>
-    <li><a href="#5-合并git仓库并保留commit记录">5. 合并git仓库并保留commit记录</a>
+    <li><a href="#7-合并git仓库并保留commit记录">7. 合并git仓库并保留commit记录</a>
       <ul>
-        <li><a href="#51-切换到新的分支">5.1. 切换到新的分支</a></li>
-        <li><a href="#52-缓存所有文件除了gitignore中声明排除的">5.2. 缓存所有文件（除了.gitignore中声明排除的）</a></li>
-        <li><a href="#53-提交跟踪过的文件commit-the-changes">5.3. 提交跟踪过的文件（Commit the changes）</a></li>
-        <li><a href="#54-删除master分支delete-the-branch">5.4. 删除master分支（Delete the branch）</a></li>
-        <li><a href="#55-重命名当前分支为masterrename-the-current-branch-to-master">5.5. 重命名当前分支为master（Rename the current branch to master）</a></li>
-        <li><a href="#56-提交到远程master分支-finally-force-update-your-repository">5.6. 提交到远程master分支 （Finally, force update your repository）</a></li>
+        <li><a href="#71-没有同名文件">7.1. 没有同名文件</a></li>
+        <li><a href="#72-存在同名文件">7.2. 存在同名文件</a></li>
       </ul>
     </li>
   </ul>
@@ -918,7 +1037,7 @@ Zhihu"
 <span class="menu-icon me-1"><i class="fab fa-fw fa-zhihu text-primary"></i></span>Zhihu</a></li></ul></li></ul></div>
 </div>
 </footer>
-<script data-precache src="/assets/main/bundle.min.01351680f89e0e34293b6918c75261e88f5ff72804497fa7dea58b4190d564e6.js" integrity="sha256-ATUWgPieDjQpO2kYx1Jh6I9f9ygESX&#43;n3qWLQZDVZOY=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
+<script data-precache src="/assets/main/bundle.min.eb8306088ad1475898679a14e6b521aa4dd1e5a5fcd235ca72022a7a1833b5e5.js" integrity="sha256-64MGCIrRR1iYZ5oU5rUhqk3R5aX80jXKcgIqehgzteU=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
 <script data-precache src="/assets/viewer/bundle.min.ffafad0d121aa7d1fb443510086dac514a0b152826cf094f02a1f3dec1f37918.js" integrity="sha256-/6&#43;tDRIap9H7RDUQCG2sUUoLFSgmzwlPAqHz3sHzeRg=" crossorigin="anonymous" defer></script><script>
   var _hmt = _hmt || [];
   (function() {

@@ -1,0 +1,1086 @@
+<!doctype html>
+<html class="position-relative" itemscope itemtype="https://schema.org/WebPage" lang="zh-cn"
+  data-bs-theme="auto" data-palette="purple">
+  <head><script src="/assets/init/bundle.min.8d71c81fa13acef85c48121799b4c1fd1e6a01b801f227df02d60682a7167d8e.js" integrity="sha256-jXHIH6E6zvhcSBIXmbTB/R5qAbgB8iffAtYGgqcWfY4=" crossorigin="anonymous"></script>
+<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>linux常用命令-文件管理 - kingdix10&#39;s site</title>
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_16x16_resize_box_3.png" sizes="16x16" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_32x32_resize_box_3.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_150x150_resize_box_3.png" sizes="150x150" type="image/png">
+    <link rel="apple-touch-icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_180x180_resize_box_3.png" sizes="180x180" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_192x192_resize_box_3.png" sizes="192x192" type="image/png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#6f42c1">
+<meta name="keywords" content="文件管理" />
+  <meta name="description" content="1. 打包隐藏文件 1tar -czf data.tar.gz ./.[!.]* 2. find 2.1. 查找文件并按大小排序 1find -type f -name &#39;*.md&#39; -printf &#39;%s\t%p\n&#39; | grep -v &#39;\.git&#39; | sort -nr | less -N 2.2. 批量删除7天前的文件 1find -type f -mtime &#43;7 -exec rm -rf {} \; 2find -type f -mtime &#43;7 -exec rm -fr" />
+    <meta name="robots" content="index, follow" /><meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://kingdix10.github.io/covers/lines_obliquely_stripes_123801_300x168.jpg"/>
+
+<meta name="twitter:title" content="linux常用命令-文件管理"/>
+<meta name="twitter:description" content="1. 打包隐藏文件 1tar -czf data.tar.gz ./.[!.]* 2. find 2.1. 查找文件并按大小排序 1find -type f -name &#39;*.md&#39; -printf &#39;%s\t%p\n&#39; | grep -v &#39;\.git&#39; | sort -nr | less -N 2.2. 批量删除7天前的文件 1find -type f -mtime &#43;7 -exec rm -rf {} \; 2find -type f -mtime &#43;7 -exec rm -fr"/>
+<meta property="og:title" content="linux常用命令-文件管理" />
+<meta property="og:description" content="1. 打包隐藏文件 1tar -czf data.tar.gz ./.[!.]* 2. find 2.1. 查找文件并按大小排序 1find -type f -name &#39;*.md&#39; -printf &#39;%s\t%p\n&#39; | grep -v &#39;\.git&#39; | sort -nr | less -N 2.2. 批量删除7天前的文件 1find -type f -mtime &#43;7 -exec rm -rf {} \; 2find -type f -mtime &#43;7 -exec rm -fr" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_fil/" /><meta property="og:image" content="https://kingdix10.github.io/covers/lines_obliquely_stripes_123801_300x168.jpg" /><meta property="article:section" content="docs" />
+<meta property="article:published_time" content="2023-01-01T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-01-01T00:00:00+00:00" /><meta property="og:site_name" content="kingdix10&#39;s site" />
+
+
+<meta itemprop="name" content="linux常用命令-文件管理">
+<meta itemprop="description" content="1. 打包隐藏文件 1tar -czf data.tar.gz ./.[!.]* 2. find 2.1. 查找文件并按大小排序 1find -type f -name &#39;*.md&#39; -printf &#39;%s\t%p\n&#39; | grep -v &#39;\.git&#39; | sort -nr | less -N 2.2. 批量删除7天前的文件 1find -type f -mtime &#43;7 -exec rm -rf {} \; 2find -type f -mtime &#43;7 -exec rm -fr"><meta itemprop="datePublished" content="2023-01-01T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2023-01-01T00:00:00+00:00" />
+<meta itemprop="wordCount" content="2176"><meta itemprop="image" content="https://kingdix10.github.io/covers/lines_obliquely_stripes_123801_300x168.jpg">
+<meta itemprop="keywords" content="工具,linux命令,文件管理," />
+  <meta property="og:image:alt" content="linux常用命令-文件管理" />
+  <meta name="twitter:image:alt" content="linux常用命令-文件管理" />
+  <link rel="manifest" href="/zh-cn/manifest.json">
+
+<link data-precache rel="stylesheet" href="/assets/main/bundle.min.6e8e72e2fe73efb4b8d986e54f0d232c384007622b8c47a23864194fbd179af4.css" integrity="sha256-bo5y4v5z77S42YblTw0jLDhAB2IrjEeiOGQZT70XmvQ=" crossorigin="anonymous">
+
+    <link data-precache rel="stylesheet" href="/assets/viewer/bundle.min.8c1002839fa22c1350d6ae1eef6593120e108f973c41348be9b5065430566aaf.css" integrity="sha256-jBACg5&#43;iLBNQ1q4e72WTEg4Qj5c8QTSL6bUGVDBWaq8=" crossorigin="anonymous">
+
+
+</head>
+  <body><header class="mb-4 sticky-top">
+  
+<nav class="top-app-bar shadow navbar navbar-expand-xxl">
+  <div class="container">
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDocsNav"
+      aria-expanded="false" aria-label="Toggle docs navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+<a class="navbar-brand d-flex align-items-center flex-grow-1 flex-xxl-grow-0 justify-content-xxl-start justify-content-center ms-2 ms-xxl-0 mx-auto me-xxl-2"
+    href="https://kingdix10.github.io/zh-cn/">
+    <picture><img class="logo " alt="Logo" src="https://kingdix10.github.io/images/icon_yellow_transparent_72x72.png" loading="lazy" width="72" height="72" />
+</picture>
+kingdix10
+</a>
+
+    <div class="offcanvas-xxl offcanvas-end flex-grow-1" data-bs-scroll="true" tabindex="-1" id="navbarMenus" aria-labelledby="navbarMenusLabel">
+      <div class="offcanvas-header px-4 pb-0">
+        <div class="offcanvas-title h5" id="navbarMenusLabel">kingdix10</div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#navbarMenus" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body p-4 pt-0 p-xxl-0">
+        <hr class="d-xxl-none">
+        <ul class="navbar-nav flex-row flex-wrap align-items-center me-auto"><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn">
+<span class="menu-icon me-1"><i class="fas fa-home"></i></span>主页
+            </a>
+          </li><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn/news/">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-newspaper"></i></span>新闻
+            </a>
+          </li><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn/docs/">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-folder"></i></span>文档
+            </a>
+          </li>
+          <li class="nav-item col-12 col-xxl-auto dropdown px-0">
+            <a href="#"
+              class="nav-link dropdown-toggle"
+              id="navbarDropdownBlog" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-blog"></i></span>博客
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog" data-bs-popper="none">
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/archives/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-file-archive text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">归档</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/series/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-columns"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">专栏</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of series.</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/categories/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-folder text-success"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">分类</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of categories.</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/tags/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-tags"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">标签</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of tags.</p>
+                  </div></a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item col-12 col-xxl-auto dropdown px-0">
+            <a href="#"
+              class="nav-link dropdown-toggle"
+              id="navbarDropdownLinks" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-link"></i></span>链接
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownLinks" data-bs-popper="none">
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://github.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-github text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">GitHub</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">github.com/kingdix10</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://gitee.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-github text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">Gitee</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">gitee.com/kingdix10</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://www.zhihu.com/people/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-zhihu text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">Zhihu</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://www.cnblogs.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">博客园</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://blog.csdn.net/u014001096" target="_blank" rel="noopener noreferrer">
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">CSDN</p>
+                  </div></a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+            </ul>
+          </li>
+        </ul>
+        
+    <hr class="d-xxl-none">
+    <form class="search-bar ms-auto my-auto" action="/zh-cn/search/" novalidate>
+      <div class="input-group align-items-center">
+        <span class="btn btn-search disabled position-absolute left-0 border-0 px-1">
+          <i class="fas fa-fw fa-search fa-lg"></i>
+        </span>
+        <input
+          class="my-1 form-control border-white rounded-5 search-input bg-body"
+          name="q"
+          type="search"
+          placeholder="搜索"
+          aria-label="Search"
+          required>
+          <span class="search-shortcut position-absolute end-0 top-0 me-2">
+            <kbd class="text-dark bg-white opacity-75 rounded-3 shadow border border-primary py-1 fw-bold">/</kbd>
+          </span>
+      </div>
+    </form><hr class="d-xxl-none">
+        <ul class="navbar-nav flex-row flex-wrap align-items-center ms-md-auto">
+<li class="nav-item py-2 py-xxl-1 col-12 col-xxl-auto">
+
+
+<nav class="social-links nav justify-content-center flex-row">
+      <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="https://github.com/kingdix10" title="GitHub" rel="me">
+        <i class="fa-fw fab fa-github"
+          ></i>
+        <span class="ms-1 d-xxl-none">Github</span>
+      </a>
+      <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="https://www.zhihu.com/people/kingdix10" title="知乎" rel="me">
+        <i class="fa-fw fab fa-zhihu"
+          ></i>
+        <span class="ms-1 d-xxl-none">Zhihu</span>
+      </a>
+  <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="/zh-cn/index.xml" title="RSS" rel="me">
+    <i class="fas fa-fw fa-rss"></i>
+    <span class="ms-1 d-xxl-none">RSS</span>
+  </a>
+</nav>
+
+</li>
+<li class="nav-item py-2 py-xxl-1 col-12 col-xxl-auto">
+  <div class="vr d-none d-xxl-flex h-100 mx-xxl-2 text-white"></div>
+  <hr class="d-xxl-none my-2">
+</li>
+<li class="nav-item dropdown py-1 py-xxl-1 col-6 col-xxl-auto">
+    <a class="nav-link px-0 px-xxl-1" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-globe"></i>
+        <span class="d-xxl-none">语言</span>
+    </a>
+    <ul class="language-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+        <li>
+        <a class="dropdown-item active" href="/zh-cn/">
+            简体中文
+        </a>
+        </li>
+        <li>
+        <a class="dropdown-item" href="/en/">
+            English
+        </a>
+        </li></ul>
+</li>
+<li class="nav-item py-1 col-12 col-xxl-auto">
+  <div class="vr d-none d-xxl-flex h-100 mx-xxl-2 text-white"></div>
+  <hr class="d-xxl-none my-2">
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="fontSizeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-font"></i>
+        <span class="d-xxl-none">字体大小</span>
+    </a>
+    <ul class="font-size-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="fontSizeDropdown">
+        <li>
+            <button class="font-size-item dropdown-item" data-size="xs">
+                特小号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="sm">
+                小号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item active" data-size="md">
+                中等
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="lg">
+                大号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="xl">
+                特大号
+            </button>
+        </li>
+    </ul>
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="paletteDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-palette"></i>
+        <span class="d-xxl-none">配色</span>
+    </a>
+    <ul class="palette-dropdown-menu dropdown-menu dropdown-menu-end px-2 row g-2" aria-labelledby="paletteDropdown">
+            <li class="col-4 my-1">
+                <a role="button" id="palette-blue" aria-label="蓝色"
+                    class="btn btn-sm w-100 palette text-bg-blue" data-palette="blue">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-blue-gray" aria-label="蓝灰色"
+                    class="btn btn-sm w-100 palette text-bg-blue-gray" data-palette="blue-gray">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-brown" aria-label="棕色"
+                    class="btn btn-sm w-100 palette text-bg-brown" data-palette="brown">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-cyan" aria-label="青色"
+                    class="btn btn-sm w-100 palette text-bg-cyan" data-palette="cyan">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-green" aria-label="绿色"
+                    class="btn btn-sm w-100 palette text-bg-green" data-palette="green">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-indigo" aria-label="靛青色"
+                    class="btn btn-sm w-100 palette text-bg-indigo" data-palette="indigo">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-orange" aria-label="橙色"
+                    class="btn btn-sm w-100 palette text-bg-orange" data-palette="orange">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-pink" aria-label="粉色"
+                    class="btn btn-sm w-100 palette text-bg-pink" data-palette="pink">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-purple" aria-label="紫色"
+                    class="btn btn-sm w-100 palette text-bg-purple" data-palette="purple">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-red" aria-label="红色"
+                    class="btn btn-sm w-100 palette text-bg-red" data-palette="red">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-teal" aria-label="蓝绿色"
+                    class="btn btn-sm w-100 palette text-bg-teal" data-palette="teal">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-yellow" aria-label="黄色"
+                    class="btn btn-sm w-100 palette text-bg-yellow" data-palette="yellow">
+                </a>
+            </li>
+    </ul>
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="modeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="mode-icon fas fa-fw fa-adjust" id="modeIcon"></i>
+        <span class="d-xxl-none">模式</span>
+    </a>
+    <ul class="mode-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="modeDropdown">
+        <li class="mode-item" data-color-mode="light" data-icon="sun">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-sun"></i> 浅色
+            </button>
+        </li>
+        <li class="mode-item" data-color-mode="dark" data-icon="moon">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-moon"></i> 深色
+            </button>
+        </li>
+        <li class="mode-item active" data-color-mode="auto" data-icon="adjust">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-adjust"></i> 自动
+            </button>
+        </li>
+    </ul>
+</li>
+        </ul>
+      </div>
+    </div>
+    <div class="d-flex">
+      <button class="navbar-toggler order-5 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarMenus"
+        aria-controls="navbarMenus" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-ellipsis-h"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+</header>
+
+    <main class="container">
+      <div class="row content"><noscript>
+    <div class="alert alert-danger" role="alert">你的浏览器不支持 JavaScript。</div>
+</noscript>
+<aside class="docs-nav col-xxl-2" tabindex="-1" data-bs-hide="focusout">
+  <div class="offcanvas-xxl offcanvas-start" id="offcanvasDocsNav" aria-labelledby="offcanvasDocsNavLabel">
+    <div class="offcanvas-header border-bottom">
+      <div class="offcanvas-title h5" id="offcanvasDocsNavLabel">浏览文档</div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#offcanvasDocsNav"></button>
+    </div>
+    <div class="offcanvas-body pt-2 flex-column"><div class="mb-3" style="margin-left: -0.5rem;">
+</div>
+<ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/"><span class="docs-nav-title-icon me-1"><i class="fas fa-fw fa-book"></i></span><span class="docs-nav-title">Linux内核分析</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-8d43cfa49df325f277d6f4234a021467" aria-expanded="false" aria-controls="nav-8d43cfa49df325f277d6f4234a021467">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-8d43cfa49df325f277d6f4234a021467">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/"><span class="docs-nav-title">linux-6.1</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-8ea97fb7a0a0d68cedef1b63b4664daa" aria-expanded="false" aria-controls="nav-8ea97fb7a0a0d68cedef1b63b4664daa">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-8ea97fb7a0a0d68cedef1b63b4664daa">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/01-task_0/"><span class="docs-nav-title">Linux 0号线程swapper简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/02-task_1/"><span class="docs-nav-title">Linux 1号线程init简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/03-task_2/"><span class="docs-nav-title">Linux 2号线程kthreadd简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/"><span class="docs-nav-title">linux thermal子系统简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/other/linux-err-retur/"><span class="docs-nav-title">Linux的errno简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/fdt/dt_to_dt/"><span class="docs-nav-title">Linux内核驱动模型（二）设备树转换</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/device_driver/initcall/"><span class="docs-nav-title">Linux内核驱动模型（三）驱动初始化</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/device_driver/device_model/"><span class="docs-nav-title">Linux内核驱动模型（四）核心结构体</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/fdt/fdt_dt/"><span class="docs-nav-title">Linux内核驱动模型（一）设备树展开</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/02-timekeeping/"><span class="docs-nav-title">linux内核时间子系统（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/01-tim/"><span class="docs-nav-title">linux内核时间子系统（一）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/kobject/kobject/"><span class="docs-nav-title">Linux内核数据结构kobject/kset/ktype</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/boot/01-entry/"><span class="docs-nav-title">内核启动流程（一）</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/"><span class="docs-nav-title">linux-6.6</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c105b2ef486b2fc777c1f47c8c02d8c9" aria-expanded="false" aria-controls="nav-c105b2ef486b2fc777c1f47c8c02d8c9">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-c105b2ef486b2fc777c1f47c8c02d8c9">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/"><span class="docs-nav-title">【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/arm64_setup/"><span class="docs-nav-title">ARM64 Crash调试环境搭建</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/jump_label/"><span class="docs-nav-title">ARM64 jump label源码分析</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/"><span class="docs-nav-title">ARM64 Linux中断入口</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/help/"><span class="docs-nav-title">Crash帮助信息</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/crash_cmd_set/"><span class="docs-nav-title">Crash命令介绍</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmallo/"><span class="docs-nav-title">kmalloc分配内存的大小</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtabl/"><span class="docs-nav-title">Linux ARM64页面大小和虚拟地址位数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/atomi/"><span class="docs-nav-title">linux atomic接口简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_/"><span class="docs-nav-title">Linux drm mm分析(基于intel ivpu驱动)</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-a-fork/"><span class="docs-nav-title">Linux fork进程/线程简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/printk-formats/"><span class="docs-nav-title">Linux printk日志输出格式控制</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/04-relationship/"><span class="docs-nav-title">Linux进程和线程关系</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/05-pid_namespa/"><span class="docs-nav-title">Linux进程命名空间（pid namespace）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/07-task_stat/"><span class="docs-nav-title">Linux进程状态与生命周期</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_2/"><span class="docs-nav-title">Linux内核copy_process分析（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_3/"><span class="docs-nav-title">Linux内核copy_process分析（三）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/06-b-copy_process_1/"><span class="docs-nav-title">Linux内核copy_process分析（一）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/dynamic_debug/"><span class="docs-nav-title">linux内核dynamic_debug</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_tabl/"><span class="docs-nav-title">Linux内核sched_class汇总</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/optimize_tips/"><span class="docs-nav-title">Linux内核代码的编写和优化技巧</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/02-irq_domain_a/"><span class="docs-nav-title">Linux中断子系统（二）domain注册</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/03-irq_create_mapping/"><span class="docs-nav-title">Linux中断子系统（三）设备中断注册</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/04-request_irq/"><span class="docs-nav-title">Linux中断子系统（四）申请中断request_irq</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/05-handler_entry/"><span class="docs-nav-title">Linux中断子系统（五）中断处理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/01-init/"><span class="docs-nav-title">Linux中断子系统（一）软硬件初始化</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/"><span class="docs-nav-title">printk的pr_fmt</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/"><span class="docs-nav-title">开发环境</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-fd57bc387b9c3a4d19f1801fc65cd5b4" aria-expanded="false" aria-controls="nav-fd57bc387b9c3a4d19f1801fc65cd5b4">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-fd57bc387b9c3a4d19f1801fc65cd5b4">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/"><span class="docs-nav-title">启动</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-05b799579ad52d4ccfa92fd6313b23f7" aria-expanded="false" aria-controls="nav-05b799579ad52d4ccfa92fd6313b23f7">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-05b799579ad52d4ccfa92fd6313b23f7">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/uboot_m/"><span class="docs-nav-title">U-Boot从dtb获取内存布局并传递到内核</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/crc32_fu/"><span class="docs-nav-title">U-Boot和Linux内核的CRC函数</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3 text-primary">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/"><span class="docs-nav-title">系统工具</span></a>
+            <a class="btn-toggle ms-1" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-eb1c5d775f73e30b3a27244e12a84f81" aria-expanded="true" aria-controls="nav-eb1c5d775f73e30b3a27244e12a84f81">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse  show border-primary" id="nav-eb1c5d775f73e30b3a27244e12a84f81">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/debian_setup/"><span class="docs-nav-title">Debian安装和配置</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/docker_setup/"><span class="docs-nav-title">Docker安装和配置</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/git/git_mis/"><span class="docs-nav-title">git配置和操作</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/jupyter_to_markdow/"><span class="docs-nav-title">jupyter转Markdown</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_tips/"><span class="docs-nav-title">Linux Bash技巧</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_decorat/"><span class="docs-nav-title">Linux Bash终端美化</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_network/"><span class="docs-nav-title">linux常用命令-网络</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_text/"><span class="docs-nav-title">linux常用命令-文本处理</span></a>
+        </li><li class="mb-2 py-1 ms-3 text-primary" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_fil/"><span class="docs-nav-title">linux常用命令-文件管理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_sys/"><span class="docs-nav-title">linux常用命令-系统管理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_benchmark/"><span class="docs-nav-title">linux常用命令-性能</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/samba/"><span class="docs-nav-title">samba使用</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/ssh_wsl_ex/"><span class="docs-nav-title">ssh连接wsl后执行Windows程序</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/resizefs/"><span class="docs-nav-title">磁盘和文件系统扩容/缩容</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/win_python3/"><span class="docs-nav-title">解决Windows不能使用python3.10的问题</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/"><span class="docs-nav-title">杂项</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-4967b62f3b1964eee9739b39b25cd3eb" aria-expanded="false" aria-controls="nav-4967b62f3b1964eee9739b39b25cd3eb">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-4967b62f3b1964eee9739b39b25cd3eb">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/01-c/array_fu/"><span class="docs-nav-title">多维数组作为函数参数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/01-c/array_typ/"><span class="docs-nav-title">数组a、&amp;a、&amp;a[0]、&amp;a[0][0]的区别与联系</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/"><span class="docs-nav-title">4412</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-0cca8bc16c798175efb847597812f8c0" aria-expanded="false" aria-controls="nav-0cca8bc16c798175efb847597812f8c0">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-0cca8bc16c798175efb847597812f8c0">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/exynos4412/"><span class="docs-nav-title">Exynos4412启动介绍</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/mkbl1/"><span class="docs-nav-title">Exynos4412自制BL1</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/mkbl2/"><span class="docs-nav-title">Exynos4412自制BL2</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul></div>
+  </div>
+</aside><div class="col-xxl-7 ms-auto">
+  <div class="container-fluid"><nav class="row card component" aria-label="breadcrumb">
+  <div class="card-body pb-0">
+    <ol class="hbs-breadcrumb breadcrumb flex-nowrap"><li class="breadcrumb-item text-surface"><a href="/zh-cn/">主页</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/">文档</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/01-os/">系统工具</a></li><li class="breadcrumb-item active">linux常用命令-文件管理</li></ol>
+  </div>
+</nav><div class="post-panel-wrapper position-relative d-flex justify-content-center">
+  <div class="d-flex flex-row justify-content-center rounded-5 border post-panel position-fixed px-3 py-1 surface shadow-1">
+    
+    
+
+    
+    
+    
+<a class="action action-toc d-block d-xxl-none" href="#post-toc-container" role="button" title="目录">
+  <i class="fas fa-fw fa-list-alt"></i>
+</a>
+    <a class="action action-copyright" href="#post-copyright" role="button" aria-label="Copyright" title="版权">
+  <i class="fas fa-fw fa-copyright"></i>
+</a>
+    
+    
+<a id="sidebarToggler" class="action action-sidebar-toggler d-none d-xxl-block" role="button" title="切换侧边栏">
+  <i class="fas fa-fw fa-expand-alt" data-fa-transform="rotate-45"></i>
+</a>
+
+    
+  </div>
+</div><article class="row card component mb-4 post">
+<div class="card-header ">
+    <h1 class="card-title post-title my-2">linux常用命令-文件管理</h1>
+</div>
+<div class="card-body"><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2023-01-01 08:00:00 &#43;0800 CST。">2023/01/01</span><span class="post-reading-time me-1 mb-1">5 分钟阅读</span><a href="/zh-cn/categories/linux%E5%91%BD%E4%BB%A4/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>Linux命令</a><a href="/zh-cn/categories/%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>文件管理</a><a href="/zh-cn/series/linux%E5%91%BD%E4%BB%A4/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
+      <i class="fas fa-fw fa-columns me-1"></i>Linux命令</a><a href="/zh-cn/tags/linux%E5%91%BD%E4%BB%A4/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux命令</a><a href="/zh-cn/tags/%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">工具</a><a href="/zh-cn/tags/%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">文件管理</a>
+</div>
+
+<div class="mt-2 mb-3 d-block d-xxl-none">
+    <h2 class="text-surface mb-3">目录</h2>
+    <div id="post-toc-container">
+        </div>
+    <hr class="text-secondary">
+</div><div class="post-content mb-3" data-bs-spy="scroll" data-bs-target="#TableOfContents" tabindex="0">
+        <div id="post-content-body">
+<h1 id="1-打包隐藏文件" data-numberify>1. 打包隐藏文件<a class="anchor ms-1" href="#1-打包隐藏文件"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">tar -czf data.tar.gz  ./.<span class="o">[</span>!.<span class="o">]</span>*
+</span></span></code></pre></div>
+<h1 id="2-find" data-numberify>2. find<a class="anchor ms-1" href="#2-find"></a></h1>
+
+<h2 id="21-查找文件并按大小排序" data-numberify>2.1. 查找文件并按大小排序<a class="anchor ms-1" href="#21-查找文件并按大小排序"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">find -type f -name <span class="s1">&#39;*.md&#39;</span> -printf <span class="s1">&#39;%s\t%p\n&#39;</span> <span class="p">|</span> grep -v <span class="s1">&#39;\.git&#39;</span> <span class="p">|</span> sort -nr  <span class="p">|</span> less -N
+</span></span></code></pre></div>
+<h2 id="22-批量删除7天前的文件" data-numberify>2.2. 批量删除7天前的文件<a class="anchor ms-1" href="#22-批量删除7天前的文件"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">find -type f -mtime +7 -exec rm -rf <span class="o">{}</span> <span class="se">\;</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">find -type f -mtime +7 -exec rm -fr <span class="o">{}</span> <span class="se">\;</span>
+</span></span></code></pre></div>
+<h2 id="23-多个条件-o" data-numberify>2.3. 多个条件(-o)<a class="anchor ms-1" href="#23-多个条件-o"></a></h2>
+<p>find ./ -name &lsquo;<em>.c&rsquo; -o -name &lsquo;</em>.h&rsquo;
+find ./ -name &lsquo;*.[ch];</p>
+
+<h2 id="24-忽略大小写-iname" data-numberify>2.4. 忽略大小写(-iname)<a class="anchor ms-1" href="#24-忽略大小写-iname"></a></h2>
+<p>find ./ -iname &lsquo;makefile&rsquo;</p>
+
+<h1 id="3-文件监控inotify" data-numberify>3. 文件监控inotify<a class="anchor ms-1" href="#3-文件监控inotify"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">sudo apt install  inotify-tools
+</span></span></code></pre></div><p>监控文件的打开关闭次数</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">inotifywatch -v -e open -e close -t <span class="m">60</span> -r  <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/test.c
+</span></span></code></pre></div>
+<h1 id="4-文件查重工具fdupes" data-numberify>4. 文件查重工具fdupes<a class="anchor ms-1" href="#4-文件查重工具fdupes"></a></h1>
+
+<h2 id="41-保留最早的文件" data-numberify>4.1. 保留最早的文件<a class="anchor ms-1" href="#41-保留最早的文件"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">fdupes --recurse --noempty  --nohidden  --size --time  --minsize<span class="o">=</span><span class="m">10240000</span> --log<span class="o">=</span>del10M.log  -d -N
+</span></span></code></pre></div>
+<h2 id="42-保留最新的文件" data-numberify>4.2. 保留最新的文件<a class="anchor ms-1" href="#42-保留最新的文件"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">fdupes --recurse --reverse   --noempty  --nohidden  --size --time  --minsize<span class="o">=</span><span class="m">10240000</span> --log<span class="o">=</span>del10M.log  -d -N
+</span></span></code></pre></div>
+<h2 id="43-其他" data-numberify>4.3. 其他<a class="anchor ms-1" href="#43-其他"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">fdupes -r -S -t -n -G <span class="m">1000000</span>  01-document/ zzzzzzzzzz/01-document/ &gt; doc.log
+</span></span><span class="line"><span class="ln">2</span><span class="cl">fdupes -r -S -t -n -G <span class="m">1000</span>  -L <span class="m">1000000</span>  01-document/ zzzzzzzzzz/01-document/ &gt; doc.log
+</span></span><span class="line"><span class="ln">3</span><span class="cl">fdupes -r -S -t -n -o name 04-personal/photos/ /export/new/photos-mage20/ &gt; photos.log
+</span></span></code></pre></div>
+<h2 id="44-帮助信息" data-numberify>4.4. 帮助信息<a class="anchor ms-1" href="#44-帮助信息"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zed" data-lang="zed"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="n">Usage</span><span class="o">:</span><span class="w"> </span><span class="n">fdupes</span><span class="w"> </span><span class="p">[</span><span class="n">options</span><span class="p">]</span><span class="w"> </span><span class="n">DIRECTORY</span><span class="p">...</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="n">r</span><span class="w"> </span><span class="o">--</span><span class="n">recurse</span><span class="w">            </span><span class="n">for</span><span class="w"> </span><span class="n">every</span><span class="w"> </span><span class="n">directory</span><span class="w"> </span><span class="n">given</span><span class="w"> </span><span class="n">follow</span><span class="w"> </span><span class="n">subdirectories</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="w">                         </span><span class="n">encountered</span><span class="w"> </span><span class="n">within</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="n">R</span><span class="w"> </span><span class="o">--</span><span class="n">recurse</span><span class="o">:</span><span class="w">           </span><span class="n">for</span><span class="w"> </span><span class="n">each</span><span class="w"> </span><span class="n">directory</span><span class="w"> </span><span class="n">given</span><span class="w"> </span><span class="n">after</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="n">option</span><span class="w"> </span><span class="n">follow</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="w">                         </span><span class="n">subdirectories</span><span class="w"> </span><span class="n">encountered</span><span class="w"> </span><span class="n">within</span><span class="w"> </span><span class="p">(</span><span class="n">note</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="err">&#39;</span><span class="o">:</span><span class="err">&#39;</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">the</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="w">                         </span><span class="n">end</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">option</span><span class="p">,</span><span class="w"> </span><span class="n">manpage</span><span class="w"> </span><span class="n">for</span><span class="w"> </span><span class="n">more</span><span class="w"> </span><span class="n">details</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="n">s</span><span class="w"> </span><span class="o">--</span><span class="n">symlinks</span><span class="w">           </span><span class="n">follow</span><span class="w"> </span><span class="n">symlinks</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="n">H</span><span class="w"> </span><span class="o">--</span><span class="n">hardlinks</span><span class="w">          </span><span class="n">normally</span><span class="p">,</span><span class="w"> </span><span class="n">when</span><span class="w"> </span><span class="n">two</span><span class="w"> </span><span class="n">or</span><span class="w"> </span><span class="n">more</span><span class="w"> </span><span class="n">files</span><span class="w"> </span><span class="n">point</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">same</span><span class="w">
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="w">                         </span><span class="n">disk</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="n">they</span><span class="w"> </span><span class="n">are</span><span class="w"> </span><span class="n">treated</span><span class="w"> </span><span class="n">as</span><span class="w"> </span><span class="n">non</span><span class="o">-</span><span class="n">duplicates</span><span class="p">;</span><span class="w"> </span><span class="n">this</span><span class="w">
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="w">                         </span><span class="n">option</span><span class="w"> </span><span class="n">will</span><span class="w"> </span><span class="n">change</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="n">behavior</span><span class="w">
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="n">G</span><span class="w"> </span><span class="o">--</span><span class="n">minsize</span><span class="o">=</span><span class="n">SIZE</span><span class="w">       </span><span class="n">consider</span><span class="w"> </span><span class="n">only</span><span class="w"> </span><span class="n">files</span><span class="w"> </span><span class="n">greater</span><span class="w"> </span><span class="n">than</span><span class="w"> </span><span class="n">or</span><span class="w"> </span><span class="n">equal</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">SIZE</span><span class="w"> </span><span class="n">bytes</span><span class="w">
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="n">L</span><span class="w"> </span><span class="o">--</span><span class="n">maxsize</span><span class="o">=</span><span class="n">SIZE</span><span class="w">       </span><span class="n">consider</span><span class="w"> </span><span class="n">only</span><span class="w"> </span><span class="n">files</span><span class="w"> </span><span class="n">less</span><span class="w"> </span><span class="n">than</span><span class="w"> </span><span class="n">or</span><span class="w"> </span><span class="n">equal</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">SIZE</span><span class="w"> </span><span class="n">bytes</span><span class="w">
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="n">n</span><span class="w"> </span><span class="o">--</span><span class="n">noempty</span><span class="w">            </span><span class="n">exclude</span><span class="w"> </span><span class="n">zero</span><span class="o">-</span><span class="n">length</span><span class="w"> </span><span class="n">files</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">consideration</span><span class="w">
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="n">A</span><span class="w"> </span><span class="o">--</span><span class="n">nohidden</span><span class="w">           </span><span class="n">exclude</span><span class="w"> </span><span class="n">hidden</span><span class="w"> </span><span class="n">files</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">consideration</span><span class="w">
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="o">--</span><span class="n">omitfirst</span><span class="w">          </span><span class="n">omit</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">first</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="n">each</span><span class="w"> </span><span class="n">set</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">matches</span><span class="w">
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="err">1</span><span class="w"> </span><span class="o">--</span><span class="n">sameline</span><span class="w">           </span><span class="n">list</span><span class="w"> </span><span class="n">each</span><span class="w"> </span><span class="n">set</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">matches</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">single</span><span class="w"> </span><span class="n">line</span><span class="w">
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="n">S</span><span class="w"> </span><span class="o">--</span><span class="n">size</span><span class="w">               </span><span class="n">show</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">duplicate</span><span class="w"> </span><span class="n">files</span><span class="w">
+</span></span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="n">t</span><span class="w"> </span><span class="o">--</span><span class="n">time</span><span class="w">               </span><span class="n">show</span><span class="w"> </span><span class="n">modification</span><span class="w"> </span><span class="n">time</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">duplicate</span><span class="w"> </span><span class="n">files</span><span class="w">
+</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="n">m</span><span class="w"> </span><span class="o">--</span><span class="n">summarize</span><span class="w">          </span><span class="n">summarize</span><span class="w"> </span><span class="n">dupe</span><span class="w"> </span><span class="n">information</span><span class="w">
+</span></span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="n">q</span><span class="w"> </span><span class="o">--</span><span class="n">quiet</span><span class="w">              </span><span class="n">hide</span><span class="w"> </span><span class="n">progress</span><span class="w"> </span><span class="n">indicator</span><span class="w">
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="n">d</span><span class="w"> </span><span class="o">--</span><span class="n">delete</span><span class="w">             </span><span class="n">prompt</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="n">for</span><span class="w"> </span><span class="n">files</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">preserve</span><span class="w"> </span><span class="n">and</span><span class="w"> </span><span class="n">delete</span><span class="w"> </span><span class="n">all</span><span class="w">
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="w">                         </span><span class="n">others</span><span class="p">;</span><span class="w"> </span><span class="n">important</span><span class="o">:</span><span class="w"> </span><span class="n">under</span><span class="w"> </span><span class="n">particular</span><span class="w"> </span><span class="n">circumstances</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="w">                         </span><span class="n">data</span><span class="w"> </span><span class="n">may</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">lost</span><span class="w"> </span><span class="n">when</span><span class="w"> </span><span class="n">using</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="n">option</span><span class="w"> </span><span class="n">together</span><span class="w">
+</span></span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="w">                         </span><span class="n">with</span><span class="w"> </span><span class="o">-</span><span class="n">s</span><span class="w"> </span><span class="n">or</span><span class="w"> </span><span class="o">--</span><span class="n">symlinks</span><span class="p">,</span><span class="w"> </span><span class="n">or</span><span class="w"> </span><span class="n">when</span><span class="w"> </span><span class="n">specifying</span><span class="w"> </span><span class="n">a</span><span class="w">
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="w">                         </span><span class="n">particular</span><span class="w"> </span><span class="n">directory</span><span class="w"> </span><span class="n">more</span><span class="w"> </span><span class="n">than</span><span class="w"> </span><span class="n">once</span><span class="p">;</span><span class="w"> </span><span class="n">refer</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">the</span><span class="w">
+</span></span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="w">                         </span><span class="n">fdupes</span><span class="w"> </span><span class="n">documentation</span><span class="w"> </span><span class="n">for</span><span class="w"> </span><span class="n">additional</span><span class="w"> </span><span class="n">information</span><span class="w">
+</span></span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="n">P</span><span class="w"> </span><span class="o">--</span><span class="n">plain</span><span class="w">              </span><span class="n">with</span><span class="w"> </span><span class="o">--</span><span class="n">delete</span><span class="p">,</span><span class="w"> </span><span class="n">use</span><span class="w"> </span><span class="n">line</span><span class="o">-</span><span class="n">based</span><span class="w"> </span><span class="n">prompt</span><span class="w"> </span><span class="p">(</span><span class="n">as</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="n">older</span><span class="w">
+</span></span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="w">                         </span><span class="n">versions</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">fdupes</span><span class="p">)</span><span class="w"> </span><span class="n">instead</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">screen</span><span class="o">-</span><span class="n">mode</span><span class="w"> </span><span class="n">interface</span><span class="w">
+</span></span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="n">N</span><span class="w"> </span><span class="o">--</span><span class="n">noprompt</span><span class="w">           </span><span class="n">together</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="o">--</span><span class="n">delete</span><span class="p">,</span><span class="w"> </span><span class="n">preserve</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">first</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">in</span><span class="w">
+</span></span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="w">                         </span><span class="n">each</span><span class="w"> </span><span class="n">set</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">duplicates</span><span class="w"> </span><span class="n">and</span><span class="w"> </span><span class="n">delete</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">rest</span><span class="w"> </span><span class="n">without</span><span class="w">
+</span></span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="w">                         </span><span class="n">prompting</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">user</span><span class="w">
+</span></span></span><span class="line"><span class="ln">33</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="n">I</span><span class="w"> </span><span class="o">--</span><span class="n">immediate</span><span class="w">          </span><span class="n">delete</span><span class="w"> </span><span class="n">duplicates</span><span class="w"> </span><span class="n">as</span><span class="w"> </span><span class="n">they</span><span class="w"> </span><span class="n">are</span><span class="w"> </span><span class="n">encountered</span><span class="p">,</span><span class="w"> </span><span class="n">without</span><span class="w">
+</span></span></span><span class="line"><span class="ln">34</span><span class="cl"><span class="w">                         </span><span class="n">grouping</span><span class="w"> </span><span class="n">into</span><span class="w"> </span><span class="n">sets</span><span class="p">;</span><span class="w"> </span><span class="n">implies</span><span class="w"> </span><span class="o">--</span><span class="n">noprompt</span><span class="w">
+</span></span></span><span class="line"><span class="ln">35</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="w"> </span><span class="o">--</span><span class="n">permissions</span><span class="w">        </span><span class="n">don</span><span class="err">&#39;</span><span class="n">t</span><span class="w"> </span><span class="n">consider</span><span class="w"> </span><span class="n">files</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="n">different</span><span class="w"> </span><span class="nn">owner/</span><span class="n">group</span><span class="w"> </span><span class="n">or</span><span class="w">
+</span></span></span><span class="line"><span class="ln">36</span><span class="cl"><span class="w">                         </span><span class="kd">permission</span><span class="w"> </span><span class="n">bits</span><span class="w"> </span><span class="n">as</span><span class="w"> </span><span class="n">duplicates</span><span class="w">
+</span></span></span><span class="line"><span class="ln">37</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="n">o</span><span class="w"> </span><span class="o">--</span><span class="n">order</span><span class="o">=</span><span class="n">BY</span><span class="w">           </span><span class="n">select</span><span class="w"> </span><span class="n">sort</span><span class="w"> </span><span class="n">order</span><span class="w"> </span><span class="n">for</span><span class="w"> </span><span class="n">output</span><span class="w"> </span><span class="n">and</span><span class="w"> </span><span class="n">deleting</span><span class="p">;</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="n">file</span><span class="w">
+</span></span></span><span class="line"><span class="ln">38</span><span class="cl"><span class="w">                         </span><span class="n">modification</span><span class="w"> </span><span class="n">time</span><span class="w"> </span><span class="p">(</span><span class="n">BY</span><span class="o">=</span><span class="err">&#39;</span><span class="n">time</span><span class="err">&#39;</span><span class="p">;</span><span class="w"> </span><span class="n">default</span><span class="p">),</span><span class="w"> </span><span class="n">status</span><span class="w">
+</span></span></span><span class="line"><span class="ln">39</span><span class="cl"><span class="w">                         </span><span class="n">change</span><span class="w"> </span><span class="n">time</span><span class="w"> </span><span class="p">(</span><span class="n">BY</span><span class="o">=</span><span class="err">&#39;</span><span class="n">ctime</span><span class="err">&#39;</span><span class="p">),</span><span class="w"> </span><span class="n">or</span><span class="w"> </span><span class="n">filename</span><span class="w"> </span><span class="p">(</span><span class="n">BY</span><span class="o">=</span><span class="err">&#39;</span><span class="n">name</span><span class="err">&#39;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="ln">40</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="n">i</span><span class="w"> </span><span class="o">--</span><span class="n">reverse</span><span class="w">            </span><span class="n">reverse</span><span class="w"> </span><span class="n">order</span><span class="w"> </span><span class="n">while</span><span class="w"> </span><span class="n">sorting</span><span class="w">
+</span></span></span><span class="line"><span class="ln">41</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="n">l</span><span class="w"> </span><span class="o">--</span><span class="n">log</span><span class="o">=</span><span class="n">LOGFILE</span><span class="w">        </span><span class="n">log</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">deletion</span><span class="w"> </span><span class="n">choices</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">LOGFILE</span><span class="w">
+</span></span></span><span class="line"><span class="ln">42</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="n">v</span><span class="w"> </span><span class="o">--</span><span class="n">version</span><span class="w">            </span><span class="n">display</span><span class="w"> </span><span class="n">fdupes</span><span class="w"> </span><span class="n">version</span><span class="w">
+</span></span></span><span class="line"><span class="ln">43</span><span class="cl"><span class="w"> </span><span class="o">-</span><span class="n">h</span><span class="w"> </span><span class="o">--</span><span class="n">help</span><span class="w">               </span><span class="n">display</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="n">help</span><span class="w"> </span><span class="n">message</span><span class="w">
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">fdupes --recurse --noempty  --nohidden  --size --time  --log<span class="o">=</span>1111.log  -d -N
+</span></span></code></pre></div>
+<h1 id="5-文件查重工具rdfind" data-numberify>5. 文件查重工具rdfind<a class="anchor ms-1" href="#5-文件查重工具rdfind"></a></h1>
+
+<h1 id="6-文件查重工具fslint" data-numberify>6. 文件查重工具fslint<a class="anchor ms-1" href="#6-文件查重工具fslint"></a></h1>
+
+<h1 id="7-同步工具rsync" data-numberify>7. 同步工具rsync<a class="anchor ms-1" href="#7-同步工具rsync"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln"> 1</span><span class="cl"># -v：显示rsync过程中详细信息。可以使用&#34;-vvvv&#34;获取更详细信息。
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl"># -P：显示文件传输的进度信息。(实际上&#34;-P&#34;=&#34;--partial --progress&#34;，其中的&#34;--progress&#34;才是显示进度信息的)。
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"># -n --dry-run  ：仅测试传输，而不实际传输。常和&#34;-vvvv&#34;配合使用来查看rsync是如何工作的。
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"># -a --archive  ：归档模式，表示递归传输并保持文件属性。等同于&#34;-rtopgDl&#34;。
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"># -r --recursive：递归到目录中去。
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl"># -t --times：保持mtime属性。强烈建议任何时候都加上&#34;-t&#34;，否则目标文件mtime会设置为系统时间，导致下次更新
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">#           ：检查出mtime不同从而导致增量传输无效。
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl"># -o --owner：保持owner属性(属主)。
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"># -g --group：保持group属性(属组)。
+</span></span><span class="line"><span class="ln">10</span><span class="cl"># -p --perms：保持perms属性(权限，不包括特殊权限)。
+</span></span><span class="line"><span class="ln">11</span><span class="cl"># -D        ：是&#34;--device --specials&#34;选项的组合，即也拷贝设备文件和特殊文件。
+</span></span><span class="line"><span class="ln">12</span><span class="cl"># -l --links：如果文件是软链接文件，则拷贝软链接本身而非软链接所指向的对象。
+</span></span><span class="line"><span class="ln">13</span><span class="cl"># -z        ：传输时进行压缩提高效率。
+</span></span><span class="line"><span class="ln">14</span><span class="cl"># -R --relative：使用相对路径。意味着将命令行中指定的全路径而非路径最尾部的文件名发送给服务端，包括它们的属性。用法见下文示例。
+</span></span><span class="line"><span class="ln">15</span><span class="cl"># --size-only ：默认算法是检查文件大小和mtime不同的文件，使用此选项将只检查文件大小。
+</span></span><span class="line"><span class="ln">16</span><span class="cl"># -u --update ：仅在源mtime比目标已存在文件的mtime新时才拷贝。注意，该选项是接收端判断的，不会影响删除行为。
+</span></span><span class="line"><span class="ln">17</span><span class="cl"># -d --dirs   ：以不递归的方式拷贝目录本身。默认递归时，如果源为&#34;dir1/file1&#34;，则不会拷贝dir1目录，使用该选项将拷贝dir1但不拷贝file1。
+</span></span><span class="line"><span class="ln">18</span><span class="cl"># --max-size  ：限制rsync传输的最大文件大小。可以使用单位后缀，还可以是一个小数值(例如：&#34;--max-size=1.5m&#34;)
+</span></span><span class="line"><span class="ln">19</span><span class="cl"># --min-size  ：限制rsync传输的最小文件大小。这可以用于禁止传输小文件或那些垃圾文件。
+</span></span><span class="line"><span class="ln">20</span><span class="cl"># --exclude   ：指定排除规则来排除不需要传输的文件。
+</span></span><span class="line"><span class="ln">21</span><span class="cl"># --delete    ：以SRC为主，对DEST进行同步。多则删之，少则补之。注意&#34;--delete&#34;是在接收端执行的，所以它是在
+</span></span><span class="line"><span class="ln">22</span><span class="cl">#             ：exclude/include规则生效之后才执行的。
+</span></span><span class="line"><span class="ln">23</span><span class="cl"># -b --backup ：对目标上已存在的文件做一个备份，备份的文件名后默认使用&#34;~&#34;做后缀。
+</span></span><span class="line"><span class="ln">24</span><span class="cl"># --backup-dir：指定备份文件的保存路径。不指定时默认和待备份文件保存在同一目录下。
+</span></span><span class="line"><span class="ln">25</span><span class="cl"># -e          ：指定所要使用的远程shell程序，默认为ssh。
+</span></span><span class="line"><span class="ln">26</span><span class="cl"># --port      ：连接daemon时使用的端口号，默认为873端口。
+</span></span><span class="line"><span class="ln">27</span><span class="cl"># --password-file：daemon模式时的密码文件，可以从中读取密码实现非交互式。注意，这不是远程shell认证的密码，而是rsync模块认证的密码。
+</span></span><span class="line"><span class="ln">28</span><span class="cl"># -W --whole-file：rsync将不再使用增量传输，而是全量传输。在网络带宽高于磁盘带宽时，该选项比增量传输更高效。
+</span></span><span class="line"><span class="ln">29</span><span class="cl"># --existing  ：要求只更新目标端已存在的文件，目标端还不存在的文件不传输。注意，使用相对路径时如果上层目录不存在也不会传输。
+</span></span><span class="line"><span class="ln">30</span><span class="cl"># --ignore-existing：要求只更新目标端不存在的文件。和&#34;--existing&#34;结合使用有特殊功能，见下文示例。
+</span></span><span class="line"><span class="ln">31</span><span class="cl"># --remove-source-files：要求删除源端已经成功传输的文件。
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="nv">OPTS</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="nv">OPTS</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">OPTS</span><span class="si">}</span><span class="s2"> -P&#34;</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="nv">OPTS</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">OPTS</span><span class="si">}</span><span class="s2"> -r&#34;</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="nv">OPTS</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">OPTS</span><span class="si">}</span><span class="s2"> -o&#34;</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="nv">OPTS</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">OPTS</span><span class="si">}</span><span class="s2"> -g&#34;</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="nv">OPTS</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">OPTS</span><span class="si">}</span><span class="s2"> -t&#34;</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="nv">OPTS</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">OPTS</span><span class="si">}</span><span class="s2"> -p&#34;</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="nv">OPTS</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">OPTS</span><span class="si">}</span><span class="s2"> -l&#34;</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="c1"># OPTS=&#34;${OPTS} -u&#34;</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="nv">OPTS</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">OPTS</span><span class="si">}</span><span class="s2"> &#34;</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="nv">OPTS</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">OPTS</span><span class="si">}</span><span class="s2"> &#34;</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="c1"># OPTS=&#34;${OPTS} --delete &#34;</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">
+</span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="c1"># NOT endswith &#39;/&#39;</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="nv">dst</span><span class="o">=</span>/export/new
+</span></span><span class="line"><span class="ln">16</span><span class="cl">
+</span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="nb">set</span> -ex
+</span></span><span class="line"><span class="ln">18</span><span class="cl">
+</span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="c1"># NOT endswith &#39;/&#39;</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="nv">src</span><span class="o">=</span>srd_path
+</span></span><span class="line"><span class="ln">21</span><span class="cl">rsync <span class="si">${</span><span class="nv">OPTS</span><span class="si">}</span> <span class="si">${</span><span class="nv">src</span><span class="si">}</span> <span class="si">${</span><span class="nv">dst</span><span class="si">}</span>
+</span></span></code></pre></div>
+<h1 id="8-同步工具unison" data-numberify>8. 同步工具unison<a class="anchor ms-1" href="#8-同步工具unison"></a></h1>
+
+<h1 id="9-同步工具lsyncd" data-numberify>9. 同步工具lsyncd<a class="anchor ms-1" href="#9-同步工具lsyncd"></a></h1>
+</div>
+</div>
+</div><div class="card-footer">
+  <div class="post-navs d-flex justify-content-evenly"><div class="post-nav post-prev">
+      <i class="fas fa-fw fa-chevron-down post-prev-icon me-1" data-fa-transform="rotate-90"></i>
+      <a href="/zh-cn/docs/01-os/linux/shell/cmd_sys/">linux常用命令-系统管理</a>
+    </div><div class="post-nav post-next">
+      <a href="/zh-cn/docs/01-os/linux/shell/cmd_text/">linux常用命令-文本处理</a>
+      <i class="fas fa-fw fa-chevron-down post-next-icon ms-1" data-fa-transform="rotate-270"></i>
+    </div></div>
+</div></article><div class="post-copyright mb-3 row card component" id="post-copyright">
+    <div class="card-header">
+        <h2 class="card-title fs-4 my-2 text-surface">版权</h2>
+    </div>
+    <div class="card-body"><a class="d-flex align-items-center flex-column" target="_blank" rel="license noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh">
+  <span><i class="fab fa-fw fa-2x fa-creative-commons"></i><i class="fab fa-fw fa-2x fa-creative-commons-by"></i><i class="fab fa-fw fa-2x fa-creative-commons-nc"></i><i class="fab fa-fw fa-2x fa-creative-commons-nd"></i></span>
+  CC BY-NC-ND 4.0 
+</a>
+
+
+    </div>
+</div><section class="related-posts row card component">
+      <div class="card-header">
+        <h2 class="card-title fs-4 my-2 text-surface">
+          相关文章
+        </h2>
+      </div>
+      <div class="card-body slide px-1">
+        <div class="slide-inner row gx-0"><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="linux常用命令-性能" src="https://kingdix10.github.io/covers/wavy_motley_metallic_139065_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/01-os/linux/shell/cmd_benchmark/">
+    linux常用命令-性能
+  </a>
+  <div class="post-meta mb-0">
+    2023/01/01
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="linux常用命令-文本处理" src="https://kingdix10.github.io/covers/scheme_glow_blue_140190_1280x720.jpg" loading="lazy"
+     width="1280"
+     height="720"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/01-os/linux/shell/cmd_text/">
+    linux常用命令-文本处理
+  </a>
+  <div class="post-meta mb-0">
+    2023/01/01
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="linux常用命令-系统管理" src="https://kingdix10.github.io/covers/iridescent_colorful_lines_130978_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/01-os/linux/shell/cmd_sys/">
+    linux常用命令-系统管理
+  </a>
+  <div class="post-meta mb-0">
+    2023/01/01
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="linux常用命令-网络" src="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/01-os/linux/shell/cmd_network/">
+    linux常用命令-网络
+  </a>
+  <div class="post-meta mb-0">
+    2023/01/01
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="Crash命令介绍" src="https://kingdix10.github.io/covers/walls_floor_light_50837_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/crash_cmd_set/">
+    Crash命令介绍
+  </a>
+  <div class="post-meta mb-0">
+    2023/01/01
+
+  </div>
+</div>
+
+          </div></div>
+        <button class="slide-control-left">
+          <i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-90"></i>
+          <span class="visually-hidden">Left</span>
+        </button>
+        <button class="slide-control-right">
+          <i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-270"></i>
+          <span class="visually-hidden">Right</span>
+        </button>
+      </div>
+    </section></div>
+</div>
+<aside class="sidebar d-flex docs-sidebar col-xxl-3 position-sticky order-xxl-5">
+  <div class="container">
+    
+<div class="row component card">
+    <div class="card-body">
+        <form action="/zh-cn/search/">
+            <div class="input-group">
+                <input name="q" class="form-control rounded" placeholder="搜索">
+                <button class="btn btn-sm btn-search position-absolute end-0 border-0 border-start border-secondary p-2" type="submit">
+                    <i class="fas fa-fw fa-search text-primary"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    <div class="accordion post-toc d-none d-lg-block">
+  <div class="accordion-item row mb-4 card component" id="postTOC">
+    <div class="card-header accordion-header">
+      <h2 class="card-title fs-4 my-2 text-surface d-none d-lg-block">目录</h2>
+      <a class="accordion-button d-lg-none mb-1 collapsed shadow-none p-0 bg-transparent" role="button" data-bs-toggle="collapse" href="#post-toc" aria-expanded="false" aria-controls="post-toc">
+        目录
+      </a>
+    </div>
+    <div class="card-body collapse accordion-collapse accordion-body d-lg-block" id="post-toc">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-打包隐藏文件">1. 打包隐藏文件</a></li>
+    <li><a href="#2-find">2. find</a>
+      <ul>
+        <li><a href="#21-查找文件并按大小排序">2.1. 查找文件并按大小排序</a></li>
+        <li><a href="#22-批量删除7天前的文件">2.2. 批量删除7天前的文件</a></li>
+        <li><a href="#23-多个条件-o">2.3. 多个条件(-o)</a></li>
+        <li><a href="#24-忽略大小写-iname">2.4. 忽略大小写(-iname)</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-文件监控inotify">3. 文件监控inotify</a></li>
+    <li><a href="#4-文件查重工具fdupes">4. 文件查重工具fdupes</a>
+      <ul>
+        <li><a href="#41-保留最早的文件">4.1. 保留最早的文件</a></li>
+        <li><a href="#42-保留最新的文件">4.2. 保留最新的文件</a></li>
+        <li><a href="#43-其他">4.3. 其他</a></li>
+        <li><a href="#44-帮助信息">4.4. 帮助信息</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-文件查重工具rdfind">5. 文件查重工具rdfind</a></li>
+    <li><a href="#6-文件查重工具fslint">6. 文件查重工具fslint</a></li>
+    <li><a href="#7-同步工具rsync">7. 同步工具rsync</a></li>
+    <li><a href="#8-同步工具unison">8. 同步工具unison</a></li>
+    <li><a href="#9-同步工具lsyncd">9. 同步工具lsyncd</a></li>
+  </ul>
+</nav>
+    </div>
+  </div>
+</div>
+    
+
+
+
+
+
+
+  </div>
+</aside>
+
+      </div>
+    </main><footer class="footer mt-auto py-3 text-center container"><div class="offcanvas offcanvas-bottom h-auto" tabindex="-1" id="offcanvasActionsPanel"
+  aria-labelledby="offcanvasActionsPanelLabel">
+  <div class="offcanvas-header">
+    <div class="offcanvas-title h5" id="offcanvasActionsPanelLabel">
+      <i class="fas fa-fw fa-th-large me-1"></i>
+      操作
+    </div>
+    <button type="button" class="btn-close ms-auto" data-bs-dismiss="offcanvas" data-bs-target="offcanvasActionsPanel" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body mt-2"><div class="actions d-flex overflow-auto align-items-center">
+      <a role="button" class="action action-go-back d-flex flex-column align-items-center me-3" href="javascript: window.history.back();">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-90"></i></span> 返回
+      </a>
+      <a role="button" class="action action-reload-page d-flex flex-column align-items-center me-3">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-redo-alt"></i></span> 刷新
+      </a>
+      <a role="button" class="action action-copy-url d-flex flex-column align-items-center me-3">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-link"></i></span> 复制链接
+      </a>
+    </div>
+  </div>
+</div><div class="row text-center text-lg-start">
+  <div class="col-12 mt-2 col-lg-3">
+    <p class="mb-2">kingdix10&#39;s site</p>
+    <p class="text-secondary mb-2"><small>kingdix10 @ 拾月国度</small></p><div class="copyright mb-2 text-secondary">
+  <small>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</small>
+</div>
+
+
+
+<nav class="social-links nav justify-content-center justify-content-between mb-2 mt-3">
+      <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="https://github.com/kingdix10" title="GitHub" rel="me">
+        <i class="fa-fw fab fa-github"
+          ></i>
+      </a>
+      <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="https://www.zhihu.com/people/kingdix10" title="知乎" rel="me">
+        <i class="fa-fw fab fa-zhihu"
+           style="color: #056de8;"></i>
+      </a>
+  <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="/zh-cn/index.xml" title="RSS" rel="me">
+    <i class="fas fa-fw fa-rss" style="color: #ea6221;"></i>
+  </a>
+</nav>
+</div>
+  <div class="col-12 col-lg-8 offset-0 offset-lg-1"><ul class="nav justify-content-between footer-memu mb-3 row"><li class="nav-item col-12 col-md-6 col-lg-3 px-0"><ul class="nav flex-column align-items-start">
+      <li class="nav-item w-100"><a class="nav-link fw-bold fs-lg" href="javascript: void(0);">链接</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+GitHub"
+  href="https://github.com/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-github text-primary"></i></span>GitHub</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+Gitee"
+  href="https://gitee.com/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-github text-primary"></i></span>Gitee</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+Zhihu"
+  href="https://www.zhihu.com/people/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-zhihu text-primary"></i></span>Zhihu</a></li></ul></li></ul></div>
+</div>
+</footer>
+<script data-precache src="/assets/main/bundle.min.eb8306088ad1475898679a14e6b521aa4dd1e5a5fcd235ca72022a7a1833b5e5.js" integrity="sha256-64MGCIrRR1iYZ5oU5rUhqk3R5aX80jXKcgIqehgzteU=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
+<script data-precache src="/assets/viewer/bundle.min.ffafad0d121aa7d1fb443510086dac514a0b152826cf094f02a1f3dec1f37918.js" integrity="sha256-/6&#43;tDRIap9H7RDUQCG2sUUoLFSgmzwlPAqHz3sHzeRg=" crossorigin="anonymous" defer></script><script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?8e042c957455c462d9b4c9da3ab642b0";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<script src="/js/sw-register.js" defer></script>
+
+  </body>
+</html>

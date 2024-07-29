@@ -7,7 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
-    <lastBuildDate>Tue, 05 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 01 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>kmalloc分配内存的大小</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmallo/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmallo/</guid>
+      <description><![CDATA[1. kmalloc分配内存的大小 本文基于linux-5.15分析。 kmalloc会根据申请的内存大小来决定来决定使用块分配器(slab/slu]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/keyboard_backlight_purple_212155_300x168.jpg" length="11894" type="image/.jpg" />
+    </item>
+    
     <item>
       <title>Linux ARM64页面大小和虚拟地址位数</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtabl/</link>
@@ -15,7 +25,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtabl/</guid>
       <description><![CDATA[ARM64的可配置的页面大小和虚拟地址位数是由ARM硬件决定的，不同的ARM版本，可选择的页面大小和地址位数也不一样。比如52位虚拟地址和物]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/neon_lights_dark_133133_300x168.jpg" length="8715" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg" length="10737" type="image/.jpg" />
     </item>
     
   </channel>

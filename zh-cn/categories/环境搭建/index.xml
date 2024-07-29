@@ -15,27 +15,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/win/win_python3/</guid>
       <description><![CDATA[1. 现象 Windows上输入python3 test.py后，脚本没有执行。 单独输入python3，会启动Microsoft Store，搜索Py]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/laptop_dj_equipment_212416_300x168.jpg" length="9857" type="image/.jpg" />
-    </item>
-    
-    <item>
-      <title>嵌入式学习环境快速搭建（二）</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/02-dev_env/eel_env/eel_readm/</link>
-      <pubDate>Thu, 06 Feb 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/02-dev_env/eel_env/eel_readm/</guid>
-      <description><![CDATA[1. eel简介 目标： 支持多种自定义配置 支持arm/arm64/riscv32/riscv64 一键实现atf、optee、u-boot、kern]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/keyboard_laptop_gradient_203739_300x168.jpg" length="10539" type="image/.jpg" />
-    </item>
-    
-    <item>
-      <title>嵌入式学习环境快速搭建（一）</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/02-dev_env/eel_env/env_setup/</link>
-      <pubDate>Wed, 05 Feb 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/02-dev_env/eel_env/env_setup/</guid>
-      <description><![CDATA[1. 环境搭建 环境搭建脚本仓库：https://gitee.com/kingdix10/envsetup 安装Linux，这里用的是Debian 1]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/iridescent_colorful_lines_130978_300x168.jpg" length="11918" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/background_texture_surface_50343_300x168.jpg" length="8903" type="image/.jpg" />
     </item>
     
   </channel>

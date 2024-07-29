@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>samba on kingdix10&#39;s site</title>
+    <link>https://kingdix10.github.io/zh-cn/tags/samba/</link>
+    <description>Recent content in samba on kingdix10&#39;s site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</copyright>
+    <lastBuildDate>Sun, 01 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/samba/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>samba使用</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/samba/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/samba/</guid>
+      <description><![CDATA[1. 准备工作 如果是虚拟机中安装的Linux系统，需要新建一个网络适配器，模式为桥接模式。 如果是独立的物理机安装了Linux系统，可以在路由器或]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/canvas_picture_abstraction_138874_300x168.jpg" length="19551" type="image/.jpg" />
+    </item>
+    
+  </channel>
+</rss>
+

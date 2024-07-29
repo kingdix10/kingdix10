@@ -15,7 +15,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/02-timekeeping/</guid>
       <description><![CDATA[1. timekeeping timekeeping是时间子系统用于从clocksource获取时间，维护墙上时间、单调递增时间、启动时间的模块，timekeepin]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/vintage_retro_camera_126517_300x168.jpg" length="11143" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/chip_circuit_processor_140251_300x168.jpg" length="19023" type="image/.jpg" />
     </item>
     
     <item>
@@ -25,7 +25,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/01-tim/</guid>
       <description><![CDATA[1. 简介 内核版本：linux-6.1 时间子系统的作用： 时间读取功能 定时器功能，有传统的定时器timer、高精度定时器hrtimer 提供用于调度]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/desert_sand_wavy_141026_300x168.jpg" length="13782" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" length="24563" type="image/.jpg" />
     </item>
     
   </channel>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>文本工具 on kingdix10&#39;s site</title>
+    <link>https://kingdix10.github.io/zh-cn/categories/%E6%96%87%E6%9C%AC%E5%B7%A5%E5%85%B7/</link>
+    <description>Recent content in 文本工具 on kingdix10&#39;s site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</copyright>
+    <lastBuildDate>Sun, 01 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E6%96%87%E6%9C%AC%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>linux常用命令-文本处理</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_text/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_text/</guid>
+      <description><![CDATA[1. grep 1.1. 常用选项 1# 输出start到end 2grep -o &#39;start.*end&#39; file 3# 文件作为文本处理 4grep -a &#39;xxx&#39; file 5# 忽略二进制文件 6grep -rsnI &#39;xxx&#39; ./ 7# 递归目录 8grep -r &#39;xxx&#39; ./ 9 10# 忽略大小写(-i, --ignore-case) 11#]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_1280x720.jpg" length="194685" type="image/.jpg" />
+    </item>
+    
+  </channel>
+</rss>
+

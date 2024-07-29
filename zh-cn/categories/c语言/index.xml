@@ -35,7 +35,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/crc32_fu/</guid>
       <description><![CDATA[测试的时候，发现内核驱动里用crc32_le计算出的值和u-boot里用crc32计算出的值不一样。 又用python的zlib.crc32和]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/squares_colorful_texture_133972_300x168.jpg" length="17371" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/neon_lights_dark_133133_300x168.jpg" length="8715" type="image/.jpg" />
     </item>
     
     <item>
@@ -45,7 +45,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/other/linux-err-retur/</guid>
       <description><![CDATA[1. Linux的errno和指针 常见的Linux函数返回值类型包括整型和指针，内核中这两种返回值类型的函数会互相调用。Linux的errno为]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wavy_motley_metallic_139065_300x168.jpg" length="26579" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/keyboard_backlight_light_159518_300x168.jpg" length="10821" type="image/.jpg" />
     </item>
     
   </channel>

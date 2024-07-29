@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>linux命令 on kingdix10&#39;s site</title>
+    <link>https://kingdix10.github.io/zh-cn/series/linux%E5%91%BD%E4%BB%A4/</link>
+    <description>Recent content in linux命令 on kingdix10&#39;s site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</copyright>
+    <lastBuildDate>Sun, 01 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/series/linux%E5%91%BD%E4%BB%A4/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>git配置和操作</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/git/git_mis/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/git/git_mis/</guid>
+      <description><![CDATA[官方资料：Git Community Book 中文版 1. 个人gitconfig 1# cat ~/.gitconfig 2 3[color] 4 ui = auto 5 6[safe] 7# directory = * 8 9[core] 10# 支持中文 11 quotepath = false 12 editor = vim 13# 14 pager = less -x1,5 15# 支持https下]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/dots_light_background_50767_300x168.jpg" length="5596" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux Bash技巧</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/bash_tips/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/bash_tips/</guid>
+      <description><![CDATA[1. shell语法 shell核心基础知识 进阶版 2. 忽略大小写 重新进入bash后生效。 1echo &#39;set completion-ignore-case on&#39; &gt; ~/.inputrc 3. 临时使用alias前的命令 参考LINUX下使用]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/walls_floor_light_50837_300x168.jpg" length="14340" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>linux常用命令-网络</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_network/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_network/</guid>
+      <description><![CDATA[nmap 1nmap -sVn 192.168.31.* 2 3nmap -sVn 192.168.31.* -oN out.txt 4 5nmap -sV -sC -Pn 192.168.31.* 6 7nmap -sV -sC -Pn 192.168.31.* -oN out.txt 8 9nmap -sV -sC -Pn 192.168.31.* -oG out.txt 10 11nmap -sV -sC -Pn 192.168.31.* -oX out.xml 12 13nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script=banner,vuln 14 15nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script=banner,vuln --script-args=banner.timeout=10,vuln.timeout=10 16 17nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script=banner,vuln --script-args=banner.timeout=10,vuln.timeout=10 --script-args=banner.path=/usr/share/nmap/scripts/http-title.nse,vuln.cvss-threshold=7]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg" length="10737" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>linux常用命令-文本处理</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_text/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_text/</guid>
+      <description><![CDATA[1. grep 1.1. 常用选项 1# 输出start到end 2grep -o &#39;start.*end&#39; file 3# 文件作为文本处理 4grep -a &#39;xxx&#39; file 5# 忽略二进制文件 6grep -rsnI &#39;xxx&#39; ./ 7# 递归目录 8grep -r &#39;xxx&#39; ./ 9 10# 忽略大小写(-i, --ignore-case) 11#]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_1280x720.jpg" length="194685" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>linux常用命令-文件管理</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_fil/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_fil/</guid>
+      <description><![CDATA[1. 打包隐藏文件 1tar -czf data.tar.gz ./.[!.]* 2. find 2.1. 查找文件并按大小排序 1find -type f -name &#39;*.md&#39; -printf &#39;%s\t%p\n&#39; | grep -v &#39;\.git&#39; | sort -nr | less -N 2.2. 批量删除7天前的文件 1find -type f -mtime +7 -exec rm -rf {} \; 2find -type f -mtime +7 -exec rm -fr]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lines_obliquely_stripes_123801_300x168.jpg" length="18016" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>linux常用命令-系统管理</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_sys/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_sys/</guid>
+      <description><![CDATA[1. pstree查看进程树 1$ pstree -ptA 2systemd(1)-+-VGAuthService(546) 3 |-cron(625) 4 |-dbus-daemon(626) 5 |-dhclient(1587) 6 |-dhclient(1831) 7 |-rinetd(707) 8 |-rsyslogd(629)-+-{in:imklog}(632) 9 | |-{in:imuxsock}(631) 10 | `-{rs:main Q:Reg}(633) 2. ps 1# 查看命名空间，需要用root权限，可以使用sudo 2ps -eo pid,pidns,user,group,cmd 3# ps查]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/iridescent_colorful_lines_130978_300x168.jpg" length="11918" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>linux常用命令-性能</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_benchmark/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_benchmark/</guid>
+      <description><![CDATA[iozone 1#!/bin/bash 2 3dd_test_file_one() 4{ 5 cnt=$1 6 bs_uint=$2 7 outdir=$3 8 9 dd if=/dev/urandom of=${outdir}/test_${cnt}${bs_uint}.bin \ 10 bs=1${bs_uint} count=${cnt} 11} 12 13dd_test_file() 14{ 15 outdir=$1 16 17 mkdir -p ${outdir} 18 19 dd_test_file_one 1 k ${outdir} 20 dd_test_file_one 4 k ${outdir} 21 dd_test_file_one 64 k ${outdir} 22 dd_test_file_one 512 k ${outdir} 23 dd_test_file_one 1 M ${outdir} 24 dd_test_file_one 4 M ${outdir} 25 dd_test_file_one 64 M ${outdir} 26 dd_test_file_one 128]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/wavy_motley_metallic_139065_300x168.jpg" length="26579" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>samba使用</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/samba/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/samba/</guid>
+      <description><![CDATA[1. 准备工作 如果是虚拟机中安装的Linux系统，需要新建一个网络适配器，模式为桥接模式。 如果是独立的物理机安装了Linux系统，可以在路由器或]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/canvas_picture_abstraction_138874_300x168.jpg" length="19551" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>磁盘和文件系统扩容/缩容</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/resizefs/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/resizefs/</guid>
+      <description><![CDATA[Linux磁盘和文件系统扩容/缩容]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/india_flag_texture_132874_300x168.jpg" length="19297" type="image/.jpg" />
+    </item>
+    
+  </channel>
+</rss>
+

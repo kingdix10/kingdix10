@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>网络工具 on kingdix10&#39;s site</title>
+    <link>https://kingdix10.github.io/zh-cn/categories/%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7/</link>
+    <description>Recent content in 网络工具 on kingdix10&#39;s site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</copyright>
+    <lastBuildDate>Sun, 01 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>linux常用命令-网络</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_network/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_network/</guid>
+      <description><![CDATA[nmap 1nmap -sVn 192.168.31.* 2 3nmap -sVn 192.168.31.* -oN out.txt 4 5nmap -sV -sC -Pn 192.168.31.* 6 7nmap -sV -sC -Pn 192.168.31.* -oN out.txt 8 9nmap -sV -sC -Pn 192.168.31.* -oG out.txt 10 11nmap -sV -sC -Pn 192.168.31.* -oX out.xml 12 13nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script=banner,vuln 14 15nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script=banner,vuln --script-args=banner.timeout=10,vuln.timeout=10 16 17nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script=banner,vuln --script-args=banner.timeout=10,vuln.timeout=10 --script-args=banner.path=/usr/share/nmap/scripts/http-title.nse,vuln.cvss-threshold=7]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg" length="10737" type="image/.jpg" />
+    </item>
+    
+  </channel>
+</rss>
+
