@@ -10,12 +10,12 @@
     <lastBuildDate>Wed, 24 Apr 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/drm/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Linux drm mm分析(基于intel ivpu驱动)</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_/</link>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_mm/</link>
       <pubDate>Wed, 24 Apr 2024 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_mm/</guid>
       <description><![CDATA[使用drm mm管理虚拟内存和物理内存]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/drone_camera_technology_171576_300x168.jpg" length="10102" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/cameras_photography_accessories_197110_300x168.jpg" length="15246" type="image/.jpg" />
     </item>
     
   </channel>

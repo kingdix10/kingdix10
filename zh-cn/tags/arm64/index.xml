@@ -7,15 +7,15 @@
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
-    <lastBuildDate>Tue, 05 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/arm64/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 10 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/arm64/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Linux ARM64页面大小和虚拟地址位数</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtabl/</link>
-      <pubDate>Tue, 05 Apr 2022 00:00:00 +0000</pubDate>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtable/</link>
+      <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtabl/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtable/</guid>
       <description><![CDATA[ARM64的可配置的页面大小和虚拟地址位数是由ARM硬件决定的，不同的ARM版本，可选择的页面大小和地址位数也不一样。比如52位虚拟地址和物]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg" length="10737" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/camera_photographer_smoke_126548_300x168.jpg" length="9088" type="image/.jpg" />
     </item>
     
   </channel>

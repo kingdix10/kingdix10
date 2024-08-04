@@ -7,41 +7,31 @@
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
-    <lastBuildDate>Mon, 15 Aug 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E8%AE%BE%E5%A4%87%E6%A8%A1%E5%9E%8B/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Linux内核驱动模型（四）核心结构体</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/device_driver/device_model/</link>
-      <pubDate>Mon, 15 Aug 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/device_driver/device_model/</guid>
-      <description><![CDATA[1. sysfs中的bus/class/device/driver 首先通过实例来看bus/class/device/driver的关系。下图绘制]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/laptop_dj_equipment_212416_300x168.jpg" length="9857" type="image/.jpg" />
-    </item>
-    
+    <lastBuildDate>Thu, 20 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E8%AE%BE%E5%A4%87%E6%A8%A1%E5%9E%8B/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Linux内核驱动模型（三）驱动初始化</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/device_driver/initcall/</link>
-      <pubDate>Fri, 12 Aug 2022 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 20 Jul 2023 00:00:00 +0000</pubDate>
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/device_driver/initcall/</guid>
       <description><![CDATA[1. module_init是什么 module_init是Linux内核开发和驱动开发中非常常见的宏，其定义在 include/linux/mod]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/vintage_retro_camera_126517_300x168.jpg" length="11143" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/hologram_scheme_scifi_139294_300x168.jpg" length="9556" type="image/.jpg" />
     </item>
     
     <item>
-      <title>Linux内核驱动模型（二）设备树转换</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/fdt/dt_to_dt/</link>
-      <pubDate>Tue, 09 Aug 2022 00:00:00 +0000</pubDate>
+      <title>Linux内核驱动模型（四）核心结构体</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/device_driver/device_model/</link>
+      <pubDate>Wed, 12 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/fdt/dt_to_dt/</guid>
-      <description><![CDATA[1. device_node tree到device tree device_node的层次结构建立之后，并没有struct device生成，那我们实现的驱动probe函数又是]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lines_plexus_neon_128926_300x168.jpg" length="24964" type="image/.jpg" />
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/device_driver/device_model/</guid>
+      <description><![CDATA[1. sysfs中的bus/class/device/driver 首先通过实例来看bus/class/device/driver的关系。下图绘制]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lines_multicolored_rainbow_125651_300x168.jpg" length="11453" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux内核驱动模型（一）设备树展开</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/fdt/fdt_dt/</link>
-      <pubDate>Mon, 08 Aug 2022 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 12 Jul 2023 00:00:00 +0000</pubDate>
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/fdt/fdt_dt/</guid>
       <description><![CDATA[1. DT和FDT 设备树（Device Tree，DT）是一种层次结构的文本数据表示方式，用于描述硬件设备的配置信息。扁平设备树（Flattene]]></description>
@@ -49,9 +39,19 @@
     </item>
     
     <item>
+      <title>Linux内核驱动模型（二）设备树转换</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/fdt/dt_to_dt/</link>
+      <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/fdt/dt_to_dt/</guid>
+      <description><![CDATA[1. device_node tree到device tree device_node的层次结构建立之后，并没有struct device生成，那我们实现的驱动probe函数又是]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lines_plexus_neon_128926_300x168.jpg" length="24964" type="image/.jpg" />
+    </item>
+    
+    <item>
       <title>Linux内核数据结构kobject/kset/ktype</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/kobject/kobject/</link>
-      <pubDate>Fri, 05 Aug 2022 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/kobject/kobject/</guid>
       <description><![CDATA[1. 数据结构简介 内核版本：linux-6.1 内核文档：Everything you never wanted to know about kobjects, ksets, and ktypes — The Linux Kernel documentation 在Linux内核中，kobject、k]]></description>

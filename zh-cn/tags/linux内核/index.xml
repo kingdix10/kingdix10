@@ -7,55 +7,55 @@
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
-    <lastBuildDate>Tue, 11 Jun 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/linux%E5%86%85%E6%A0%B8/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 16 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/linux%E5%86%85%E6%A0%B8/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Linux中断子系统（二）domain注册</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/02-irq_domain_a/</link>
-      <pubDate>Tue, 11 Jun 2024 00:00:00 +0000</pubDate>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_domain_add/</link>
+      <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/02-irq_domain_a/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_domain_add/</guid>
       <description><![CDATA[1. IRQ domain注册 中断控制器初始化的过程中，要向中断子系统注册irq domain。核心函数__irq_domain_add。 gic-v2使]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wall_brick_neon_150470_300x168.jpg" length="13857" type="image/.jpg" />
-    </item>
-    
-    <item>
-      <title>Linux中断子系统（三）设备中断注册</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/03-irq_create_mapping/</link>
-      <pubDate>Tue, 11 Jun 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/03-irq_create_mapping/</guid>
-      <description><![CDATA[1. 设备中断注册 gic-v3的中断号划分在《IHI0069H_gic_architecture_specification.pdf》有所罗列：]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/laptop_keyboard_glow_170138_300x168.jpg" length="3604" type="image/.jpg" />
-    </item>
-    
-    <item>
-      <title>Linux中断子系统（四）申请中断request_irq</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/04-request_irq/</link>
-      <pubDate>Tue, 11 Jun 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/04-request_irq/</guid>
-      <description><![CDATA[1. 申请中断 __setup_irq是用于设置和注册中断的核心函数，它是request_threaded_irq等函数的内部实现。 1.1. irqaction handl]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/code_letters_screen_137590_300x168.jpg" length="10341" type="image/.jpg" />
-    </item>
-    
-    <item>
-      <title>Linux中断子系统（五）中断处理</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/05-handler_entry/</link>
-      <pubDate>Tue, 11 Jun 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/05-handler_entry/</guid>
-      <description><![CDATA[1. 中断入口 要处理中断，必须为handle_arch_irq赋值。 ARM64自己定义handle_arch_irq的实现。 1/// arch/arm64/kernel/irq.c 2void (*handle_arch_irq)(struct pt_regs *) __ro_after_init = default_handle_irq; 3void]]></description>
     <enclosure url="https://kingdix10.github.io/covers/drone_camera_technology_171576_300x168.jpg" length="10102" type="image/.jpg" />
     </item>
     
     <item>
-      <title>Linux中断子系统（一）软硬件初始化</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/01-init/</link>
-      <pubDate>Tue, 11 Jun 2024 00:00:00 +0000</pubDate>
+      <title>Linux中断子系统（三）设备中断注册</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_create_mapping/</link>
+      <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/01-init/</guid>
-      <description><![CDATA[1. 简介 early_irq_init完成中断子系统软件部分初始化。 irqchip_init初始化中断控制器，向系统注册struct irq_do]]></description>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_create_mapping/</guid>
+      <description><![CDATA[1. 设备中断注册 gic-v3的中断号划分在《IHI0069H_gic_architecture_specification.pdf》有所罗列：]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/code_letters_screen_137590_300x168.jpg" length="10341" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux中断子系统（四）申请中断request_irq</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/request_irq/</link>
+      <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/request_irq/</guid>
+      <description><![CDATA[1. 申请中断 __setup_irq是用于设置和注册中断的核心函数，它是request_threaded_irq等函数的内部实现。 1.1. irqaction handl]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/wall_brick_neon_150470_300x168.jpg" length="13857" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux中断子系统（五）中断处理</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/handler_entry/</link>
+      <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/handler_entry/</guid>
+      <description><![CDATA[1. 中断入口 要处理中断，必须为handle_arch_irq赋值。 ARM64自己定义handle_arch_irq的实现。 1/// arch/arm64/kernel/irq.c 2void (*handle_arch_irq)(struct pt_regs *) __ro_after_init = default_handle_irq; 3void]]></description>
     <enclosure url="https://kingdix10.github.io/covers/cameras_photography_accessories_197110_300x168.jpg" length="15246" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux中断子系统（一）软硬件初始化</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/init/</link>
+      <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/init/</guid>
+      <description><![CDATA[1. 简介 early_irq_init完成中断子系统软件部分初始化。 irqchip_init初始化中断控制器，向系统注册struct irq_do]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/texture_relief_3d_156496_300x168.jpg" length="9241" type="image/.jpg" />
     </item>
     
     <item>
@@ -65,7 +65,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/optimize_tips/</guid>
       <description><![CDATA[1. Linux内核代码的编写和优化技巧 1.1. 代码编写 使用 __same_type和 typecheck编译时检查类型匹配。 __printf和 __sca]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/paint_stains_colorful_139992_300x168.jpg" length="4863" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/cables_wires_lights_130357_1280x720.jpg" length="276503" type="image/.jpg" />
     </item>
     
     <item>
@@ -75,17 +75,17 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/jump_label/</guid>
       <description><![CDATA[1. 背景 引入jump label的背景，参考Linux: Jump label实现简析 在内核代码中，有很多分支判断条件，它们在绝大多数情形下，都是不成立的]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/desert_sand_wavy_141026_300x168.jpg" length="13782" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/code_programming_text_140050_300x168.jpg" length="11796" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux drm mm分析(基于intel ivpu驱动)</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_/</link>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_mm/</link>
       <pubDate>Wed, 24 Apr 2024 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_mm/</guid>
       <description><![CDATA[使用drm mm管理虚拟内存和物理内存]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/drone_camera_technology_171576_300x168.jpg" length="10102" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/cameras_photography_accessories_197110_300x168.jpg" length="15246" type="image/.jpg" />
     </item>
     
     <item>
@@ -95,123 +95,123 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/</guid>
       <description><![CDATA[深度分析系统调用从用户程序到内核的流程]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/pixels_cubes_shapes_127558_300x168.jpg" length="18339" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/laptop_backlight_colorful_194324_300x168.jpg" length="7666" type="image/.jpg" />
     </item>
     
     <item>
       <title>ARM64 Linux中断入口</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/</link>
-      <pubDate>Sat, 20 Apr 2024 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 21 Apr 2024 00:00:00 +0000</pubDate>
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/</guid>
       <description><![CDATA[1. 简介 ARM64中断入口相关的代码主要在arch/arm64/kernel/entry.S，启动过程中，会将中断向量表vectors的起始虚]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/bubbles_drops_macro_126764_300x168.jpg" length="23506" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/laptop_keyboard_glow_170138_300x168.jpg" length="3604" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux fork进程/线程简介</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/a-fork/</link>
+      <pubDate>Sat, 03 Feb 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/a-fork/</guid>
+      <description><![CDATA[1. kernel_clone kernel_clone是内核创建进程/线程的核心函数，如下功能都是通过调用kernel_clone实现的。 kernel_thread：]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lines_intersection_oblique_153331_300x168.jpg" length="16159" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux进程和线程关系</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/relationship/</link>
+      <pubDate>Wed, 27 Dec 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/relationship/</guid>
+      <description><![CDATA[1. 基本概念 Linux内核中没有使用单独的数据结构来描述进程和线程，而是将它们统一起来，使用task_struct结构体来描述，这就是“Lin]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/india_flag_texture_132874_300x168.jpg" length="19297" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux 0号线程swapper简介</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_0/</link>
+      <pubDate>Wed, 13 Dec 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_0/</guid>
+      <description><![CDATA[1. 总览 这里以ARM64为例。 在内核的起始阶段，还没有进程和线程的概念，在开启MMU之后，__primary_switched的第一步就是将i]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/walls_floor_light_50837_300x168.jpg" length="14340" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux 1号线程init简介</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_1/</link>
+      <pubDate>Wed, 13 Dec 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_1/</guid>
+      <description><![CDATA[1. 1号进程的内核态 1号进程首先运行在内核态，其函数是kernel_init，这里简单介绍一下其工作： 非bootcpu相关初始化 页分配器初始化]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/wavy_motley_metallic_139065_300x168.jpg" length="26579" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux 2号线程kthreadd简介</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_2/</link>
+      <pubDate>Wed, 13 Dec 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_2/</guid>
+      <description><![CDATA[1. 2号线程kthreadd Linux内核规定，所有的线程必须由已存在的线程创建出来，也就是要求所有的task_struct都需要在已有的ta]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_1280x720.jpg" length="194685" type="image/.jpg" />
     </item>
     
     <item>
       <title>ARM64 Crash调试环境搭建</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/arm64_setup/</link>
-      <pubDate>Tue, 03 Oct 2023 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/arm64_setup/</guid>
       <description><![CDATA[1. ARM64 Crash调试环境搭建 主要参考资料： 内核源码 Documentation/admin-guide/kdump/kdump.rst或者Doc]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/cockpit_panel_display_169481_300x168.jpg" length="10012" type="image/.jpg" />
-    </item>
-    
-    <item>
-      <title>linux thermal子系统简介</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/</link>
-      <pubDate>Fri, 05 May 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/</guid>
-      <description><![CDATA[1. thermal简介 内核版本：linux-6.1 thermal子系统主要用来监测和调节CPU、GPU等芯片或设备的温度。三个主要结构体的关系]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/paint_grunge_green_124502_300x168.jpg" length="5826" type="image/.jpg" />
-    </item>
-    
-    <item>
-      <title>linux内核时间子系统（二）</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/02-timekeeping/</link>
-      <pubDate>Sun, 05 Feb 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/02-timekeeping/</guid>
-      <description><![CDATA[1. timekeeping timekeeping是时间子系统用于从clocksource获取时间，维护墙上时间、单调递增时间、启动时间的模块，timekeepin]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/chip_circuit_processor_140251_300x168.jpg" length="19023" type="image/.jpg" />
-    </item>
-    
-    <item>
-      <title>linux内核时间子系统（一）</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/01-tim/</link>
-      <pubDate>Thu, 02 Feb 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/01-tim/</guid>
-      <description><![CDATA[1. 简介 内核版本：linux-6.1 时间子系统的作用： 时间读取功能 定时器功能，有传统的定时器timer、高精度定时器hrtimer 提供用于调度]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" length="24563" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/dots_light_background_50767_300x168.jpg" length="5596" type="image/.jpg" />
     </item>
     
     <item>
       <title>Crash命令介绍</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/crash_cmd_set/</link>
-      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/crash_cmd_set/</guid>
       <description><![CDATA[1. Crash命令介绍 虽然使用硬件设备来调试有很多优点和方便之处，但是我一直希望代码是可以自己调试自己的，从而避免使用一些昂贵的外部的的设备。]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/walls_floor_light_50837_300x168.jpg" length="14340" type="image/.jpg" />
-    </item>
-    
-    <item>
-      <title>kmalloc分配内存的大小</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmallo/</link>
-      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmallo/</guid>
-      <description><![CDATA[1. kmalloc分配内存的大小 本文基于linux-5.15分析。 kmalloc会根据申请的内存大小来决定来决定使用块分配器(slab/slu]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/keyboard_backlight_purple_212155_300x168.jpg" length="11894" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_1280x720.jpg" length="194685" type="image/.jpg" />
     </item>
     
     <item>
       <title>linux atomic接口简介</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/atomi/</link>
-      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/atomic/</link>
+      <pubDate>Wed, 30 Aug 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/atomi/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/atomic/</guid>
       <description><![CDATA[1. 后缀说明 acquire操作指的是在这条语句之后的所有内存操作只准在这条语句之后，不准被提前到这条语句之前。 release操作指的是在这条语]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/cables_wires_lights_130357_1280x720.jpg" length="276503" type="image/.jpg" />
-    </item>
-    
-    <item>
-      <title>Linux内核驱动模型（四）核心结构体</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/device_driver/device_model/</link>
-      <pubDate>Mon, 15 Aug 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/device_driver/device_model/</guid>
-      <description><![CDATA[1. sysfs中的bus/class/device/driver 首先通过实例来看bus/class/device/driver的关系。下图绘制]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/laptop_dj_equipment_212416_300x168.jpg" length="9857" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/ice_cream_patterns_pattern_136013_1280x720.jpg" length="153485" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux内核驱动模型（三）驱动初始化</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/device_driver/initcall/</link>
-      <pubDate>Fri, 12 Aug 2022 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 20 Jul 2023 00:00:00 +0000</pubDate>
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/device_driver/initcall/</guid>
       <description><![CDATA[1. module_init是什么 module_init是Linux内核开发和驱动开发中非常常见的宏，其定义在 include/linux/mod]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/vintage_retro_camera_126517_300x168.jpg" length="11143" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/hologram_scheme_scifi_139294_300x168.jpg" length="9556" type="image/.jpg" />
     </item>
     
     <item>
-      <title>Linux内核驱动模型（二）设备树转换</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/fdt/dt_to_dt/</link>
-      <pubDate>Tue, 09 Aug 2022 00:00:00 +0000</pubDate>
+      <title>Linux内核驱动模型（四）核心结构体</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/device_driver/device_model/</link>
+      <pubDate>Wed, 12 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/fdt/dt_to_dt/</guid>
-      <description><![CDATA[1. device_node tree到device tree device_node的层次结构建立之后，并没有struct device生成，那我们实现的驱动probe函数又是]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lines_plexus_neon_128926_300x168.jpg" length="24964" type="image/.jpg" />
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/device_driver/device_model/</guid>
+      <description><![CDATA[1. sysfs中的bus/class/device/driver 首先通过实例来看bus/class/device/driver的关系。下图绘制]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lines_multicolored_rainbow_125651_300x168.jpg" length="11453" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux内核驱动模型（一）设备树展开</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/fdt/fdt_dt/</link>
-      <pubDate>Mon, 08 Aug 2022 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 12 Jul 2023 00:00:00 +0000</pubDate>
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/fdt/fdt_dt/</guid>
       <description><![CDATA[1. DT和FDT 设备树（Device Tree，DT）是一种层次结构的文本数据表示方式，用于描述硬件设备的配置信息。扁平设备树（Flattene]]></description>
@@ -219,9 +219,29 @@
     </item>
     
     <item>
+      <title>Linux ARM64页面大小和虚拟地址位数</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtable/</link>
+      <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtable/</guid>
+      <description><![CDATA[ARM64的可配置的页面大小和虚拟地址位数是由ARM硬件决定的，不同的ARM版本，可选择的页面大小和地址位数也不一样。比如52位虚拟地址和物]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/camera_photographer_smoke_126548_300x168.jpg" length="9088" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux内核驱动模型（二）设备树转换</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/fdt/dt_to_dt/</link>
+      <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/fdt/dt_to_dt/</guid>
+      <description><![CDATA[1. device_node tree到device tree device_node的层次结构建立之后，并没有struct device生成，那我们实现的驱动probe函数又是]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lines_plexus_neon_128926_300x168.jpg" length="24964" type="image/.jpg" />
+    </item>
+    
+    <item>
       <title>Linux内核数据结构kobject/kset/ktype</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/kobject/kobject/</link>
-      <pubDate>Fri, 05 Aug 2022 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/kobject/kobject/</guid>
       <description><![CDATA[1. 数据结构简介 内核版本：linux-6.1 内核文档：Everything you never wanted to know about kobjects, ksets, and ktypes — The Linux Kernel documentation 在Linux内核中，kobject、k]]></description>
@@ -229,91 +249,71 @@
     </item>
     
     <item>
-      <title>Linux ARM64页面大小和虚拟地址位数</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtabl/</link>
-      <pubDate>Tue, 05 Apr 2022 00:00:00 +0000</pubDate>
+      <title>linux内核时间子系统（二）</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/timekeeping/</link>
+      <pubDate>Wed, 22 Feb 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtabl/</guid>
-      <description><![CDATA[ARM64的可配置的页面大小和虚拟地址位数是由ARM硬件决定的，不同的ARM版本，可选择的页面大小和地址位数也不一样。比如52位虚拟地址和物]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg" length="10737" type="image/.jpg" />
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/timekeeping/</guid>
+      <description><![CDATA[1. timekeeping timekeeping是时间子系统用于从clocksource获取时间，维护墙上时间、单调递增时间、启动时间的模块，timekeepin]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/chip_circuit_processor_140251_300x168.jpg" length="19023" type="image/.jpg" />
     </item>
     
     <item>
-      <title>Linux内核sched_class汇总</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_tabl/</link>
-      <pubDate>Tue, 22 Feb 2022 00:00:00 +0000</pubDate>
+      <title>kmalloc分配内存的大小</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc/</link>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_tabl/</guid>
-      <description><![CDATA[1/// kernel/sched/sched.h 2/* 3 * Helper to define a sched_class instance; each one is placed in a separate 4 * section which is ordered by the linker script: 5 * 6 * include/asm-generic/vmlinux.lds.h 7 * 8 * *CAREFUL* they are laid out in *REVERSE* order!!! 9 * 10 * Also enforce alignment on the instance, not the type, to guarantee layout. 11 */ 12#define DEFINE_SCHED_CLASS(name) \ 13const struct sched_class name##_sched_class]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/paint_wall_shabby_135205_300x168.jpg" length="17321" type="image/.jpg" />
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc/</guid>
+      <description><![CDATA[1. kmalloc分配内存的大小 本文基于linux-5.15分析。 kmalloc会根据申请的内存大小来决定来决定使用块分配器(slab/slu]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/squares_colorful_texture_133972_300x168.jpg" length="17371" type="image/.jpg" />
     </item>
     
     <item>
-      <title>Linux fork进程/线程简介</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/06-a-fork/</link>
-      <pubDate>Sat, 12 Feb 2022 00:00:00 +0000</pubDate>
+      <title>linux thermal子系统简介</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/</link>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/06-a-fork/</guid>
-      <description><![CDATA[1. kernel_clone kernel_clone是内核创建进程/线程的核心函数，如下功能都是通过调用kernel_clone实现的。 kernel_thread：]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_autumn_129305_300x168.jpg" length="15566" type="image/.jpg" />
-    </item>
-    
-    <item>
-      <title>Linux进程和线程关系</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/04-relationship/</link>
-      <pubDate>Thu, 10 Feb 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/04-relationship/</guid>
-      <description><![CDATA[1. 基本概念 Linux内核中没有使用单独的数据结构来描述进程和线程，而是将它们统一起来，使用task_struct结构体来描述，这就是“Lin]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lava_texture_surface_140175_300x168.jpg" length="10556" type="image/.jpg" />
-    </item>
-    
-    <item>
-      <title>Linux 2号线程kthreadd简介</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/03-task_2/</link>
-      <pubDate>Mon, 07 Feb 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/03-task_2/</guid>
-      <description><![CDATA[1. 2号线程kthreadd Linux内核规定，所有的线程必须由已存在的线程创建出来，也就是要求所有的task_struct都需要在已有的ta]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_1280x720.jpg" length="194685" type="image/.jpg" />
-    </item>
-    
-    <item>
-      <title>Linux 1号线程init简介</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/02-task_1/</link>
-      <pubDate>Sun, 06 Feb 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/02-task_1/</guid>
-      <description><![CDATA[1. 1号进程的内核态 1号进程首先运行在内核态，其函数是kernel_init，这里简单介绍一下其工作： 非bootcpu相关初始化 页分配器初始化]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wavy_motley_metallic_139065_300x168.jpg" length="26579" type="image/.jpg" />
-    </item>
-    
-    <item>
-      <title>Linux 0号线程swapper简介</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/01-task_0/</link>
-      <pubDate>Sat, 05 Feb 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/01-task_0/</guid>
-      <description><![CDATA[1. 总览 这里以ARM64为例。 在内核的起始阶段，还没有进程和线程的概念，在开启MMU之后，__primary_switched的第一步就是将i]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/walls_floor_light_50837_300x168.jpg" length="14340" type="image/.jpg" />
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/</guid>
+      <description><![CDATA[1. thermal简介 内核版本：linux-6.1 thermal子系统主要用来监测和调节CPU、GPU等芯片或设备的温度。三个主要结构体的关系]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/paint_grunge_green_124502_300x168.jpg" length="5826" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux的errno简介</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/other/linux-err-retur/</link>
-      <pubDate>Sun, 05 Apr 2020 00:00:00 +0000</pubDate>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/other/linux-err-return/</link>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/other/linux-err-retur/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/other/linux-err-return/</guid>
       <description><![CDATA[1. Linux的errno和指针 常见的Linux函数返回值类型包括整型和指针，内核中这两种返回值类型的函数会互相调用。Linux的errno为]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/keyboard_backlight_light_159518_300x168.jpg" length="10821" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/wall_brick_purple_141823_300x168.jpg" length="14935" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Linux内核sched_class汇总</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_table/</link>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_table/</guid>
+      <description><![CDATA[1/// kernel/sched/sched.h 2/* 3 * Helper to define a sched_class instance; each one is placed in a separate 4 * section which is ordered by the linker script: 5 * 6 * include/asm-generic/vmlinux.lds.h 7 * 8 * *CAREFUL* they are laid out in *REVERSE* order!!! 9 * 10 * Also enforce alignment on the instance, not the type, to guarantee layout. 11 */ 12#define DEFINE_SCHED_CLASS(name) \ 13const struct sched_class name##_sched_class]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_autumn_129305_300x168.jpg" length="15566" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>linux内核时间子系统（一）</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/time/</link>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/time/</guid>
+      <description><![CDATA[1. 简介 内核版本：linux-6.1 时间子系统的作用： 时间读取功能 定时器功能，有传统的定时器timer、高精度定时器hrtimer 提供用于调度]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" length="24563" type="image/.jpg" />
     </item>
     
     <item>
       <title>内核启动流程（一）</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/boot/01-entry/</link>
-      <pubDate>Sun, 15 Mar 2020 00:00:00 +0000</pubDate>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/boot/entry/</link>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/boot/01-entry/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/boot/entry/</guid>
       <description><![CDATA[1. 内核启动入口 根据Makefile对KBUILD_LDS的定义，链接vmlinux使用的连接脚本为 arch/$(SRCARCH)/kerne]]></description>
     <enclosure url="https://kingdix10.github.io/covers/dots_light_background_50767_300x168.jpg" length="5596" type="image/.jpg" />
     </item>

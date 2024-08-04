@@ -7,15 +7,15 @@
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
-    <lastBuildDate>Sun, 01 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 28 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Docker安装和配置</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/docker_setup/</link>
-      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 28 Jul 2024 00:00:00 +0000</pubDate>
       
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/docker_setup/</guid>
       <description><![CDATA[1. Docker安装 参考docker-ce | 镜像站使用帮助 | 清华大学开源软件镜像站，可以使用https://gitee.com/kingdix]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/pink_color_background_153889_300x168.jpg" length="1430" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/dots_light_background_50767_300x168.jpg" length="5596" type="image/.jpg" />
     </item>
     
   </channel>

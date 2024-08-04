@@ -7,55 +7,55 @@
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
-    <lastBuildDate>Tue, 03 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 03 Dec 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>ARM64 Crash调试环境搭建</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/arm64_setup/</link>
-      <pubDate>Tue, 03 Oct 2023 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/arm64_setup/</guid>
       <description><![CDATA[1. ARM64 Crash调试环境搭建 主要参考资料： 内核源码 Documentation/admin-guide/kdump/kdump.rst或者Doc]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/cockpit_panel_display_169481_300x168.jpg" length="10012" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/dots_light_background_50767_300x168.jpg" length="5596" type="image/.jpg" />
     </item>
     
     <item>
       <title>Crash命令介绍</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/crash_cmd_set/</link>
-      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/crash_cmd_set/</guid>
       <description><![CDATA[1. Crash命令介绍 虽然使用硬件设备来调试有很多优点和方便之处，但是我一直希望代码是可以自己调试自己的，从而避免使用一些昂贵的外部的的设备。]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/walls_floor_light_50837_300x168.jpg" length="14340" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_1280x720.jpg" length="194685" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux printk日志输出格式控制</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-formats/</link>
-      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-formats/</guid>
       <description><![CDATA[1. 说明 根据内核文档整理而成，具体格式含义可查看内核文档，或点击如何获得正确的printk格式占位符(v6.6)或如何获得正确的printk格]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/scifi_chip_structure_139654_300x168.jpg" length="17424" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/desert_sand_wavy_141026_300x168.jpg" length="13782" type="image/.jpg" />
     </item>
     
     <item>
       <title>linux内核dynamic_debug</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/dynamic_debug/</link>
-      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/dynamic_debug/</guid>
       <description><![CDATA[1. 打开dynamic_debug 1CONFIG_DYNAMIC_DEBUG=y /proc/dynamic_debug/control 如果开启了CONFIG_DEBUG_FS，在&lt;debugfs&gt;/dynamic_debug/]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/ice_cream_patterns_pattern_136013_1280x720.jpg" length="153485" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/scifi_chip_structure_139654_300x168.jpg" length="17424" type="image/.jpg" />
     </item>
     
     <item>
       <title>printk的pr_fmt</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/</link>
-      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/</guid>
       <description><![CDATA[printk /proc/sys/kernel/printk 3. 常见pr_*()接口 include/linux/printk.h 三种类型的接口说明如下： pr_xxx：按照pr_fmt(fmt)指定的格式输出日志。 pr_xxx_once：日志]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/code_programming_text_140050_300x168.jpg" length="11796" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/shortcode.png" length="6548" type="image/.png" />
     </item>
     
   </channel>

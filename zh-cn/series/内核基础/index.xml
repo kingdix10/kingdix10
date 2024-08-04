@@ -7,45 +7,45 @@
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
-    <lastBuildDate>Sun, 01 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/series/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 30 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/series/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>linux atomic接口简介</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/atomi/</link>
-      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/atomic/</link>
+      <pubDate>Wed, 30 Aug 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/atomi/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/atomic/</guid>
       <description><![CDATA[1. 后缀说明 acquire操作指的是在这条语句之后的所有内存操作只准在这条语句之后，不准被提前到这条语句之前。 release操作指的是在这条语]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/cables_wires_lights_130357_1280x720.jpg" length="276503" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/ice_cream_patterns_pattern_136013_1280x720.jpg" length="153485" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux printk日志输出格式控制</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-formats/</link>
-      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-formats/</guid>
       <description><![CDATA[1. 说明 根据内核文档整理而成，具体格式含义可查看内核文档，或点击如何获得正确的printk格式占位符(v6.6)或如何获得正确的printk格]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/scifi_chip_structure_139654_300x168.jpg" length="17424" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/desert_sand_wavy_141026_300x168.jpg" length="13782" type="image/.jpg" />
     </item>
     
     <item>
       <title>linux内核dynamic_debug</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/dynamic_debug/</link>
-      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/dynamic_debug/</guid>
       <description><![CDATA[1. 打开dynamic_debug 1CONFIG_DYNAMIC_DEBUG=y /proc/dynamic_debug/control 如果开启了CONFIG_DEBUG_FS，在&lt;debugfs&gt;/dynamic_debug/]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/ice_cream_patterns_pattern_136013_1280x720.jpg" length="153485" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/scifi_chip_structure_139654_300x168.jpg" length="17424" type="image/.jpg" />
     </item>
     
     <item>
       <title>printk的pr_fmt</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/</link>
-      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/</guid>
       <description><![CDATA[printk /proc/sys/kernel/printk 3. 常见pr_*()接口 include/linux/printk.h 三种类型的接口说明如下： pr_xxx：按照pr_fmt(fmt)指定的格式输出日志。 pr_xxx_once：日志]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/code_programming_text_140050_300x168.jpg" length="11796" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/shortcode.png" length="6548" type="image/.png" />
     </item>
     
   </channel>

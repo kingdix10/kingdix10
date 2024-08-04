@@ -7,45 +7,45 @@
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
-    <lastBuildDate>Tue, 11 Jun 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 16 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Linux中断子系统（一）软硬件初始化</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/01-init/</link>
-      <pubDate>Tue, 11 Jun 2024 00:00:00 +0000</pubDate>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/init/</link>
+      <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/01-init/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/init/</guid>
       <description><![CDATA[1. 简介 early_irq_init完成中断子系统软件部分初始化。 irqchip_init初始化中断控制器，向系统注册struct irq_do]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/cameras_photography_accessories_197110_300x168.jpg" length="15246" type="image/.jpg" />
-    </item>
-    
-    <item>
-      <title>内核启动流程（一）</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/boot/01-entry/</link>
-      <pubDate>Sun, 15 Mar 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/boot/01-entry/</guid>
-      <description><![CDATA[1. 内核启动入口 根据Makefile对KBUILD_LDS的定义，链接vmlinux使用的连接脚本为 arch/$(SRCARCH)/kerne]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/dots_light_background_50767_300x168.jpg" length="5596" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/texture_relief_3d_156496_300x168.jpg" length="9241" type="image/.jpg" />
     </item>
     
     <item>
       <title>U-Boot从dtb获取内存布局并传递到内核</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_m/</link>
-      <pubDate>Tue, 10 Mar 2020 00:00:00 +0000</pubDate>
+      <link>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_mem/</link>
+      <pubDate>Tue, 11 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_m/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_mem/</guid>
       <description><![CDATA[1. U-Boot获取布局内存 在DDR控制器初始化完成之后，就要确定系统中有多少可用内存，这通常是由dram_init_banksize来实现的]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/cubes_colorful_bright_128866_300x168.jpg" length="27784" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/neon_lights_dark_133133_300x168.jpg" length="8715" type="image/.jpg" />
     </item>
     
     <item>
       <title>Exynos4412启动介绍</title>
       <link>https://kingdix10.github.io/zh-cn/docs/exynos4412/exynos4412/</link>
-      <pubDate>Thu, 05 Mar 2020 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 05 Jun 2023 00:00:00 +0000</pubDate>
       
       <guid>https://kingdix10.github.io/zh-cn/docs/exynos4412/exynos4412/</guid>
       <description><![CDATA[1. 两种大小的BL1是怎么回事 关于4412的BL1，有说8k的，也有说15k的，到底哪一个是对的呢？ 这要追溯一下4412的版本，Exynos4]]></description>
     <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_autumn_129305_300x168.jpg" length="15566" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>内核启动流程（一）</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/boot/entry/</link>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/boot/entry/</guid>
+      <description><![CDATA[1. 内核启动入口 根据Makefile对KBUILD_LDS的定义，链接vmlinux使用的连接脚本为 arch/$(SRCARCH)/kerne]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/dots_light_background_50767_300x168.jpg" length="5596" type="image/.jpg" />
     </item>
     
   </channel>

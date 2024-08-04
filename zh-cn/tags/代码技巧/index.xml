@@ -15,7 +15,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/optimize_tips/</guid>
       <description><![CDATA[1. Linux内核代码的编写和优化技巧 1.1. 代码编写 使用 __same_type和 typecheck编译时检查类型匹配。 __printf和 __sca]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/paint_stains_colorful_139992_300x168.jpg" length="4863" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/cables_wires_lights_130357_1280x720.jpg" length="276503" type="image/.jpg" />
     </item>
     
     <item>
@@ -25,7 +25,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/jump_label/</guid>
       <description><![CDATA[1. 背景 引入jump label的背景，参考Linux: Jump label实现简析 在内核代码中，有很多分支判断条件，它们在绝大多数情形下，都是不成立的]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/desert_sand_wavy_141026_300x168.jpg" length="13782" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/code_programming_text_140050_300x168.jpg" length="11796" type="image/.jpg" />
     </item>
     
   </channel>

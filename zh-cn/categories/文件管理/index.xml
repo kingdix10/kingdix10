@@ -7,15 +7,15 @@
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
-    <lastBuildDate>Sun, 01 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 02 Sep 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>linux常用命令-文件管理</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_fil/</link>
-      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_file/</link>
+      <pubDate>Mon, 02 Sep 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_fil/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_file/</guid>
       <description><![CDATA[1. 打包隐藏文件 1tar -czf data.tar.gz ./.[!.]* 2. find 2.1. 查找文件并按大小排序 1find -type f -name &#39;*.md&#39; -printf &#39;%s\t%p\n&#39; | grep -v &#39;\.git&#39; | sort -nr | less -N 2.2. 批量删除7天前的文件 1find -type f -mtime +7 -exec rm -rf {} \; 2find -type f -mtime +7 -exec rm -fr]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lines_obliquely_stripes_123801_300x168.jpg" length="18016" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_1280x720.jpg" length="194685" type="image/.jpg" />
     </item>
     
   </channel>

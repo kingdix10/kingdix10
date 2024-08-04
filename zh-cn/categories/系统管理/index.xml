@@ -7,35 +7,35 @@
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
-    <lastBuildDate>Sun, 01 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 28 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Debian安装和配置</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/debian_setup/</link>
-      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 28 Jul 2024 00:00:00 +0000</pubDate>
       
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/debian_setup/</guid>
       <description><![CDATA[1. 网址 1.1. Debian 官网：https://www.debian.org 下载链接： https://www.debian.org/distrib https://www.debian.org/distrib/netinst 如果不使用图形界面，可以下载网络安装ISO。 1.2. ElementaryOS elementar]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/mosaic_multicolored_texture_126795_300x168.jpg" length="20064" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/camera_photographer_smoke_126548_300x168.jpg" length="9088" type="image/.jpg" />
     </item>
     
     <item>
       <title>Docker安装和配置</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/docker_setup/</link>
-      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 28 Jul 2024 00:00:00 +0000</pubDate>
       
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/docker_setup/</guid>
       <description><![CDATA[1. Docker安装 参考docker-ce | 镜像站使用帮助 | 清华大学开源软件镜像站，可以使用https://gitee.com/kingdix]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/pink_color_background_153889_300x168.jpg" length="1430" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/dots_light_background_50767_300x168.jpg" length="5596" type="image/.jpg" />
     </item>
     
     <item>
       <title>linux常用命令-系统管理</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_sys/</link>
-      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 09 Mar 2024 00:00:00 +0000</pubDate>
       
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_sys/</guid>
       <description><![CDATA[1. pstree查看进程树 1$ pstree -ptA 2systemd(1)-+-VGAuthService(546) 3 |-cron(625) 4 |-dbus-daemon(626) 5 |-dhclient(1587) 6 |-dhclient(1831) 7 |-rinetd(707) 8 |-rsyslogd(629)-+-{in:imklog}(632) 9 | |-{in:imuxsock}(631) 10 | `-{rs:main Q:Reg}(633) 2. ps 1# 查看命名空间，需要用root权限，可以使用sudo 2ps -eo pid,pidns,user,group,cmd 3# ps查]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/iridescent_colorful_lines_130978_300x168.jpg" length="11918" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/dunes_sand_texture_151004_300x168.jpg" length="17708" type="image/.jpg" />
     </item>
     
   </channel>

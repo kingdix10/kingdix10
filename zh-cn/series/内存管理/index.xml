@@ -7,15 +7,15 @@
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
-    <lastBuildDate>Sun, 01 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/series/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 30 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/series/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>kmalloc分配内存的大小</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmallo/</link>
-      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc/</link>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmallo/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc/</guid>
       <description><![CDATA[1. kmalloc分配内存的大小 本文基于linux-5.15分析。 kmalloc会根据申请的内存大小来决定来决定使用块分配器(slab/slu]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/keyboard_backlight_purple_212155_300x168.jpg" length="11894" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/squares_colorful_texture_133972_300x168.jpg" length="17371" type="image/.jpg" />
     </item>
     
   </channel>
