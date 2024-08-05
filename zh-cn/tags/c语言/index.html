@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="position-relative" itemscope itemtype="https://schema.org/WebPage" lang="zh-cn"
   data-bs-theme="auto" data-palette="purple">
-  <head><script src="/assets/init/bundle.min.8d71c81fa13acef85c48121799b4c1fd1e6a01b801f227df02d60682a7167d8e.js" integrity="sha256-jXHIH6E6zvhcSBIXmbTB/R5qAbgB8iffAtYGgqcWfY4=" crossorigin="anonymous"></script>
+  <head><script src="/assets/init/bundle.min.0bb93948508b32667bbc76d4f9a8123a3c3b2ef731048422b0c48f9ea39586e9.js" integrity="sha256-C7k5SFCLMmZ7vHbU&#43;agSOjw7LvcxBIQisMSPnqOVhuk=" crossorigin="anonymous"></script>
 <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>C语言 - 标签 - kingdix10&#39;s site</title>
@@ -393,10 +393,10 @@ kingdix10
   <div class="posts mb-4"><article class="row card post component">
   <div class="card-header">
     <h2 class="card-title post-title my-2 fs-4">
-      <a href="/zh-cn/docs/99-jottings/c/c_struct_cmp/">【C语言】用memcmp比较结构体会有什么问题</a>
+      <a href="/zh-cn/docs/05-program/ccpp/c_struct_cmp/">用memcmp比较结构体会有什么问题</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="【C语言】用memcmp比较结构体会有什么问题" src="https://kingdix10.github.io/covers/wall_brick_neon_150470_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="用memcmp比较结构体会有什么问题" src="https://kingdix10.github.io/covers/pattern_frosty_frost_134125_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
@@ -405,7 +405,29 @@ kingdix10
 </div>
 
     <div class="post-summary"><p> 1. 示例一 先看下如下代码，思考一下，结果是输出a == b还是a != b？
-1#include &lt;stdio.h&gt; 2#include &lt;string.h&gt; 3 4struct test_type { 5 char name[10]; 6 int i; 7 long l; 8}; 9 10int main(void) 11{ 12 struct test_type a = { 13 &#34;test&#34;, 1, 2 14 }; 15 struct test_type b; 16 17 b.i = a.i; 18 b.l = a.l; 19 strcpy(b.name, a.name); 20 21 if (0 ==...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/99-jottings/c/c_struct_cmp/#post-content-body">阅读更多</a></div>
+1#include &lt;stdio.h&gt; 2#include &lt;string.h&gt; 3 4struct test_type { 5 char name[10]; 6 int i; 7 long l; 8}; 9 10int main(void) 11{ 12 struct test_type a = { 13 &#34;test&#34;, 1, 2 14 }; 15 struct test_type b; 16 17 b.i = a.i; 18 b.l = a.l; 19 strcpy(b.name, a.name); 20 21 if (0 ==...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/05-program/ccpp/c_struct_cmp/#post-content-body">阅读更多</a></div>
+    </div>
+  </div>
+</article>
+<article class="row card post component">
+  <div class="card-header">
+    <h2 class="card-title post-title my-2 fs-4">
+      <a href="/zh-cn/docs/05-program/ccpp/c_assert/">C语言编译断言</a>
+    </h2>
+  </div>
+  <div class="card-body"><picture><img class="img-fluid" alt="C语言编译断言" src="https://kingdix10.github.io/covers/chip_circuit_processor_140251_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2024-02-25 08:00:00 &#43;0800 CST，更新于 2024-08-05 02:10:49 &#43;0800 CST。">2024/02/25</span><span class="post-reading-time me-1 mb-1">1 分钟阅读</span><a href="/zh-cn/categories/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>C语言</a><a href="/zh-cn/series/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
+      <i class="fas fa-fw fa-columns me-1"></i>C语言</a><a href="/zh-cn/tags/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">C语言</a>
+</div>
+
+    <div class="post-summary"><p> 1. 简介 c++17标准引入了static_assert。
+1static_assert(bool-constexpr, message ) /// since C++11 2static_assert(bool-constexpr) /// since C++17 gnu c编译器也实现了_Static_assert，见Static Assertions。
+2. 自定义 在没有static_assert的c语言中，可以自己实现类似的功能，如下：
+2.1. 方法一 1#ifndef STATIC_ASSERT 2#define STATIC_ASSERT(exp)...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/05-program/ccpp/c_assert/#post-content-body">阅读更多</a></div>
     </div>
   </div>
 </article>
@@ -415,7 +437,7 @@ kingdix10
       <a href="/zh-cn/docs/04-kernel/linux-6.1/other/linux-err-return/">Linux的errno简介</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Linux的errno简介" src="https://kingdix10.github.io/covers/wall_brick_purple_141823_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="Linux的errno简介" src="https://kingdix10.github.io/covers/lens_camera_glare_147903_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
@@ -431,10 +453,10 @@ kingdix10
 <article class="row card post component">
   <div class="card-header">
     <h2 class="card-title post-title my-2 fs-4">
-      <a href="/zh-cn/docs/99-jottings/c/array_func/">多维数组作为函数参数</a>
+      <a href="/zh-cn/docs/05-program/ccpp/array_func/">多维数组作为函数参数</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="多维数组作为函数参数" src="https://kingdix10.github.io/covers/cameras_photography_accessories_197110_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="多维数组作为函数参数" src="https://kingdix10.github.io/covers/pixels_circles_colorful_121100_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
@@ -444,17 +466,17 @@ kingdix10
 
     <div class="post-summary"><p> 1. 方法一：传递数组 C语言对多维数组的存储是按照一维数组来处理的，数组的每个维度在内存中按顺序存储。所以将多维数组作为参数传递时，必须指定多维数组子维度的大小，否则函数无法得知每个子维度结束地址。 第一维的长度可以指定，也可以不指定。
 1void func1(int a1[], int x); 2void func2(int a2[][4], int x, int y); 3void func3(int a3[][4][8], int x, int y, int z); 2. 方法二：数组指针 把参数声明为指向数组的指针，此方法还是需要指定数组的子维度大小，不然函数内部无法使用下标去访问数组。
-1void func1(int...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/99-jottings/c/array_func/#post-content-body">阅读更多</a></div>
+1void func1(int...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/05-program/ccpp/array_func/#post-content-body">阅读更多</a></div>
     </div>
   </div>
 </article>
 <article class="row card post component">
   <div class="card-header">
     <h2 class="card-title post-title my-2 fs-4">
-      <a href="/zh-cn/docs/99-jottings/c/array_type/">数组a、&amp;a、&amp;a[0]、&amp;a[0][0]的区别与联系</a>
+      <a href="/zh-cn/docs/05-program/ccpp/array_type/">数组a、&amp;a、&amp;a[0]、&amp;a[0][0]的区别与联系</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="数组a、&amp;a、&amp;a[0]、&amp;a[0][0]的区别与联系" src="https://kingdix10.github.io/covers/code_letters_screen_137590_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="数组a、&amp;a、&amp;a[0]、&amp;a[0][0]的区别与联系" src="https://kingdix10.github.io/covers/fabric_texture_colorful_142186_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
@@ -464,7 +486,7 @@ kingdix10
 
     <div class="post-summary"><p> 1. 测试结果 分别声明一个一维数组a1[8]和二维数组a2[4][8]，查看各个表达式的类型、地址、与首地址的差值，以及内存地址内存储的int变量值。数组内变量的低8位记录数组的行号和列号，其中高4位为行，低4位为列。先看一下测试程序给出的结果。
 一维数组
-1int a1[8]; 2sizeof(a1): 32(0x20) var typeof(var) (void *)(var) offset *(int *)(var) a1 int * 0x7ffe2034d2d0 0x00 0x00 &amp;a1 int (*)[8] 0x7ffe2034d2d0 0x00 0x00 &amp;a1[0] int * 0x7ffe2034d2d0...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/99-jottings/c/array_type/#post-content-body">阅读更多</a></div>
+1int a1[8]; 2sizeof(a1): 32(0x20) var typeof(var) (void *)(var) offset *(int *)(var) a1 int * 0x7ffe2034d2d0 0x00 0x00 &amp;a1 int (*)[8] 0x7ffe2034d2d0 0x00 0x00 &amp;a1[0] int * 0x7ffe2034d2d0...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/05-program/ccpp/array_type/#post-content-body">阅读更多</a></div>
     </div>
   </div>
 </article>
@@ -575,15 +597,27 @@ kingdix10
                         </a>
                         <a href="/zh-cn/series/%E4%B8%AD%E6%96%AD%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="中断管理">
                             中断管理
+                            <span class="badge badge-sm text-secondary bg-white ms-1">6</span>
+                        </a>
+                        <a href="/zh-cn/series/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="内核基础">
+                            内核基础
                             <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
                         </a>
                         <a href="/zh-cn/series/%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%9E%8B/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="设备驱动模型">
                             设备驱动模型
                             <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
                         </a>
-                        <a href="/zh-cn/series/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="内核基础">
-                            内核基础
+                        <a href="/zh-cn/series/u-boot/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="u-boot">
+                            u-boot
                             <span class="badge badge-sm text-secondary bg-white ms-1">4</span>
+                        </a>
+                        <a href="/zh-cn/series/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="启动流程">
+                            启动流程
+                            <span class="badge badge-sm text-secondary bg-white ms-1">4</span>
+                        </a>
+                        <a href="/zh-cn/series/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="C语言">
+                            C语言
+                            <span class="badge badge-sm text-secondary bg-white ms-1">3</span>
                         </a>
                         <a href="/zh-cn/series/%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="内核调试">
                             内核调试
@@ -591,6 +625,10 @@ kingdix10
                         </a>
                         <a href="/zh-cn/series/%E4%BB%A3%E7%A0%81%E6%8A%80%E5%B7%A7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="代码技巧">
                             代码技巧
+                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
+                        </a>
+                        <a href="/zh-cn/series/%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="工具">
+                            工具
                             <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
                         </a>
                         <a href="/zh-cn/series/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="开发环境">
@@ -605,9 +643,21 @@ kingdix10
                             系统管理
                             <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
                         </a>
-                        <a href="https://kingdix10.github.io/zh-cn/series" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title='全部'>
-                        全部
-                        <span class="badge badge-sm text-secondary bg-white ms-1">15</span>
+                        <a href="/zh-cn/series/%E7%BC%96%E8%AF%91/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="编译">
+                            编译
+                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
+                        </a>
+                        <a href="/zh-cn/series/drm/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="DRM">
+                            DRM
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                        <a href="/zh-cn/series/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="内存管理">
+                            内存管理
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                        <a href="/zh-cn/series/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="系统调用">
+                            系统调用
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
                         </a>
                     </div>
                     <div class="tab-pane" id="taxonomyCategories" role="tabpanel" aria-labelledby="taxonomyCategoriesTab" tabindex="0">
@@ -619,17 +669,21 @@ kingdix10
                             linux命令
                             <span class="badge badge-sm text-secondary bg-white ms-1">10</span>
                         </a>
-                        <a href="/zh-cn/categories/%E4%B8%AD%E6%96%AD%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="中断管理">
-                            中断管理
-                            <span class="badge badge-sm text-secondary bg-white ms-1">6</span>
+                        <a href="/zh-cn/categories/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="启动流程">
+                            启动流程
+                            <span class="badge badge-sm text-secondary bg-white ms-1">9</span>
                         </a>
                         <a href="/zh-cn/categories/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="C语言">
                             C语言
-                            <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">8</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E4%B8%AD%E6%96%AD%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="中断管理">
+                            中断管理
+                            <span class="badge badge-sm text-secondary bg-white ms-1">7</span>
                         </a>
                         <a href="/zh-cn/categories/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="内核基础">
                             内核基础
-                            <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">6</span>
                         </a>
                         <a href="/zh-cn/categories/%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="内核调试">
                             内核调试
@@ -639,10 +693,6 @@ kingdix10
                             设备模型
                             <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
                         </a>
-                        <a href="/zh-cn/categories/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="启动流程">
-                            启动流程
-                            <span class="badge badge-sm text-secondary bg-white ms-1">4</span>
-                        </a>
                         <a href="/zh-cn/categories/4412/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="4412">
                             4412
                             <span class="badge badge-sm text-secondary bg-white ms-1">3</span>
@@ -651,27 +701,95 @@ kingdix10
                             kdump crash
                             <span class="badge badge-sm text-secondary bg-white ms-1">3</span>
                         </a>
-                        <a href="https://kingdix10.github.io/zh-cn/categories" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title='全部'>
-                        全部
-                        <span class="badge badge-sm text-secondary bg-white ms-1">25</span>
+                        <a href="/zh-cn/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="开发环境">
+                            开发环境
+                            <span class="badge badge-sm text-secondary bg-white ms-1">3</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="系统管理">
+                            系统管理
+                            <span class="badge badge-sm text-secondary bg-white ms-1">3</span>
+                        </a>
+                        <a href="/zh-cn/categories/windows/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="Windows">
+                            Windows
+                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E4%BB%A3%E7%A0%81%E6%8A%80%E5%B7%A7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="代码技巧">
+                            代码技巧
+                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="内存管理">
+                            内存管理
+                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="工具">
+                            工具
+                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E6%97%B6%E9%97%B4%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="时间子系统">
+                            时间子系统
+                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E7%BC%96%E8%AF%91/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="编译">
+                            编译
+                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
+                        </a>
+                        <a href="/zh-cn/categories/drm/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="DRM">
+                            DRM
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                        <a href="/zh-cn/categories/thermal%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="thermal子系统">
+                            thermal子系统
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                        <a href="/zh-cn/categories/u-boot/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="u-boot">
+                            u-boot
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="文件管理">
+                            文件管理
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E6%96%87%E6%9C%AC%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="文本工具">
+                            文本工具
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="环境搭建">
+                            环境搭建
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="磁盘管理">
+                            磁盘管理
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="系统调用">
+                            系统调用
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="网络工具">
+                            网络工具
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
                         </a>
                     </div>
                     <div class="tab-pane" id="taxonomyTags" role="tabpanel" aria-labelledby="taxonomyTagsTab" tabindex="0">
                         <a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="linux内核">
                             linux内核
-                            <span class="badge badge-sm text-secondary bg-white ms-1">31</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">34</span>
                         </a>
                         <a href="/zh-cn/tags/linux-6.6/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="linux-6.6">
                             linux-6.6
-                            <span class="badge badge-sm text-secondary bg-white ms-1">20</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">22</span>
                         </a>
                         <a href="/zh-cn/tags/%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="工具">
                             工具
-                            <span class="badge badge-sm text-secondary bg-white ms-1">13</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">14</span>
                         </a>
                         <a href="/zh-cn/tags/linux-6.1/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="linux-6.1">
                             linux-6.1
                             <span class="badge badge-sm text-secondary bg-white ms-1">11</span>
+                        </a>
+                        <a href="/zh-cn/tags/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="启动流程">
+                            启动流程
+                            <span class="badge badge-sm text-secondary bg-white ms-1">9</span>
                         </a>
                         <a href="/zh-cn/tags/%E5%86%85%E6%A0%B8%E9%A9%B1%E5%8A%A8/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="内核驱动">
                             内核驱动
@@ -685,21 +803,21 @@ kingdix10
                             进程管理
                             <span class="badge badge-sm text-secondary bg-white ms-1">6</span>
                         </a>
+                        <a href="/zh-cn/tags/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="C语言">
+                            C语言
+                            <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
+                        </a>
                         <a href="/zh-cn/tags/linux/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="Linux">
                             Linux
+                            <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
+                        </a>
+                        <a href="/zh-cn/tags/u-boot/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="u-boot">
+                            u-boot
                             <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
                         </a>
                         <a href="/zh-cn/tags/%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="内核调试">
                             内核调试
                             <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
-                        </a>
-                        <a href="/zh-cn/tags/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="C语言">
-                            C语言
-                            <span class="badge badge-sm text-secondary bg-white ms-1">4</span>
-                        </a>
-                        <a href="/zh-cn/tags/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="启动流程">
-                            启动流程
-                            <span class="badge badge-sm text-secondary bg-white ms-1">4</span>
                         </a>
                         <a href="/zh-cn/tags/4412/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="4412">
                             4412
@@ -721,10 +839,6 @@ kingdix10
                             Bash
                             <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
                         </a>
-                        <a href="/zh-cn/tags/u-boot/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="u-boot">
-                            u-boot
-                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
-                        </a>
                         <a href="/zh-cn/tags/windows/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="Windows">
                             Windows
                             <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
@@ -735,6 +849,14 @@ kingdix10
                         </a>
                         <a href="/zh-cn/tags/%E6%95%B0%E7%BB%84/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="数组">
                             数组
+                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
+                        </a>
+                        <a href="/zh-cn/tags/%E7%BC%96%E8%AF%91/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="编译">
+                            编译
+                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
+                        </a>
+                        <a href="/zh-cn/tags/%E7%BC%96%E8%AF%91%E5%99%A8/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="编译器">
+                            编译器
                             <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
                         </a>
                         <a href="/zh-cn/tags/arm64/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="ARM64">
@@ -769,39 +891,27 @@ kingdix10
                             开发环境
                             <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
                         </a>
-                        <a href="/zh-cn/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="数据结构">
-                            数据结构
-                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
-                        </a>
-                        <a href="/zh-cn/tags/%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="文件管理">
-                            文件管理
-                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
-                        </a>
-                        <a href="/zh-cn/tags/%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="磁盘管理">
-                            磁盘管理
-                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
-                        </a>
-                        <a href="/zh-cn/tags/%E7%BB%93%E6%9E%84%E4%BD%93/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="结构体">
-                            结构体
-                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        <a href="https://kingdix10.github.io/zh-cn/tags" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title='全部'>
+                        全部
+                        <span class="badge badge-sm text-secondary bg-white ms-1">34</span>
                         </a>
                     </div>
                 <div class="tab-pane" id="taxonomyArchives" role="tabpanel" aria-labelledby="taxonomyArchivesTab" tabindex="0">
 
     <a href="/zh-cn/archives/2024/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2024">
-    2024 <span class="badge badge-sm text-secondary bg-white ms-1">24</span>
+    2024 <span class="badge badge-sm text-secondary bg-white ms-1">29</span>
     </a>
 
     <a href="/zh-cn/archives/2023/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2023">
-    2023 <span class="badge badge-sm text-secondary bg-white ms-1">25</span>
+    2023 <span class="badge badge-sm text-secondary bg-white ms-1">28</span>
     </a>
 
     <a href="/zh-cn/archives/2022/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2022">
-    2022 <span class="badge badge-sm text-secondary bg-white ms-1">13</span>
+    2022 <span class="badge badge-sm text-secondary bg-white ms-1">17</span>
     </a>
 
     <a href="/zh-cn/archives/2019/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2019">
-    2019 <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+    2019 <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
     </a>
 
 
@@ -856,7 +966,103 @@ kingdix10
   <div class="d-flex">
       <div
         class="flex-shrink-0 d-flex justify-content-center align-items-center"
-        style="max-width: 100px"><picture><img class="img-fluid" alt="ssh连接wsl后执行Windows程序" src="https://kingdix10.github.io/covers/gradient_orange_shades_131495_300x168.jpg" loading="lazy"
+        style="max-width: 100px"><picture><img class="img-fluid" alt="编译工具杂记" src="https://kingdix10.github.io/covers/trunk_tree_texture_119590_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+      </div>
+    <div
+      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
+      <a class="post-title" href="/zh-cn/docs/05-program/ccpp/gcc_tools/">
+        编译工具杂记
+      </a>
+      <div class="post-meta mt-2">
+        <span class="post-date">
+          2024/08/05
+        </span>
+      </div>
+    </div>
+  </div>
+                    </li>
+                    <li class="mb-2">
+    
+  
+  <div class="d-flex">
+      <div
+        class="flex-shrink-0 d-flex justify-content-center align-items-center"
+        style="max-width: 100px"><picture><img class="img-fluid" alt="VMware和Hyper-V回收虚拟磁盘空间" src="https://kingdix10.github.io/covers/mosaic_multicolored_texture_126795_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+      </div>
+    <div
+      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
+      <a class="post-title" href="/zh-cn/docs/02-dev_env/vdisk_compact/">
+        VMware和Hyper-V回收虚拟磁盘空间
+      </a>
+      <div class="post-meta mt-2">
+        <span class="post-date">
+          2024/08/05
+        </span>
+      </div>
+    </div>
+  </div>
+                    </li>
+                    <li class="mb-2">
+    
+  
+  <div class="d-flex">
+      <div
+        class="flex-shrink-0 d-flex justify-content-center align-items-center"
+        style="max-width: 100px"><picture><img class="img-fluid" alt="make调试" src="https://kingdix10.github.io/covers/flowers_leaves_pattern_148777_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+      </div>
+    <div
+      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
+      <a class="post-title" href="/zh-cn/docs/05-program/compile/make_debug/">
+        make调试
+      </a>
+      <div class="post-meta mt-2">
+        <span class="post-date">
+          2024/08/05
+        </span>
+      </div>
+    </div>
+  </div>
+                    </li>
+                    <li class="mb-2">
+    
+  
+  <div class="d-flex">
+      <div
+        class="flex-shrink-0 d-flex justify-content-center align-items-center"
+        style="max-width: 100px"><picture><img class="img-fluid" alt="rt-thread Cortex-A9 SMP启动" src="https://kingdix10.github.io/covers/metal_texture_surface_157344_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+      </div>
+    <div
+      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
+      <a class="post-title" href="/zh-cn/docs/03-boot/rtthread_smp_cortex_a9/">
+        rt-thread Cortex-A9 SMP启动
+      </a>
+      <div class="post-meta mt-2">
+        <span class="post-date">
+          2024/08/04
+        </span>
+      </div>
+    </div>
+  </div>
+                    </li>
+                    <li class="mb-2">
+    
+  
+  <div class="d-flex">
+      <div
+        class="flex-shrink-0 d-flex justify-content-center align-items-center"
+        style="max-width: 100px"><picture><img class="img-fluid" alt="ssh连接wsl后执行Windows程序" src="https://kingdix10.github.io/covers/wavy_motley_metallic_139065_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture>
@@ -869,102 +1075,6 @@ kingdix10
       <div class="post-meta mt-2">
         <span class="post-date">
           2024/07/29
-        </span>
-      </div>
-    </div>
-  </div>
-                    </li>
-                    <li class="mb-2">
-    
-  
-  <div class="d-flex">
-      <div
-        class="flex-shrink-0 d-flex justify-content-center align-items-center"
-        style="max-width: 100px"><picture><img class="img-fluid" alt="linux常用命令-性能" src="https://kingdix10.github.io/covers/pink_color_background_153889_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture>
-      </div>
-    <div
-      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
-      <a class="post-title" href="/zh-cn/docs/01-os/linux/shell/cmd_benchmark/">
-        linux常用命令-性能
-      </a>
-      <div class="post-meta mt-2">
-        <span class="post-date">
-          2024/07/28
-        </span>
-      </div>
-    </div>
-  </div>
-                    </li>
-                    <li class="mb-2">
-    
-  
-  <div class="d-flex">
-      <div
-        class="flex-shrink-0 d-flex justify-content-center align-items-center"
-        style="max-width: 100px"><picture><img class="img-fluid" alt="linux常用命令-文本处理" src="https://kingdix10.github.io/covers/walls_floor_light_50837_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture>
-      </div>
-    <div
-      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
-      <a class="post-title" href="/zh-cn/docs/01-os/linux/shell/cmd_text/">
-        linux常用命令-文本处理
-      </a>
-      <div class="post-meta mt-2">
-        <span class="post-date">
-          2024/07/28
-        </span>
-      </div>
-    </div>
-  </div>
-                    </li>
-                    <li class="mb-2">
-    
-  
-  <div class="d-flex">
-      <div
-        class="flex-shrink-0 d-flex justify-content-center align-items-center"
-        style="max-width: 100px"><picture><img class="img-fluid" alt="Docker安装和配置" src="https://kingdix10.github.io/covers/dots_light_background_50767_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture>
-      </div>
-    <div
-      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
-      <a class="post-title" href="/zh-cn/docs/01-os/linux/docker_setup/">
-        Docker安装和配置
-      </a>
-      <div class="post-meta mt-2">
-        <span class="post-date">
-          2024/07/28
-        </span>
-      </div>
-    </div>
-  </div>
-                    </li>
-                    <li class="mb-2">
-    
-  
-  <div class="d-flex">
-      <div
-        class="flex-shrink-0 d-flex justify-content-center align-items-center"
-        style="max-width: 100px"><picture><img class="img-fluid" alt="Debian安装和配置" src="https://kingdix10.github.io/covers/camera_photographer_smoke_126548_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture>
-      </div>
-    <div
-      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
-      <a class="post-title" href="/zh-cn/docs/01-os/linux/debian_setup/">
-        Debian安装和配置
-      </a>
-      <div class="post-meta mt-2">
-        <span class="post-date">
-          2024/07/28
         </span>
       </div>
     </div>
@@ -995,19 +1105,19 @@ kingdix10
       <div class="card-body collapse accordion-collapse accordion-body d-lg-block show" id="archives">
 
     <a href="/zh-cn/archives/2024/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2024">
-    2024 <span class="badge badge-sm text-secondary bg-white ms-1">24</span>
+    2024 <span class="badge badge-sm text-secondary bg-white ms-1">29</span>
     </a>
 
     <a href="/zh-cn/archives/2023/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2023">
-    2023 <span class="badge badge-sm text-secondary bg-white ms-1">25</span>
+    2023 <span class="badge badge-sm text-secondary bg-white ms-1">28</span>
     </a>
 
     <a href="/zh-cn/archives/2022/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2022">
-    2022 <span class="badge badge-sm text-secondary bg-white ms-1">13</span>
+    2022 <span class="badge badge-sm text-secondary bg-white ms-1">17</span>
     </a>
 
     <a href="/zh-cn/archives/2019/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2019">
-    2019 <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+    2019 <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
     </a>
 
 
@@ -1079,7 +1189,7 @@ Zhihu"
 <span class="menu-icon me-1"><i class="fab fa-fw fa-zhihu text-primary"></i></span>Zhihu</a></li></ul></li></ul></div>
 </div>
 </footer>
-<script data-precache src="/assets/main/bundle.min.eb8306088ad1475898679a14e6b521aa4dd1e5a5fcd235ca72022a7a1833b5e5.js" integrity="sha256-64MGCIrRR1iYZ5oU5rUhqk3R5aX80jXKcgIqehgzteU=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
+<script data-precache src="/assets/main/bundle.min.de08722b15dbab0d764debd50114ce3d28da8ee6c7b889ff8c82e6faad0b46dd.js" integrity="sha256-3ghyKxXbqw12TevVARTOPSjajubHuIn/jILm&#43;q0LRt0=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
 <script data-precache src="/assets/viewer/bundle.min.ffafad0d121aa7d1fb443510086dac514a0b152826cf094f02a1f3dec1f37918.js" integrity="sha256-/6&#43;tDRIap9H7RDUQCG2sUUoLFSgmzwlPAqHz3sHzeRg=" crossorigin="anonymous" defer></script><script>
   var _hmt = _hmt || [];
   (function() {

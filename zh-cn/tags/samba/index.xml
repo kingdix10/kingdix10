@@ -9,13 +9,13 @@
 </copyright>
     <lastBuildDate>Sun, 09 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/samba/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>samba使用</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/samba/</link>
+      <title>samba服务器搭建和使用</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/02-dev_env/samba/</link>
       <pubDate>Sun, 09 Jan 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/samba/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/02-dev_env/samba/</guid>
       <description><![CDATA[1. 准备工作 如果是虚拟机中安装的Linux系统，需要新建一个网络适配器，模式为桥接模式。 如果是独立的物理机安装了Linux系统，可以在路由器或]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/india_flag_texture_132874_300x168.jpg" length="19297" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/camera_photographer_smoke_126548_300x168.jpg" length="9088" type="image/.jpg" />
     </item>
     
   </channel>

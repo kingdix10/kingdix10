@@ -10,12 +10,12 @@
     <lastBuildDate>Mon, 10 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>磁盘和文件系统扩容/缩容</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/resizefs/</link>
+      <link>https://kingdix10.github.io/zh-cn/docs/02-dev_env/resizefs/</link>
       <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/resizefs/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/02-dev_env/resizefs/</guid>
       <description><![CDATA[Linux磁盘和文件系统扩容/缩容]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lava_texture_surface_140175_300x168.jpg" length="10556" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/iridescent_colorful_lines_130978_300x168.jpg" length="11918" type="image/.jpg" />
     </item>
     
   </channel>

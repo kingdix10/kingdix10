@@ -7,15 +7,45 @@
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
-    <lastBuildDate>Tue, 11 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 04 Aug 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>rt-thread Cortex-A9 SMP启动</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/03-boot/rtthread_smp_cortex_a9/</link>
+      <pubDate>Sun, 04 Aug 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/rtthread_smp_cortex_a9/</guid>
+      <description><![CDATA[rt-thread版本：4.0]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/metal_texture_surface_157344_300x168.jpg" length="9729" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>保证内核启动安全的几种方式</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/kernel_boot_security/</link>
+      <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/kernel_boot_security/</guid>
+      <description><![CDATA[保证内核启动安全的几种方式 禁止修改cmdline 禁止修改根文件系统 使能内核地址空间布局随机化(KASLR)]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/paint_stains_colorful_139992_300x168.jpg" length="4863" type="image/.jpg" />
+    </item>
+    
     <item>
       <title>U-Boot从dtb获取内存布局并传递到内核</title>
       <link>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_mem/</link>
       <pubDate>Tue, 11 Jul 2023 00:00:00 +0000</pubDate>
       
       <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_mem/</guid>
-      <description><![CDATA[1. U-Boot获取布局内存 在DDR控制器初始化完成之后，就要确定系统中有多少可用内存，这通常是由dram_init_banksize来实现的]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/neon_lights_dark_133133_300x168.jpg" length="8715" type="image/.jpg" />
+      <description><![CDATA[1. U-Boot获取布局内存 U-Boot在启动过程中，默认内存布局通常在.config中定义。 1CONFIG_SYS_SDRAM_BASE=0x240000000 2CONFIG_SYS_DDR_SIZE=0xC0000000 在DDR控制器初始化完成之后，就要确定系统中]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/wall_brick_neon_150470_300x168.jpg" length="13857" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>U-Boot杂项记录</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_misc_note/</link>
+      <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_misc_note/</guid>
+      <description><![CDATA[1. get_ram_size get_ram_size只适用于CONFIG_SYS_DDR_SIZE=2^n。 1int dram_init(void) 2{ 3 gd-&gt;ram_size = get_ram_size((long *)CONFIG_SYS_SDRAM_BASE, 4 CONFIG_SYS_DDR_SIZE); 5 return 0; 6} 2. 多核启动之spintabl]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/spots_stains_colorful_147593_300x168.jpg" length="20423" type="image/.jpg" />
     </item>
     
     <item>
@@ -25,7 +55,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/exynos4412/exynos4412/</guid>
       <description><![CDATA[1. 两种大小的BL1是怎么回事 关于4412的BL1，有说8k的，也有说15k的，到底哪一个是对的呢？ 这要追溯一下4412的版本，Exynos4]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_autumn_129305_300x168.jpg" length="15566" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/lens_camera_glare_147903_300x168.jpg" length="7000" type="image/.jpg" />
     </item>
     
     <item>
@@ -35,7 +65,17 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/time/</guid>
       <description><![CDATA[1. 简介 内核版本：linux-6.1 时间子系统的作用： 时间读取功能 定时器功能，有传统的定时器timer、高精度定时器hrtimer 提供用于调度]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" length="24563" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/mosaic_multicolored_texture_126795_300x168.jpg" length="20064" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>U-Boot启动分析</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/u-boot-bootflow/</link>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/u-boot-bootflow/</guid>
+      <description><![CDATA[1. 查找入口 u-boot版本：2024.01 参考defconfig：imx8qm_mek_defconfig 通过编译生成的u-boot.lds]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/code_letters_screen_137590_300x168.jpg" length="10341" type="image/.jpg" />
     </item>
     
     <item>
@@ -45,7 +85,17 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/boot/entry/</guid>
       <description><![CDATA[1. 内核启动入口 根据Makefile对KBUILD_LDS的定义，链接vmlinux使用的连接脚本为 arch/$(SRCARCH)/kerne]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/dots_light_background_50767_300x168.jpg" length="5596" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/paint_canvas_stains_124156_300x168.jpg" length="18821" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>嵌入式系统启动流程</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/boot_flow/</link>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/boot_flow/</guid>
+      <description><![CDATA[1. 启动流程 1.1. bootrom 芯片上电后，会自动执行bootrom代码，bootrom是各家厂商定制的，但完成的工作基本相同。bootrom通常支持从多种不]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/bubbles_drops_macro_126764_300x168.jpg" length="23506" type="image/.jpg" />
     </item>
     
   </channel>

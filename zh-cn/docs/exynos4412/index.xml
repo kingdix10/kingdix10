@@ -15,7 +15,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/exynos4412/exynos4412/</guid>
       <description><![CDATA[1. 两种大小的BL1是怎么回事 关于4412的BL1，有说8k的，也有说15k的，到底哪一个是对的呢？ 这要追溯一下4412的版本，Exynos4]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_autumn_129305_300x168.jpg" length="15566" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/lens_camera_glare_147903_300x168.jpg" length="7000" type="image/.jpg" />
     </item>
     
     <item>
@@ -25,7 +25,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/exynos4412/mkbl1/</guid>
       <description><![CDATA[1. 自制BL1 参考Android_Exynos4412_iROM_Secure_Booting_Guide_Ver.1.00.00.pdf，E]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/paint_wall_shabby_135205_300x168.jpg" length="17321" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/lines_plexus_neon_128926_300x168.jpg" length="24964" type="image/.jpg" />
     </item>
     
     <item>
@@ -35,7 +35,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/exynos4412/mkbl2/</guid>
       <description><![CDATA[1. 自制BL2 在官方提供的BL1或自制的BL1基础上，可以自制BL2。如果是使用U-Boot，编译时生成u-booot-spl.bin也是制作]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/camera_lens_strap_145518_300x168.jpg" length="15893" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/lines_multicolored_rainbow_125651_300x168.jpg" length="11453" type="image/.jpg" />
     </item>
     
   </channel>

@@ -2,7 +2,7 @@
 <html class="position-relative" itemscope itemtype="https://schema.org/WebPage" lang="zh-cn"
   data-bs-theme="auto" data-palette="purple">
   <head>
-	<meta name="generator" content="Hugo 0.111.3"><script src="/assets/init/bundle.min.8d71c81fa13acef85c48121799b4c1fd1e6a01b801f227df02d60682a7167d8e.js" integrity="sha256-jXHIH6E6zvhcSBIXmbTB/R5qAbgB8iffAtYGgqcWfY4=" crossorigin="anonymous"></script>
+	<meta name="generator" content="Hugo 0.111.3"><script src="/assets/init/bundle.min.0bb93948508b32667bbc76d4f9a8123a3c3b2ef731048422b0c48f9ea39586e9.js" integrity="sha256-C7k5SFCLMmZ7vHbU&#43;agSOjw7LvcxBIQisMSPnqOVhuk=" crossorigin="anonymous"></script>
 <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>kingdix10&#39;s site 第 3 页</title>
@@ -390,10 +390,116 @@ kingdix10
   <div class="posts mb-4"><article class="row card post component">
   <div class="card-header">
     <h2 class="card-title post-title my-2 fs-4">
+      <a href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/">ARM64 Linux中断入口</a>
+    </h2>
+  </div>
+  <div class="card-body"><picture><img class="img-fluid" alt="ARM64 Linux中断入口" src="https://kingdix10.github.io/covers/cubes_colorful_bright_128866_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2024-04-21 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2024/04/21</span><span class="post-reading-time me-1 mb-1">17 分钟阅读</span><a href="/zh-cn/categories/%E4%B8%AD%E6%96%AD%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>中断管理</a><a href="/zh-cn/tags/linux-6.6/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux-6.6</a><a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux内核</a>
+</div>
+
+    <div class="post-summary"><p> 1. 简介 ARM64中断入口相关的代码主要在arch/arm64/kernel/entry.S，启动过程中，会将中断向量表vectors的起始虚拟地址写入到VBAR_EL1。
+当发生中断或者异常时，硬件会保存一些寄存器，然后就是软件的工作：
+进入中断后，根据中断原因，跳转到对应的中断处理函数，这部分是汇编实现。 在中断处理函数中，先通过kernel_entry将寄存器压栈，然后将栈空间记录的struct pt_regs传递给C语言的对应中断处理函数。 完成中断处理后，根据中断发生的异常等级，决定是调用ret_to_user还是ret_to_kernel退出中断，这两个hasn’t都是对汇编代码kernel_exit的封装。...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/#post-content-body">阅读更多</a></div>
+    </div>
+  </div>
+</article>
+<article class="row card post component">
+  <div class="card-header">
+    <h2 class="card-title post-title my-2 fs-4">
+      <a href="/zh-cn/docs/03-boot/u-boot/crc32_func/">U-Boot和Linux内核的CRC函数</a>
+    </h2>
+  </div>
+  <div class="card-body"><picture><img class="img-fluid" alt="U-Boot和Linux内核的CRC函数" src="https://kingdix10.github.io/covers/laptop_keyboard_glow_170138_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2024-04-21 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2024/04/21</span><span class="post-reading-time me-1 mb-1">1 分钟阅读</span><a href="/zh-cn/categories/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>C语言</a><a href="/zh-cn/tags/u-boot/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">U-Boot</a>
+</div>
+
+    <div class="post-summary"><p>测试的时候，发现内核驱动里用crc32_le计算出的值和u-boot里用crc32计算出的值不一样。
+又用python的zlib.crc32和把内容写到文件用linuxcrc32命令计算，发现与u-bootcrc32函数计算结果一致。
+对比u-boot和linux内核用的crc32table，两者是一致的，后来查看代码，发现u-boot的crc32有个与0xffffffffL进行异或的操作。 实际linux的crc32_le函数与u-boot的crc32_no_comp函数是一致的。
+1uint32_t __efi_runtime crc32(uint32_t crc, const Bytef *p, uInt len) 2{ 3...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/03-boot/u-boot/crc32_func/#post-content-body">阅读更多</a></div>
+    </div>
+  </div>
+</article>
+<article class="row card post component">
+  <div class="card-header">
+    <h2 class="card-title post-title my-2 fs-4">
+      <a href="/zh-cn/docs/01-os/linux/shell/cmd_sys/">linux常用命令-系统管理</a>
+    </h2>
+  </div>
+  <div class="card-body"><picture><img class="img-fluid" alt="linux常用命令-系统管理" src="https://kingdix10.github.io/covers/paint_canvas_stains_124156_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2024-03-09 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2024/03/09</span><span class="post-reading-time me-1 mb-1">1 分钟阅读</span><a href="/zh-cn/categories/linux%E5%91%BD%E4%BB%A4/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>Linux命令</a><a href="/zh-cn/categories/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>系统管理</a><a href="/zh-cn/series/linux%E5%91%BD%E4%BB%A4/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
+      <i class="fas fa-fw fa-columns me-1"></i>Linux命令</a><a href="/zh-cn/tags/linux%E5%91%BD%E4%BB%A4/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux命令</a><a href="/zh-cn/tags/%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">工具</a><a href="/zh-cn/tags/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">系统管理</a>
+</div>
+
+    <div class="post-summary"><p> 1. pstree查看进程树 1$ pstree -ptA 2systemd(1)-+-VGAuthService(546) 3 |-cron(625) 4 |-dbus-daemon(626) 5 |-dhclient(1587) 6 |-dhclient(1831) 7 |-rinetd(707) 8 |-rsyslogd(629)-+-{in:imklog}(632) 9 | |-{in:imuxsock}(631) 10 | `-{rs:main Q:Reg}(633) 2. ps 1# 查看命名空间，需要用root权限，可以使用sudo 2ps -eo pid,pidns,user,group,cmd 3# ps查看进程...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/01-os/linux/shell/cmd_sys/#post-content-body">阅读更多</a></div>
+    </div>
+  </div>
+</article>
+<article class="row card post component">
+  <div class="card-header">
+    <h2 class="card-title post-title my-2 fs-4">
+      <a href="/zh-cn/docs/05-program/ccpp/c_assert/">C语言编译断言</a>
+    </h2>
+  </div>
+  <div class="card-body"><picture><img class="img-fluid" alt="C语言编译断言" src="https://kingdix10.github.io/covers/chip_circuit_processor_140251_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2024-02-25 08:00:00 &#43;0800 CST，更新于 2024-08-05 02:10:49 &#43;0800 CST。">2024/02/25</span><span class="post-reading-time me-1 mb-1">1 分钟阅读</span><a href="/zh-cn/categories/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>C语言</a><a href="/zh-cn/series/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
+      <i class="fas fa-fw fa-columns me-1"></i>C语言</a><a href="/zh-cn/tags/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">C语言</a>
+</div>
+
+    <div class="post-summary"><p> 1. 简介 c++17标准引入了static_assert。
+1static_assert(bool-constexpr, message ) /// since C++11 2static_assert(bool-constexpr) /// since C++17 gnu c编译器也实现了_Static_assert，见Static Assertions。
+2. 自定义 在没有static_assert的c语言中，可以自己实现类似的功能，如下：
+2.1. 方法一 1#ifndef STATIC_ASSERT 2#define STATIC_ASSERT(exp)...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/05-program/ccpp/c_assert/#post-content-body">阅读更多</a></div>
+    </div>
+  </div>
+</article>
+<article class="row card post component">
+  <div class="card-header">
+    <h2 class="card-title post-title my-2 fs-4">
+      <a href="/zh-cn/docs/01-os/linux/shell/bash_tips/">Linux Bash技巧</a>
+    </h2>
+  </div>
+  <div class="card-body"><picture><img class="img-fluid" alt="Linux Bash技巧" src="https://kingdix10.github.io/covers/paint_grunge_green_124502_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2024-02-25 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2024/02/25</span><span class="post-reading-time me-1 mb-1">1 分钟阅读</span><a href="/zh-cn/categories/linux%E5%91%BD%E4%BB%A4/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>Linux命令</a><a href="/zh-cn/series/linux%E5%91%BD%E4%BB%A4/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
+      <i class="fas fa-fw fa-columns me-1"></i>Linux命令</a><a href="/zh-cn/tags/bash/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Bash</a><a href="/zh-cn/tags/%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">工具</a>
+</div>
+
+    <div class="post-summary"><p> 1. shell语法 shell核心基础知识 进阶版
+2. 忽略大小写 重新进入bash后生效。
+1echo &#39;set completion-ignore-case on&#39; &gt; ~/.inputrc 3. 临时使用alias前的命令 参考LINUX下使用命令行获取公网IP地址转载
+“&#34;在命令前表示使用最原始的命令 比如 rm 和 \rm 如果环境alias过，那rm就是alias后的rm 如: rm -i \rm 指没有alias过最原始的rm。
+4. 修改默认编辑器 Linux上crontab的默认编辑器是vi编辑器。然而，在运行crontab命令之前，可以通过将VISUAL或EDITOR环境变量设置为所需的编辑器来改变。例如，...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/01-os/linux/shell/bash_tips/#post-content-body">阅读更多</a></div>
+    </div>
+  </div>
+</article>
+<article class="row card post component">
+  <div class="card-header">
+    <h2 class="card-title post-title my-2 fs-4">
       <a href="/zh-cn/docs/04-kernel/linux-6.6/sched/a-fork/">Linux fork进程/线程简介</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Linux fork进程/线程简介" src="https://kingdix10.github.io/covers/lines_intersection_oblique_153331_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="Linux fork进程/线程简介" src="https://kingdix10.github.io/covers/wall_brick_purple_141823_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
@@ -414,7 +520,7 @@ kernel_thread：创建内核进程 user_mode_thread：创建1号进程，1号进
       <a href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_2/">Linux内核copy_process分析（二）</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Linux内核copy_process分析（二）" src="https://kingdix10.github.io/covers/canvas_picture_abstraction_138874_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="Linux内核copy_process分析（二）" src="https://kingdix10.github.io/covers/keyboard_laptop_gradient_203739_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
@@ -434,7 +540,7 @@ kernel_thread：创建内核进程 user_mode_thread：创建1号进程，1号进
       <a href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_3/">Linux内核copy_process分析（三）</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Linux内核copy_process分析（三）" src="https://kingdix10.github.io/covers/code_text_colorful_140555_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="Linux内核copy_process分析（三）" src="https://kingdix10.github.io/covers/lines_multicolored_rainbow_125651_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
@@ -455,7 +561,7 @@ kernel_thread：创建内核进程 user_mode_thread：创建1号进程，1号进
       <a href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_1/">Linux内核copy_process分析（一）</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Linux内核copy_process分析（一）" src="https://kingdix10.github.io/covers/texture_background_color_72786_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="Linux内核copy_process分析（一）" src="https://kingdix10.github.io/covers/lines_intersection_oblique_153331_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
@@ -474,7 +580,7 @@ kernel_thread：创建内核进程 user_mode_thread：创建1号进程，1号进
       <a href="/zh-cn/docs/04-kernel/linux-6.6/sched/pid_namespace/">Linux进程命名空间（pid namespace）</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Linux进程命名空间（pid namespace）" src="https://kingdix10.github.io/covers/keyboard_backlight_light_159518_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="Linux进程命名空间（pid namespace）" src="https://kingdix10.github.io/covers/lens_camera_glare_147903_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
@@ -487,110 +593,6 @@ kernel_thread：创建内核进程 user_mode_thread：创建1号进程，1号进
 有了namespace就可以实现基本的容器功能，著名的Docker就是使用了namespace来实现资源隔离。
 Linux支持多种资源的namespace：
 Type Parameter Linux...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/04-kernel/linux-6.6/sched/pid_namespace/#post-content-body">阅读更多</a></div>
-    </div>
-  </div>
-</article>
-<article class="row card post component">
-  <div class="card-header">
-    <h2 class="card-title post-title my-2 fs-4">
-      <a href="/zh-cn/docs/04-kernel/linux-6.6/sched/relationship/">Linux进程和线程关系</a>
-    </h2>
-  </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Linux进程和线程关系" src="https://kingdix10.github.io/covers/india_flag_texture_132874_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture><div class="post-meta mb-3">
-  <span class="post-date me-1 mb-1" title="创建于 2023-12-27 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2023/12/27</span><span class="post-reading-time me-1 mb-1">8 分钟阅读</span><a href="/zh-cn/categories/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
-      <i class="fas fa-fw fa-folder me-1"></i>进程管理</a><a href="/zh-cn/series/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
-      <i class="fas fa-fw fa-columns me-1"></i>进程管理</a><a href="/zh-cn/tags/linux-6.6/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux-6.6</a><a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux内核</a><a href="/zh-cn/tags/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">进程管理</a>
-</div>
-
-    <div class="post-summary"><p> 1. 基本概念 Linux内核中没有使用单独的数据结构来描述进程和线程，而是将它们统一起来，使用task_struct结构体来描述，这就是“Linux不区分进程和线程”的来源。
-内核态： 所有线程都由kthreadd创建，运行在内核态，由独立的task_sturct描述。内核中不区分进程和线程，为了方便区分，这里统称为内核线程
-用户态：
-单线程进程：仅有一个线程，也就是主线程，内核中由一个task_struct描述,进程id就是task_struct.pid。 多线程进程：包含多个线程，每个线程都有自己的task_struct，有几个线程（包含主线程）就会有几个task_struct，所有task_struct...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/04-kernel/linux-6.6/sched/relationship/#post-content-body">阅读更多</a></div>
-    </div>
-  </div>
-</article>
-<article class="row card post component">
-  <div class="card-header">
-    <h2 class="card-title post-title my-2 fs-4">
-      <a href="/zh-cn/docs/04-kernel/linux-6.1/sched/task_0/">Linux 0号线程swapper简介</a>
-    </h2>
-  </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Linux 0号线程swapper简介" src="https://kingdix10.github.io/covers/walls_floor_light_50837_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture><div class="post-meta mb-3">
-  <span class="post-date me-1 mb-1" title="创建于 2023-12-13 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2023/12/13</span><span class="post-reading-time me-1 mb-1">8 分钟阅读</span><a href="/zh-cn/categories/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
-      <i class="fas fa-fw fa-folder me-1"></i>进程管理</a><a href="/zh-cn/series/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
-      <i class="fas fa-fw fa-columns me-1"></i>进程管理</a><a href="/zh-cn/tags/linux-6.1/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux-6.1</a><a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux内核</a><a href="/zh-cn/tags/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">进程管理</a>
-</div>
-
-    <div class="post-summary"><p> 1. 总览 这里以ARM64为例。
-在内核的起始阶段，还没有进程和线程的概念，在开启MMU之后，__primary_switched的第一步就是将init_task的地址写到sp_el0，这个时候就可以用get_current()或者curent获取到0号线程的task_struct了。在0号线程的上下文，完成调度器的相关初始化之后，创建1号和2号线程，然后开启调度器，init_task自此进入idle状态。
-这里看几个概念：
-0号线程：对应init_task结构体，名字为swapper，在多处理器中，名称为swapper/&lt;id&gt;，负责内核的一些基础的初始化工作。 1号线程：由0号线程创建，最初的函数为kernel_init，运...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/04-kernel/linux-6.1/sched/task_0/#post-content-body">阅读更多</a></div>
-    </div>
-  </div>
-</article>
-<article class="row card post component">
-  <div class="card-header">
-    <h2 class="card-title post-title my-2 fs-4">
-      <a href="/zh-cn/docs/04-kernel/linux-6.1/sched/task_1/">Linux 1号线程init简介</a>
-    </h2>
-  </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Linux 1号线程init简介" src="https://kingdix10.github.io/covers/wavy_motley_metallic_139065_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture><div class="post-meta mb-3">
-  <span class="post-date me-1 mb-1" title="创建于 2023-12-13 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2023/12/13</span><span class="post-reading-time me-1 mb-1">1 分钟阅读</span><a href="/zh-cn/categories/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
-      <i class="fas fa-fw fa-folder me-1"></i>进程管理</a><a href="/zh-cn/series/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
-      <i class="fas fa-fw fa-columns me-1"></i>进程管理</a><a href="/zh-cn/tags/linux-6.1/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux-6.1</a><a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux内核</a><a href="/zh-cn/tags/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">进程管理</a>
-</div>
-
-    <div class="post-summary"><p> 1. 1号进程的内核态 1号进程首先运行在内核态，其函数是kernel_init，这里简单介绍一下其工作：
-非bootcpu相关初始化 页分配器初始化的收尾工作 驱动子系统和设备树初始化 调用__initcall指定的初始化函数 挂载根文件系统 是否__init指定的内存 执行用户态init程序 2. 1号进程内核态到用户态的切换 kernel_init最后通过kernel_execve函数执行用户程序，完成内核态到用户态的切换。
-这里以elf格式的init程序为例简单说明一下kernel_execve的工作流程：kernel_execve会申请新的mm_struct，记录init程序的代码段和数据段，将当前进程内核栈中记录的pc...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/04-kernel/linux-6.1/sched/task_1/#post-content-body">阅读更多</a></div>
-    </div>
-  </div>
-</article>
-<article class="row card post component">
-  <div class="card-header">
-    <h2 class="card-title post-title my-2 fs-4">
-      <a href="/zh-cn/docs/04-kernel/linux-6.1/sched/task_2/">Linux 2号线程kthreadd简介</a>
-    </h2>
-  </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Linux 2号线程kthreadd简介" src="https://kingdix10.github.io/covers/scheme_glow_blue_140190_1280x720.jpg" loading="lazy"
-     width="1280"
-     height="720"/>
-  </picture><div class="post-meta mb-3">
-  <span class="post-date me-1 mb-1" title="创建于 2023-12-13 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2023/12/13</span><span class="post-reading-time me-1 mb-1">4 分钟阅读</span><a href="/zh-cn/categories/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
-      <i class="fas fa-fw fa-folder me-1"></i>进程管理</a><a href="/zh-cn/series/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
-      <i class="fas fa-fw fa-columns me-1"></i>进程管理</a><a href="/zh-cn/tags/linux-6.1/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux-6.1</a><a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux内核</a><a href="/zh-cn/tags/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">进程管理</a>
-</div>
-
-    <div class="post-summary"><p> 1. 2号线程kthreadd Linux内核规定，所有的线程必须由已存在的线程创建出来，也就是要求所有的task_struct都需要在已有的task_struct上复制出来。Linux可以通过kernel_thread来创建内核线程，这个函数会复制当前线程的task_struct。如果任由各个子系统或驱动自己调用kernel_thread来创建线程，那在创建内核线程时current所指向的task_struct是不确定的。为了解决这一问题，Linux内核将所有内核线程的创建交给固定的线程来做，这个线程就是2号线程kthreadd。
-2. 内核线程创建的接口 内核为开发者提供了两个创建内核线程的宏kthread_create...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/04-kernel/linux-6.1/sched/task_2/#post-content-body">阅读更多</a></div>
-    </div>
-  </div>
-</article>
-<article class="row card post component">
-  <div class="card-header">
-    <h2 class="card-title post-title my-2 fs-4">
-      <a href="/zh-cn/docs/04-kernel/linux-6.6/sched/task_state/">Linux进程状态与生命周期</a>
-    </h2>
-  </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Linux进程状态与生命周期" src="https://kingdix10.github.io/covers/lines_multicolored_rainbow_125651_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture><div class="post-meta mb-3">
-  <span class="post-date me-1 mb-1" title="创建于 2023-12-13 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2023/12/13</span><span class="post-reading-time me-1 mb-1">4 分钟阅读</span><a href="/zh-cn/categories/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
-      <i class="fas fa-fw fa-folder me-1"></i>进程管理</a><a href="/zh-cn/series/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
-      <i class="fas fa-fw fa-columns me-1"></i>进程管理</a><a href="/zh-cn/tags/linux/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux</a><a href="/zh-cn/tags/linux-6.6/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux-6.6</a>
-</div>
-
-    <div class="post-summary"><p> 1. 进程状态切换 state value desc TASK_NEW 0x00000800 新建 TASK_RUNNING 0x00000000 就绪或占有cpu运行 TASK_INTERRUPTIBLE 0x00000001 可中断睡眠 TASK_UNINTERRUPTIBLE 0x00000002 不可中断睡眠 TASK_WAKEKILL 0x00000100 可以在stopped/traced/killable的情况下唤醒 TASK_WAKING 0x00000200 正在被唤醒 __TASK_STOPPED 0x00000004 和其他状态组合，用于唤醒包含此状态标记的进程 TASK_STOPPED 0x00000104...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/04-kernel/linux-6.6/sched/task_state/#post-content-body">阅读更多</a></div>
     </div>
   </div>
 </article>
@@ -622,7 +624,7 @@ Type Parameter Linux...</p><div><a class="btn btn-sm btn-outline-primary btn-rea
         <a href="/zh-cn/page/4/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
       </li>
       <li class="page-item">
-        <a href="/zh-cn/page/7/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="/zh-cn/page/8/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
       </li>
     </ul></div>
 
@@ -730,15 +732,27 @@ Type Parameter Linux...</p><div><a class="btn btn-sm btn-outline-primary btn-rea
                         </a>
                         <a href="/zh-cn/series/%E4%B8%AD%E6%96%AD%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="中断管理">
                             中断管理
+                            <span class="badge badge-sm text-secondary bg-white ms-1">6</span>
+                        </a>
+                        <a href="/zh-cn/series/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="内核基础">
+                            内核基础
                             <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
                         </a>
                         <a href="/zh-cn/series/%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%9E%8B/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="设备驱动模型">
                             设备驱动模型
                             <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
                         </a>
-                        <a href="/zh-cn/series/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="内核基础">
-                            内核基础
+                        <a href="/zh-cn/series/u-boot/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="u-boot">
+                            u-boot
                             <span class="badge badge-sm text-secondary bg-white ms-1">4</span>
+                        </a>
+                        <a href="/zh-cn/series/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="启动流程">
+                            启动流程
+                            <span class="badge badge-sm text-secondary bg-white ms-1">4</span>
+                        </a>
+                        <a href="/zh-cn/series/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="C语言">
+                            C语言
+                            <span class="badge badge-sm text-secondary bg-white ms-1">3</span>
                         </a>
                         <a href="/zh-cn/series/%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="内核调试">
                             内核调试
@@ -746,6 +760,10 @@ Type Parameter Linux...</p><div><a class="btn btn-sm btn-outline-primary btn-rea
                         </a>
                         <a href="/zh-cn/series/%E4%BB%A3%E7%A0%81%E6%8A%80%E5%B7%A7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="代码技巧">
                             代码技巧
+                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
+                        </a>
+                        <a href="/zh-cn/series/%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="工具">
+                            工具
                             <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
                         </a>
                         <a href="/zh-cn/series/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="开发环境">
@@ -760,9 +778,21 @@ Type Parameter Linux...</p><div><a class="btn btn-sm btn-outline-primary btn-rea
                             系统管理
                             <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
                         </a>
-                        <a href="https://kingdix10.github.io/zh-cn/series" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title='全部'>
-                        全部
-                        <span class="badge badge-sm text-secondary bg-white ms-1">15</span>
+                        <a href="/zh-cn/series/%E7%BC%96%E8%AF%91/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="编译">
+                            编译
+                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
+                        </a>
+                        <a href="/zh-cn/series/drm/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="DRM">
+                            DRM
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                        <a href="/zh-cn/series/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="内存管理">
+                            内存管理
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                        <a href="/zh-cn/series/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="系统调用">
+                            系统调用
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
                         </a>
                     </div>
                     <div class="tab-pane" id="taxonomyCategories" role="tabpanel" aria-labelledby="taxonomyCategoriesTab" tabindex="0">
@@ -774,17 +804,21 @@ Type Parameter Linux...</p><div><a class="btn btn-sm btn-outline-primary btn-rea
                             linux命令
                             <span class="badge badge-sm text-secondary bg-white ms-1">10</span>
                         </a>
-                        <a href="/zh-cn/categories/%E4%B8%AD%E6%96%AD%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="中断管理">
-                            中断管理
-                            <span class="badge badge-sm text-secondary bg-white ms-1">6</span>
+                        <a href="/zh-cn/categories/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="启动流程">
+                            启动流程
+                            <span class="badge badge-sm text-secondary bg-white ms-1">9</span>
                         </a>
                         <a href="/zh-cn/categories/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="C语言">
                             C语言
-                            <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">8</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E4%B8%AD%E6%96%AD%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="中断管理">
+                            中断管理
+                            <span class="badge badge-sm text-secondary bg-white ms-1">7</span>
                         </a>
                         <a href="/zh-cn/categories/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="内核基础">
                             内核基础
-                            <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">6</span>
                         </a>
                         <a href="/zh-cn/categories/%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="内核调试">
                             内核调试
@@ -794,10 +828,6 @@ Type Parameter Linux...</p><div><a class="btn btn-sm btn-outline-primary btn-rea
                             设备模型
                             <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
                         </a>
-                        <a href="/zh-cn/categories/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="启动流程">
-                            启动流程
-                            <span class="badge badge-sm text-secondary bg-white ms-1">4</span>
-                        </a>
                         <a href="/zh-cn/categories/4412/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="4412">
                             4412
                             <span class="badge badge-sm text-secondary bg-white ms-1">3</span>
@@ -806,27 +836,95 @@ Type Parameter Linux...</p><div><a class="btn btn-sm btn-outline-primary btn-rea
                             kdump crash
                             <span class="badge badge-sm text-secondary bg-white ms-1">3</span>
                         </a>
-                        <a href="https://kingdix10.github.io/zh-cn/categories" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title='全部'>
-                        全部
-                        <span class="badge badge-sm text-secondary bg-white ms-1">25</span>
+                        <a href="/zh-cn/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="开发环境">
+                            开发环境
+                            <span class="badge badge-sm text-secondary bg-white ms-1">3</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="系统管理">
+                            系统管理
+                            <span class="badge badge-sm text-secondary bg-white ms-1">3</span>
+                        </a>
+                        <a href="/zh-cn/categories/windows/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="Windows">
+                            Windows
+                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E4%BB%A3%E7%A0%81%E6%8A%80%E5%B7%A7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="代码技巧">
+                            代码技巧
+                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="内存管理">
+                            内存管理
+                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="工具">
+                            工具
+                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E6%97%B6%E9%97%B4%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="时间子系统">
+                            时间子系统
+                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E7%BC%96%E8%AF%91/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="编译">
+                            编译
+                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
+                        </a>
+                        <a href="/zh-cn/categories/drm/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="DRM">
+                            DRM
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                        <a href="/zh-cn/categories/thermal%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="thermal子系统">
+                            thermal子系统
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                        <a href="/zh-cn/categories/u-boot/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="u-boot">
+                            u-boot
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="文件管理">
+                            文件管理
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E6%96%87%E6%9C%AC%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="文本工具">
+                            文本工具
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="环境搭建">
+                            环境搭建
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="磁盘管理">
+                            磁盘管理
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="系统调用">
+                            系统调用
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="网络工具">
+                            网络工具
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
                         </a>
                     </div>
                     <div class="tab-pane" id="taxonomyTags" role="tabpanel" aria-labelledby="taxonomyTagsTab" tabindex="0">
                         <a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="linux内核">
                             linux内核
-                            <span class="badge badge-sm text-secondary bg-white ms-1">31</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">34</span>
                         </a>
                         <a href="/zh-cn/tags/linux-6.6/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="linux-6.6">
                             linux-6.6
-                            <span class="badge badge-sm text-secondary bg-white ms-1">20</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">22</span>
                         </a>
                         <a href="/zh-cn/tags/%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="工具">
                             工具
-                            <span class="badge badge-sm text-secondary bg-white ms-1">13</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">14</span>
                         </a>
                         <a href="/zh-cn/tags/linux-6.1/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="linux-6.1">
                             linux-6.1
                             <span class="badge badge-sm text-secondary bg-white ms-1">11</span>
+                        </a>
+                        <a href="/zh-cn/tags/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="启动流程">
+                            启动流程
+                            <span class="badge badge-sm text-secondary bg-white ms-1">9</span>
                         </a>
                         <a href="/zh-cn/tags/%E5%86%85%E6%A0%B8%E9%A9%B1%E5%8A%A8/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="内核驱动">
                             内核驱动
@@ -840,21 +938,21 @@ Type Parameter Linux...</p><div><a class="btn btn-sm btn-outline-primary btn-rea
                             进程管理
                             <span class="badge badge-sm text-secondary bg-white ms-1">6</span>
                         </a>
+                        <a href="/zh-cn/tags/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="C语言">
+                            C语言
+                            <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
+                        </a>
                         <a href="/zh-cn/tags/linux/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="Linux">
                             Linux
+                            <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
+                        </a>
+                        <a href="/zh-cn/tags/u-boot/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="u-boot">
+                            u-boot
                             <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
                         </a>
                         <a href="/zh-cn/tags/%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="内核调试">
                             内核调试
                             <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
-                        </a>
-                        <a href="/zh-cn/tags/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="C语言">
-                            C语言
-                            <span class="badge badge-sm text-secondary bg-white ms-1">4</span>
-                        </a>
-                        <a href="/zh-cn/tags/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="启动流程">
-                            启动流程
-                            <span class="badge badge-sm text-secondary bg-white ms-1">4</span>
                         </a>
                         <a href="/zh-cn/tags/4412/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="4412">
                             4412
@@ -876,10 +974,6 @@ Type Parameter Linux...</p><div><a class="btn btn-sm btn-outline-primary btn-rea
                             Bash
                             <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
                         </a>
-                        <a href="/zh-cn/tags/u-boot/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="u-boot">
-                            u-boot
-                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
-                        </a>
                         <a href="/zh-cn/tags/windows/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="Windows">
                             Windows
                             <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
@@ -890,6 +984,14 @@ Type Parameter Linux...</p><div><a class="btn btn-sm btn-outline-primary btn-rea
                         </a>
                         <a href="/zh-cn/tags/%E6%95%B0%E7%BB%84/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="数组">
                             数组
+                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
+                        </a>
+                        <a href="/zh-cn/tags/%E7%BC%96%E8%AF%91/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="编译">
+                            编译
+                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
+                        </a>
+                        <a href="/zh-cn/tags/%E7%BC%96%E8%AF%91%E5%99%A8/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="编译器">
+                            编译器
                             <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
                         </a>
                         <a href="/zh-cn/tags/arm64/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="ARM64">
@@ -924,39 +1026,27 @@ Type Parameter Linux...</p><div><a class="btn btn-sm btn-outline-primary btn-rea
                             开发环境
                             <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
                         </a>
-                        <a href="/zh-cn/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="数据结构">
-                            数据结构
-                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
-                        </a>
-                        <a href="/zh-cn/tags/%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="文件管理">
-                            文件管理
-                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
-                        </a>
-                        <a href="/zh-cn/tags/%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="磁盘管理">
-                            磁盘管理
-                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
-                        </a>
-                        <a href="/zh-cn/tags/%E7%BB%93%E6%9E%84%E4%BD%93/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="结构体">
-                            结构体
-                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        <a href="https://kingdix10.github.io/zh-cn/tags" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title='全部'>
+                        全部
+                        <span class="badge badge-sm text-secondary bg-white ms-1">34</span>
                         </a>
                     </div>
                 <div class="tab-pane" id="taxonomyArchives" role="tabpanel" aria-labelledby="taxonomyArchivesTab" tabindex="0">
 
     <a href="/zh-cn/archives/2024/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2024">
-    2024 <span class="badge badge-sm text-secondary bg-white ms-1">24</span>
+    2024 <span class="badge badge-sm text-secondary bg-white ms-1">29</span>
     </a>
 
     <a href="/zh-cn/archives/2023/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2023">
-    2023 <span class="badge badge-sm text-secondary bg-white ms-1">25</span>
+    2023 <span class="badge badge-sm text-secondary bg-white ms-1">28</span>
     </a>
 
     <a href="/zh-cn/archives/2022/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2022">
-    2022 <span class="badge badge-sm text-secondary bg-white ms-1">13</span>
+    2022 <span class="badge badge-sm text-secondary bg-white ms-1">17</span>
     </a>
 
     <a href="/zh-cn/archives/2019/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2019">
-    2019 <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+    2019 <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
     </a>
 
 
@@ -1011,7 +1101,103 @@ Type Parameter Linux...</p><div><a class="btn btn-sm btn-outline-primary btn-rea
   <div class="d-flex">
       <div
         class="flex-shrink-0 d-flex justify-content-center align-items-center"
-        style="max-width: 100px"><picture><img class="img-fluid" alt="ssh连接wsl后执行Windows程序" src="https://kingdix10.github.io/covers/gradient_orange_shades_131495_300x168.jpg" loading="lazy"
+        style="max-width: 100px"><picture><img class="img-fluid" alt="编译工具杂记" src="https://kingdix10.github.io/covers/trunk_tree_texture_119590_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+      </div>
+    <div
+      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
+      <a class="post-title" href="/zh-cn/docs/05-program/ccpp/gcc_tools/">
+        编译工具杂记
+      </a>
+      <div class="post-meta mt-2">
+        <span class="post-date">
+          2024/08/05
+        </span>
+      </div>
+    </div>
+  </div>
+                    </li>
+                    <li class="mb-2">
+    
+  
+  <div class="d-flex">
+      <div
+        class="flex-shrink-0 d-flex justify-content-center align-items-center"
+        style="max-width: 100px"><picture><img class="img-fluid" alt="VMware和Hyper-V回收虚拟磁盘空间" src="https://kingdix10.github.io/covers/mosaic_multicolored_texture_126795_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+      </div>
+    <div
+      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
+      <a class="post-title" href="/zh-cn/docs/02-dev_env/vdisk_compact/">
+        VMware和Hyper-V回收虚拟磁盘空间
+      </a>
+      <div class="post-meta mt-2">
+        <span class="post-date">
+          2024/08/05
+        </span>
+      </div>
+    </div>
+  </div>
+                    </li>
+                    <li class="mb-2">
+    
+  
+  <div class="d-flex">
+      <div
+        class="flex-shrink-0 d-flex justify-content-center align-items-center"
+        style="max-width: 100px"><picture><img class="img-fluid" alt="make调试" src="https://kingdix10.github.io/covers/flowers_leaves_pattern_148777_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+      </div>
+    <div
+      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
+      <a class="post-title" href="/zh-cn/docs/05-program/compile/make_debug/">
+        make调试
+      </a>
+      <div class="post-meta mt-2">
+        <span class="post-date">
+          2024/08/05
+        </span>
+      </div>
+    </div>
+  </div>
+                    </li>
+                    <li class="mb-2">
+    
+  
+  <div class="d-flex">
+      <div
+        class="flex-shrink-0 d-flex justify-content-center align-items-center"
+        style="max-width: 100px"><picture><img class="img-fluid" alt="rt-thread Cortex-A9 SMP启动" src="https://kingdix10.github.io/covers/metal_texture_surface_157344_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+      </div>
+    <div
+      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
+      <a class="post-title" href="/zh-cn/docs/03-boot/rtthread_smp_cortex_a9/">
+        rt-thread Cortex-A9 SMP启动
+      </a>
+      <div class="post-meta mt-2">
+        <span class="post-date">
+          2024/08/04
+        </span>
+      </div>
+    </div>
+  </div>
+                    </li>
+                    <li class="mb-2">
+    
+  
+  <div class="d-flex">
+      <div
+        class="flex-shrink-0 d-flex justify-content-center align-items-center"
+        style="max-width: 100px"><picture><img class="img-fluid" alt="ssh连接wsl后执行Windows程序" src="https://kingdix10.github.io/covers/wavy_motley_metallic_139065_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture>
@@ -1024,102 +1210,6 @@ Type Parameter Linux...</p><div><a class="btn btn-sm btn-outline-primary btn-rea
       <div class="post-meta mt-2">
         <span class="post-date">
           2024/07/29
-        </span>
-      </div>
-    </div>
-  </div>
-                    </li>
-                    <li class="mb-2">
-    
-  
-  <div class="d-flex">
-      <div
-        class="flex-shrink-0 d-flex justify-content-center align-items-center"
-        style="max-width: 100px"><picture><img class="img-fluid" alt="linux常用命令-性能" src="https://kingdix10.github.io/covers/pink_color_background_153889_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture>
-      </div>
-    <div
-      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
-      <a class="post-title" href="/zh-cn/docs/01-os/linux/shell/cmd_benchmark/">
-        linux常用命令-性能
-      </a>
-      <div class="post-meta mt-2">
-        <span class="post-date">
-          2024/07/28
-        </span>
-      </div>
-    </div>
-  </div>
-                    </li>
-                    <li class="mb-2">
-    
-  
-  <div class="d-flex">
-      <div
-        class="flex-shrink-0 d-flex justify-content-center align-items-center"
-        style="max-width: 100px"><picture><img class="img-fluid" alt="linux常用命令-文本处理" src="https://kingdix10.github.io/covers/walls_floor_light_50837_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture>
-      </div>
-    <div
-      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
-      <a class="post-title" href="/zh-cn/docs/01-os/linux/shell/cmd_text/">
-        linux常用命令-文本处理
-      </a>
-      <div class="post-meta mt-2">
-        <span class="post-date">
-          2024/07/28
-        </span>
-      </div>
-    </div>
-  </div>
-                    </li>
-                    <li class="mb-2">
-    
-  
-  <div class="d-flex">
-      <div
-        class="flex-shrink-0 d-flex justify-content-center align-items-center"
-        style="max-width: 100px"><picture><img class="img-fluid" alt="Docker安装和配置" src="https://kingdix10.github.io/covers/dots_light_background_50767_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture>
-      </div>
-    <div
-      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
-      <a class="post-title" href="/zh-cn/docs/01-os/linux/docker_setup/">
-        Docker安装和配置
-      </a>
-      <div class="post-meta mt-2">
-        <span class="post-date">
-          2024/07/28
-        </span>
-      </div>
-    </div>
-  </div>
-                    </li>
-                    <li class="mb-2">
-    
-  
-  <div class="d-flex">
-      <div
-        class="flex-shrink-0 d-flex justify-content-center align-items-center"
-        style="max-width: 100px"><picture><img class="img-fluid" alt="Debian安装和配置" src="https://kingdix10.github.io/covers/camera_photographer_smoke_126548_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture>
-      </div>
-    <div
-      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
-      <a class="post-title" href="/zh-cn/docs/01-os/linux/debian_setup/">
-        Debian安装和配置
-      </a>
-      <div class="post-meta mt-2">
-        <span class="post-date">
-          2024/07/28
         </span>
       </div>
     </div>
@@ -1150,19 +1240,19 @@ Type Parameter Linux...</p><div><a class="btn btn-sm btn-outline-primary btn-rea
       <div class="card-body collapse accordion-collapse accordion-body d-lg-block show" id="archives">
 
     <a href="/zh-cn/archives/2024/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2024">
-    2024 <span class="badge badge-sm text-secondary bg-white ms-1">24</span>
+    2024 <span class="badge badge-sm text-secondary bg-white ms-1">29</span>
     </a>
 
     <a href="/zh-cn/archives/2023/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2023">
-    2023 <span class="badge badge-sm text-secondary bg-white ms-1">25</span>
+    2023 <span class="badge badge-sm text-secondary bg-white ms-1">28</span>
     </a>
 
     <a href="/zh-cn/archives/2022/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2022">
-    2022 <span class="badge badge-sm text-secondary bg-white ms-1">13</span>
+    2022 <span class="badge badge-sm text-secondary bg-white ms-1">17</span>
     </a>
 
     <a href="/zh-cn/archives/2019/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2019">
-    2019 <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+    2019 <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
     </a>
 
 
@@ -1234,7 +1324,7 @@ Zhihu"
 <span class="menu-icon me-1"><i class="fab fa-fw fa-zhihu text-primary"></i></span>Zhihu</a></li></ul></li></ul></div>
 </div>
 </footer>
-<script data-precache src="/assets/main/bundle.min.eb8306088ad1475898679a14e6b521aa4dd1e5a5fcd235ca72022a7a1833b5e5.js" integrity="sha256-64MGCIrRR1iYZ5oU5rUhqk3R5aX80jXKcgIqehgzteU=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
+<script data-precache src="/assets/main/bundle.min.de08722b15dbab0d764debd50114ce3d28da8ee6c7b889ff8c82e6faad0b46dd.js" integrity="sha256-3ghyKxXbqw12TevVARTOPSjajubHuIn/jILm&#43;q0LRt0=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
 <script data-precache src="/assets/viewer/bundle.min.ffafad0d121aa7d1fb443510086dac514a0b152826cf094f02a1f3dec1f37918.js" integrity="sha256-/6&#43;tDRIap9H7RDUQCG2sUUoLFSgmzwlPAqHz3sHzeRg=" crossorigin="anonymous" defer></script><script>
   var _hmt = _hmt || [];
   (function() {

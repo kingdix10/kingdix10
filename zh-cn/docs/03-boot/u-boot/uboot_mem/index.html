@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="position-relative" itemscope itemtype="https://schema.org/WebPage" lang="zh-cn"
   data-bs-theme="auto" data-palette="purple">
-  <head><script src="/assets/init/bundle.min.8d71c81fa13acef85c48121799b4c1fd1e6a01b801f227df02d60682a7167d8e.js" integrity="sha256-jXHIH6E6zvhcSBIXmbTB/R5qAbgB8iffAtYGgqcWfY4=" crossorigin="anonymous"></script>
+  <head><script src="/assets/init/bundle.min.0bb93948508b32667bbc76d4f9a8123a3c3b2ef731048422b0c48f9ea39586e9.js" integrity="sha256-C7k5SFCLMmZ7vHbU&#43;agSOjw7LvcxBIQisMSPnqOVhuk=" crossorigin="anonymous"></script>
 <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>U-Boot从dtb获取内存布局并传递到内核 - kingdix10&#39;s site</title>
@@ -12,23 +12,24 @@
     <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_192x192_resize_box_3.png" sizes="192x192" type="image/png">
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#6f42c1">
 <meta name="keywords" content="启动流程, 内存管理" />
-  <meta name="description" content="1. U-Boot获取布局内存 在DDR控制器初始化完成之后，就要确定系统中有多少可用内存，这通常是由dram_init_banksize来实现的" />
+  <meta name="description" content="1. U-Boot获取布局内存 U-Boot在启动过程中，默认内存布局通常在.config中定义。 1CONFIG_SYS_SDRAM_BASE=0x240000000 2CONFIG_SYS_DDR_SIZE=0xC0000000 在DDR控制器初始化完成之后，就要确定系统中" />
     <meta name="robots" content="index, follow" /><meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://kingdix10.github.io/covers/neon_lights_dark_133133_300x168.jpg"/>
+<meta name="twitter:image" content="https://kingdix10.github.io/covers/wall_brick_neon_150470_300x168.jpg"/>
 
 <meta name="twitter:title" content="U-Boot从dtb获取内存布局并传递到内核"/>
-<meta name="twitter:description" content="1. U-Boot获取布局内存 在DDR控制器初始化完成之后，就要确定系统中有多少可用内存，这通常是由dram_init_banksize来实现的"/>
+<meta name="twitter:description" content="1. U-Boot获取布局内存 U-Boot在启动过程中，默认内存布局通常在.config中定义。 1CONFIG_SYS_SDRAM_BASE=0x240000000 2CONFIG_SYS_DDR_SIZE=0xC0000000 在DDR控制器初始化完成之后，就要确定系统中"/>
 <meta property="og:title" content="U-Boot从dtb获取内存布局并传递到内核" />
-<meta property="og:description" content="1. U-Boot获取布局内存 在DDR控制器初始化完成之后，就要确定系统中有多少可用内存，这通常是由dram_init_banksize来实现的" />
+<meta property="og:description" content="1. U-Boot获取布局内存 U-Boot在启动过程中，默认内存布局通常在.config中定义。 1CONFIG_SYS_SDRAM_BASE=0x240000000 2CONFIG_SYS_DDR_SIZE=0xC0000000 在DDR控制器初始化完成之后，就要确定系统中" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_mem/" /><meta property="og:image" content="https://kingdix10.github.io/covers/neon_lights_dark_133133_300x168.jpg" /><meta property="article:section" content="docs" />
+<meta property="og:url" content="https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_mem/" /><meta property="og:image" content="https://kingdix10.github.io/covers/wall_brick_neon_150470_300x168.jpg" /><meta property="article:section" content="docs" />
 <meta property="article:published_time" content="2023-07-11T00:00:00+00:00" />
 <meta property="article:modified_time" content="2024-08-04T17:46:33+00:00" /><meta property="og:site_name" content="kingdix10&#39;s site" />
+<meta property="og:see_also" content="https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_misc_note/" /><meta property="og:see_also" content="https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/u-boot-bootflow/" /><meta property="og:see_also" content="https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/u-boot-stubs/" />
 
 <meta itemprop="name" content="U-Boot从dtb获取内存布局并传递到内核">
-<meta itemprop="description" content="1. U-Boot获取布局内存 在DDR控制器初始化完成之后，就要确定系统中有多少可用内存，这通常是由dram_init_banksize来实现的"><meta itemprop="datePublished" content="2023-07-11T00:00:00+00:00" />
+<meta itemprop="description" content="1. U-Boot获取布局内存 U-Boot在启动过程中，默认内存布局通常在.config中定义。 1CONFIG_SYS_SDRAM_BASE=0x240000000 2CONFIG_SYS_DDR_SIZE=0xC0000000 在DDR控制器初始化完成之后，就要确定系统中"><meta itemprop="datePublished" content="2023-07-11T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2024-08-04T17:46:33+00:00" />
-<meta itemprop="wordCount" content="1772"><meta itemprop="image" content="https://kingdix10.github.io/covers/neon_lights_dark_133133_300x168.jpg">
+<meta itemprop="wordCount" content="1807"><meta itemprop="image" content="https://kingdix10.github.io/covers/wall_brick_neon_150470_300x168.jpg">
 <meta itemprop="keywords" content="启动流程,u-boot,内存管理," />
   <meta property="og:image:alt" content="U-Boot从dtb获取内存布局并传递到内核" />
   <meta name="twitter:image:alt" content="U-Boot从dtb获取内存布局并传递到内核" />
@@ -500,7 +501,11 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_table/"><span class="docs-nav-title">Linux内核sched_class汇总</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/asm_macors/"><span class="docs-nav-title">Linux内核常见ARM64汇编宏</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/optimize_tips/"><span class="docs-nav-title">Linux内核代码的编写和优化技巧</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_flow/"><span class="docs-nav-title">Linux中断处理流程图</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_domain_add/"><span class="docs-nav-title">Linux中断子系统（二）domain注册</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
@@ -513,6 +518,76 @@ kingdix10
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/init/"><span class="docs-nav-title">Linux中断子系统（一）软硬件初始化</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/"><span class="docs-nav-title">printk的pr_fmt</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/kernel_boot_security/"><span class="docs-nav-title">保证内核启动安全的几种方式</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/"><span class="docs-nav-title">编程语言</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c763ce92a79b45df97e2263a975854b9" aria-expanded="false" aria-controls="nav-c763ce92a79b45df97e2263a975854b9">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-c763ce92a79b45df97e2263a975854b9">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/"><span class="docs-nav-title">C/C&#43;&#43;</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-97f02fde471866056c482bd758f3802a" aria-expanded="false" aria-controls="nav-97f02fde471866056c482bd758f3802a">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-97f02fde471866056c482bd758f3802a">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/c_assert/"><span class="docs-nav-title">C语言编译断言</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/macro_link_args/"><span class="docs-nav-title">gcc宏定义中的连接符和可变参数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/gcc_tools/"><span class="docs-nav-title">编译工具杂记</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/gcc_predefine/"><span class="docs-nav-title">编译器预定义宏</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/array_func/"><span class="docs-nav-title">多维数组作为函数参数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/array_type/"><span class="docs-nav-title">数组a、&amp;a、&amp;a[0]、&amp;a[0][0]的区别与联系</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/c_struct_cmp/"><span class="docs-nav-title">用memcmp比较结构体会有什么问题</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/python/"><span class="docs-nav-title">Python</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-ffa1725fdabf7411c32ceb6eae66fd17" aria-expanded="false" aria-controls="nav-ffa1725fdabf7411c32ceb6eae66fd17">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-ffa1725fdabf7411c32ceb6eae66fd17">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/compile/"><span class="docs-nav-title">构建工具</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-cffaf2396700969f3f8596d2093784ef" aria-expanded="false" aria-controls="nav-cffaf2396700969f3f8596d2093784ef">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-cffaf2396700969f3f8596d2093784ef">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/compile/make_debug/"><span class="docs-nav-title">make调试</span></a>
         </li></ul>
             </div>
           </div>
@@ -529,7 +604,13 @@ kingdix10
           </div>
           <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-fd57bc387b9c3a4d19f1801fc65cd5b4">
             <div class="btn-toggle-nav fw-normal ms-2 small">
-              <ul class="list-unstyled mb-2 w-100"></ul>
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/samba/"><span class="docs-nav-title">samba服务器搭建和使用</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/vdisk_compact/"><span class="docs-nav-title">VMware和Hyper-V回收虚拟磁盘空间</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/resizefs/"><span class="docs-nav-title">磁盘和文件系统扩容/缩容</span></a>
+        </li></ul>
             </div>
           </div>
         </li><li class="mb-2" tabindex="-1">
@@ -542,10 +623,22 @@ kingdix10
           </div>
           <div class="docs-nav-subnavs border-start mt-2 collapse  show border-primary" id="nav-05b799579ad52d4ccfa92fd6313b23f7">
             <div class="btn-toggle-nav fw-normal ms-2 small">
-              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3 text-primary" tabindex="-1">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/rtthread_smp_cortex_a9/"><span class="docs-nav-title">rt-thread Cortex-A9 SMP启动</span></a>
+        </li><li class="mb-2 py-1 ms-3 text-primary" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/uboot_mem/"><span class="docs-nav-title">U-Boot从dtb获取内存布局并传递到内核</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/u-boot-stubs/"><span class="docs-nav-title">u-boot的stubs机制</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/crc32_func/"><span class="docs-nav-title">U-Boot和Linux内核的CRC函数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/u-boot-bootflow/"><span class="docs-nav-title">U-Boot启动分析</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/uboot_misc_note/"><span class="docs-nav-title">U-Boot杂项记录</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/u-boot_commands/"><span class="docs-nav-title">常见u-boot命令</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/boot_flow/"><span class="docs-nav-title">嵌入式系统启动流程</span></a>
         </li></ul>
             </div>
           </div>
@@ -582,11 +675,9 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_benchmark/"><span class="docs-nav-title">linux常用命令-性能</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/samba/"><span class="docs-nav-title">samba使用</span></a>
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/sourceinsight/"><span class="docs-nav-title">sourceinsight快速建工程</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/ssh_wsl_exe/"><span class="docs-nav-title">ssh连接wsl后执行Windows程序</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/resizefs/"><span class="docs-nav-title">磁盘和文件系统扩容/缩容</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/win_python3/"><span class="docs-nav-title">解决Windows不能使用python3.10的问题</span></a>
         </li></ul>
@@ -602,13 +693,7 @@ kingdix10
           </div>
           <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-4967b62f3b1964eee9739b39b25cd3eb">
             <div class="btn-toggle-nav fw-normal ms-2 small">
-              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/c/c_struct_cmp/"><span class="docs-nav-title">【C语言】用memcmp比较结构体会有什么问题</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/c/array_func/"><span class="docs-nav-title">多维数组作为函数参数</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/c/array_type/"><span class="docs-nav-title">数组a、&amp;a、&amp;a[0]、&amp;a[0][0]的区别与联系</span></a>
-        </li></ul>
+              <ul class="list-unstyled mb-2 w-100"></ul>
             </div>
           </div>
         </li><li class="mb-2" tabindex="-1">
@@ -665,7 +750,8 @@ kingdix10
 </div>
 <div class="card-body"><div class="post-meta mb-3">
   <span class="post-date me-1 mb-1" title="创建于 2023-07-11 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2023/07/11</span><span class="post-reading-time me-1 mb-1">4 分钟阅读</span><a href="/zh-cn/categories/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
-      <i class="fas fa-fw fa-folder me-1"></i>启动流程</a><a href="/zh-cn/tags/u-boot/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">U-Boot</a><a href="/zh-cn/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">内存管理</a><a href="/zh-cn/tags/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">启动流程</a>
+      <i class="fas fa-fw fa-folder me-1"></i>启动流程</a><a href="/zh-cn/series/u-boot/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
+      <i class="fas fa-fw fa-columns me-1"></i>U-Boot</a><a href="/zh-cn/tags/u-boot/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">U-Boot</a><a href="/zh-cn/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">内存管理</a><a href="/zh-cn/tags/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">启动流程</a>
 </div>
 
 <div class="mt-2 mb-3 d-block d-xxl-none">
@@ -676,7 +762,10 @@ kingdix10
 </div><div class="post-content mb-3" data-bs-spy="scroll" data-bs-target="#TableOfContents" tabindex="0">
         <div id="post-content-body">
 <h1 id="1-u-boot获取布局内存" data-numberify>1. U-Boot获取布局内存<a class="anchor ms-1" href="#1-u-boot获取布局内存"></a></h1>
-<p>在DDR控制器初始化完成之后，就要确定系统中有多少可用内存，这通常是由dram_init_banksize来实现的，而不同的板级文件会实现不同的dram_init_banksize，这也就决定了不同的板级可以定义不同的获取内存布局的方法。这里介绍一种从dtb中获取内存布局的实现，这可以通过简单的调用fdtdec_setup_memory_banksize来实现。而在使能了CONFIG_OF_LIBFDT的情况下，U-Boot又会通过fdt_fixup_memory_banks来为内核dtb添加或修改memory节点，这样就可以只在U-Boot中定义memory信息，内核dtb省略memory定义，从而可以使其更加简洁通用。相信这也是后续U-Boot推荐使用的方式。</p>
+<p>U-Boot在启动过程中，默认内存布局通常在<code>.config</code>中定义。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="n">CONFIG_SYS_SDRAM_BASE</span><span class="o">=</span><span class="mh">0x240000000</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="n">CONFIG_SYS_DDR_SIZE</span><span class="o">=</span><span class="mh">0xC0000000</span>
+</span></span></code></pre></div><p>在DDR控制器初始化完成之后，就要确定系统中有多少可用内存，这通常是由<code>dram_init_banksize</code>来实现的，而不同的板级文件会实现不同的<code>dram_init_banksize</code>，这也就决定了不同的板级可以定义不同的获取内存布局的方法。这里介绍一种从dtb中获取内存布局的实现，这可以通过简单的调用<code>fdtdec_setup_memory_banksize</code>来实现。而在使能了<code>CONFIG_OF_LIBFDT</code>的情况下，U-Boot又会通过<code>fdt_fixup_memory_banks</code>来为内核dtb添加或修改<code>memory</code>节点，这样就可以只在U-Boot中定义<code>memory</code>信息，内核dtb省略<code>memory</code>定义，从而可以使其更加简洁通用。相信这也是后续U-Boot推荐使用的方式。</p>
 <p>这里涉及的函数逻辑都比较简单，下面简单介绍一下。</p>
 
 <h2 id="11-fdtdec_setup_memory_banksize从dtb获取内存布局" data-numberify>1.1. fdtdec_setup_memory_banksize：从dtb获取内存布局<a class="anchor ms-1" href="#11-fdtdec_setup_memory_banksize从dtb获取内存布局"></a></h2>
@@ -889,7 +978,10 @@ kingdix10
 </span></span></code></pre></div></div>
 </div>
 </div><div class="card-footer">
-  <div class="post-navs d-flex justify-content-evenly"><div class="post-nav post-next">
+  <div class="post-navs d-flex justify-content-evenly"><div class="post-nav post-prev">
+      <i class="fas fa-fw fa-chevron-down post-prev-icon me-1" data-fa-transform="rotate-90"></i>
+      <a href="/zh-cn/docs/03-boot/u-boot/uboot_misc_note/">U-Boot杂项记录</a>
+    </div><div class="post-nav post-next">
       <a href="/zh-cn/docs/03-boot/u-boot/crc32_func/">U-Boot和Linux内核的CRC函数</a>
       <i class="fas fa-fw fa-chevron-down post-next-icon ms-1" data-fa-transform="rotate-270"></i>
     </div></div>
@@ -914,7 +1006,41 @@ kingdix10
         <div class="slide-inner row gx-0"><div class="col-12 col-md-6 col-lg-4 me-2">
             <div class="post-card card card-body p-0 border-0 surface">
   
-  <picture><img class="img-fluid" alt="Exynos4412启动介绍" src="https://kingdix10.github.io/covers/leaves_patterns_autumn_129305_300x168.jpg" loading="lazy"
+  <picture><img class="img-fluid" alt="U-Boot杂项记录" src="https://kingdix10.github.io/covers/spots_stains_colorful_147593_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/03-boot/u-boot/uboot_misc_note/">
+    U-Boot杂项记录
+  </a>
+  <div class="post-meta mb-0">
+    2023/07/10
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="U-Boot启动分析" src="https://kingdix10.github.io/covers/code_letters_screen_137590_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/03-boot/u-boot/u-boot-bootflow/">
+    U-Boot启动分析
+  </a>
+  <div class="post-meta mb-0">
+    2022/12/30
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="Exynos4412启动介绍" src="https://kingdix10.github.io/covers/lens_camera_glare_147903_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture>
@@ -931,7 +1057,7 @@ kingdix10
           </div><div class="col-12 col-md-6 col-lg-4 me-2">
             <div class="post-card card card-body p-0 border-0 surface">
   
-  <picture><img class="img-fluid" alt="kmalloc分配内存的大小" src="https://kingdix10.github.io/covers/squares_colorful_texture_133972_300x168.jpg" loading="lazy"
+  <picture><img class="img-fluid" alt="kmalloc分配内存的大小" src="https://kingdix10.github.io/covers/wood_texture_logs_159793_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture>
@@ -948,30 +1074,13 @@ kingdix10
           </div><div class="col-12 col-md-6 col-lg-4 me-2">
             <div class="post-card card card-body p-0 border-0 surface">
   
-  <picture><img class="img-fluid" alt="内核启动流程（一）" src="https://kingdix10.github.io/covers/dots_light_background_50767_300x168.jpg" loading="lazy"
+  <picture><img class="img-fluid" alt="内核启动流程（一）" src="https://kingdix10.github.io/covers/paint_canvas_stains_124156_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture>
 
   <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.1/boot/entry/">
     内核启动流程（一）
-  </a>
-  <div class="post-meta mb-0">
-    2022/12/30
-
-  </div>
-</div>
-
-          </div><div class="col-12 col-md-6 col-lg-4 me-2">
-            <div class="post-card card card-body p-0 border-0 surface">
-  
-  <picture><img class="img-fluid" alt="linux内核时间子系统（一）" src="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture>
-
-  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.1/time/time/">
-    linux内核时间子系统（一）
   </a>
   <div class="post-meta mb-0">
     2022/12/30
@@ -1108,7 +1217,7 @@ Zhihu"
 <span class="menu-icon me-1"><i class="fab fa-fw fa-zhihu text-primary"></i></span>Zhihu</a></li></ul></li></ul></div>
 </div>
 </footer>
-<script data-precache src="/assets/main/bundle.min.eb8306088ad1475898679a14e6b521aa4dd1e5a5fcd235ca72022a7a1833b5e5.js" integrity="sha256-64MGCIrRR1iYZ5oU5rUhqk3R5aX80jXKcgIqehgzteU=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
+<script data-precache src="/assets/main/bundle.min.de08722b15dbab0d764debd50114ce3d28da8ee6c7b889ff8c82e6faad0b46dd.js" integrity="sha256-3ghyKxXbqw12TevVARTOPSjajubHuIn/jILm&#43;q0LRt0=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
 <script data-precache src="/assets/viewer/bundle.min.ffafad0d121aa7d1fb443510086dac514a0b152826cf094f02a1f3dec1f37918.js" integrity="sha256-/6&#43;tDRIap9H7RDUQCG2sUUoLFSgmzwlPAqHz3sHzeRg=" crossorigin="anonymous" defer></script><script>
   var _hmt = _hmt || [];
   (function() {

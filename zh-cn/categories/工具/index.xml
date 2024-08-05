@@ -7,7 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
-    <lastBuildDate>Sun, 03 Dec 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 05 Aug 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>VMware和Hyper-V回收虚拟磁盘空间</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/02-dev_env/vdisk_compact/</link>
+      <pubDate>Mon, 05 Aug 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/02-dev_env/vdisk_compact/</guid>
+      <description><![CDATA[1. 基本原理 文件系统未占用的空间数据写完全0，会被视为空闲空间，可以被虚拟机软件回收。 操作步骤： 虚拟机内，空闲空间数据写0。 关闭虚拟机 回收虚拟]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/mosaic_multicolored_texture_126795_300x168.jpg" length="20064" type="image/.jpg" />
+    </item>
+    
     <item>
       <title>jupyter转Markdown</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/jupyter_to_markdown/</link>
@@ -15,7 +25,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/jupyter_to_markdown/</guid>
       <description><![CDATA[1apt install jupyter-core 或者 1python3 -m pip install jupyter 转换： 1jupyter nbconvert --to markdown xxx.ipynb]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" length="24563" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/dunes_sand_texture_151004_300x168.jpg" length="17708" type="image/.jpg" />
     </item>
     
   </channel>

@@ -2,8 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/</loc>
+    <lastmod>2024-08-05T18:10:49+00:00</lastmod>
+  </url><url>
     <loc>https://kingdix10.github.io/zh-cn/</loc>
-    <lastmod>2024-08-04T17:46:33+00:00</lastmod>
+    <lastmod>2024-08-05T18:10:49+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -14,6 +17,57 @@
                 hreflang="zh-cn"
                 href="https://kingdix10.github.io/zh-cn/"
                 />
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/docs/05-program/compile/make_debug/</loc>
+    <lastmod>2024-08-05T18:10:49+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/docs/02-dev_env/vdisk_compact/</loc>
+    <lastmod>2024-08-05T17:46:33+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/docs/05-program/</loc>
+    <lastmod>2024-08-05T18:10:49+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/tags/%E7%BC%96%E8%AF%91/</loc>
+    <lastmod>2024-08-05T18:10:49+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/series/%E7%BC%96%E8%AF%91/</loc>
+    <lastmod>2024-08-05T18:10:49+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/categories/%E7%BC%96%E8%AF%91/</loc>
+    <lastmod>2024-08-05T18:10:49+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/gcc_tools/</loc>
+    <lastmod>2024-08-05T18:10:49+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/tags/%E5%B7%A5%E5%85%B7/</loc>
+    <lastmod>2024-08-05T17:46:33+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/series/%E5%B7%A5%E5%85%B7/</loc>
+    <lastmod>2024-08-05T17:46:33+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/categories/%E5%B7%A5%E5%85%B7/</loc>
+    <lastmod>2024-08-05T17:46:33+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/docs/05-program/compile/</loc>
+    <lastmod>2024-08-05T18:10:49+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/docs/02-dev_env/</loc>
+    <lastmod>2024-08-05T17:46:33+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/docs/03-boot/rtthread_smp_cortex_a9/</loc>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/docs/03-boot/</loc>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/tags/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/</loc>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/series/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/</loc>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/categories/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/</loc>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/docs/01-os/win/ssh_wsl_exe/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
@@ -34,7 +88,7 @@
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/docs/01-os/</loc>
-    <lastmod>2024-08-04T17:46:33+00:00</lastmod>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/docs/01-os/linux/debian_setup/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
@@ -55,9 +109,6 @@
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/categories/linux%E5%91%BD%E4%BB%A4/</loc>
-    <lastmod>2024-08-04T17:46:33+00:00</lastmod>
-  </url><url>
-    <loc>https://kingdix10.github.io/zh-cn/tags/%E5%B7%A5%E5%85%B7/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/tags/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</loc>
@@ -81,26 +132,23 @@
     <loc>https://kingdix10.github.io/zh-cn/docs/01-os/linux/git/git_misc/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
-    <loc>https://kingdix10.github.io/zh-cn/docs/99-jottings/c/c_struct_cmp/</loc>
-    <lastmod>2024-08-04T17:46:33+00:00</lastmod>
-  </url><url>
     <loc>https://kingdix10.github.io/zh-cn/tags/c%E8%AF%AD%E8%A8%80/</loc>
-    <lastmod>2024-08-04T17:46:33+00:00</lastmod>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/categories/c%E8%AF%AD%E8%A8%80/</loc>
-    <lastmod>2024-08-04T17:46:33+00:00</lastmod>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/tags/linux-6.6/</loc>
-    <lastmod>2024-08-04T17:46:33+00:00</lastmod>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/</loc>
-    <lastmod>2024-08-04T17:46:33+00:00</lastmod>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/tags/linux%E5%86%85%E6%A0%B8/</loc>
-    <lastmod>2024-08-04T17:46:33+00:00</lastmod>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/docs/04-kernel/</loc>
-    <lastmod>2024-08-04T17:46:33+00:00</lastmod>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_domain_add/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
@@ -120,17 +168,14 @@
     <loc>https://kingdix10.github.io/zh-cn/tags/%E7%BB%93%E6%9E%84%E4%BD%93/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
-    <loc>https://kingdix10.github.io/zh-cn/categories/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/</loc>
-    <lastmod>2024-08-04T17:46:33+00:00</lastmod>
-  </url><url>
-    <loc>https://kingdix10.github.io/zh-cn/docs/99-jottings/</loc>
+    <loc>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/c_struct_cmp/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/series/%E4%B8%AD%E6%96%AD%E7%AE%A1%E7%90%86/</loc>
-    <lastmod>2024-08-04T17:46:33+00:00</lastmod>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/categories/%E4%B8%AD%E6%96%AD%E7%AE%A1%E7%90%86/</loc>
-    <lastmod>2024-08-04T17:46:33+00:00</lastmod>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/optimize_tips/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
@@ -166,12 +211,9 @@
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/tags/u-boot/</loc>
-    <lastmod>2024-08-04T17:46:33+00:00</lastmod>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/crc32_func/</loc>
-    <lastmod>2024-08-04T17:46:33+00:00</lastmod>
-  </url><url>
-    <loc>https://kingdix10.github.io/zh-cn/docs/03-boot/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/series/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/</loc>
@@ -185,6 +227,12 @@
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/tags/bash/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/series/c%E8%AF%AD%E8%A8%80/</loc>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/c_assert/</loc>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/bash_tips/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
@@ -291,11 +339,8 @@
     <loc>https://kingdix10.github.io/zh-cn/tags/python3/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
-    <loc>https://kingdix10.github.io/zh-cn/series/%E5%B7%A5%E5%85%B7/</loc>
-    <lastmod>2024-08-04T17:46:33+00:00</lastmod>
-  </url><url>
-    <loc>https://kingdix10.github.io/zh-cn/categories/%E5%B7%A5%E5%85%B7/</loc>
-    <lastmod>2024-08-04T17:46:33+00:00</lastmod>
+    <loc>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/kernel_boot_security/</loc>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
@@ -322,10 +367,10 @@
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/series/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/</loc>
-    <lastmod>2024-08-04T17:46:33+00:00</lastmod>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/categories/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/</loc>
-    <lastmod>2024-08-04T17:46:33+00:00</lastmod>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/device_driver/initcall/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
@@ -345,10 +390,10 @@
     <loc>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/fdt/fdt_dt/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
-    <loc>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_mem/</loc>
-    <lastmod>2024-08-04T17:46:33+00:00</lastmod>
+    <loc>https://kingdix10.github.io/zh-cn/series/u-boot/</loc>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
   </url><url>
-    <loc>https://kingdix10.github.io/zh-cn/tags/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/</loc>
+    <loc>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_mem/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/tags/arm64/</loc>
@@ -357,11 +402,17 @@
     <loc>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtable/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/asm_macors/</loc>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
+  </url><url>
     <loc>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/fdt/dt_to_dt/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/kobject/kobject/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_misc_note/</loc>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/tags/%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
@@ -369,7 +420,7 @@
     <loc>https://kingdix10.github.io/zh-cn/categories/%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
-    <loc>https://kingdix10.github.io/zh-cn/docs/01-os/linux/resizefs/</loc>
+    <loc>https://kingdix10.github.io/zh-cn/docs/02-dev_env/resizefs/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/categories/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</loc>
@@ -432,13 +483,19 @@
     <loc>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/time/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_flow/</loc>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
+  </url><url>
     <loc>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/categories/thermal%E5%AD%90%E7%B3%BB%E7%BB%9F/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
-    <loc>https://kingdix10.github.io/zh-cn/docs/99-jottings/c/array_func/</loc>
+    <loc>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/u-boot-bootflow/</loc>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/array_func/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/series/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</loc>
@@ -447,20 +504,26 @@
     <loc>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/boot/entry/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
-    <loc>https://kingdix10.github.io/zh-cn/series/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/</loc>
-    <lastmod>2024-08-04T17:46:33+00:00</lastmod>
+    <loc>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/boot_flow/</loc>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/tags/%E6%95%B0%E7%BB%84/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
-    <loc>https://kingdix10.github.io/zh-cn/docs/99-jottings/c/array_type/</loc>
+    <loc>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/array_type/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/tags/samba/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
   </url><url>
-    <loc>https://kingdix10.github.io/zh-cn/docs/01-os/linux/samba/</loc>
+    <loc>https://kingdix10.github.io/zh-cn/docs/02-dev_env/samba/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/categories/u-boot/</loc>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/u-boot-stubs/</loc>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_file/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
@@ -470,6 +533,21 @@
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/categories/%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/</loc>
     <lastmod>2024-08-04T17:46:33+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/macro_link_args/</loc>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/docs/01-os/win/sourceinsight/</loc>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/tags/%E7%BC%96%E8%AF%91%E5%99%A8/</loc>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/gcc_predefine/</loc>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/u-boot_commands/</loc>
+    <lastmod>2024-08-04T18:10:49+00:00</lastmod>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/about/</loc>
     <lastmod>2024-07-27T16:06:53+08:00</lastmod>
@@ -614,6 +692,8 @@
                 href="https://kingdix10.github.io/zh-cn/offline/"
                 />
   </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/docs/05-program/python/</loc>
+  </url><url>
     <loc>https://kingdix10.github.io/zh-cn/tags/</loc>
     <lastmod>2024-07-26T22:55:42+08:00</lastmod>
     <xhtml:link
@@ -652,8 +732,6 @@
                 hreflang="zh-cn"
                 href="https://kingdix10.github.io/zh-cn/archives/"
                 />
-  </url><url>
-    <loc>https://kingdix10.github.io/zh-cn/docs/02-dev_env/</loc>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/contact/</loc>
     <lastmod>2024-07-26T22:55:42+08:00</lastmod>
@@ -706,6 +784,8 @@
                 hreflang="zh-cn"
                 href="https://kingdix10.github.io/zh-cn/news/"
                 />
+  </url><url>
+    <loc>https://kingdix10.github.io/zh-cn/docs/99-jottings/</loc>
   </url><url>
     <loc>https://kingdix10.github.io/zh-cn/series/</loc>
     <lastmod>2024-07-26T22:55:42+08:00</lastmod>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>C/C&#43;&#43; on kingdix10&#39;s site</title>
+    <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/</link>
+    <description>Recent content in C/C&#43;&#43; on kingdix10&#39;s site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</copyright>
+    <lastBuildDate>Mon, 05 Aug 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>编译工具杂记</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/gcc_tools/</link>
+      <pubDate>Mon, 05 Aug 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/gcc_tools/</guid>
+      <description><![CDATA[1. gcc 在线文档：https://gcc.gnu.org/onlinedocs 1.1. 编译选项 1# -Wall 2# -Werror/-Werror= 1.2. 调试选项 1## -save-temps=obj 2 3# -fcallgraph-info 2. objcopy 1objcopy -I binary -O elf32-little --change-section-address .data=0x08000000 input.bin output.elf 3. gdb 1target]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/trunk_tree_texture_119590_300x168.jpg" length="18828" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>用memcmp比较结构体会有什么问题</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/c_struct_cmp/</link>
+      <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/c_struct_cmp/</guid>
+      <description><![CDATA[1. 示例一 先看下如下代码，思考一下，结果是输出a == b还是a != b？ 1#include &lt;stdio.h&gt; 2#include &lt;string.h&gt; 3 4struct test_type { 5 char name[10]; 6 int i; 7 long l; 8}; 9 10int main(void) 11{ 12 struct test_type a = { 13 &#34;test&#34;, 1, 2 14 }; 15 struct test_type b; 16]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/pattern_frosty_frost_134125_300x168.jpg" length="18643" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>C语言编译断言</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/c_assert/</link>
+      <pubDate>Sun, 25 Feb 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/c_assert/</guid>
+      <description><![CDATA[1. 简介 c++17标准引入了static_assert。 1static_assert(bool-constexpr, message ) /// since C++11 2static_assert(bool-constexpr) /// since C++17 gnu c编译器也实现了_Static_assert，见Static As]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/chip_circuit_processor_140251_300x168.jpg" length="19023" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>多维数组作为函数参数</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/array_func/</link>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/array_func/</guid>
+      <description><![CDATA[1. 方法一：传递数组 C语言对多维数组的存储是按照一维数组来处理的，数组的每个维度在内存中按顺序存储。所以将多维数组作为参数传递时，必须指定多维]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/pixels_circles_colorful_121100_300x168.jpg" length="23064" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>数组a、&amp;a、&amp;a[0]、&amp;a[0][0]的区别与联系</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/array_type/</link>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/array_type/</guid>
+      <description><![CDATA[1. 测试结果 分别声明一个一维数组a1[8]和二维数组a2[4][8]，查看各个表达式的类型、地址、与首地址的差值，以及内存地址内存储的int变]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/fabric_texture_colorful_142186_300x168.jpg" length="17451" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>gcc宏定义中的连接符和可变参数</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/macro_link_args/</link>
+      <pubDate>Thu, 18 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/macro_link_args/</guid>
+      <description><![CDATA[1. 连接符 1.1. 字符串转换# #用来把参数转换成字符串 1#define pr_var(var) printf(#var &#34; is %d\n&#34;, var); 2 3int main(int argc, char **argv) 4{ 5 int a = 1, b = 2; 6 7 pr_var(a); 8 pr_var(b); 9 pr_var(a+b); 10} 1.2. 参数连接## 在宏中，##可以用于]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_texture_127524_300x168.jpg" length="18901" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>编译器预定义宏</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/gcc_predefine/</link>
+      <pubDate>Thu, 18 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/gcc_predefine/</guid>
+      <description><![CDATA[1. 查看gcc预定义宏 在Linux下可以输入如下命令： 1gcc -posix -E -dM - &lt; /dev/null window下，命令稍有不同 1gcc -posix -E -dM - &lt; nul 1.1. 常见宏 macro desc __FILE__ 文件名 __LINE__ 行号 __func__ 函数]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/keyboard_backlight_purple_212155_300x168.jpg" length="11894" type="image/.jpg" />
+    </item>
+    
+  </channel>
+</rss>
+

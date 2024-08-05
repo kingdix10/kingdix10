@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="position-relative" itemscope itemtype="https://schema.org/WebPage" lang="zh-cn"
   data-bs-theme="auto" data-palette="purple">
-  <head><script src="/assets/init/bundle.min.8d71c81fa13acef85c48121799b4c1fd1e6a01b801f227df02d60682a7167d8e.js" integrity="sha256-jXHIH6E6zvhcSBIXmbTB/R5qAbgB8iffAtYGgqcWfY4=" crossorigin="anonymous"></script>
+  <head><script src="/assets/init/bundle.min.0bb93948508b32667bbc76d4f9a8123a3c3b2ef731048422b0c48f9ea39586e9.js" integrity="sha256-C7k5SFCLMmZ7vHbU&#43;agSOjw7LvcxBIQisMSPnqOVhuk=" crossorigin="anonymous"></script>
 <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>文档 - kingdix10&#39;s site</title>
@@ -496,7 +496,11 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_table/"><span class="docs-nav-title">Linux内核sched_class汇总</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/asm_macors/"><span class="docs-nav-title">Linux内核常见ARM64汇编宏</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/optimize_tips/"><span class="docs-nav-title">Linux内核代码的编写和优化技巧</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_flow/"><span class="docs-nav-title">Linux中断处理流程图</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_domain_add/"><span class="docs-nav-title">Linux中断子系统（二）domain注册</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
@@ -509,6 +513,76 @@ kingdix10
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/init/"><span class="docs-nav-title">Linux中断子系统（一）软硬件初始化</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/"><span class="docs-nav-title">printk的pr_fmt</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/kernel_boot_security/"><span class="docs-nav-title">保证内核启动安全的几种方式</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/"><span class="docs-nav-title">编程语言</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c763ce92a79b45df97e2263a975854b9" aria-expanded="false" aria-controls="nav-c763ce92a79b45df97e2263a975854b9">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-c763ce92a79b45df97e2263a975854b9">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/"><span class="docs-nav-title">C/C&#43;&#43;</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-97f02fde471866056c482bd758f3802a" aria-expanded="false" aria-controls="nav-97f02fde471866056c482bd758f3802a">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-97f02fde471866056c482bd758f3802a">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/c_assert/"><span class="docs-nav-title">C语言编译断言</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/macro_link_args/"><span class="docs-nav-title">gcc宏定义中的连接符和可变参数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/gcc_tools/"><span class="docs-nav-title">编译工具杂记</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/gcc_predefine/"><span class="docs-nav-title">编译器预定义宏</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/array_func/"><span class="docs-nav-title">多维数组作为函数参数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/array_type/"><span class="docs-nav-title">数组a、&amp;a、&amp;a[0]、&amp;a[0][0]的区别与联系</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/c_struct_cmp/"><span class="docs-nav-title">用memcmp比较结构体会有什么问题</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/python/"><span class="docs-nav-title">Python</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-ffa1725fdabf7411c32ceb6eae66fd17" aria-expanded="false" aria-controls="nav-ffa1725fdabf7411c32ceb6eae66fd17">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-ffa1725fdabf7411c32ceb6eae66fd17">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/compile/"><span class="docs-nav-title">构建工具</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-cffaf2396700969f3f8596d2093784ef" aria-expanded="false" aria-controls="nav-cffaf2396700969f3f8596d2093784ef">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-cffaf2396700969f3f8596d2093784ef">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/compile/make_debug/"><span class="docs-nav-title">make调试</span></a>
         </li></ul>
             </div>
           </div>
@@ -525,7 +599,13 @@ kingdix10
           </div>
           <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-fd57bc387b9c3a4d19f1801fc65cd5b4">
             <div class="btn-toggle-nav fw-normal ms-2 small">
-              <ul class="list-unstyled mb-2 w-100"></ul>
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/samba/"><span class="docs-nav-title">samba服务器搭建和使用</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/vdisk_compact/"><span class="docs-nav-title">VMware和Hyper-V回收虚拟磁盘空间</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/resizefs/"><span class="docs-nav-title">磁盘和文件系统扩容/缩容</span></a>
+        </li></ul>
             </div>
           </div>
         </li><li class="mb-2" tabindex="-1">
@@ -539,9 +619,21 @@ kingdix10
           <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-05b799579ad52d4ccfa92fd6313b23f7">
             <div class="btn-toggle-nav fw-normal ms-2 small">
               <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/rtthread_smp_cortex_a9/"><span class="docs-nav-title">rt-thread Cortex-A9 SMP启动</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/uboot_mem/"><span class="docs-nav-title">U-Boot从dtb获取内存布局并传递到内核</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/u-boot-stubs/"><span class="docs-nav-title">u-boot的stubs机制</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/crc32_func/"><span class="docs-nav-title">U-Boot和Linux内核的CRC函数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/u-boot-bootflow/"><span class="docs-nav-title">U-Boot启动分析</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/uboot_misc_note/"><span class="docs-nav-title">U-Boot杂项记录</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/u-boot_commands/"><span class="docs-nav-title">常见u-boot命令</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/boot_flow/"><span class="docs-nav-title">嵌入式系统启动流程</span></a>
         </li></ul>
             </div>
           </div>
@@ -578,11 +670,9 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_benchmark/"><span class="docs-nav-title">linux常用命令-性能</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/samba/"><span class="docs-nav-title">samba使用</span></a>
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/sourceinsight/"><span class="docs-nav-title">sourceinsight快速建工程</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/ssh_wsl_exe/"><span class="docs-nav-title">ssh连接wsl后执行Windows程序</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/resizefs/"><span class="docs-nav-title">磁盘和文件系统扩容/缩容</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/win_python3/"><span class="docs-nav-title">解决Windows不能使用python3.10的问题</span></a>
         </li></ul>
@@ -598,13 +688,7 @@ kingdix10
           </div>
           <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-4967b62f3b1964eee9739b39b25cd3eb">
             <div class="btn-toggle-nav fw-normal ms-2 small">
-              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/c/c_struct_cmp/"><span class="docs-nav-title">【C语言】用memcmp比较结构体会有什么问题</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/c/array_func/"><span class="docs-nav-title">多维数组作为函数参数</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/c/array_type/"><span class="docs-nav-title">数组a、&amp;a、&amp;a[0]、&amp;a[0][0]的区别与联系</span></a>
-        </li></ul>
+              <ul class="list-unstyled mb-2 w-100"></ul>
             </div>
           </div>
         </li><li class="mb-2" tabindex="-1">
@@ -641,11 +725,13 @@ kingdix10
     <ul class="nav nav-pills justify-content-between"><li class="nav-item post-section my-2 mx-1">
           <a class="btn btn-sm btn-secondary" href="/zh-cn/docs/04-kernel/">Linux内核分析</a>
         </li><li class="nav-item post-section my-2 mx-1">
+          <a class="btn btn-sm btn-secondary" href="/zh-cn/docs/05-program/">编程语言</a>
+        </li><li class="nav-item post-section my-2 mx-1">
+          <a class="btn btn-sm btn-secondary" href="/zh-cn/docs/02-dev_env/">开发环境</a>
+        </li><li class="nav-item post-section my-2 mx-1">
           <a class="btn btn-sm btn-secondary" href="/zh-cn/docs/03-boot/">启动</a>
         </li><li class="nav-item post-section my-2 mx-1">
           <a class="btn btn-sm btn-secondary" href="/zh-cn/docs/01-os/">系统工具</a>
-        </li><li class="nav-item post-section my-2 mx-1">
-          <a class="btn btn-sm btn-secondary" href="/zh-cn/docs/99-jottings/">杂项</a>
         </li><li class="nav-item post-section my-2 mx-1">
           <a class="btn btn-sm btn-secondary" href="/zh-cn/docs/exynos4412/">4412</a>
         </li></ul>
@@ -653,10 +739,94 @@ kingdix10
 </div><div class="posts mb-4"><article class="row card post component">
   <div class="card-header">
     <h2 class="card-title post-title my-2 fs-4">
+      <a href="/zh-cn/docs/05-program/compile/make_debug/">make调试</a>
+    </h2>
+  </div>
+  <div class="card-body"><picture><img class="img-fluid" alt="make调试" src="https://kingdix10.github.io/covers/flowers_leaves_pattern_148777_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2024-08-05 08:00:00 &#43;0800 CST，更新于 2024-08-06 02:10:49 &#43;0800 CST。">2024/08/05</span><span class="post-reading-time me-1 mb-1">1 分钟阅读</span><a href="/zh-cn/categories/%E7%BC%96%E8%AF%91/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>编译</a><a href="/zh-cn/series/%E7%BC%96%E8%AF%91/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
+      <i class="fas fa-fw fa-columns me-1"></i>编译</a><a href="/zh-cn/tags/%E7%BC%96%E8%AF%91/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">编译</a>
+</div>
+
+    <div class="post-summary"><p> 命令行选项 1# -n, --just-print 2# -d, --debug=brief Makefile打印 在rule外，可以使用如下方法
+1# 仅输出信息 2$(info TEXT…) 3 4# 输出文件名、行号和信息 5$(warning TEXT…) 6 7# 输出文件名、行号和信息后停止 8$(error TEXT…) 在rule内，直接使用echo输出，或者去掉@即可。
+1target: 2 @echo $(VAR) </p>
+    </div>
+  </div>
+</article>
+<article class="row card post component">
+  <div class="card-header">
+    <h2 class="card-title post-title my-2 fs-4">
+      <a href="/zh-cn/docs/02-dev_env/vdisk_compact/">VMware和Hyper-V回收虚拟磁盘空间</a>
+    </h2>
+  </div>
+  <div class="card-body"><picture><img class="img-fluid" alt="VMware和Hyper-V回收虚拟磁盘空间" src="https://kingdix10.github.io/covers/mosaic_multicolored_texture_126795_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2024-08-05 08:00:00 &#43;0800 CST，更新于 2024-08-06 01:46:33 &#43;0800 CST。">2024/08/05</span><span class="post-reading-time me-1 mb-1">2 分钟阅读</span><a href="/zh-cn/categories/%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>工具</a><a href="/zh-cn/series/%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
+      <i class="fas fa-fw fa-columns me-1"></i>工具</a><a href="/zh-cn/tags/%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">工具</a>
+</div>
+
+    <div class="post-summary"><p> 1. 基本原理 文件系统未占用的空间数据写完全0，会被视为空闲空间，可以被虚拟机软件回收。
+操作步骤：
+虚拟机内，空闲空间数据写0。 关闭虚拟机 回收虚拟磁盘文件空间 2. 文件系统和磁盘空闲区间擦除 对于根文件系统，只能使用dd命令创建全零文件模拟擦除。
+1df # 查看剩余空间大小 2dd if=/dev/zero of=zero.bin bs=1MiB count=1024 3sync 4rm -f zero.bin 其他可重新挂载的分区可以使用如下几种方式：
+卸载或将文件系统挂为只读后，使用zerofree回收，注意zerofree只适用于ext2、ext3、ext4文件系统。 使用resize2fs压缩文件文件系统后，缩...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/02-dev_env/vdisk_compact/#post-content-body">阅读更多</a></div>
+    </div>
+  </div>
+</article>
+<article class="row card post component">
+  <div class="card-header">
+    <h2 class="card-title post-title my-2 fs-4">
+      <a href="/zh-cn/docs/05-program/ccpp/gcc_tools/">编译工具杂记</a>
+    </h2>
+  </div>
+  <div class="card-body"><picture><img class="img-fluid" alt="编译工具杂记" src="https://kingdix10.github.io/covers/trunk_tree_texture_119590_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2024-08-05 08:00:00 &#43;0800 CST，更新于 2024-08-06 02:10:49 &#43;0800 CST。">2024/08/05</span><span class="post-reading-time me-1 mb-1">1 分钟阅读</span><a href="/zh-cn/categories/%E7%BC%96%E8%AF%91/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>编译</a><a href="/zh-cn/series/%E7%BC%96%E8%AF%91/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
+      <i class="fas fa-fw fa-columns me-1"></i>编译</a><a href="/zh-cn/tags/%E7%BC%96%E8%AF%91/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">编译</a>
+</div>
+
+    <div class="post-summary"><p> 1. gcc 在线文档：https://gcc.gnu.org/onlinedocs
+1.1. 编译选项 1# -Wall 2# -Werror/-Werror= 1.2. 调试选项 1## -save-temps=obj 2 3# -fcallgraph-info 2. objcopy 1objcopy -I binary -O elf32-little --change-section-address .data=0x08000000 input.bin output.elf 3. gdb 1target remote localhost:1234 2 3file /path/to/vmlinux 4...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/05-program/ccpp/gcc_tools/#post-content-body">阅读更多</a></div>
+    </div>
+  </div>
+</article>
+<article class="row card post component">
+  <div class="card-header">
+    <h2 class="card-title post-title my-2 fs-4">
+      <a href="/zh-cn/docs/03-boot/rtthread_smp_cortex_a9/">rt-thread Cortex-A9 SMP启动</a>
+    </h2>
+  </div>
+  <div class="card-body"><picture><img class="img-fluid" alt="rt-thread Cortex-A9 SMP启动" src="https://kingdix10.github.io/covers/metal_texture_surface_157344_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2024-08-04 08:00:00 &#43;0800 CST，更新于 2024-08-05 02:10:49 &#43;0800 CST。">2024/08/04</span><span class="post-reading-time me-1 mb-1">1 分钟阅读</span><a href="/zh-cn/categories/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>启动流程</a><a href="/zh-cn/series/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
+      <i class="fas fa-fw fa-columns me-1"></i>启动流程</a><a href="/zh-cn/tags/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">启动流程</a>
+</div>
+
+    <div class="post-summary"><p>rt-thread版本：4.0
+</p>
+    </div>
+  </div>
+</article>
+<article class="row card post component">
+  <div class="card-header">
+    <h2 class="card-title post-title my-2 fs-4">
       <a href="/zh-cn/docs/01-os/win/ssh_wsl_exe/">ssh连接wsl后执行Windows程序</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="ssh连接wsl后执行Windows程序" src="https://kingdix10.github.io/covers/gradient_orange_shades_131495_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="ssh连接wsl后执行Windows程序" src="https://kingdix10.github.io/covers/wavy_motley_metallic_139065_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
@@ -678,7 +848,7 @@ kingdix10
       <a href="/zh-cn/docs/01-os/linux/debian_setup/">Debian安装和配置</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Debian安装和配置" src="https://kingdix10.github.io/covers/camera_photographer_smoke_126548_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="Debian安装和配置" src="https://kingdix10.github.io/covers/canvas_picture_abstraction_138874_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
@@ -703,7 +873,7 @@ https://elementary.io/zh_CN https://elementary.io
       <a href="/zh-cn/docs/01-os/linux/docker_setup/">Docker安装和配置</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Docker安装和配置" src="https://kingdix10.github.io/covers/dots_light_background_50767_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="Docker安装和配置" src="https://kingdix10.github.io/covers/lines_intersection_oblique_153331_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
@@ -725,7 +895,7 @@ script function debian_install_docker.sh 安装docker，使用tsinghua apt源 do
       <a href="/zh-cn/docs/01-os/linux/shell/cmd_text/">linux常用命令-文本处理</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="linux常用命令-文本处理" src="https://kingdix10.github.io/covers/walls_floor_light_50837_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="linux常用命令-文本处理" src="https://kingdix10.github.io/covers/water_waves_ripples_143522_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
@@ -745,7 +915,7 @@ script function debian_install_docker.sh 安装docker，使用tsinghua apt源 do
       <a href="/zh-cn/docs/01-os/linux/shell/cmd_benchmark/">linux常用命令-性能</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="linux常用命令-性能" src="https://kingdix10.github.io/covers/pink_color_background_153889_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="linux常用命令-性能" src="https://kingdix10.github.io/covers/camera_lens_strap_145518_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
@@ -764,7 +934,7 @@ script function debian_install_docker.sh 安装docker，使用tsinghua apt源 do
       <a href="/zh-cn/docs/01-os/linux/git/git_misc/">git配置和操作</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="git配置和操作" src="https://kingdix10.github.io/covers/cockpit_panel_display_169481_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="git配置和操作" src="https://kingdix10.github.io/covers/leaves_patterns_autumn_129305_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
@@ -776,89 +946,6 @@ script function debian_install_docker.sh 安装docker，使用tsinghua apt源 do
     <div class="post-summary"><p>官方资料：Git Community Book 中文版
 1. 个人gitconfig 1# cat ~/.gitconfig 2 3[color] 4	ui = auto 5 6[safe] 7#	directory = * 8 9[core] 10# 支持中文 11	quotepath = false 12	editor = vim 13# 14	pager = less -x1,5 15# 支持https下保存用户名密码 16[credential] 17	helper = store 参考git 显示中文和解决中文乱码
 1git config --global core.quotepath false 3. 使用git...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/01-os/linux/git/git_misc/#post-content-body">阅读更多</a></div>
-    </div>
-  </div>
-</article>
-<article class="row card post component">
-  <div class="card-header">
-    <h2 class="card-title post-title my-2 fs-4">
-      <a href="/zh-cn/docs/99-jottings/c/c_struct_cmp/">【C语言】用memcmp比较结构体会有什么问题</a>
-    </h2>
-  </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="【C语言】用memcmp比较结构体会有什么问题" src="https://kingdix10.github.io/covers/wall_brick_neon_150470_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture><div class="post-meta mb-3">
-  <span class="post-date me-1 mb-1" title="创建于 2024-07-16 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2024/07/16</span><span class="post-reading-time me-1 mb-1">2 分钟阅读</span><a href="/zh-cn/categories/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
-      <i class="fas fa-fw fa-folder me-1"></i>C语言</a><a href="/zh-cn/tags/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">C语言</a><a href="/zh-cn/tags/%E7%BB%93%E6%9E%84%E4%BD%93/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">结构体</a>
-</div>
-
-    <div class="post-summary"><p> 1. 示例一 先看下如下代码，思考一下，结果是输出a == b还是a != b？
-1#include &lt;stdio.h&gt; 2#include &lt;string.h&gt; 3 4struct test_type { 5 char name[10]; 6 int i; 7 long l; 8}; 9 10int main(void) 11{ 12 struct test_type a = { 13 &#34;test&#34;, 1, 2 14 }; 15 struct test_type b; 16 17 b.i = a.i; 18 b.l = a.l; 19 strcpy(b.name, a.name); 20 21 if (0 ==...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/99-jottings/c/c_struct_cmp/#post-content-body">阅读更多</a></div>
-    </div>
-  </div>
-</article>
-<article class="row card post component">
-  <div class="card-header">
-    <h2 class="card-title post-title my-2 fs-4">
-      <a href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_domain_add/">Linux中断子系统（二）domain注册</a>
-    </h2>
-  </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Linux中断子系统（二）domain注册" src="https://kingdix10.github.io/covers/drone_camera_technology_171576_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture><div class="post-meta mb-3">
-  <span class="post-date me-1 mb-1" title="创建于 2024-07-16 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2024/07/16</span><span class="post-reading-time me-1 mb-1">2 分钟阅读</span><a href="/zh-cn/categories/%E4%B8%AD%E6%96%AD%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
-      <i class="fas fa-fw fa-folder me-1"></i>中断管理</a><a href="/zh-cn/series/%E4%B8%AD%E6%96%AD%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
-      <i class="fas fa-fw fa-columns me-1"></i>中断管理</a><a href="/zh-cn/tags/linux-6.6/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux-6.6</a><a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux内核</a>
-</div>
-
-    <div class="post-summary"><p> 1. IRQ domain注册 中断控制器初始化的过程中，要向中断子系统注册irq domain。核心函数__irq_domain_add。
-gic-v2使用irq_domain_create_linear，gic-v3则使用irq_domain_add_tree。
-__irq_domain_add的实现在kernel/irq/irqdomain.c，逻辑并不复杂，主要就是申请struct irq_domain结构体和对各个成员进行赋值，细节可以自己分析。
-1/// kernel/irq/irqdomain.c 2/** 3 * __irq_domain_add() - Allocate a new irq_domain data...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_domain_add/#post-content-body">阅读更多</a></div>
-    </div>
-  </div>
-</article>
-<article class="row card post component">
-  <div class="card-header">
-    <h2 class="card-title post-title my-2 fs-4">
-      <a href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_create_mapping/">Linux中断子系统（三）设备中断注册</a>
-    </h2>
-  </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Linux中断子系统（三）设备中断注册" src="https://kingdix10.github.io/covers/code_letters_screen_137590_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture><div class="post-meta mb-3">
-  <span class="post-date me-1 mb-1" title="创建于 2024-07-16 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2024/07/16</span><span class="post-reading-time me-1 mb-1">4 分钟阅读</span><a href="/zh-cn/categories/%E4%B8%AD%E6%96%AD%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
-      <i class="fas fa-fw fa-folder me-1"></i>中断管理</a><a href="/zh-cn/series/%E4%B8%AD%E6%96%AD%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
-      <i class="fas fa-fw fa-columns me-1"></i>中断管理</a><a href="/zh-cn/tags/linux-6.6/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux-6.6</a><a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux内核</a>
-</div>
-
-    <div class="post-summary"><p> 1. 设备中断注册 gic-v3的中断号划分在《IHI0069H_gic_architecture_specification.pdf》有所罗列：
-前边介绍，在gic初始化时，已经使用了0-7号SGI来作为IPI。
-对于设备中断，使用的是PPI和SPI。设备probe时调用irq_of_parse_and_map等函数，如timer_of_irq_init。会调用函数来向系统注册中断，常用函数有如下几个：
-1/// include/linux/of_irq.h 2extern int of_irq_get(struct device_node *dev, int index); 3extern int...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_create_mapping/#post-content-body">阅读更多</a></div>
-    </div>
-  </div>
-</article>
-<article class="row card post component">
-  <div class="card-header">
-    <h2 class="card-title post-title my-2 fs-4">
-      <a href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/request_irq/">Linux中断子系统（四）申请中断request_irq</a>
-    </h2>
-  </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Linux中断子系统（四）申请中断request_irq" src="https://kingdix10.github.io/covers/wall_brick_neon_150470_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture><div class="post-meta mb-3">
-  <span class="post-date me-1 mb-1" title="创建于 2024-07-16 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2024/07/16</span><span class="post-reading-time me-1 mb-1">6 分钟阅读</span><a href="/zh-cn/categories/%E4%B8%AD%E6%96%AD%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
-      <i class="fas fa-fw fa-folder me-1"></i>中断管理</a><a href="/zh-cn/series/%E4%B8%AD%E6%96%AD%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
-      <i class="fas fa-fw fa-columns me-1"></i>中断管理</a><a href="/zh-cn/tags/linux-6.6/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux-6.6</a><a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux内核</a>
-</div>
-
-    <div class="post-summary"><p> 1. 申请中断 __setup_irq是用于设置和注册中断的核心函数，它是request_threaded_irq等函数的内部实现。 1.1. irqaction handler和thread_fn是struct irqaction的两个重要成员，由程序员指定或在__setup_irq中自动设置， 在中断发生后的处理函数被调用。
-1/// include/linux/interrupt.h 2/** 3 * struct irqaction - per interrupt action descriptor 4 * @handler:	interrupt handler function 5 * @name:	name of...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/request_irq/#post-content-body">阅读更多</a></div>
     </div>
   </div>
 </article>
@@ -889,7 +976,7 @@ __irq_domain_add的实现在kernel/irq/irqdomain.c，逻辑并不复杂，主要
         <a href="/zh-cn/docs/page/2/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
       </li>
       <li class="page-item">
-        <a href="/zh-cn/docs/page/7/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="/zh-cn/docs/page/8/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
       </li>
     </ul></div>
 </div>
@@ -982,7 +1069,7 @@ Zhihu"
 <span class="menu-icon me-1"><i class="fab fa-fw fa-zhihu text-primary"></i></span>Zhihu</a></li></ul></li></ul></div>
 </div>
 </footer>
-<script data-precache src="/assets/main/bundle.min.eb8306088ad1475898679a14e6b521aa4dd1e5a5fcd235ca72022a7a1833b5e5.js" integrity="sha256-64MGCIrRR1iYZ5oU5rUhqk3R5aX80jXKcgIqehgzteU=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
+<script data-precache src="/assets/main/bundle.min.de08722b15dbab0d764debd50114ce3d28da8ee6c7b889ff8c82e6faad0b46dd.js" integrity="sha256-3ghyKxXbqw12TevVARTOPSjajubHuIn/jILm&#43;q0LRt0=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
 <script data-precache src="/assets/viewer/bundle.min.ffafad0d121aa7d1fb443510086dac514a0b152826cf094f02a1f3dec1f37918.js" integrity="sha256-/6&#43;tDRIap9H7RDUQCG2sUUoLFSgmzwlPAqHz3sHzeRg=" crossorigin="anonymous" defer></script><script>
   var _hmt = _hmt || [];
   (function() {

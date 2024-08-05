@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>编译器 on kingdix10&#39;s site</title>
+    <link>https://kingdix10.github.io/zh-cn/tags/%E7%BC%96%E8%AF%91%E5%99%A8/</link>
+    <description>Recent content in 编译器 on kingdix10&#39;s site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</copyright>
+    <lastBuildDate>Thu, 18 Jul 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/%E7%BC%96%E8%AF%91%E5%99%A8/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>gcc宏定义中的连接符和可变参数</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/macro_link_args/</link>
+      <pubDate>Thu, 18 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/macro_link_args/</guid>
+      <description><![CDATA[1. 连接符 1.1. 字符串转换# #用来把参数转换成字符串 1#define pr_var(var) printf(#var &#34; is %d\n&#34;, var); 2 3int main(int argc, char **argv) 4{ 5 int a = 1, b = 2; 6 7 pr_var(a); 8 pr_var(b); 9 pr_var(a+b); 10} 1.2. 参数连接## 在宏中，##可以用于]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_texture_127524_300x168.jpg" length="18901" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>编译器预定义宏</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/gcc_predefine/</link>
+      <pubDate>Thu, 18 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/gcc_predefine/</guid>
+      <description><![CDATA[1. 查看gcc预定义宏 在Linux下可以输入如下命令： 1gcc -posix -E -dM - &lt; /dev/null window下，命令稍有不同 1gcc -posix -E -dM - &lt; nul 1.1. 常见宏 macro desc __FILE__ 文件名 __LINE__ 行号 __func__ 函数]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/keyboard_backlight_purple_212155_300x168.jpg" length="11894" type="image/.jpg" />
+    </item>
+    
+  </channel>
+</rss>
+

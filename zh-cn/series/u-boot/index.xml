@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>u-boot on kingdix10&#39;s site</title>
+    <link>https://kingdix10.github.io/zh-cn/series/u-boot/</link>
+    <description>Recent content in u-boot on kingdix10&#39;s site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</copyright>
+    <lastBuildDate>Tue, 11 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/series/u-boot/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>U-Boot从dtb获取内存布局并传递到内核</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_mem/</link>
+      <pubDate>Tue, 11 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_mem/</guid>
+      <description><![CDATA[1. U-Boot获取布局内存 U-Boot在启动过程中，默认内存布局通常在.config中定义。 1CONFIG_SYS_SDRAM_BASE=0x240000000 2CONFIG_SYS_DDR_SIZE=0xC0000000 在DDR控制器初始化完成之后，就要确定系统中]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/wall_brick_neon_150470_300x168.jpg" length="13857" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>U-Boot杂项记录</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_misc_note/</link>
+      <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_misc_note/</guid>
+      <description><![CDATA[1. get_ram_size get_ram_size只适用于CONFIG_SYS_DDR_SIZE=2^n。 1int dram_init(void) 2{ 3 gd-&gt;ram_size = get_ram_size((long *)CONFIG_SYS_SDRAM_BASE, 4 CONFIG_SYS_DDR_SIZE); 5 return 0; 6} 2. 多核启动之spintabl]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/spots_stains_colorful_147593_300x168.jpg" length="20423" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>U-Boot启动分析</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/u-boot-bootflow/</link>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/u-boot-bootflow/</guid>
+      <description><![CDATA[1. 查找入口 u-boot版本：2024.01 参考defconfig：imx8qm_mek_defconfig 通过编译生成的u-boot.lds]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/code_letters_screen_137590_300x168.jpg" length="10341" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>u-boot的stubs机制</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/u-boot-stubs/</link>
+      <pubDate>Sun, 09 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/u-boot-stubs/</guid>
+      <description><![CDATA[1. U-Boot版本 1VERSION = 2021 2PATCHLEVEL = 10 3SUBLEVEL = 4EXTRAVERSION = 5NAME = 2. 涉及的文件 include/_exports.h，辅助文件，在包含_exports.h前，定义不同]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/drone_camera_technology_171576_300x168.jpg" length="10102" type="image/.jpg" />
+    </item>
+    
+  </channel>
+</rss>
+

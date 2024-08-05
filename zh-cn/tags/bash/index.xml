@@ -15,7 +15,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/bash_tips/</guid>
       <description><![CDATA[1. shell语法 shell核心基础知识 进阶版 2. 忽略大小写 重新进入bash后生效。 1echo &#39;set completion-ignore-case on&#39; &gt; ~/.inputrc 3. 临时使用alias前的命令 参考LINUX下使用]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wavy_motley_metallic_139065_300x168.jpg" length="26579" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/paint_grunge_green_124502_300x168.jpg" length="5826" type="image/.jpg" />
     </item>
     
     <item>
@@ -25,7 +25,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/bash_decorate/</guid>
       <description><![CDATA[1. PS1示例 先说一下bash版本 1$ bash --version 2GNU bash, version 5.1.4(1)-release (x86_64-pc-linux-gnu) 3Copyright (C) 2020 Free Software Foundation, Inc. 4License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt; 5 6This is free software; you are free to change and redistribute it. 7There is NO WARRANTY, to the extent permitted by law. bash中的P]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg" length="10737" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/india_flag_texture_132874_300x168.jpg" length="19297" type="image/.jpg" />
     </item>
     
   </channel>
