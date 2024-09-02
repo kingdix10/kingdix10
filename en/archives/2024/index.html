@@ -20,6 +20,7 @@
 <meta property="og:description" content="kingdix10&#39;s site" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://kingdix10.github.io/en/archives/2024/" />
+
 <meta itemprop="name" content="2024">
 <meta itemprop="description" content="kingdix10&#39;s site">
   <meta property="og:image" content="https://kingdix10.github.io/images/icon_yellow_transparent_72x72.png"/>
@@ -455,7 +456,13 @@ kingdix10
         <div class="card-body collapse accordion-collapse accordion-body d-lg-block show" id="taxonomies-toggle">
             <ul class="nav nav-pills nav-fill" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="taxonomyCategoriesTab" data-bs-toggle="tab" data-bs-target="#taxonomyCategories" 
+                        <button class="nav-link active" id="taxonomySeriesTab" data-bs-toggle="tab" data-bs-target="#taxonomySeries" 
+                            type="button" role="tab" aria-controls="taxonomySeries" aria-selected="true">
+                            Series
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="taxonomyCategoriesTab" data-bs-toggle="tab" data-bs-target="#taxonomyCategories" 
                             type="button" role="tab" aria-controls="taxonomyCategories" aria-selected="true">
                             Categories
                         </button>
@@ -475,7 +482,13 @@ kingdix10
             </ul>
             
             <div class="tab-content mt-3">
-                    <div class="tab-pane active" id="taxonomyCategories" role="tabpanel" aria-labelledby="taxonomyCategoriesTab" tabindex="0">
+                    <div class="tab-pane active" id="taxonomySeries" role="tabpanel" aria-labelledby="taxonomySeriesTab" tabindex="0">
+                        <a href="/en/series/kdump-crash/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="kdump crash">
+                            kdump crash
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                    </div>
+                    <div class="tab-pane" id="taxonomyCategories" role="tabpanel" aria-labelledby="taxonomyCategoriesTab" tabindex="0">
                         <a href="/en/categories/kdump-crash/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="kdump crash">
                             kdump crash
                             <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
@@ -549,14 +562,14 @@ kingdix10
   <div class="d-flex">
       <div
         class="flex-shrink-0 d-flex justify-content-center align-items-center"
-        style="max-width: 100px"><picture><img class="img-fluid" alt="Crash Help" src="https://kingdix10.github.io/covers/india_flag_texture_132874_300x168.jpg" loading="lazy"
+        style="max-width: 100px"><picture><img class="img-fluid" alt="Crash Help" src="https://kingdix10.github.io/covers/laptop_backlight_colorful_194324_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture>
       </div>
     <div
       class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
-      <a class="post-title" href="/en/docs/04-kernel/linux-6.6/kdump_crash/help/">
+      <a class="post-title" href="/en/docs/04-kernel/linux-6.6/debug/kdump_crash/help/">
         Crash Help
       </a>
       <div class="post-meta mt-2">

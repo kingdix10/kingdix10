@@ -15,7 +15,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/05-program/compile/make_debug/</guid>
       <description><![CDATA[命令行选项 1# -n, --just-print 2# -d, --debug=brief Makefile打印 在rule外，可以使用如下方法 1# 仅输出信息 2$(info TEXT…) 3 4# 输出文件名、行号和信息 5$(warning TEXT…) 6]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/flowers_leaves_pattern_148777_300x168.jpg" length="26948" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/pattern_color_mosaic_131243_300x168.jpg" length="26919" type="image/.jpg" />
     </item>
     
     <item>
@@ -25,7 +25,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/gcc_tools/</guid>
       <description><![CDATA[1. gcc 在线文档：https://gcc.gnu.org/onlinedocs 1.1. 编译选项 1# -Wall 2# -Werror/-Werror= 1.2. 调试选项 1## -save-temps=obj 2 3# -fcallgraph-info 2. objcopy 1objcopy -I binary -O elf32-little --change-section-address .data=0x08000000 input.bin output.elf 3. gdb 1target]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/trunk_tree_texture_119590_300x168.jpg" length="18828" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" length="24563" type="image/.jpg" />
     </item>
     
   </channel>

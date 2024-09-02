@@ -15,7 +15,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/rtthread_smp_cortex_a9/</guid>
       <description><![CDATA[rt-thread版本：4.0]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/metal_texture_surface_157344_300x168.jpg" length="9729" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/cubes_colorful_bright_128866_300x168.jpg" length="27784" type="image/.jpg" />
     </item>
     
     <item>
@@ -25,17 +25,17 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/kernel_boot_security/</guid>
       <description><![CDATA[保证内核启动安全的几种方式 禁止修改cmdline 禁止修改根文件系统 使能内核地址空间布局随机化(KASLR)]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/paint_stains_colorful_139992_300x168.jpg" length="4863" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/code_text_colorful_140555_300x168.jpg" length="22830" type="image/.jpg" />
     </item>
     
     <item>
       <title>内核启动流程（一）</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/boot/entry/</link>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/boot/entry/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/boot/entry/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/boot/entry/</guid>
       <description><![CDATA[1. 内核启动入口 根据Makefile对KBUILD_LDS的定义，链接vmlinux使用的连接脚本为 arch/$(SRCARCH)/kerne]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/paint_canvas_stains_124156_300x168.jpg" length="18821" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/code_text_colorful_140555_300x168.jpg" length="22830" type="image/.jpg" />
     </item>
     
     <item>

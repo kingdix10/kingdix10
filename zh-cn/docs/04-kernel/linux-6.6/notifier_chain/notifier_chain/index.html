@@ -1,0 +1,1263 @@
+<!doctype html>
+<html class="position-relative" itemscope itemtype="https://schema.org/WebPage" lang="zh-cn"
+  data-bs-theme="auto" data-palette="purple">
+  <head><script src="/assets/init/bundle.min.0bb93948508b32667bbc76d4f9a8123a3c3b2ef731048422b0c48f9ea39586e9.js" integrity="sha256-C7k5SFCLMmZ7vHbU&#43;agSOjw7LvcxBIQisMSPnqOVhuk=" crossorigin="anonymous"></script>
+<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Linux内核的通知链机制 - kingdix10&#39;s site</title>
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_16x16_resize_box_3.png" sizes="16x16" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_32x32_resize_box_3.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_150x150_resize_box_3.png" sizes="150x150" type="image/png">
+    <link rel="apple-touch-icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_180x180_resize_box_3.png" sizes="180x180" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_192x192_resize_box_3.png" sizes="192x192" type="image/png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#6f42c1">
+<meta name="keywords" content="通知链" />
+  <meta name="description" content="1. 简介 Linux内核中的notifier_chain是一种用于跨模块通信的机制。当一个模块需要通知其他模块某些事件时，它可以使用notifi" />
+    <meta name="robots" content="index, follow" /><meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://kingdix10.github.io/covers/neon_lights_dark_133133_300x168.jpg"/>
+
+<meta name="twitter:title" content="Linux内核的通知链机制"/>
+<meta name="twitter:description" content="1. 简介 Linux内核中的notifier_chain是一种用于跨模块通信的机制。当一个模块需要通知其他模块某些事件时，它可以使用notifi"/>
+<meta property="og:title" content="Linux内核的通知链机制" />
+<meta property="og:description" content="1. 简介 Linux内核中的notifier_chain是一种用于跨模块通信的机制。当一个模块需要通知其他模块某些事件时，它可以使用notifi" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/notifier_chain/notifier_chain/" /><meta property="og:image" content="https://kingdix10.github.io/covers/neon_lights_dark_133133_300x168.jpg" /><meta property="article:section" content="docs" />
+<meta property="article:published_time" content="2024-08-14T00:00:00+00:00" />
+<meta property="article:modified_time" content="2024-08-14T00:00:00+00:00" /><meta property="og:site_name" content="kingdix10&#39;s site" />
+
+
+<meta itemprop="name" content="Linux内核的通知链机制">
+<meta itemprop="description" content="1. 简介 Linux内核中的notifier_chain是一种用于跨模块通信的机制。当一个模块需要通知其他模块某些事件时，它可以使用notifi"><meta itemprop="datePublished" content="2024-08-14T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2024-08-14T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1693"><meta itemprop="image" content="https://kingdix10.github.io/covers/neon_lights_dark_133133_300x168.jpg">
+<meta itemprop="keywords" content="通知链," />
+  <meta property="og:image:alt" content="Linux内核的通知链机制" />
+  <meta name="twitter:image:alt" content="Linux内核的通知链机制" />
+  <link rel="manifest" href="/zh-cn/manifest.json">
+
+<link data-precache rel="stylesheet" href="/assets/main/bundle.min.6e8e72e2fe73efb4b8d986e54f0d232c384007622b8c47a23864194fbd179af4.css" integrity="sha256-bo5y4v5z77S42YblTw0jLDhAB2IrjEeiOGQZT70XmvQ=" crossorigin="anonymous">
+
+    <link data-precache rel="stylesheet" href="/assets/viewer/bundle.min.8c1002839fa22c1350d6ae1eef6593120e108f973c41348be9b5065430566aaf.css" integrity="sha256-jBACg5&#43;iLBNQ1q4e72WTEg4Qj5c8QTSL6bUGVDBWaq8=" crossorigin="anonymous">
+
+
+</head>
+  <body><header class="mb-4 sticky-top">
+  
+<nav class="top-app-bar shadow navbar navbar-expand-xxl">
+  <div class="container">
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDocsNav"
+      aria-expanded="false" aria-label="Toggle docs navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+<a class="navbar-brand d-flex align-items-center flex-grow-1 flex-xxl-grow-0 justify-content-xxl-start justify-content-center ms-2 ms-xxl-0 mx-auto me-xxl-2"
+    href="https://kingdix10.github.io/zh-cn/">
+    <picture><img class="logo " alt="Logo" src="https://kingdix10.github.io/images/icon_yellow_transparent_72x72.png" loading="lazy" width="72" height="72" />
+</picture>
+kingdix10
+</a>
+
+    <div class="offcanvas-xxl offcanvas-end flex-grow-1" data-bs-scroll="true" tabindex="-1" id="navbarMenus" aria-labelledby="navbarMenusLabel">
+      <div class="offcanvas-header px-4 pb-0">
+        <div class="offcanvas-title h5" id="navbarMenusLabel">kingdix10</div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#navbarMenus" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body p-4 pt-0 p-xxl-0">
+        <hr class="d-xxl-none">
+        <ul class="navbar-nav flex-row flex-wrap align-items-center me-auto"><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn">
+<span class="menu-icon me-1"><i class="fas fa-home"></i></span>主页
+            </a>
+          </li><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn/news/">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-newspaper"></i></span>新闻
+            </a>
+          </li><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn/docs/">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-folder"></i></span>文档
+            </a>
+          </li>
+          <li class="nav-item col-12 col-xxl-auto dropdown px-0">
+            <a href="#"
+              class="nav-link dropdown-toggle"
+              id="navbarDropdownBlog" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-blog"></i></span>博客
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog" data-bs-popper="none">
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/archives/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-file-archive text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">归档</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/series/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-columns"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">专栏</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of series.</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/categories/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-folder text-success"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">分类</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of categories.</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/tags/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-tags"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">标签</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of tags.</p>
+                  </div></a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item col-12 col-xxl-auto dropdown px-0">
+            <a href="#"
+              class="nav-link dropdown-toggle"
+              id="navbarDropdownLinks" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-link"></i></span>链接
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownLinks" data-bs-popper="none">
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://github.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-github text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">GitHub</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">github.com/kingdix10</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://gitee.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-github text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">Gitee</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">gitee.com/kingdix10</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://www.zhihu.com/people/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-zhihu text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">Zhihu</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://www.cnblogs.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">博客园</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://blog.csdn.net/u014001096" target="_blank" rel="noopener noreferrer">
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">CSDN</p>
+                  </div></a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+            </ul>
+          </li>
+        </ul>
+        
+    <hr class="d-xxl-none">
+    <form class="search-bar ms-auto my-auto" action="/zh-cn/search/" novalidate>
+      <div class="input-group align-items-center">
+        <span class="btn btn-search disabled position-absolute left-0 border-0 px-1">
+          <i class="fas fa-fw fa-search fa-lg"></i>
+        </span>
+        <input
+          class="my-1 form-control border-white rounded-5 search-input bg-body"
+          name="q"
+          type="search"
+          placeholder="搜索"
+          aria-label="Search"
+          required>
+          <span class="search-shortcut position-absolute end-0 top-0 me-2">
+            <kbd class="text-dark bg-white opacity-75 rounded-3 shadow border border-primary py-1 fw-bold">/</kbd>
+          </span>
+      </div>
+    </form><hr class="d-xxl-none">
+        <ul class="navbar-nav flex-row flex-wrap align-items-center ms-md-auto">
+<li class="nav-item py-2 py-xxl-1 col-12 col-xxl-auto">
+
+
+<nav class="social-links nav justify-content-center flex-row">
+      <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="https://github.com/kingdix10" title="GitHub" rel="me">
+        <i class="fa-fw fab fa-github"
+          ></i>
+        <span class="ms-1 d-xxl-none">Github</span>
+      </a>
+      <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="https://www.zhihu.com/people/kingdix10" title="知乎" rel="me">
+        <i class="fa-fw fab fa-zhihu"
+          ></i>
+        <span class="ms-1 d-xxl-none">Zhihu</span>
+      </a>
+  <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="/zh-cn/index.xml" title="RSS" rel="me">
+    <i class="fas fa-fw fa-rss"></i>
+    <span class="ms-1 d-xxl-none">RSS</span>
+  </a>
+</nav>
+
+</li>
+<li class="nav-item py-2 py-xxl-1 col-12 col-xxl-auto">
+  <div class="vr d-none d-xxl-flex h-100 mx-xxl-2 text-white"></div>
+  <hr class="d-xxl-none my-2">
+</li>
+<li class="nav-item dropdown py-1 py-xxl-1 col-6 col-xxl-auto">
+    <a class="nav-link px-0 px-xxl-1" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-globe"></i>
+        <span class="d-xxl-none">语言</span>
+    </a>
+    <ul class="language-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+        <li>
+        <a class="dropdown-item active" href="/zh-cn/">
+            简体中文
+        </a>
+        </li>
+        <li>
+        <a class="dropdown-item" href="/en/">
+            English
+        </a>
+        </li></ul>
+</li>
+<li class="nav-item py-1 col-12 col-xxl-auto">
+  <div class="vr d-none d-xxl-flex h-100 mx-xxl-2 text-white"></div>
+  <hr class="d-xxl-none my-2">
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="fontSizeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-font"></i>
+        <span class="d-xxl-none">字体大小</span>
+    </a>
+    <ul class="font-size-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="fontSizeDropdown">
+        <li>
+            <button class="font-size-item dropdown-item" data-size="xs">
+                特小号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="sm">
+                小号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item active" data-size="md">
+                中等
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="lg">
+                大号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="xl">
+                特大号
+            </button>
+        </li>
+    </ul>
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="paletteDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-palette"></i>
+        <span class="d-xxl-none">配色</span>
+    </a>
+    <ul class="palette-dropdown-menu dropdown-menu dropdown-menu-end px-2 row g-2" aria-labelledby="paletteDropdown">
+            <li class="col-4 my-1">
+                <a role="button" id="palette-blue" aria-label="蓝色"
+                    class="btn btn-sm w-100 palette text-bg-blue" data-palette="blue">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-blue-gray" aria-label="蓝灰色"
+                    class="btn btn-sm w-100 palette text-bg-blue-gray" data-palette="blue-gray">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-brown" aria-label="棕色"
+                    class="btn btn-sm w-100 palette text-bg-brown" data-palette="brown">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-cyan" aria-label="青色"
+                    class="btn btn-sm w-100 palette text-bg-cyan" data-palette="cyan">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-green" aria-label="绿色"
+                    class="btn btn-sm w-100 palette text-bg-green" data-palette="green">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-indigo" aria-label="靛青色"
+                    class="btn btn-sm w-100 palette text-bg-indigo" data-palette="indigo">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-orange" aria-label="橙色"
+                    class="btn btn-sm w-100 palette text-bg-orange" data-palette="orange">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-pink" aria-label="粉色"
+                    class="btn btn-sm w-100 palette text-bg-pink" data-palette="pink">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-purple" aria-label="紫色"
+                    class="btn btn-sm w-100 palette text-bg-purple" data-palette="purple">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-red" aria-label="红色"
+                    class="btn btn-sm w-100 palette text-bg-red" data-palette="red">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-teal" aria-label="蓝绿色"
+                    class="btn btn-sm w-100 palette text-bg-teal" data-palette="teal">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-yellow" aria-label="黄色"
+                    class="btn btn-sm w-100 palette text-bg-yellow" data-palette="yellow">
+                </a>
+            </li>
+    </ul>
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="modeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="mode-icon fas fa-fw fa-adjust" id="modeIcon"></i>
+        <span class="d-xxl-none">模式</span>
+    </a>
+    <ul class="mode-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="modeDropdown">
+        <li class="mode-item" data-color-mode="light" data-icon="sun">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-sun"></i> 浅色
+            </button>
+        </li>
+        <li class="mode-item" data-color-mode="dark" data-icon="moon">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-moon"></i> 深色
+            </button>
+        </li>
+        <li class="mode-item active" data-color-mode="auto" data-icon="adjust">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-adjust"></i> 自动
+            </button>
+        </li>
+    </ul>
+</li>
+        </ul>
+      </div>
+    </div>
+    <div class="d-flex">
+      <button class="navbar-toggler order-5 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarMenus"
+        aria-controls="navbarMenus" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-ellipsis-h"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+</header>
+
+    <main class="container">
+      <div class="row content"><noscript>
+    <div class="alert alert-danger" role="alert">你的浏览器不支持 JavaScript。</div>
+</noscript>
+<aside class="docs-nav col-xxl-2" tabindex="-1" data-bs-hide="focusout">
+  <div class="offcanvas-xxl offcanvas-start" id="offcanvasDocsNav" aria-labelledby="offcanvasDocsNavLabel">
+    <div class="offcanvas-header border-bottom">
+      <div class="offcanvas-title h5" id="offcanvasDocsNavLabel">浏览文档</div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#offcanvasDocsNav"></button>
+    </div>
+    <div class="offcanvas-body pt-2 flex-column"><div class="mb-3" style="margin-left: -0.5rem;">
+</div>
+<ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3 text-primary">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/"><span class="docs-nav-title-icon me-1"><i class="fas fa-fw fa-book"></i></span><span class="docs-nav-title">Linux内核分析</span></a>
+            <a class="btn-toggle ms-1" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-8d43cfa49df325f277d6f4234a021467" aria-expanded="true" aria-controls="nav-8d43cfa49df325f277d6f4234a021467">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse  show border-primary" id="nav-8d43cfa49df325f277d6f4234a021467">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/"><span class="docs-nav-title">linux-6.1/5.10</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-8ea97fb7a0a0d68cedef1b63b4664daa" aria-expanded="false" aria-controls="nav-8ea97fb7a0a0d68cedef1b63b4664daa">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-8ea97fb7a0a0d68cedef1b63b4664daa">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/"><span class="docs-nav-title">linux thermal子系统简介</span></a>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/"><span class="docs-nav-title">进程管理</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-83c2de274b2e4577ecf37614ae1dc5db" aria-expanded="false" aria-controls="nav-83c2de274b2e4577ecf37614ae1dc5db">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-83c2de274b2e4577ecf37614ae1dc5db">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/task_0/"><span class="docs-nav-title">Linux 0号线程swapper简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/task_1/"><span class="docs-nav-title">Linux 1号线程init简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/task_2/"><span class="docs-nav-title">Linux 2号线程kthreadd简介</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/drivers/"><span class="docs-nav-title">内核驱动</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-d3b01a1b86aa6db82f0e7b3aaac6b5d2" aria-expanded="false" aria-controls="nav-d3b01a1b86aa6db82f0e7b3aaac6b5d2">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-d3b01a1b86aa6db82f0e7b3aaac6b5d2">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/"><span class="docs-nav-title">设备模型</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-debf5d4911c9878135b99f6e8f2a44cd" aria-expanded="false" aria-controls="nav-debf5d4911c9878135b99f6e8f2a44cd">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-debf5d4911c9878135b99f6e8f2a44cd">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/dt_to_dt/"><span class="docs-nav-title">Linux内核驱动模型（二）设备树转换</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/initcall/"><span class="docs-nav-title">Linux内核驱动模型（三）驱动初始化</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/device_model/"><span class="docs-nav-title">Linux内核驱动模型（四）核心结构体</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/fdt_dt/"><span class="docs-nav-title">Linux内核驱动模型（一）设备树展开</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/kobject/kobject/"><span class="docs-nav-title">Linux内核数据结构kobject/kset/ktype</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/"><span class="docs-nav-title">时间子系统</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c9f99e03f1800548b626b43e128eb70f" aria-expanded="false" aria-controls="nav-c9f99e03f1800548b626b43e128eb70f">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-c9f99e03f1800548b626b43e128eb70f">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/timekeeping/"><span class="docs-nav-title">linux内核时间子系统（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/time/"><span class="docs-nav-title">linux内核时间子系统（一）</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3 text-primary">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/"><span class="docs-nav-title">linux-6.6</span></a>
+            <a class="btn-toggle ms-1" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c105b2ef486b2fc777c1f47c8c02d8c9" aria-expanded="true" aria-controls="nav-c105b2ef486b2fc777c1f47c8c02d8c9">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse  show border-primary" id="nav-c105b2ef486b2fc777c1f47c8c02d8c9">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/"><span class="docs-nav-title">【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_mm/"><span class="docs-nav-title">Linux drm mm分析(基于intel ivpu驱动)</span></a>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/devicemodel/"><span class="docs-nav-title">linux-6.1</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c2d7103f5fb31202d4516726f7f8b937" aria-expanded="false" aria-controls="nav-c2d7103f5fb31202d4516726f7f8b937">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-c2d7103f5fb31202d4516726f7f8b937">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2 py-1 ms-3 text-primary" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/notifier_chain/notifier_chain/"><span class="docs-nav-title">Linux内核的通知链机制</span></a>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/"><span class="docs-nav-title">进程管理</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-655e5bdc71766563bee0b49f680e7299" aria-expanded="false" aria-controls="nav-655e5bdc71766563bee0b49f680e7299">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-655e5bdc71766563bee0b49f680e7299">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/execve/"><span class="docs-nav-title">exec系统调用简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/a-fork/"><span class="docs-nav-title">Linux fork进程/线程简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/relationship/"><span class="docs-nav-title">Linux进程和线程关系</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/pid_namespace/"><span class="docs-nav-title">Linux进程命名空间（pid namespace）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/task_state/"><span class="docs-nav-title">Linux进程状态与生命周期</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_2/"><span class="docs-nav-title">Linux内核copy_process分析（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_3/"><span class="docs-nav-title">Linux内核copy_process分析（三）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_1/"><span class="docs-nav-title">Linux内核copy_process分析（一）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_table/"><span class="docs-nav-title">Linux内核sched_class汇总</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/task_life/"><span class="docs-nav-title">用trace追踪Linux进程的一生</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/"><span class="docs-nav-title">内存管理</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-de97508460ed4f8a4a3e7ac2798cb58e" aria-expanded="false" aria-controls="nav-de97508460ed4f8a4a3e7ac2798cb58e">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-de97508460ed4f8a4a3e7ac2798cb58e">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc/"><span class="docs-nav-title">kmalloc分配内存的大小</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtable/"><span class="docs-nav-title">Linux ARM64页面大小和虚拟地址位数</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/"><span class="docs-nav-title">内核调试</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-38c732a7b9755fe00848e5f2dcd802d9" aria-expanded="false" aria-controls="nav-38c732a7b9755fe00848e5f2dcd802d9">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-38c732a7b9755fe00848e5f2dcd802d9">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/arm64_setup/"><span class="docs-nav-title">ARM64 Crash调试环境搭建</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/help/"><span class="docs-nav-title">Crash帮助信息</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/crash_cmd_set/"><span class="docs-nav-title">Crash命令介绍</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/printk-formats/"><span class="docs-nav-title">Linux printk日志输出格式控制</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/dynamic_debug/"><span class="docs-nav-title">linux内核dynamic_debug</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/"><span class="docs-nav-title">printk的pr_fmt</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/boot/entry/"><span class="docs-nav-title">内核启动流程（一）</span></a>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/drivers/"><span class="docs-nav-title">内核驱动</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-f13ac328747f9149370d84b8c8f95a46" aria-expanded="false" aria-controls="nav-f13ac328747f9149370d84b8c8f95a46">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-f13ac328747f9149370d84b8c8f95a46">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/fs/"><span class="docs-nav-title">文件系统</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-6c01ebad189fffa4467424d95bb94649" aria-expanded="false" aria-controls="nav-6c01ebad189fffa4467424d95bb94649">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-6c01ebad189fffa4467424d95bb94649">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/"><span class="docs-nav-title">杂项</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-4c6ab7a6d5e5a1b2fc403b3d23256450" aria-expanded="false" aria-controls="nav-4c6ab7a6d5e5a1b2fc403b3d23256450">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-4c6ab7a6d5e5a1b2fc403b3d23256450">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/jump_label/"><span class="docs-nav-title">ARM64 jump label源码分析</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/atomic/"><span class="docs-nav-title">linux atomic接口简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/linux-err-return/"><span class="docs-nav-title">Linux的errno简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/asm_macors/"><span class="docs-nav-title">Linux内核常见ARM64汇编宏</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/optimize_tips/"><span class="docs-nav-title">Linux内核代码的编写和优化技巧</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/kernel_boot_security/"><span class="docs-nav-title">保证内核启动安全的几种方式</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/"><span class="docs-nav-title">中断子系统</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-0e8011cfba83e7078ddfdac6dd9bdab4" aria-expanded="false" aria-controls="nav-0e8011cfba83e7078ddfdac6dd9bdab4">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-0e8011cfba83e7078ddfdac6dd9bdab4">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/"><span class="docs-nav-title">ARM64 Linux中断入口</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_flow/"><span class="docs-nav-title">Linux中断处理流程图</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_domain_add/"><span class="docs-nav-title">Linux中断子系统（二）domain注册</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_create_mapping/"><span class="docs-nav-title">Linux中断子系统（三）设备中断注册</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/request_irq/"><span class="docs-nav-title">Linux中断子系统（四）申请中断request_irq</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/handler_entry/"><span class="docs-nav-title">Linux中断子系统（五）中断处理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/init/"><span class="docs-nav-title">Linux中断子系统（一）软硬件初始化</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/"><span class="docs-nav-title">编程语言</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c763ce92a79b45df97e2263a975854b9" aria-expanded="false" aria-controls="nav-c763ce92a79b45df97e2263a975854b9">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-c763ce92a79b45df97e2263a975854b9">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/"><span class="docs-nav-title">C/C&#43;&#43;</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-97f02fde471866056c482bd758f3802a" aria-expanded="false" aria-controls="nav-97f02fde471866056c482bd758f3802a">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-97f02fde471866056c482bd758f3802a">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/c_assert/"><span class="docs-nav-title">C语言编译断言</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/macro_link_args/"><span class="docs-nav-title">gcc宏定义中的连接符和可变参数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/gcc_tools/"><span class="docs-nav-title">编译工具杂记</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/gcc_predefine/"><span class="docs-nav-title">编译器预定义宏</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/array_func/"><span class="docs-nav-title">多维数组作为函数参数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/array_type/"><span class="docs-nav-title">数组a、&amp;a、&amp;a[0]、&amp;a[0][0]的区别与联系</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/c_struct_cmp/"><span class="docs-nav-title">用memcmp比较结构体会有什么问题</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/python/"><span class="docs-nav-title">Python</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-ffa1725fdabf7411c32ceb6eae66fd17" aria-expanded="false" aria-controls="nav-ffa1725fdabf7411c32ceb6eae66fd17">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-ffa1725fdabf7411c32ceb6eae66fd17">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/compile/"><span class="docs-nav-title">构建工具</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-cffaf2396700969f3f8596d2093784ef" aria-expanded="false" aria-controls="nav-cffaf2396700969f3f8596d2093784ef">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-cffaf2396700969f3f8596d2093784ef">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/compile/make_debug/"><span class="docs-nav-title">make调试</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/"><span class="docs-nav-title">开发环境</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-fd57bc387b9c3a4d19f1801fc65cd5b4" aria-expanded="false" aria-controls="nav-fd57bc387b9c3a4d19f1801fc65cd5b4">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-fd57bc387b9c3a4d19f1801fc65cd5b4">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/samba/"><span class="docs-nav-title">samba服务器搭建和使用</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/vdisk_compact/"><span class="docs-nav-title">VMware和Hyper-V回收虚拟磁盘空间</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/resizefs/"><span class="docs-nav-title">磁盘和文件系统扩容/缩容</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/"><span class="docs-nav-title">启动</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-05b799579ad52d4ccfa92fd6313b23f7" aria-expanded="false" aria-controls="nav-05b799579ad52d4ccfa92fd6313b23f7">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-05b799579ad52d4ccfa92fd6313b23f7">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/rtthread_smp_cortex_a9/"><span class="docs-nav-title">rt-thread Cortex-A9 SMP启动</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/uboot_mem/"><span class="docs-nav-title">U-Boot从dtb获取内存布局并传递到内核</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/u-boot-stubs/"><span class="docs-nav-title">u-boot的stubs机制</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/crc32_func/"><span class="docs-nav-title">U-Boot和Linux内核的CRC函数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/u-boot-bootflow/"><span class="docs-nav-title">U-Boot启动分析</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/uboot_misc_note/"><span class="docs-nav-title">U-Boot杂项记录</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/u-boot_commands/"><span class="docs-nav-title">常见u-boot命令</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/boot_flow/"><span class="docs-nav-title">嵌入式系统启动流程</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/"><span class="docs-nav-title">系统工具</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-eb1c5d775f73e30b3a27244e12a84f81" aria-expanded="false" aria-controls="nav-eb1c5d775f73e30b3a27244e12a84f81">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-eb1c5d775f73e30b3a27244e12a84f81">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/debian_setup/"><span class="docs-nav-title">Debian安装和配置</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/docker_setup/"><span class="docs-nav-title">Docker安装和配置</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/git/git_misc/"><span class="docs-nav-title">git配置和操作</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/jupyter_to_markdown/"><span class="docs-nav-title">jupyter转Markdown</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_tips/"><span class="docs-nav-title">Linux Bash技巧</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_decorate/"><span class="docs-nav-title">Linux Bash终端美化</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_network/"><span class="docs-nav-title">linux常用命令-网络</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_text/"><span class="docs-nav-title">linux常用命令-文本处理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_file/"><span class="docs-nav-title">linux常用命令-文件管理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_sys/"><span class="docs-nav-title">linux常用命令-系统管理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_benchmark/"><span class="docs-nav-title">linux常用命令-性能</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/sourceinsight/"><span class="docs-nav-title">sourceinsight快速建工程</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/ssh_wsl_exe/"><span class="docs-nav-title">ssh连接wsl后执行Windows程序</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/win_python3/"><span class="docs-nav-title">解决Windows不能使用python3.10的问题</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/"><span class="docs-nav-title">杂项</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-4967b62f3b1964eee9739b39b25cd3eb" aria-expanded="false" aria-controls="nav-4967b62f3b1964eee9739b39b25cd3eb">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-4967b62f3b1964eee9739b39b25cd3eb">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/"><span class="docs-nav-title">4412</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-0cca8bc16c798175efb847597812f8c0" aria-expanded="false" aria-controls="nav-0cca8bc16c798175efb847597812f8c0">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-0cca8bc16c798175efb847597812f8c0">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/exynos4412/"><span class="docs-nav-title">Exynos4412启动介绍</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/mkbl1/"><span class="docs-nav-title">Exynos4412自制BL1</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/mkbl2/"><span class="docs-nav-title">Exynos4412自制BL2</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul></div>
+  </div>
+</aside><div class="col-xxl-7 ms-auto">
+  <div class="container-fluid"><nav class="row card component" aria-label="breadcrumb">
+  <div class="card-body pb-0">
+    <ol class="hbs-breadcrumb breadcrumb flex-nowrap"><li class="breadcrumb-item text-surface"><a href="/zh-cn/">主页</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/">文档</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/04-kernel/">Linux内核分析</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/04-kernel/linux-6.6/">linux-6.6</a></li><li class="breadcrumb-item active">Linux内核的通知链机制</li></ol>
+  </div>
+</nav><div class="post-panel-wrapper position-relative d-flex justify-content-center">
+  <div class="d-flex flex-row justify-content-center rounded-5 border post-panel position-fixed px-3 py-1 surface shadow-1">
+    
+    
+
+    
+    
+    
+<a class="action action-toc d-block d-xxl-none" href="#post-toc-container" role="button" title="目录">
+  <i class="fas fa-fw fa-list-alt"></i>
+</a>
+    <a class="action action-copyright" href="#post-copyright" role="button" aria-label="Copyright" title="版权">
+  <i class="fas fa-fw fa-copyright"></i>
+</a>
+    
+    
+<a id="sidebarToggler" class="action action-sidebar-toggler d-none d-xxl-block" role="button" title="切换侧边栏">
+  <i class="fas fa-fw fa-expand-alt" data-fa-transform="rotate-45"></i>
+</a>
+
+    
+  </div>
+</div><article class="row card component mb-4 post">
+<div class="card-header ">
+    <h1 class="card-title post-title my-2">Linux内核的通知链机制</h1>
+</div>
+<div class="card-body"><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2024-08-14 08:00:00 &#43;0800 CST。">2024/08/14</span><span class="post-reading-time me-1 mb-1">4 分钟阅读</span><a href="/zh-cn/categories/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>内核基础</a><a href="/zh-cn/series/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
+      <i class="fas fa-fw fa-columns me-1"></i>内核基础</a><a href="/zh-cn/tags/%E9%80%9A%E7%9F%A5%E9%93%BE/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">通知链</a>
+</div>
+
+<div class="mt-2 mb-3 d-block d-xxl-none">
+    <h2 class="text-surface mb-3">目录</h2>
+    <div id="post-toc-container">
+        </div>
+    <hr class="text-secondary">
+</div><div class="post-content mb-3" data-bs-spy="scroll" data-bs-target="#TableOfContents" tabindex="0">
+        <div id="post-content-body">
+<h1 id="1-简介" data-numberify>1. 简介<a class="anchor ms-1" href="#1-简介"></a></h1>
+<p>Linux内核中的notifier_chain是一种用于跨模块通信的机制。当一个模块需要通知其他模块某些事件时，它可以使用notifier_chain将这些事件通知给其他模块。这种机制使得模块之间的耦合度降低，提高了代码的可维护性和可扩展性。</p>
+<p>在Linux内核中，有四种类型的通知链：</p>
+<ol>
+<li>原子通知链适用于对原子性要求高的中断上下文</li>
+<li>阻塞通知链适用于进程上下文的复杂处理</li>
+<li>原始通知链提供了最大的灵活性但需要谨慎使用</li>
+<li>SRCU 通知链则在读写锁保护的场景中发挥作用</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// include/linux/notifier.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * Notifier chains are of four types:
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> *	Atomic notifier chains: Chain callbacks run in interrupt/atomic
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> *		context. Callouts are not allowed to block.
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> *	Blocking notifier chains: Chain callbacks run in process context.
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> *		Callouts are allowed to block.
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> *	Raw notifier chains: There are no restrictions on callbacks,
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> *		registration, or unregistration.  All locking and protection
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cm"> *		must be provided by the caller.
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cm"> *	SRCU notifier chains: A variant of blocking notifier chains, with
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cm"> *		the same restrictions.
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cm"> * atomic_notifier_chain_register() may be called from an atomic context,
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cm"> * but blocking_notifier_chain_register() and srcu_notifier_chain_register()
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cm"> * must be called from a process context.  Ditto for the corresponding
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="cm"> * _unregister() routines.
+</span></span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="cm"> * atomic_notifier_chain_unregister(), blocking_notifier_chain_unregister(),
+</span></span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="cm"> * and srcu_notifier_chain_unregister() _must not_ be called from within
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="cm"> * the call chain.
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="cm"> * SRCU notifier chains are an alternative form of blocking notifier chains.
+</span></span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="cm"> * They use SRCU (Sleepable Read-Copy Update) instead of rw-semaphores for
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="cm"> * protection of the chain links.  This means there is _very_ low overhead
+</span></span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="cm"> * in srcu_notifier_call_chain(): no cache bounces and no memory barriers.
+</span></span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="cm"> * As compensation, srcu_notifier_chain_unregister() is rather expensive.
+</span></span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="cm"> * SRCU notifier chains should be used when the chain will be called very
+</span></span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="cm"> * often but notifier_blocks will seldom be removed.
+</span></span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl">
+</span></span><span class="line"><span class="ln">33</span><span class="cl"><span class="k">struct</span> <span class="n">notifier_block</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">34</span><span class="cl">
+</span></span><span class="line"><span class="ln">35</span><span class="cl"><span class="k">typedef</span>	<span class="nf">int</span> <span class="p">(</span><span class="o">*</span><span class="kt">notifier_fn_t</span><span class="p">)(</span><span class="k">struct</span> <span class="n">notifier_block</span> <span class="o">*</span><span class="n">nb</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">36</span><span class="cl">            <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">action</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">data</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">37</span><span class="cl">
+</span></span><span class="line"><span class="ln">38</span><span class="cl"><span class="k">struct</span> <span class="n">notifier_block</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">39</span><span class="cl">    <span class="kt">notifier_fn_t</span> <span class="n">notifier_call</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">40</span><span class="cl">    <span class="k">struct</span> <span class="n">notifier_block</span> <span class="n">__rcu</span> <span class="o">*</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">41</span><span class="cl">    <span class="kt">int</span> <span class="n">priority</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">42</span><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="ln">43</span><span class="cl">
+</span></span><span class="line"><span class="ln">44</span><span class="cl"><span class="k">struct</span> <span class="n">atomic_notifier_head</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">45</span><span class="cl">    <span class="kt">spinlock_t</span> <span class="n">lock</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">46</span><span class="cl">    <span class="k">struct</span> <span class="n">notifier_block</span> <span class="n">__rcu</span> <span class="o">*</span><span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">47</span><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="ln">48</span><span class="cl">
+</span></span><span class="line"><span class="ln">49</span><span class="cl"><span class="k">struct</span> <span class="n">blocking_notifier_head</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">50</span><span class="cl">    <span class="k">struct</span> <span class="n">rw_semaphore</span> <span class="n">rwsem</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">51</span><span class="cl">    <span class="k">struct</span> <span class="n">notifier_block</span> <span class="n">__rcu</span> <span class="o">*</span><span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">52</span><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="ln">53</span><span class="cl">
+</span></span><span class="line"><span class="ln">54</span><span class="cl"><span class="k">struct</span> <span class="n">raw_notifier_head</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">55</span><span class="cl">    <span class="k">struct</span> <span class="n">notifier_block</span> <span class="n">__rcu</span> <span class="o">*</span><span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">56</span><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="ln">57</span><span class="cl">
+</span></span><span class="line"><span class="ln">58</span><span class="cl"><span class="k">struct</span> <span class="n">srcu_notifier_head</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">59</span><span class="cl">    <span class="k">struct</span> <span class="n">mutex</span> <span class="n">mutex</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">60</span><span class="cl">    <span class="k">struct</span> <span class="n">srcu_usage</span> <span class="n">srcuu</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">61</span><span class="cl">    <span class="k">struct</span> <span class="n">srcu_struct</span> <span class="n">srcu</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">62</span><span class="cl">    <span class="k">struct</span> <span class="n">notifier_block</span> <span class="n">__rcu</span> <span class="o">*</span><span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">63</span><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div>
+<h2 id="11-原子通知链" data-numberify>1.1. 原子通知链<a class="anchor ms-1" href="#11-原子通知链"></a></h2>
+<p>原子通知链用于在中断上下文中或者其他不允许阻塞的场景中进行通知。其特点是通知的处理过程必须是原子的，不能被打断。</p>
+<p>在实现上，原子通知链通过使用原子操作来保证通知的顺序和完整性。当事件发生时，内核会遍历原子通知链上注册的回调函数，并依次执行它们。</p>
+<p>优点：适用于对实时性和原子性要求较高的场景，能够确保通知的快速处理且不会被中断。</p>
+<p>缺点：由于不能阻塞，所以在处理复杂逻辑时可能会受到限制。</p>
+
+<h2 id="12-阻塞通知链" data-numberify>1.2. 阻塞通知链<a class="anchor ms-1" href="#12-阻塞通知链"></a></h2>
+<p>阻塞通知链允许在通知处理过程中进行阻塞操作，例如等待资源、睡眠等。</p>
+<p>这种通知链通常在进程上下文使用，因为阻塞操作在中断上下文是不被允许的。当通知被触发时，内核会按照注册的顺序依次调用回调函数，如果某个回调函数进行了阻塞操作，内核会暂停当前回调函数的执行，切换到其他可运行的任务。</p>
+<p>优点：能够处理较为复杂的逻辑，包括需要阻塞等待的情况。</p>
+<p>缺点：可能会导致系统的响应时间变长，特别是在处理耗时的阻塞操作时。</p>
+
+<h2 id="13-原始通知链" data-numberify>1.3. 原始通知链<a class="anchor ms-1" href="#13-原始通知链"></a></h2>
+<p>原始通知链提供了一种最低级别的通知机制，不对通知的执行顺序和并发访问进行任何保证。</p>
+<p>它适用于那些对通知的顺序和并发处理要求不高，或者需要自定义处理方式的场景。</p>
+<p>优点：灵活性高，能够满足一些特殊的需求。</p>
+<p>缺点：由于缺乏保证，使用时需要特别小心，以避免出现竞态条件和不确定的行为。</p>
+
+<h2 id="14-srcu-通知链" data-numberify>1.4. SRCU 通知链<a class="anchor ms-1" href="#14-srcu-通知链"></a></h2>
+<p>SRCU 通知链用于在读写锁保护的场景中进行通知。它结合了读锁的并发访问和写锁的同步更新特性。</p>
+<p>在使用 SRCU 通知链时，读端可以并发地访问通知链，而写端在更新通知链时需要获取写锁。</p>
+<p>优点：在保证一定的并发性能的同时，能够安全地进行通知链的更新。</p>
+<p>缺点：实现相对复杂，需要对读写锁和 SRCU 机制有深入的理解。</p>
+
+<h1 id="2-原理" data-numberify>2. 原理<a class="anchor ms-1" href="#2-原理"></a></h1>
+
+<h2 id="21-注册" data-numberify>2.1. 注册<a class="anchor ms-1" href="#21-注册"></a></h2>
+<p>核心函数：<code>notifier_chain_register</code>。</p>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.6/notifier_chain/notifier_chain/notifier_register_caller.png" loading="lazy" width="2201" height="1532" />
+</picture>
+
+</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// kernel/notifier.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="kt">int</span> <span class="nf">notifier_chain_register</span><span class="p">(</span><span class="k">struct</span> <span class="n">notifier_block</span> <span class="o">**</span><span class="n">nl</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">                   <span class="k">struct</span> <span class="n">notifier_block</span> <span class="o">*</span><span class="n">n</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">                   <span class="kt">bool</span> <span class="n">unique_priority</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    <span class="k">while</span> <span class="p">((</span><span class="o">*</span><span class="n">nl</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">        <span class="c1">/// 已经存在，返回错误
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="nf">unlikely</span><span class="p">((</span><span class="o">*</span><span class="n">nl</span><span class="p">)</span> <span class="o">==</span> <span class="n">n</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">            <span class="nf">WARN</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#34;notifier callback %ps already registered&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">                 <span class="n">n</span><span class="o">-&gt;</span><span class="n">notifier_call</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">            <span class="k">return</span> <span class="o">-</span><span class="n">EEXIST</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">        <span class="c1">/// 优先级高于当前节点，插入到当前节点之前
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">n</span><span class="o">-&gt;</span><span class="n">priority</span> <span class="o">&gt;</span> <span class="p">(</span><span class="o">*</span><span class="n">nl</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">priority</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">            <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl">        <span class="c1">/// 优先级相同，且要求唯一性，返回错误
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">n</span><span class="o">-&gt;</span><span class="n">priority</span> <span class="o">==</span> <span class="p">(</span><span class="o">*</span><span class="n">nl</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">priority</span> <span class="o">&amp;&amp;</span> <span class="n">unique_priority</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">            <span class="k">return</span> <span class="o">-</span><span class="n">EBUSY</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">        <span class="c1">/// 遍历下一个节点
+</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="c1"></span>        <span class="n">nl</span> <span class="o">=</span> <span class="o">&amp;</span><span class="p">((</span><span class="o">*</span><span class="n">nl</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">    <span class="c1">/// 插入新节点
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="c1"></span>    <span class="n">n</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="o">*</span><span class="n">nl</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl">    <span class="nf">rcu_assign_pointer</span><span class="p">(</span><span class="o">*</span><span class="n">nl</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl">
+</span></span><span class="line"><span class="ln">26</span><span class="cl">    <span class="nf">trace_notifier_register</span><span class="p">((</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="n">n</span><span class="o">-&gt;</span><span class="n">notifier_call</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">27</span><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div>
+<h2 id="22-调用" data-numberify>2.2. 调用<a class="anchor ms-1" href="#22-调用"></a></h2>
+<p>核心函数：<code>notifier_call_chain</code>。</p>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.6/notifier_chain/notifier_chain/notifier_call.png" loading="lazy" width="684" height="347" />
+</picture>
+
+</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// kernel/notifier.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cm">/**
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * notifier_call_chain - Informs the registered notifiers about an event.
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> *	@nl:		Pointer to head of the blocking notifier chain
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> *	@val:		Value passed unmodified to notifier function
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> *	@v:		Pointer passed unmodified to notifier function
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> *	@nr_to_call:	Number of notifier functions to be called. Don&#39;t care
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> *			value of this parameter is -1.
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> *	@nr_calls:	Records the number of notifications sent. Don&#39;t care
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> *			value of this field is NULL.
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cm"> *	Return:		notifier_call_chain returns the value returned by the
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cm"> *			last notifier function called.
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">notifier_call_chain</span><span class="p">(</span><span class="k">struct</span> <span class="n">notifier_block</span> <span class="o">**</span><span class="n">nl</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">                   <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">val</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">v</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl">                   <span class="kt">int</span> <span class="n">nr_to_call</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">nr_calls</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">    <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">NOTIFY_DONE</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">    <span class="k">struct</span> <span class="n">notifier_block</span> <span class="o">*</span><span class="n">nb</span><span class="p">,</span> <span class="o">*</span><span class="n">next_nb</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">
+</span></span><span class="line"><span class="ln">21</span><span class="cl">    <span class="c1">/// 获取当前链表第一个节点
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="c1"></span>    <span class="n">nb</span> <span class="o">=</span> <span class="nf">rcu_dereference_raw</span><span class="p">(</span><span class="o">*</span><span class="n">nl</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl">
+</span></span><span class="line"><span class="ln">24</span><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="n">nb</span> <span class="o">&amp;&amp;</span> <span class="n">nr_to_call</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl">        <span class="c1">/// 获取下一个节点
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="c1"></span>        <span class="n">next_nb</span> <span class="o">=</span> <span class="nf">rcu_dereference_raw</span><span class="p">(</span><span class="n">nb</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">27</span><span class="cl">
+</span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="cp">#ifdef CONFIG_DEBUG_NOTIFIERS
+</span></span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="cp"></span>        <span class="c1">/// ... ..
+</span></span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="c1"></span><span class="cp">#endif
+</span></span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="cp"></span>        <span class="nf">trace_notifier_run</span><span class="p">((</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="n">nb</span><span class="o">-&gt;</span><span class="n">notifier_call</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl">        <span class="c1">/// 调用回调函数
+</span></span></span><span class="line"><span class="ln">33</span><span class="cl"><span class="c1"></span>        <span class="n">ret</span> <span class="o">=</span> <span class="n">nb</span><span class="o">-&gt;</span><span class="nf">notifier_call</span><span class="p">(</span><span class="n">nb</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">v</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">34</span><span class="cl">
+</span></span><span class="line"><span class="ln">35</span><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">nr_calls</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">36</span><span class="cl">            <span class="p">(</span><span class="o">*</span><span class="n">nr_calls</span><span class="p">)</span><span class="o">++</span><span class="p">;</span>  <span class="c1">/// 更新调用次数
+</span></span></span><span class="line"><span class="ln">37</span><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="ln">38</span><span class="cl">        <span class="c1">/// 判断回调函数是否需要停止调用
+</span></span></span><span class="line"><span class="ln">39</span><span class="cl"><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">&amp;</span> <span class="n">NOTIFY_STOP_MASK</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">40</span><span class="cl">            <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">41</span><span class="cl">
+</span></span><span class="line"><span class="ln">42</span><span class="cl">        <span class="c1">/// 更新当前节点
+</span></span></span><span class="line"><span class="ln">43</span><span class="cl"><span class="c1"></span>        <span class="n">nb</span> <span class="o">=</span> <span class="n">next_nb</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">44</span><span class="cl">        <span class="n">nr_to_call</span><span class="o">--</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">45</span><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="ln">46</span><span class="cl">    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">47</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">48</span><span class="cl"><span class="nf">NOKPROBE_SYMBOL</span><span class="p">(</span><span class="n">notifier_call_chain</span><span class="p">);</span>
+</span></span></code></pre></div></div>
+</div>
+</div><div class="card-footer">
+  <div class="post-navs d-flex justify-content-evenly"><div class="post-nav post-prev">
+      <i class="fas fa-fw fa-chevron-down post-prev-icon me-1" data-fa-transform="rotate-90"></i>
+      <a href="/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_mm/">Linux drm mm分析(基于intel ivpu驱动)</a>
+    </div></div>
+</div></article><div class="post-copyright mb-3 row card component" id="post-copyright">
+    <div class="card-header">
+        <h2 class="card-title fs-4 my-2 text-surface">版权</h2>
+    </div>
+    <div class="card-body"><a class="d-flex align-items-center flex-column" target="_blank" rel="license noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh">
+  <span><i class="fab fa-fw fa-2x fa-creative-commons"></i><i class="fab fa-fw fa-2x fa-creative-commons-by"></i><i class="fab fa-fw fa-2x fa-creative-commons-nc"></i><i class="fab fa-fw fa-2x fa-creative-commons-nd"></i></span>
+  CC BY-NC-ND 4.0 
+</a>
+
+
+    </div>
+</div></div>
+</div>
+<aside class="sidebar d-flex docs-sidebar col-xxl-3 position-sticky order-xxl-5">
+  <div class="container">
+    
+<div class="row component card">
+    <div class="card-body">
+        <form action="/zh-cn/search/">
+            <div class="input-group">
+                <input name="q" class="form-control rounded" placeholder="搜索">
+                <button class="btn btn-sm btn-search position-absolute end-0 border-0 border-start border-secondary p-2" type="submit">
+                    <i class="fas fa-fw fa-search text-primary"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    <div class="accordion post-toc d-none d-lg-block">
+  <div class="accordion-item row mb-4 card component" id="postTOC">
+    <div class="card-header accordion-header">
+      <h2 class="card-title fs-4 my-2 text-surface d-none d-lg-block">目录</h2>
+      <a class="accordion-button d-lg-none mb-1 collapsed shadow-none p-0 bg-transparent" role="button" data-bs-toggle="collapse" href="#post-toc" aria-expanded="false" aria-controls="post-toc">
+        目录
+      </a>
+    </div>
+    <div class="card-body collapse accordion-collapse accordion-body d-lg-block" id="post-toc">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-简介">1. 简介</a>
+      <ul>
+        <li><a href="#11-原子通知链">1.1. 原子通知链</a></li>
+        <li><a href="#12-阻塞通知链">1.2. 阻塞通知链</a></li>
+        <li><a href="#13-原始通知链">1.3. 原始通知链</a></li>
+        <li><a href="#14-srcu-通知链">1.4. SRCU 通知链</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-原理">2. 原理</a>
+      <ul>
+        <li><a href="#21-注册">2.1. 注册</a></li>
+        <li><a href="#22-调用">2.2. 调用</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+  </div>
+</div>
+    
+
+
+
+
+
+
+  </div>
+</aside>
+
+      </div>
+    </main><footer class="footer mt-auto py-3 text-center container"><div class="offcanvas offcanvas-bottom h-auto" tabindex="-1" id="offcanvasActionsPanel"
+  aria-labelledby="offcanvasActionsPanelLabel">
+  <div class="offcanvas-header">
+    <div class="offcanvas-title h5" id="offcanvasActionsPanelLabel">
+      <i class="fas fa-fw fa-th-large me-1"></i>
+      操作
+    </div>
+    <button type="button" class="btn-close ms-auto" data-bs-dismiss="offcanvas" data-bs-target="offcanvasActionsPanel" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body mt-2"><div class="actions d-flex overflow-auto align-items-center">
+      <a role="button" class="action action-go-back d-flex flex-column align-items-center me-3" href="javascript: window.history.back();">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-90"></i></span> 返回
+      </a>
+      <a role="button" class="action action-reload-page d-flex flex-column align-items-center me-3">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-redo-alt"></i></span> 刷新
+      </a>
+      <a role="button" class="action action-copy-url d-flex flex-column align-items-center me-3">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-link"></i></span> 复制链接
+      </a>
+    </div>
+  </div>
+</div><div class="row text-center text-lg-start">
+  <div class="col-12 mt-2 col-lg-3">
+    <p class="mb-2">kingdix10&#39;s site</p>
+    <p class="text-secondary mb-2"><small>kingdix10 @ 拾月国度</small></p><div class="copyright mb-2 text-secondary">
+  <small>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</small>
+</div>
+
+
+
+<nav class="social-links nav justify-content-center justify-content-between mb-2 mt-3">
+      <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="https://github.com/kingdix10" title="GitHub" rel="me">
+        <i class="fa-fw fab fa-github"
+          ></i>
+      </a>
+      <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="https://www.zhihu.com/people/kingdix10" title="知乎" rel="me">
+        <i class="fa-fw fab fa-zhihu"
+           style="color: #056de8;"></i>
+      </a>
+  <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="/zh-cn/index.xml" title="RSS" rel="me">
+    <i class="fas fa-fw fa-rss" style="color: #ea6221;"></i>
+  </a>
+</nav>
+</div>
+  <div class="col-12 col-lg-8 offset-0 offset-lg-1"><ul class="nav justify-content-between footer-memu mb-3 row"><li class="nav-item col-12 col-md-6 col-lg-3 px-0"><ul class="nav flex-column align-items-start">
+      <li class="nav-item w-100"><a class="nav-link fw-bold fs-lg" href="javascript: void(0);">链接</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+GitHub"
+  href="https://github.com/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-github text-primary"></i></span>GitHub</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+Gitee"
+  href="https://gitee.com/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-github text-primary"></i></span>Gitee</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+Zhihu"
+  href="https://www.zhihu.com/people/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-zhihu text-primary"></i></span>Zhihu</a></li></ul></li></ul></div>
+</div>
+</footer>
+<script data-precache src="/assets/main/bundle.min.de08722b15dbab0d764debd50114ce3d28da8ee6c7b889ff8c82e6faad0b46dd.js" integrity="sha256-3ghyKxXbqw12TevVARTOPSjajubHuIn/jILm&#43;q0LRt0=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
+<script data-precache src="/assets/viewer/bundle.min.ffafad0d121aa7d1fb443510086dac514a0b152826cf094f02a1f3dec1f37918.js" integrity="sha256-/6&#43;tDRIap9H7RDUQCG2sUUoLFSgmzwlPAqHz3sHzeRg=" crossorigin="anonymous" defer></script><script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?8e042c957455c462d9b4c9da3ab642b0";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<script src="/js/sw-register.js" defer></script>
+
+  </body>
+</html>

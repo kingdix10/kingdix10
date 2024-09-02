@@ -10,52 +10,52 @@
     <lastBuildDate>Thu, 20 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/%E5%86%85%E6%A0%B8%E9%A9%B1%E5%8A%A8/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Linux内核驱动模型（三）驱动初始化</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/device_driver/initcall/</link>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/initcall/</link>
       <pubDate>Thu, 20 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/device_driver/initcall/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/initcall/</guid>
       <description><![CDATA[1. module_init是什么 module_init是Linux内核开发和驱动开发中非常常见的宏，其定义在 include/linux/mod]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/pixels_cubes_shapes_127558_300x168.jpg" length="18339" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_1280x720.jpg" length="194685" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux内核驱动模型（四）核心结构体</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/device_driver/device_model/</link>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/device_model/</link>
       <pubDate>Wed, 12 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/device_driver/device_model/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/device_model/</guid>
       <description><![CDATA[1. sysfs中的bus/class/device/driver 首先通过实例来看bus/class/device/driver的关系。下图绘制]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/hologram_scheme_scifi_139294_300x168.jpg" length="9556" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/dunes_sand_texture_151004_300x168.jpg" length="17708" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux内核驱动模型（一）设备树展开</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/fdt/fdt_dt/</link>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/fdt_dt/</link>
       <pubDate>Wed, 12 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/fdt/fdt_dt/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/fdt_dt/</guid>
       <description><![CDATA[1. DT和FDT 设备树（Device Tree，DT）是一种层次结构的文本数据表示方式，用于描述硬件设备的配置信息。扁平设备树（Flattene]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/code_programming_text_140050_300x168.jpg" length="11796" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/iridescent_colorful_lines_130978_300x168.jpg" length="11918" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux内核驱动模型（二）设备树转换</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/fdt/dt_to_dt/</link>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/dt_to_dt/</link>
       <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/fdt/dt_to_dt/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/dt_to_dt/</guid>
       <description><![CDATA[1. device_node tree到device tree device_node的层次结构建立之后，并没有struct device生成，那我们实现的驱动probe函数又是]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/shortcode.png" length="6548" type="image/.png" />
+    <enclosure url="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg" length="10737" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux内核数据结构kobject/kset/ktype</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/kobject/kobject/</link>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/kobject/kobject/</link>
       <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/kobject/kobject/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/kobject/kobject/</guid>
       <description><![CDATA[1. 数据结构简介 内核版本：linux-6.1 内核文档：Everything you never wanted to know about kobjects, ksets, and ktypes — The Linux Kernel documentation 在Linux内核中，kobject、k]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_texture_127524_300x168.jpg" length="18901" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/lines_obliquely_stripes_123801_300x168.jpg" length="18016" type="image/.jpg" />
     </item>
     
     <item>
@@ -65,7 +65,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/timekeeping/</guid>
       <description><![CDATA[1. timekeeping timekeeping是时间子系统用于从clocksource获取时间，维护墙上时间、单调递增时间、启动时间的模块，timekeepin]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" length="24563" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/flowers_leaves_pattern_148777_300x168.jpg" length="26948" type="image/.jpg" />
     </item>
     
     <item>
@@ -75,7 +75,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/</guid>
       <description><![CDATA[1. thermal简介 内核版本：linux-6.1 thermal子系统主要用来监测和调节CPU、GPU等芯片或设备的温度。三个主要结构体的关系]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/code_text_colorful_140555_300x168.jpg" length="22830" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/blinds_lines_shade_143653_300x168.jpg" length="11444" type="image/.jpg" />
     </item>
     
     <item>
@@ -85,7 +85,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/time/</guid>
       <description><![CDATA[1. 简介 内核版本：linux-6.1 时间子系统的作用： 时间读取功能 定时器功能，有传统的定时器timer、高精度定时器hrtimer 提供用于调度]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/mosaic_multicolored_texture_126795_300x168.jpg" length="20064" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/wood_texture_logs_159793_300x168.jpg" length="19513" type="image/.jpg" />
     </item>
     
   </channel>

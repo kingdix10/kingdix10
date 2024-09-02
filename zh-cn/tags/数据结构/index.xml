@@ -10,12 +10,12 @@
     <lastBuildDate>Mon, 10 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Linux内核数据结构kobject/kset/ktype</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/kobject/kobject/</link>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/kobject/kobject/</link>
       <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/kobject/kobject/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/kobject/kobject/</guid>
       <description><![CDATA[1. 数据结构简介 内核版本：linux-6.1 内核文档：Everything you never wanted to know about kobjects, ksets, and ktypes — The Linux Kernel documentation 在Linux内核中，kobject、k]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_texture_127524_300x168.jpg" length="18901" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/lines_obliquely_stripes_123801_300x168.jpg" length="18016" type="image/.jpg" />
     </item>
     
   </channel>

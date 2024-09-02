@@ -15,7 +15,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/02-dev_env/vdisk_compact/</guid>
       <description><![CDATA[1. 基本原理 文件系统未占用的空间数据写完全0，会被视为空闲空间，可以被虚拟机软件回收。 操作步骤： 虚拟机内，空闲空间数据写0。 关闭虚拟机 回收虚拟]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/mosaic_multicolored_texture_126795_300x168.jpg" length="20064" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg" length="10737" type="image/.jpg" />
     </item>
     
     <item>
@@ -25,7 +25,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/02-dev_env/resizefs/</guid>
       <description><![CDATA[Linux磁盘和文件系统扩容/缩容]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/iridescent_colorful_lines_130978_300x168.jpg" length="11918" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/lines_obliquely_stripes_123801_300x168.jpg" length="18016" type="image/.jpg" />
     </item>
     
     <item>
@@ -35,7 +35,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/02-dev_env/samba/</guid>
       <description><![CDATA[1. 准备工作 如果是虚拟机中安装的Linux系统，需要新建一个网络适配器，模式为桥接模式。 如果是独立的物理机安装了Linux系统，可以在路由器或]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/camera_photographer_smoke_126548_300x168.jpg" length="9088" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/iridescent_colorful_lines_130978_300x168.jpg" length="11918" type="image/.jpg" />
     </item>
     
   </channel>

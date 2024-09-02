@@ -15,7 +15,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/02-dev_env/vdisk_compact/</guid>
       <description><![CDATA[1. 基本原理 文件系统未占用的空间数据写完全0，会被视为空闲空间，可以被虚拟机软件回收。 操作步骤： 虚拟机内，空闲空间数据写0。 关闭虚拟机 回收虚拟]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/mosaic_multicolored_texture_126795_300x168.jpg" length="20064" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg" length="10737" type="image/.jpg" />
     </item>
     
     <item>
@@ -25,7 +25,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/jupyter_to_markdown/</guid>
       <description><![CDATA[1apt install jupyter-core 或者 1python3 -m pip install jupyter 转换： 1jupyter nbconvert --to markdown xxx.ipynb]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/dunes_sand_texture_151004_300x168.jpg" length="17708" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/walls_floor_light_50837_300x168.jpg" length="14340" type="image/.jpg" />
     </item>
     
   </channel>

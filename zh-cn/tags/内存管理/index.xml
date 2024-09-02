@@ -15,7 +15,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_mm/</guid>
       <description><![CDATA[使用drm mm管理虚拟内存和物理内存]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/code_letters_screen_137590_300x168.jpg" length="10341" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/flowers_leaves_pattern_148777_300x168.jpg" length="26948" type="image/.jpg" />
     </item>
     
     <item>
@@ -35,7 +35,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc/</guid>
       <description><![CDATA[1. kmalloc分配内存的大小 本文基于linux-5.15分析。 kmalloc会根据申请的内存大小来决定来决定使用块分配器(slab/slu]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wood_texture_logs_159793_300x168.jpg" length="19513" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/wall_brick_neon_150470_300x168.jpg" length="13857" type="image/.jpg" />
     </item>
     
   </channel>

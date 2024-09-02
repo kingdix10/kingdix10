@@ -15,7 +15,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_network/</guid>
       <description><![CDATA[nmap 1nmap -sVn 192.168.31.* 2 3nmap -sVn 192.168.31.* -oN out.txt 4 5nmap -sV -sC -Pn 192.168.31.* 6 7nmap -sV -sC -Pn 192.168.31.* -oN out.txt 8 9nmap -sV -sC -Pn 192.168.31.* -oG out.txt 10 11nmap -sV -sC -Pn 192.168.31.* -oX out.xml 12 13nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script=banner,vuln 14 15nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script=banner,vuln --script-args=banner.timeout=10,vuln.timeout=10 16 17nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script=banner,vuln --script-args=banner.timeout=10,vuln.timeout=10 --script-args=banner.path=/usr/share/nmap/scripts/http-title.nse,vuln.cvss-threshold=7]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lava_texture_surface_140175_300x168.jpg" length="10556" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/texture_background_color_72786_300x168.jpg" length="9947" type="image/.jpg" />
     </item>
     
   </channel>

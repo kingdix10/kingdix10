@@ -15,7 +15,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_file/</guid>
       <description><![CDATA[1. 打包隐藏文件 1tar -czf data.tar.gz ./.[!.]* 2. find 2.1. 查找文件并按大小排序 1find -type f -name &#39;*.md&#39; -printf &#39;%s\t%p\n&#39; | grep -v &#39;\.git&#39; | sort -nr | less -N 2.2. 批量删除7天前的文件 1find -type f -mtime +7 -exec rm -rf {} \; 2find -type f -mtime +7 -exec rm -fr]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/texture_background_color_72786_300x168.jpg" length="9947" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/camera_lens_strap_145518_300x168.jpg" length="15893" type="image/.jpg" />
     </item>
     
   </channel>

@@ -15,7 +15,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/05-program/compile/make_debug/</guid>
       <description><![CDATA[命令行选项 1# -n, --just-print 2# -d, --debug=brief Makefile打印 在rule外，可以使用如下方法 1# 仅输出信息 2$(info TEXT…) 3 4# 输出文件名、行号和信息 5$(warning TEXT…) 6]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/flowers_leaves_pattern_148777_300x168.jpg" length="26948" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/pattern_color_mosaic_131243_300x168.jpg" length="26919" type="image/.jpg" />
     </item>
     
   </channel>

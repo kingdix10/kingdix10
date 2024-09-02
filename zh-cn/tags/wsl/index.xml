@@ -15,7 +15,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/win/ssh_wsl_exe/</guid>
       <description><![CDATA[1. 准备工作 wsl需要安装openssh-server，有可能需要修改/etc/sshd_config中端口号。 2. wsl运行程序 ssh连接ws]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wavy_motley_metallic_139065_300x168.jpg" length="26579" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/cockpit_panel_display_169481_300x168.jpg" length="10012" type="image/.jpg" />
     </item>
     
   </channel>

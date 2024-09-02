@@ -15,7 +15,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_domain_add/</guid>
       <description><![CDATA[1. IRQ domain注册 中断控制器初始化的过程中，要向中断子系统注册irq domain。核心函数__irq_domain_add。 gic-v2使]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/bubbles_drops_macro_126764_300x168.jpg" length="23506" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/travel_map_compass_123078_300x168.jpg" length="14785" type="image/.jpg" />
     </item>
     
     <item>
@@ -25,7 +25,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_create_mapping/</guid>
       <description><![CDATA[1. 设备中断注册 gic-v3的中断号划分在《IHI0069H_gic_architecture_specification.pdf》有所罗列：]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/metal_texture_surface_157344_300x168.jpg" length="9729" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/pixels_cubes_shapes_127558_300x168.jpg" length="18339" type="image/.jpg" />
     </item>
     
     <item>
@@ -35,7 +35,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/request_irq/</guid>
       <description><![CDATA[1. 申请中断 __setup_irq是用于设置和注册中断的核心函数，它是request_threaded_irq等函数的内部实现。 1.1. irqaction handl]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/spots_stains_colorful_147593_300x168.jpg" length="20423" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/laptop_backlight_colorful_194324_300x168.jpg" length="7666" type="image/.jpg" />
     </item>
     
     <item>
@@ -45,7 +45,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/handler_entry/</guid>
       <description><![CDATA[1. 中断入口 要处理中断，必须为handle_arch_irq赋值。 ARM64自己定义handle_arch_irq的实现。 1/// arch/arm64/kernel/irq.c 2void (*handle_arch_irq)(struct pt_regs *) __ro_after_init = default_handle_irq; 3void]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/laptop_keyboard_glow_170138_300x168.jpg" length="3604" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/vintage_retro_camera_126517_300x168.jpg" length="11143" type="image/.jpg" />
     </item>
     
     <item>
@@ -55,7 +55,17 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/init/</guid>
       <description><![CDATA[1. 简介 early_irq_init完成中断子系统软件部分初始化。 irqchip_init初始化中断控制器，向系统注册struct irq_do]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/code_letters_screen_137590_300x168.jpg" length="10341" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/hologram_scheme_scifi_139294_300x168.jpg" length="9556" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>ARM64 Linux中断入口</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/</link>
+      <pubDate>Sun, 21 Apr 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/</guid>
+      <description><![CDATA[1. 简介 ARM64中断入口相关的代码主要在arch/arm64/kernel/entry.S，启动过程中，会将中断向量表vectors的起始虚]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/wavy_curvy_lines_146044_300x168.jpg" length="25854" type="image/.jpg" />
     </item>
     
     <item>
@@ -65,7 +75,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_flow/</guid>
       <description><![CDATA[sequenceDiagram participant caller as caller participant irq as irq.c participant irqdomain as irqdomain.c participant irqdesc as irqdesc.c participant bitmap as bitmap.c activate caller caller -&gt;&gt; irq: irq_of_parse_and_map activate irq Note right of irq: irq_of_parse_and_map irq -&gt;&gt; irq: of_irq_parse_one irq -&gt;&gt; irqdomain: irq_create_of_mapping activate irqdomain Note right of irqdomain :irq_create_of_mapping irqdomain -&gt;&gt; irqdomain: of_phandle_args_to_fwspec irqdomain -&gt;&gt; irqdomain: irq_create_fwspec_mapping activate irqdomain Note right of irqdomain :irq_create_fwspec_mapping irqdomain -&gt;&gt; irqdomain: irq_domain_translate irqdomain -&gt;&gt;]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/binary_code_code_numbers_147523_300x168.jpg" length="15658" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/code_programming_text_140050_300x168.jpg" length="11796" type="image/.jpg" />
     </item>
     
   </channel>

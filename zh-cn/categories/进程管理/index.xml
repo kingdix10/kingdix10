@@ -7,7 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
-    <lastBuildDate>Sat, 03 Feb 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 31 Aug 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>用trace追踪Linux进程的一生</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/task_life/</link>
+      <pubDate>Sat, 31 Aug 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/task_life/</guid>
+      <description><![CDATA[1. 简介 通常来说，shell要启动一个新的程序，会先fork一个新进程，然后执行exec系统调用将替换新进程的执行程序。posix规定了pos]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/texture_background_color_72786_300x168.jpg" length="9947" type="image/.jpg" />
+    </item>
+    
     <item>
       <title>Linux fork进程/线程简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/a-fork/</link>
@@ -15,7 +25,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/a-fork/</guid>
       <description><![CDATA[1. kernel_clone kernel_clone是内核创建进程/线程的核心函数，如下功能都是通过调用kernel_clone实现的。 kernel_thread：]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wall_brick_purple_141823_300x168.jpg" length="14935" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/walls_floor_light_50837_300x168.jpg" length="14340" type="image/.jpg" />
     </item>
     
     <item>
@@ -25,7 +35,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_2/</guid>
       <description><![CDATA[1. shm_init_task 在使能SYSVIPC的情况下，初始化task-&gt;sysvshm.shm_clist。 1 /* copy all the process information */ 2 shm_init_task(p); 2. security_task_alloc 1 retval = security_task_alloc(p, clone_flags); /// Allocate a task&#39;s LSM blob]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/keyboard_laptop_gradient_203739_300x168.jpg" length="10539" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/blinds_lines_shade_143653_300x168.jpg" length="11444" type="image/.jpg" />
     </item>
     
     <item>
@@ -35,7 +45,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_3/</guid>
       <description><![CDATA[1. stackleak_task_init 需要编译器和体系结构支持，见CONFIG_GCC_PLUGIN_STACKLEAK，ARM64默认未使能。 如果使能，会设置lowest_]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lines_multicolored_rainbow_125651_300x168.jpg" length="11453" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/pink_color_background_153889_300x168.jpg" length="1430" type="image/.jpg" />
     </item>
     
     <item>
@@ -45,7 +55,17 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_1/</guid>
       <description><![CDATA[1. copy_process原型 1/// kernel/fork.c 2/* 3 * This creates a new process as a copy of the old one, 4 * but does not actually start it yet. 5 * 6 * It copies the registers, and all the appropriate 7 * parts of the process environment (as per the clone 8 * flags). The actual kick-off]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lines_intersection_oblique_153331_300x168.jpg" length="16159" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/iridescent_colorful_lines_130978_300x168.jpg" length="11918" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>exec系统调用简介</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/execve/</link>
+      <pubDate>Wed, 03 Jan 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/execve/</guid>
+      <description><![CDATA[1. 动态链接和静态链接 1.1. 编译命令 1aarch64-linux-gnu-gcc -o dummy_arm64 dummy.c 2aarch64-linux-gnu-gcc -static -o dummy_arm64_static dummy.c 1.2. 查看文件格式信息 1$ file dummy_arm64* 2dummy_arm64: ELF 64-bit LSB executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=3fa0f1369e1b3181f059174b078dd893e813abb2, for GNU/Linux 3.7.0, with debug_info, not stripped 3dummy_arm64_static: ELF 64-bit LSB executable, ARM aarch64, version 1 (GNU/Linux), statically linked,]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/camera_lens_strap_145518_300x168.jpg" length="15893" type="image/.jpg" />
     </item>
     
     <item>
@@ -55,7 +75,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/pid_namespace/</guid>
       <description><![CDATA[1. namespace简介 namespace是Linux提供的一种内核级别环境隔离的方法，很多编程语言也有namespace这样的功能，例如C]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lens_camera_glare_147903_300x168.jpg" length="7000" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/cockpit_panel_display_169481_300x168.jpg" length="10012" type="image/.jpg" />
     </item>
     
     <item>
@@ -65,7 +85,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/relationship/</guid>
       <description><![CDATA[1. 基本概念 Linux内核中没有使用单独的数据结构来描述进程和线程，而是将它们统一起来，使用task_struct结构体来描述，这就是“Lin]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/texture_background_color_72786_300x168.jpg" length="9947" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/stars_figure_pattern_178502_300x168.jpg" length="18670" type="image/.jpg" />
     </item>
     
     <item>
@@ -75,7 +95,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_0/</guid>
       <description><![CDATA[1. 总览 这里以ARM64为例。 在内核的起始阶段，还没有进程和线程的概念，在开启MMU之后，__primary_switched的第一步就是将i]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/canvas_picture_abstraction_138874_300x168.jpg" length="19551" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_300x168.jpg" length="21351" type="image/.jpg" />
     </item>
     
     <item>
@@ -85,7 +105,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_1/</guid>
       <description><![CDATA[1. 1号进程的内核态 1号进程首先运行在内核态，其函数是kernel_init，这里简单介绍一下其工作： 非bootcpu相关初始化 页分配器初始化]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/india_flag_texture_132874_300x168.jpg" length="19297" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/gradient_blur_blending_130648_300x168.jpg" length="2927" type="image/.jpg" />
     </item>
     
     <item>
@@ -95,7 +115,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_2/</guid>
       <description><![CDATA[1. 2号线程kthreadd Linux内核规定，所有的线程必须由已存在的线程创建出来，也就是要求所有的task_struct都需要在已有的ta]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/cockpit_panel_display_169481_300x168.jpg" length="10012" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" length="24563" type="image/.jpg" />
     </item>
     
     <item>
@@ -105,7 +125,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/task_state/</guid>
       <description><![CDATA[1. 进程状态切换 state value desc TASK_NEW 0x00000800 新建 TASK_RUNNING 0x00000000 就绪或占有cpu运行 TASK_INTERRUPTIBLE 0x00000001 可中断睡眠 TASK_UNINTERRUPTIBLE 0x00000002 不可中断睡眠 TASK_WAKEKILL 0x00000100 可以在stopped/traced/killable的]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lines_plexus_neon_128926_300x168.jpg" length="24964" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/canvas_picture_abstraction_138874_300x168.jpg" length="19551" type="image/.jpg" />
     </item>
     
     <item>
@@ -115,7 +135,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_table/</guid>
       <description><![CDATA[1/// kernel/sched/sched.h 2/* 3 * Helper to define a sched_class instance; each one is placed in a separate 4 * section which is ordered by the linker script: 5 * 6 * include/asm-generic/vmlinux.lds.h 7 * 8 * *CAREFUL* they are laid out in *REVERSE* order!!! 9 * 10 * Also enforce alignment on the instance, not the type, to guarantee layout. 11 */ 12#define DEFINE_SCHED_CLASS(name) \ 13const struct sched_class name##_sched_class]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/keyboard_backlight_light_159518_300x168.jpg" length="10821" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/wavy_motley_metallic_139065_300x168.jpg" length="26579" type="image/.jpg" />
     </item>
     
   </channel>

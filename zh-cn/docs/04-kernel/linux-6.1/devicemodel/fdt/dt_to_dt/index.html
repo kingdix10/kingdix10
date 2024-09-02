@@ -1,0 +1,1461 @@
+<!doctype html>
+<html class="position-relative" itemscope itemtype="https://schema.org/WebPage" lang="zh-cn"
+  data-bs-theme="auto" data-palette="purple">
+  <head><script src="/assets/init/bundle.min.0bb93948508b32667bbc76d4f9a8123a3c3b2ef731048422b0c48f9ea39586e9.js" integrity="sha256-C7k5SFCLMmZ7vHbU&#43;agSOjw7LvcxBIQisMSPnqOVhuk=" crossorigin="anonymous"></script>
+<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Linux内核驱动模型（二）设备树转换 - kingdix10&#39;s site</title>
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_16x16_resize_box_3.png" sizes="16x16" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_32x32_resize_box_3.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_150x150_resize_box_3.png" sizes="150x150" type="image/png">
+    <link rel="apple-touch-icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_180x180_resize_box_3.png" sizes="180x180" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_192x192_resize_box_3.png" sizes="192x192" type="image/png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#6f42c1">
+<meta name="keywords" content="设备树, 设备驱动模型" />
+  <meta name="description" content="从“device_node tree”到“device tree”" />
+    <meta name="robots" content="index, follow" /><meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg"/>
+
+<meta name="twitter:title" content="Linux内核驱动模型（二）设备树转换"/>
+<meta name="twitter:description" content="从“device_node tree”到“device tree”"/>
+<meta property="og:title" content="Linux内核驱动模型（二）设备树转换" />
+<meta property="og:description" content="从“device_node tree”到“device tree”" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/dt_to_dt/" /><meta property="og:image" content="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg" /><meta property="article:section" content="docs" />
+<meta property="article:published_time" content="2023-07-10T00:00:00+00:00" />
+<meta property="article:modified_time" content="2024-08-04T17:46:33+00:00" /><meta property="og:site_name" content="kingdix10&#39;s site" />
+
+
+<meta itemprop="name" content="Linux内核驱动模型（二）设备树转换">
+<meta itemprop="description" content="从“device_node tree”到“device tree”"><meta itemprop="datePublished" content="2023-07-10T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2024-08-04T17:46:33+00:00" />
+<meta itemprop="wordCount" content="2985"><meta itemprop="image" content="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg">
+<meta itemprop="keywords" content="linux内核,内核驱动,linux-6.1," />
+  <meta property="og:image:alt" content="Linux内核驱动模型（二）设备树转换" />
+  <meta name="twitter:image:alt" content="Linux内核驱动模型（二）设备树转换" />
+  <link rel="manifest" href="/zh-cn/manifest.json">
+
+<link data-precache rel="stylesheet" href="/assets/main/bundle.min.6e8e72e2fe73efb4b8d986e54f0d232c384007622b8c47a23864194fbd179af4.css" integrity="sha256-bo5y4v5z77S42YblTw0jLDhAB2IrjEeiOGQZT70XmvQ=" crossorigin="anonymous">
+
+    <link data-precache rel="stylesheet" href="/assets/viewer/bundle.min.8c1002839fa22c1350d6ae1eef6593120e108f973c41348be9b5065430566aaf.css" integrity="sha256-jBACg5&#43;iLBNQ1q4e72WTEg4Qj5c8QTSL6bUGVDBWaq8=" crossorigin="anonymous">
+
+
+</head>
+  <body><header class="mb-4 sticky-top">
+  
+<nav class="top-app-bar shadow navbar navbar-expand-xxl">
+  <div class="container">
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDocsNav"
+      aria-expanded="false" aria-label="Toggle docs navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+<a class="navbar-brand d-flex align-items-center flex-grow-1 flex-xxl-grow-0 justify-content-xxl-start justify-content-center ms-2 ms-xxl-0 mx-auto me-xxl-2"
+    href="https://kingdix10.github.io/zh-cn/">
+    <picture><img class="logo " alt="Logo" src="https://kingdix10.github.io/images/icon_yellow_transparent_72x72.png" loading="lazy" width="72" height="72" />
+</picture>
+kingdix10
+</a>
+
+    <div class="offcanvas-xxl offcanvas-end flex-grow-1" data-bs-scroll="true" tabindex="-1" id="navbarMenus" aria-labelledby="navbarMenusLabel">
+      <div class="offcanvas-header px-4 pb-0">
+        <div class="offcanvas-title h5" id="navbarMenusLabel">kingdix10</div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#navbarMenus" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body p-4 pt-0 p-xxl-0">
+        <hr class="d-xxl-none">
+        <ul class="navbar-nav flex-row flex-wrap align-items-center me-auto"><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn">
+<span class="menu-icon me-1"><i class="fas fa-home"></i></span>主页
+            </a>
+          </li><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn/news/">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-newspaper"></i></span>新闻
+            </a>
+          </li><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn/docs/">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-folder"></i></span>文档
+            </a>
+          </li>
+          <li class="nav-item col-12 col-xxl-auto dropdown px-0">
+            <a href="#"
+              class="nav-link dropdown-toggle"
+              id="navbarDropdownBlog" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-blog"></i></span>博客
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog" data-bs-popper="none">
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/archives/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-file-archive text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">归档</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/series/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-columns"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">专栏</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of series.</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/categories/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-folder text-success"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">分类</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of categories.</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/tags/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-tags"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">标签</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of tags.</p>
+                  </div></a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item col-12 col-xxl-auto dropdown px-0">
+            <a href="#"
+              class="nav-link dropdown-toggle"
+              id="navbarDropdownLinks" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-link"></i></span>链接
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownLinks" data-bs-popper="none">
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://github.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-github text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">GitHub</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">github.com/kingdix10</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://gitee.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-github text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">Gitee</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">gitee.com/kingdix10</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://www.zhihu.com/people/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-zhihu text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">Zhihu</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://www.cnblogs.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">博客园</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://blog.csdn.net/u014001096" target="_blank" rel="noopener noreferrer">
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">CSDN</p>
+                  </div></a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+            </ul>
+          </li>
+        </ul>
+        
+    <hr class="d-xxl-none">
+    <form class="search-bar ms-auto my-auto" action="/zh-cn/search/" novalidate>
+      <div class="input-group align-items-center">
+        <span class="btn btn-search disabled position-absolute left-0 border-0 px-1">
+          <i class="fas fa-fw fa-search fa-lg"></i>
+        </span>
+        <input
+          class="my-1 form-control border-white rounded-5 search-input bg-body"
+          name="q"
+          type="search"
+          placeholder="搜索"
+          aria-label="Search"
+          required>
+          <span class="search-shortcut position-absolute end-0 top-0 me-2">
+            <kbd class="text-dark bg-white opacity-75 rounded-3 shadow border border-primary py-1 fw-bold">/</kbd>
+          </span>
+      </div>
+    </form><hr class="d-xxl-none">
+        <ul class="navbar-nav flex-row flex-wrap align-items-center ms-md-auto">
+<li class="nav-item py-2 py-xxl-1 col-12 col-xxl-auto">
+
+
+<nav class="social-links nav justify-content-center flex-row">
+      <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="https://github.com/kingdix10" title="GitHub" rel="me">
+        <i class="fa-fw fab fa-github"
+          ></i>
+        <span class="ms-1 d-xxl-none">Github</span>
+      </a>
+      <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="https://www.zhihu.com/people/kingdix10" title="知乎" rel="me">
+        <i class="fa-fw fab fa-zhihu"
+          ></i>
+        <span class="ms-1 d-xxl-none">Zhihu</span>
+      </a>
+  <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="/zh-cn/index.xml" title="RSS" rel="me">
+    <i class="fas fa-fw fa-rss"></i>
+    <span class="ms-1 d-xxl-none">RSS</span>
+  </a>
+</nav>
+
+</li>
+<li class="nav-item py-2 py-xxl-1 col-12 col-xxl-auto">
+  <div class="vr d-none d-xxl-flex h-100 mx-xxl-2 text-white"></div>
+  <hr class="d-xxl-none my-2">
+</li>
+<li class="nav-item dropdown py-1 py-xxl-1 col-6 col-xxl-auto">
+    <a class="nav-link px-0 px-xxl-1" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-globe"></i>
+        <span class="d-xxl-none">语言</span>
+    </a>
+    <ul class="language-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+        <li>
+        <a class="dropdown-item active" href="/zh-cn/">
+            简体中文
+        </a>
+        </li>
+        <li>
+        <a class="dropdown-item" href="/en/">
+            English
+        </a>
+        </li></ul>
+</li>
+<li class="nav-item py-1 col-12 col-xxl-auto">
+  <div class="vr d-none d-xxl-flex h-100 mx-xxl-2 text-white"></div>
+  <hr class="d-xxl-none my-2">
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="fontSizeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-font"></i>
+        <span class="d-xxl-none">字体大小</span>
+    </a>
+    <ul class="font-size-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="fontSizeDropdown">
+        <li>
+            <button class="font-size-item dropdown-item" data-size="xs">
+                特小号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="sm">
+                小号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item active" data-size="md">
+                中等
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="lg">
+                大号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="xl">
+                特大号
+            </button>
+        </li>
+    </ul>
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="paletteDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-palette"></i>
+        <span class="d-xxl-none">配色</span>
+    </a>
+    <ul class="palette-dropdown-menu dropdown-menu dropdown-menu-end px-2 row g-2" aria-labelledby="paletteDropdown">
+            <li class="col-4 my-1">
+                <a role="button" id="palette-blue" aria-label="蓝色"
+                    class="btn btn-sm w-100 palette text-bg-blue" data-palette="blue">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-blue-gray" aria-label="蓝灰色"
+                    class="btn btn-sm w-100 palette text-bg-blue-gray" data-palette="blue-gray">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-brown" aria-label="棕色"
+                    class="btn btn-sm w-100 palette text-bg-brown" data-palette="brown">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-cyan" aria-label="青色"
+                    class="btn btn-sm w-100 palette text-bg-cyan" data-palette="cyan">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-green" aria-label="绿色"
+                    class="btn btn-sm w-100 palette text-bg-green" data-palette="green">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-indigo" aria-label="靛青色"
+                    class="btn btn-sm w-100 palette text-bg-indigo" data-palette="indigo">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-orange" aria-label="橙色"
+                    class="btn btn-sm w-100 palette text-bg-orange" data-palette="orange">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-pink" aria-label="粉色"
+                    class="btn btn-sm w-100 palette text-bg-pink" data-palette="pink">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-purple" aria-label="紫色"
+                    class="btn btn-sm w-100 palette text-bg-purple" data-palette="purple">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-red" aria-label="红色"
+                    class="btn btn-sm w-100 palette text-bg-red" data-palette="red">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-teal" aria-label="蓝绿色"
+                    class="btn btn-sm w-100 palette text-bg-teal" data-palette="teal">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-yellow" aria-label="黄色"
+                    class="btn btn-sm w-100 palette text-bg-yellow" data-palette="yellow">
+                </a>
+            </li>
+    </ul>
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="modeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="mode-icon fas fa-fw fa-adjust" id="modeIcon"></i>
+        <span class="d-xxl-none">模式</span>
+    </a>
+    <ul class="mode-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="modeDropdown">
+        <li class="mode-item" data-color-mode="light" data-icon="sun">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-sun"></i> 浅色
+            </button>
+        </li>
+        <li class="mode-item" data-color-mode="dark" data-icon="moon">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-moon"></i> 深色
+            </button>
+        </li>
+        <li class="mode-item active" data-color-mode="auto" data-icon="adjust">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-adjust"></i> 自动
+            </button>
+        </li>
+    </ul>
+</li>
+        </ul>
+      </div>
+    </div>
+    <div class="d-flex">
+      <button class="navbar-toggler order-5 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarMenus"
+        aria-controls="navbarMenus" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-ellipsis-h"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+</header>
+
+    <main class="container">
+      <div class="row content"><noscript>
+    <div class="alert alert-danger" role="alert">你的浏览器不支持 JavaScript。</div>
+</noscript>
+<aside class="docs-nav col-xxl-2" tabindex="-1" data-bs-hide="focusout">
+  <div class="offcanvas-xxl offcanvas-start" id="offcanvasDocsNav" aria-labelledby="offcanvasDocsNavLabel">
+    <div class="offcanvas-header border-bottom">
+      <div class="offcanvas-title h5" id="offcanvasDocsNavLabel">浏览文档</div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#offcanvasDocsNav"></button>
+    </div>
+    <div class="offcanvas-body pt-2 flex-column"><div class="mb-3" style="margin-left: -0.5rem;">
+</div>
+<ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3 text-primary">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/"><span class="docs-nav-title-icon me-1"><i class="fas fa-fw fa-book"></i></span><span class="docs-nav-title">Linux内核分析</span></a>
+            <a class="btn-toggle ms-1" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-8d43cfa49df325f277d6f4234a021467" aria-expanded="true" aria-controls="nav-8d43cfa49df325f277d6f4234a021467">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse  show border-primary" id="nav-8d43cfa49df325f277d6f4234a021467">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3 text-primary">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/"><span class="docs-nav-title">linux-6.1/5.10</span></a>
+            <a class="btn-toggle ms-1" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-8ea97fb7a0a0d68cedef1b63b4664daa" aria-expanded="true" aria-controls="nav-8ea97fb7a0a0d68cedef1b63b4664daa">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse  show border-primary" id="nav-8ea97fb7a0a0d68cedef1b63b4664daa">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/"><span class="docs-nav-title">linux thermal子系统简介</span></a>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/"><span class="docs-nav-title">进程管理</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-83c2de274b2e4577ecf37614ae1dc5db" aria-expanded="false" aria-controls="nav-83c2de274b2e4577ecf37614ae1dc5db">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-83c2de274b2e4577ecf37614ae1dc5db">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/task_0/"><span class="docs-nav-title">Linux 0号线程swapper简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/task_1/"><span class="docs-nav-title">Linux 1号线程init简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/task_2/"><span class="docs-nav-title">Linux 2号线程kthreadd简介</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/drivers/"><span class="docs-nav-title">内核驱动</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-d3b01a1b86aa6db82f0e7b3aaac6b5d2" aria-expanded="false" aria-controls="nav-d3b01a1b86aa6db82f0e7b3aaac6b5d2">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-d3b01a1b86aa6db82f0e7b3aaac6b5d2">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3 text-primary">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/"><span class="docs-nav-title">设备模型</span></a>
+            <a class="btn-toggle ms-1" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-debf5d4911c9878135b99f6e8f2a44cd" aria-expanded="true" aria-controls="nav-debf5d4911c9878135b99f6e8f2a44cd">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse  show border-primary" id="nav-debf5d4911c9878135b99f6e8f2a44cd">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3 text-primary" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/dt_to_dt/"><span class="docs-nav-title">Linux内核驱动模型（二）设备树转换</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/initcall/"><span class="docs-nav-title">Linux内核驱动模型（三）驱动初始化</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/device_model/"><span class="docs-nav-title">Linux内核驱动模型（四）核心结构体</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/fdt_dt/"><span class="docs-nav-title">Linux内核驱动模型（一）设备树展开</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/kobject/kobject/"><span class="docs-nav-title">Linux内核数据结构kobject/kset/ktype</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/"><span class="docs-nav-title">时间子系统</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c9f99e03f1800548b626b43e128eb70f" aria-expanded="false" aria-controls="nav-c9f99e03f1800548b626b43e128eb70f">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-c9f99e03f1800548b626b43e128eb70f">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/timekeeping/"><span class="docs-nav-title">linux内核时间子系统（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/time/"><span class="docs-nav-title">linux内核时间子系统（一）</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/"><span class="docs-nav-title">linux-6.6</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c105b2ef486b2fc777c1f47c8c02d8c9" aria-expanded="false" aria-controls="nav-c105b2ef486b2fc777c1f47c8c02d8c9">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-c105b2ef486b2fc777c1f47c8c02d8c9">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/"><span class="docs-nav-title">【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_mm/"><span class="docs-nav-title">Linux drm mm分析(基于intel ivpu驱动)</span></a>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/devicemodel/"><span class="docs-nav-title">linux-6.1</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c2d7103f5fb31202d4516726f7f8b937" aria-expanded="false" aria-controls="nav-c2d7103f5fb31202d4516726f7f8b937">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-c2d7103f5fb31202d4516726f7f8b937">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/notifier_chain/notifier_chain/"><span class="docs-nav-title">Linux内核的通知链机制</span></a>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/"><span class="docs-nav-title">进程管理</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-655e5bdc71766563bee0b49f680e7299" aria-expanded="false" aria-controls="nav-655e5bdc71766563bee0b49f680e7299">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-655e5bdc71766563bee0b49f680e7299">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/execve/"><span class="docs-nav-title">exec系统调用简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/a-fork/"><span class="docs-nav-title">Linux fork进程/线程简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/relationship/"><span class="docs-nav-title">Linux进程和线程关系</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/pid_namespace/"><span class="docs-nav-title">Linux进程命名空间（pid namespace）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/task_state/"><span class="docs-nav-title">Linux进程状态与生命周期</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_2/"><span class="docs-nav-title">Linux内核copy_process分析（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_3/"><span class="docs-nav-title">Linux内核copy_process分析（三）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_1/"><span class="docs-nav-title">Linux内核copy_process分析（一）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_table/"><span class="docs-nav-title">Linux内核sched_class汇总</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/task_life/"><span class="docs-nav-title">用trace追踪Linux进程的一生</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/"><span class="docs-nav-title">内存管理</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-de97508460ed4f8a4a3e7ac2798cb58e" aria-expanded="false" aria-controls="nav-de97508460ed4f8a4a3e7ac2798cb58e">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-de97508460ed4f8a4a3e7ac2798cb58e">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc/"><span class="docs-nav-title">kmalloc分配内存的大小</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtable/"><span class="docs-nav-title">Linux ARM64页面大小和虚拟地址位数</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/"><span class="docs-nav-title">内核调试</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-38c732a7b9755fe00848e5f2dcd802d9" aria-expanded="false" aria-controls="nav-38c732a7b9755fe00848e5f2dcd802d9">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-38c732a7b9755fe00848e5f2dcd802d9">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/arm64_setup/"><span class="docs-nav-title">ARM64 Crash调试环境搭建</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/help/"><span class="docs-nav-title">Crash帮助信息</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/crash_cmd_set/"><span class="docs-nav-title">Crash命令介绍</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/printk-formats/"><span class="docs-nav-title">Linux printk日志输出格式控制</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/dynamic_debug/"><span class="docs-nav-title">linux内核dynamic_debug</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/"><span class="docs-nav-title">printk的pr_fmt</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/boot/entry/"><span class="docs-nav-title">内核启动流程（一）</span></a>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/drivers/"><span class="docs-nav-title">内核驱动</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-f13ac328747f9149370d84b8c8f95a46" aria-expanded="false" aria-controls="nav-f13ac328747f9149370d84b8c8f95a46">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-f13ac328747f9149370d84b8c8f95a46">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/fs/"><span class="docs-nav-title">文件系统</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-6c01ebad189fffa4467424d95bb94649" aria-expanded="false" aria-controls="nav-6c01ebad189fffa4467424d95bb94649">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-6c01ebad189fffa4467424d95bb94649">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/"><span class="docs-nav-title">杂项</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-4c6ab7a6d5e5a1b2fc403b3d23256450" aria-expanded="false" aria-controls="nav-4c6ab7a6d5e5a1b2fc403b3d23256450">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-4c6ab7a6d5e5a1b2fc403b3d23256450">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/jump_label/"><span class="docs-nav-title">ARM64 jump label源码分析</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/atomic/"><span class="docs-nav-title">linux atomic接口简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/linux-err-return/"><span class="docs-nav-title">Linux的errno简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/asm_macors/"><span class="docs-nav-title">Linux内核常见ARM64汇编宏</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/optimize_tips/"><span class="docs-nav-title">Linux内核代码的编写和优化技巧</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/kernel_boot_security/"><span class="docs-nav-title">保证内核启动安全的几种方式</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/"><span class="docs-nav-title">中断子系统</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-0e8011cfba83e7078ddfdac6dd9bdab4" aria-expanded="false" aria-controls="nav-0e8011cfba83e7078ddfdac6dd9bdab4">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-0e8011cfba83e7078ddfdac6dd9bdab4">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/"><span class="docs-nav-title">ARM64 Linux中断入口</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_flow/"><span class="docs-nav-title">Linux中断处理流程图</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_domain_add/"><span class="docs-nav-title">Linux中断子系统（二）domain注册</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_create_mapping/"><span class="docs-nav-title">Linux中断子系统（三）设备中断注册</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/request_irq/"><span class="docs-nav-title">Linux中断子系统（四）申请中断request_irq</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/handler_entry/"><span class="docs-nav-title">Linux中断子系统（五）中断处理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/init/"><span class="docs-nav-title">Linux中断子系统（一）软硬件初始化</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/"><span class="docs-nav-title">编程语言</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c763ce92a79b45df97e2263a975854b9" aria-expanded="false" aria-controls="nav-c763ce92a79b45df97e2263a975854b9">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-c763ce92a79b45df97e2263a975854b9">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/"><span class="docs-nav-title">C/C&#43;&#43;</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-97f02fde471866056c482bd758f3802a" aria-expanded="false" aria-controls="nav-97f02fde471866056c482bd758f3802a">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-97f02fde471866056c482bd758f3802a">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/c_assert/"><span class="docs-nav-title">C语言编译断言</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/macro_link_args/"><span class="docs-nav-title">gcc宏定义中的连接符和可变参数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/gcc_tools/"><span class="docs-nav-title">编译工具杂记</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/gcc_predefine/"><span class="docs-nav-title">编译器预定义宏</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/array_func/"><span class="docs-nav-title">多维数组作为函数参数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/array_type/"><span class="docs-nav-title">数组a、&amp;a、&amp;a[0]、&amp;a[0][0]的区别与联系</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/c_struct_cmp/"><span class="docs-nav-title">用memcmp比较结构体会有什么问题</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/python/"><span class="docs-nav-title">Python</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-ffa1725fdabf7411c32ceb6eae66fd17" aria-expanded="false" aria-controls="nav-ffa1725fdabf7411c32ceb6eae66fd17">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-ffa1725fdabf7411c32ceb6eae66fd17">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/compile/"><span class="docs-nav-title">构建工具</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-cffaf2396700969f3f8596d2093784ef" aria-expanded="false" aria-controls="nav-cffaf2396700969f3f8596d2093784ef">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-cffaf2396700969f3f8596d2093784ef">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/compile/make_debug/"><span class="docs-nav-title">make调试</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/"><span class="docs-nav-title">开发环境</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-fd57bc387b9c3a4d19f1801fc65cd5b4" aria-expanded="false" aria-controls="nav-fd57bc387b9c3a4d19f1801fc65cd5b4">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-fd57bc387b9c3a4d19f1801fc65cd5b4">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/samba/"><span class="docs-nav-title">samba服务器搭建和使用</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/vdisk_compact/"><span class="docs-nav-title">VMware和Hyper-V回收虚拟磁盘空间</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/resizefs/"><span class="docs-nav-title">磁盘和文件系统扩容/缩容</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/"><span class="docs-nav-title">启动</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-05b799579ad52d4ccfa92fd6313b23f7" aria-expanded="false" aria-controls="nav-05b799579ad52d4ccfa92fd6313b23f7">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-05b799579ad52d4ccfa92fd6313b23f7">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/rtthread_smp_cortex_a9/"><span class="docs-nav-title">rt-thread Cortex-A9 SMP启动</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/uboot_mem/"><span class="docs-nav-title">U-Boot从dtb获取内存布局并传递到内核</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/u-boot-stubs/"><span class="docs-nav-title">u-boot的stubs机制</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/crc32_func/"><span class="docs-nav-title">U-Boot和Linux内核的CRC函数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/u-boot-bootflow/"><span class="docs-nav-title">U-Boot启动分析</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/uboot_misc_note/"><span class="docs-nav-title">U-Boot杂项记录</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/u-boot_commands/"><span class="docs-nav-title">常见u-boot命令</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/boot_flow/"><span class="docs-nav-title">嵌入式系统启动流程</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/"><span class="docs-nav-title">系统工具</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-eb1c5d775f73e30b3a27244e12a84f81" aria-expanded="false" aria-controls="nav-eb1c5d775f73e30b3a27244e12a84f81">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-eb1c5d775f73e30b3a27244e12a84f81">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/debian_setup/"><span class="docs-nav-title">Debian安装和配置</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/docker_setup/"><span class="docs-nav-title">Docker安装和配置</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/git/git_misc/"><span class="docs-nav-title">git配置和操作</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/jupyter_to_markdown/"><span class="docs-nav-title">jupyter转Markdown</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_tips/"><span class="docs-nav-title">Linux Bash技巧</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_decorate/"><span class="docs-nav-title">Linux Bash终端美化</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_network/"><span class="docs-nav-title">linux常用命令-网络</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_text/"><span class="docs-nav-title">linux常用命令-文本处理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_file/"><span class="docs-nav-title">linux常用命令-文件管理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_sys/"><span class="docs-nav-title">linux常用命令-系统管理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_benchmark/"><span class="docs-nav-title">linux常用命令-性能</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/sourceinsight/"><span class="docs-nav-title">sourceinsight快速建工程</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/ssh_wsl_exe/"><span class="docs-nav-title">ssh连接wsl后执行Windows程序</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/win_python3/"><span class="docs-nav-title">解决Windows不能使用python3.10的问题</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/"><span class="docs-nav-title">杂项</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-4967b62f3b1964eee9739b39b25cd3eb" aria-expanded="false" aria-controls="nav-4967b62f3b1964eee9739b39b25cd3eb">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-4967b62f3b1964eee9739b39b25cd3eb">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/"><span class="docs-nav-title">4412</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-0cca8bc16c798175efb847597812f8c0" aria-expanded="false" aria-controls="nav-0cca8bc16c798175efb847597812f8c0">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-0cca8bc16c798175efb847597812f8c0">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/exynos4412/"><span class="docs-nav-title">Exynos4412启动介绍</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/mkbl1/"><span class="docs-nav-title">Exynos4412自制BL1</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/mkbl2/"><span class="docs-nav-title">Exynos4412自制BL2</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul></div>
+  </div>
+</aside><div class="col-xxl-7 ms-auto">
+  <div class="container-fluid"><nav class="row card component" aria-label="breadcrumb">
+  <div class="card-body pb-0">
+    <ol class="hbs-breadcrumb breadcrumb flex-nowrap"><li class="breadcrumb-item text-surface"><a href="/zh-cn/">主页</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/">文档</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/04-kernel/">Linux内核分析</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/04-kernel/linux-6.1/">linux-6.1/5.10</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/">设备模型</a></li><li class="breadcrumb-item active">Linux内核驱动模型（二）设备树转换</li></ol>
+  </div>
+</nav><div class="post-panel-wrapper position-relative d-flex justify-content-center">
+  <div class="d-flex flex-row justify-content-center rounded-5 border post-panel position-fixed px-3 py-1 surface shadow-1">
+    
+    
+
+    
+    
+    
+<a class="action action-toc d-block d-xxl-none" href="#post-toc-container" role="button" title="目录">
+  <i class="fas fa-fw fa-list-alt"></i>
+</a>
+    <a class="action action-copyright" href="#post-copyright" role="button" aria-label="Copyright" title="版权">
+  <i class="fas fa-fw fa-copyright"></i>
+</a>
+    
+    
+<a id="sidebarToggler" class="action action-sidebar-toggler d-none d-xxl-block" role="button" title="切换侧边栏">
+  <i class="fas fa-fw fa-expand-alt" data-fa-transform="rotate-45"></i>
+</a>
+
+    
+  </div>
+</div><article class="row card component mb-4 post">
+<div class="card-header ">
+    <h1 class="card-title post-title my-2">Linux内核驱动模型（二）设备树转换</h1>
+</div>
+<div class="card-body"><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2023-07-10 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2023/07/10</span><span class="post-reading-time me-1 mb-1">6 分钟阅读</span><a href="/zh-cn/categories/%E8%AE%BE%E5%A4%87%E6%A8%A1%E5%9E%8B/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>设备模型</a><a href="/zh-cn/series/%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%9E%8B/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
+      <i class="fas fa-fw fa-columns me-1"></i>设备驱动模型</a><a href="/zh-cn/tags/linux-6.1/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux-6.1</a><a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux内核</a><a href="/zh-cn/tags/%E5%86%85%E6%A0%B8%E9%A9%B1%E5%8A%A8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">内核驱动</a>
+</div>
+
+      <p class="lead mb-3 text-body-emphasis">从“device_node tree”到“device tree”</p>
+<div class="mt-2 mb-3 d-block d-xxl-none">
+    <h2 class="text-surface mb-3">目录</h2>
+    <div id="post-toc-container">
+        </div>
+    <hr class="text-secondary">
+</div><div class="post-content mb-3" data-bs-spy="scroll" data-bs-target="#TableOfContents" tabindex="0">
+        <div id="post-content-body">
+<h1 id="1-device_node-tree到device-tree" data-numberify>1. device_node tree到device tree<a class="anchor ms-1" href="#1-device_node-tree到device-tree"></a></h1>
+<p>device_node的层次结构建立之后，并没有struct device生成，那我们实现的驱动probe函数又是如何获取设备的呢？
+这就需要有一个从device_node创建struct device的过程，这个过程并没有一个统一的函数来实现，而是各个总线的在初始化时，主动扫描设备树，根据device_node创建自己需要的设备。下边以platform总线为例说明。</p>
+<p><picture><img class="img-fluid " alt="dt_to_dt" src="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/dt_to_dt/dt_to_dt.png" loading="lazy" width="901" height="827" />
+</picture>
+
+</p>
+<p>of_platform_default_populate_init通过arch_initcall_sync加入到内核的 <code>.init</code>段，在内核初始化时被调用。</p>
+
+<h2 id="11-of_device_alloc" data-numberify>1.1. of_device_alloc<a class="anchor ms-1" href="#11-of_device_alloc"></a></h2>
+<p>of_platform_device_create_pdata调用of_device_alloc来获取新建的 <code>struct platform_device</code>，这里先分析of_device_alloc。</p>
+<p>of_device_alloc主要完成如下工作：</p>
+<ol>
+<li>调用platform_device_alloc分配 <code>struct platform_device</code></li>
+<li>填充platform_device的resource数组，这是dts里为设备指定的资源</li>
+<li>device的of_node指向device_node，fwnode指向device_node的fwnode</li>
+<li>默认父设备为platform_bus，platform_bus下可以挂普通设备和总线设备，如果是挂在二级总线下的设备，parent不为platform_bus。后续会根据parent来形成树形结构。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// drivers/of/platform.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cm">/**
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * of_device_alloc - Allocate and initialize an of_device
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> * @np: device node to assign to device
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> * @bus_id: Name to assign to the device.  May be null to use default name.
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> * @parent: Parent device.
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="k">struct</span> <span class="n">platform_device</span> <span class="o">*</span><span class="nf">of_device_alloc</span><span class="p">(</span><span class="k">struct</span> <span class="n">device_node</span> <span class="o">*</span><span class="n">np</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">                  <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">bus_id</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">                  <span class="k">struct</span> <span class="n">device</span> <span class="o">*</span><span class="n">parent</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="k">struct</span> <span class="n">platform_device</span> <span class="o">*</span><span class="n">dev</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">    <span class="kt">int</span> <span class="n">rc</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">num_reg</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">    <span class="k">struct</span> <span class="n">resource</span> <span class="o">*</span><span class="n">res</span><span class="p">,</span> <span class="n">temp_res</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">
+</span></span><span class="line"><span class="ln">16</span><span class="cl">    <span class="n">dev</span> <span class="o">=</span> <span class="nf">platform_device_alloc</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">,</span> <span class="n">PLATFORM_DEVID_NONE</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">dev</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">
+</span></span><span class="line"><span class="ln">20</span><span class="cl">    <span class="cm">/* count the io resources */</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="nf">of_address_to_resource</span><span class="p">(</span><span class="n">np</span><span class="p">,</span> <span class="n">num_reg</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">temp_res</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">        <span class="n">num_reg</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl">
+</span></span><span class="line"><span class="ln">24</span><span class="cl">    <span class="cm">/* Populate the resource table */</span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">num_reg</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">26</span><span class="cl">        <span class="n">res</span> <span class="o">=</span> <span class="nf">kcalloc</span><span class="p">(</span><span class="n">num_reg</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">res</span><span class="p">),</span> <span class="n">GFP_KERNEL</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">27</span><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl">            <span class="nf">platform_device_put</span><span class="p">(</span><span class="n">dev</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">29</span><span class="cl">            <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">30</span><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="ln">31</span><span class="cl">
+</span></span><span class="line"><span class="ln">32</span><span class="cl">        <span class="n">dev</span><span class="o">-&gt;</span><span class="n">num_resources</span> <span class="o">=</span> <span class="n">num_reg</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">33</span><span class="cl">        <span class="n">dev</span><span class="o">-&gt;</span><span class="n">resource</span> <span class="o">=</span> <span class="n">res</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">34</span><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_reg</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">,</span> <span class="n">res</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">35</span><span class="cl">            <span class="n">rc</span> <span class="o">=</span> <span class="nf">of_address_to_resource</span><span class="p">(</span><span class="n">np</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">res</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">36</span><span class="cl">            <span class="nf">WARN_ON</span><span class="p">(</span><span class="n">rc</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">37</span><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="ln">38</span><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="ln">39</span><span class="cl">
+</span></span><span class="line"><span class="ln">40</span><span class="cl">    <span class="c1">/// device的of_node指向device_node，fwnode指向device_node的fwnode
+</span></span></span><span class="line"><span class="ln">41</span><span class="cl"><span class="c1"></span>    <span class="n">dev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">.</span><span class="n">of_node</span> <span class="o">=</span> <span class="nf">of_node_get</span><span class="p">(</span><span class="n">np</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">42</span><span class="cl">    <span class="n">dev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">.</span><span class="n">fwnode</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">np</span><span class="o">-&gt;</span><span class="n">fwnode</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">43</span><span class="cl">    <span class="n">dev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span> <span class="o">?</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">platform_bus</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">44</span><span class="cl">
+</span></span><span class="line"><span class="ln">45</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">bus_id</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">46</span><span class="cl">        <span class="nf">dev_set_name</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">,</span> <span class="s">&#34;%s&#34;</span><span class="p">,</span> <span class="n">bus_id</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">47</span><span class="cl">    <span class="k">else</span>
+</span></span><span class="line"><span class="ln">48</span><span class="cl">        <span class="nf">of_device_make_bus_id</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">49</span><span class="cl">
+</span></span><span class="line"><span class="ln">50</span><span class="cl">    <span class="k">return</span> <span class="n">dev</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">51</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">52</span><span class="cl"><span class="nf">EXPORT_SYMBOL</span><span class="p">(</span><span class="n">of_device_alloc</span><span class="p">);</span>
+</span></span></code></pre></div><p>of_device_alloc之后，device和device_node的关系图如下：
+<picture><img class="img-fluid " alt="dt_to_dt_struct" src="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/dt_to_dt/dt_to_dt_struct.png" loading="lazy" width="1933" height="1282" />
+</picture>
+
+</p>
+
+<h2 id="12-of_platform_device_create_pdata" data-numberify>1.2. of_platform_device_create_pdata<a class="anchor ms-1" href="#12-of_platform_device_create_pdata"></a></h2>
+<p>of_platform_device_create_pdata主要完成如下工作：</p>
+<ol>
+<li>of_device_alloc分配platform_device</li>
+<li>将bus设置为platform_bus_type</li>
+<li>通过of_device_add调用device_add将设备添加到系统，device_add会关联parent和device，建立完整的树状结构</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cm"> * of_platform_device_create_pdata - Alloc, initialize and register an of_device
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * @np: pointer to node to create device for
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> * @bus_id: name to assign device
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> * @platform_data: pointer to populate platform_data pointer with
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> * @parent: Linux device model parent device.
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> * Return: Pointer to created platform device, or NULL if a device was not
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> * registered.  Unavailable devices will not get registered.
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="k">static</span> <span class="k">struct</span> <span class="n">platform_device</span> <span class="o">*</span><span class="nf">of_platform_device_create_pdata</span><span class="p">(</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">                    <span class="k">struct</span> <span class="n">device_node</span> <span class="o">*</span><span class="n">np</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">                    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">bus_id</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">                    <span class="kt">void</span> <span class="o">*</span><span class="n">platform_data</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">                    <span class="k">struct</span> <span class="n">device</span> <span class="o">*</span><span class="n">parent</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">    <span class="k">struct</span> <span class="n">platform_device</span> <span class="o">*</span><span class="n">dev</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">
+</span></span><span class="line"><span class="ln">19</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nf">of_device_is_available</span><span class="p">(</span><span class="n">np</span><span class="p">)</span> <span class="o">||</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">        <span class="nf">of_node_test_and_set_flag</span><span class="p">(</span><span class="n">np</span><span class="p">,</span> <span class="n">OF_POPULATED</span><span class="p">))</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl">        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">
+</span></span><span class="line"><span class="ln">23</span><span class="cl">    <span class="n">dev</span> <span class="o">=</span> <span class="nf">of_device_alloc</span><span class="p">(</span><span class="n">np</span><span class="p">,</span> <span class="n">bus_id</span><span class="p">,</span> <span class="n">parent</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">dev</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl">        <span class="k">goto</span> <span class="n">err_clear_flag</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">26</span><span class="cl">
+</span></span><span class="line"><span class="ln">27</span><span class="cl">    <span class="n">dev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">.</span><span class="n">coherent_dma_mask</span> <span class="o">=</span> <span class="nf">DMA_BIT_MASK</span><span class="p">(</span><span class="mi">32</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">.</span><span class="n">dma_mask</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">29</span><span class="cl">        <span class="n">dev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">.</span><span class="n">dma_mask</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">.</span><span class="n">coherent_dma_mask</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">30</span><span class="cl">    <span class="n">dev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">.</span><span class="n">bus</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">platform_bus_type</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">31</span><span class="cl">    <span class="n">dev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">.</span><span class="n">platform_data</span> <span class="o">=</span> <span class="n">platform_data</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl">    <span class="nf">of_msi_configure</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">,</span> <span class="n">dev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">.</span><span class="n">of_node</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">33</span><span class="cl">
+</span></span><span class="line"><span class="ln">34</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nf">of_device_add</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">35</span><span class="cl">        <span class="nf">platform_device_put</span><span class="p">(</span><span class="n">dev</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">36</span><span class="cl">        <span class="k">goto</span> <span class="n">err_clear_flag</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">37</span><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="ln">38</span><span class="cl">
+</span></span><span class="line"><span class="ln">39</span><span class="cl">    <span class="k">return</span> <span class="n">dev</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">40</span><span class="cl">
+</span></span><span class="line"><span class="ln">41</span><span class="cl"><span class="nl">err_clear_flag</span><span class="p">:</span>
+</span></span><span class="line"><span class="ln">42</span><span class="cl">    <span class="nf">of_node_clear_flag</span><span class="p">(</span><span class="n">np</span><span class="p">,</span> <span class="n">OF_POPULATED</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">43</span><span class="cl">    <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">44</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div>
+<h2 id="13-添加platform_device的另一种方式" data-numberify>1.3. 添加platform_device的另一种方式<a class="anchor ms-1" href="#13-添加platform_device的另一种方式"></a></h2>
+<p>值得一提的是，除了platform设备除了在初始化时通过解析设备树添加，还可以通过如下函数手动添加：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1">/// include/linux/platform_device.h
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="c1"></span><span class="n">platform_device_register_full</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="n">platform_device_register_resndata</span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="n">platform_device_register_simple</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="n">platform_device_register_data</span>
+</span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="n">platform_device_add</span>
+</span></span></code></pre></div><p>比如如下代码：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/module.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/platform_device.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="c1">/// ... ...
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="k">static</span> <span class="k">struct</span> <span class="n">platform_driver</span> <span class="n">pdrv</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="p">.</span><span class="n">probe</span>      <span class="o">=</span> <span class="n">pdev_probe</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">    <span class="p">.</span><span class="n">remove</span>     <span class="o">=</span> <span class="n">pdev_remove</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    <span class="p">.</span><span class="n">driver</span>     <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">        <span class="p">.</span><span class="n">name</span>   <span class="o">=</span> <span class="s">&#34;pdev-demo&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">
+</span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="k">static</span> <span class="k">struct</span> <span class="n">platform_device</span> <span class="o">*</span><span class="n">pdev</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">
+</span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="n">__init</span> <span class="nf">pdev_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">    <span class="kt">int</span> <span class="n">ret</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">
+</span></span><span class="line"><span class="ln">20</span><span class="cl">    <span class="n">pdev</span> <span class="o">=</span> <span class="nf">platform_device_register_simple</span><span class="p">(</span><span class="s">&#34;pdev-demo&#34;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nf">IS_ERR</span><span class="p">(</span><span class="n">pdev</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">        <span class="k">return</span> <span class="nf">PTR_ERR</span><span class="p">(</span><span class="n">pdev</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl">
+</span></span><span class="line"><span class="ln">25</span><span class="cl">    <span class="n">ret</span> <span class="o">=</span> <span class="nf">platform_driver_register</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pdrv</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">26</span><span class="cl">
+</span></span><span class="line"><span class="ln">27</span><span class="cl">    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">29</span><span class="cl">
+</span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="k">static</span> <span class="kt">void</span> <span class="n">__exit</span> <span class="nf">pdev_exit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl">    <span class="nf">platform_driver_unregister</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pdrv</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">33</span><span class="cl">    <span class="nf">platform_device_unregister</span><span class="p">(</span><span class="n">pdev</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">34</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">35</span><span class="cl">
+</span></span><span class="line"><span class="ln">36</span><span class="cl"><span class="nf">module_init</span><span class="p">(</span><span class="n">pdev_init</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">37</span><span class="cl"><span class="nf">module_exit</span><span class="p">(</span><span class="n">pdev_exit</span><span class="p">);</span>
+</span></span></code></pre></div>
+<h1 id="2-设备和驱动的匹配of_match_table" data-numberify>2. 设备和驱动的匹配：of_match_table<a class="anchor ms-1" href="#2-设备和驱动的匹配of_match_table"></a></h1>
+<p>设备和驱动的匹配是靠总线的match函数来实现的，如果驱动要匹配来自设备树的设备，需要调用of_driver_match_device，比如platform总线的match函数platform_match，内部就直接调用了of_driver_match_device。当然，除了匹配设备树，还可以匹配其他信息，比如设备名称和驱动名称。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// include/linux/of_device.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cm">/**
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * of_driver_match_device - Tell if a driver&#39;s of_match_table matches a device.
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> * @drv: the device_driver structure to test
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> * @dev: the device structure to match against
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="k">static</span> <span class="kr">inline</span> <span class="kt">int</span> <span class="nf">of_driver_match_device</span><span class="p">(</span><span class="k">struct</span> <span class="n">device</span> <span class="o">*</span><span class="n">dev</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">                     <span class="k">const</span> <span class="k">struct</span> <span class="n">device_driver</span> <span class="o">*</span><span class="n">drv</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">    <span class="k">return</span> <span class="nf">of_match_device</span><span class="p">(</span><span class="n">drv</span><span class="o">-&gt;</span><span class="n">of_match_table</span><span class="p">,</span> <span class="n">dev</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/dt_to_dt/platform_driver.png" loading="lazy" width="1325" height="780" />
+</picture>
+
+</p>
+
+<h1 id="3-其他总线上的device_node-tree到device-tree" data-numberify>3. 其他总线上的device_node tree到device tree<a class="anchor ms-1" href="#3-其他总线上的device_node-tree到device-tree"></a></h1>
+<p>可以通过 <code>git grep -Iw -p --heading of_driver_match_device drivers/</code>来搜索会从设备树中匹配设备的总线，要调用这些总线的match函数，都需要提前将device_node tree为device tree，这个转换不一定是像platform总线在系统初始化时完成。比如i2c总线，这个转换是在注册i2c_adapter时，通过i2c_register_adapter调用of_i2c_register_devices来完成的。当然，注册的设备也不再是 <code>struct platform_device</code>，而是 <code>struct i2c_client</code>。至于其他总线，可以自行分析。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="n">drivers</span><span class="o">/</span><span class="n">base</span><span class="o">/</span><span class="n">platform</span><span class="p">.</span><span class="n">c</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="mi">1331</span><span class="o">=</span><span class="k">static</span> <span class="kt">int</span> <span class="nf">platform_match</span><span class="p">(</span><span class="k">struct</span> <span class="n">device</span> <span class="o">*</span><span class="n">dev</span><span class="p">,</span> <span class="k">struct</span> <span class="n">device_driver</span> <span class="o">*</span><span class="n">drv</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="mi">1341</span><span class="o">:</span>   <span class="k">if</span> <span class="p">(</span><span class="nf">of_driver_match_device</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">drv</span><span class="p">))</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="n">drivers</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">moxtet</span><span class="p">.</span><span class="n">c</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="mi">86</span><span class="o">=</span><span class="k">static</span> <span class="kt">int</span> <span class="nf">moxtet_match</span><span class="p">(</span><span class="k">struct</span> <span class="n">device</span> <span class="o">*</span><span class="n">dev</span><span class="p">,</span> <span class="k">struct</span> <span class="n">device_driver</span> <span class="o">*</span><span class="n">drv</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="mi">92</span><span class="o">:</span>     <span class="k">if</span> <span class="p">(</span><span class="nf">of_driver_match_device</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">drv</span><span class="p">))</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="n">drivers</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">sunxi</span><span class="o">-</span><span class="n">rsb</span><span class="p">.</span><span class="n">c</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="mi">133</span><span class="o">=</span><span class="k">static</span> <span class="kt">int</span> <span class="nf">sunxi_rsb_device_match</span><span class="p">(</span><span class="k">struct</span> <span class="n">device</span> <span class="o">*</span><span class="n">dev</span><span class="p">,</span> <span class="k">struct</span> <span class="n">device_driver</span> <span class="o">*</span><span class="n">drv</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="mi">135</span><span class="o">:</span>    <span class="k">return</span> <span class="nf">of_driver_match_device</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">drv</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="n">drivers</span><span class="o">/</span><span class="n">gpu</span><span class="o">/</span><span class="n">drm</span><span class="o">/</span><span class="n">drm_mipi_dsi</span><span class="p">.</span><span class="n">c</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="mi">50</span><span class="o">=</span><span class="k">static</span> <span class="kt">int</span> <span class="nf">mipi_dsi_device_match</span><span class="p">(</span><span class="k">struct</span> <span class="n">device</span> <span class="o">*</span><span class="n">dev</span><span class="p">,</span> <span class="k">struct</span> <span class="n">device_driver</span> <span class="o">*</span><span class="n">drv</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="mi">55</span><span class="o">:</span>     <span class="k">if</span> <span class="p">(</span><span class="nf">of_driver_match_device</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">drv</span><span class="p">))</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="n">drivers</span><span class="o">/</span><span class="n">hsi</span><span class="o">/</span><span class="n">hsi_core</span><span class="p">.</span><span class="n">c</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="mi">40</span><span class="o">=</span><span class="k">static</span> <span class="kt">int</span> <span class="nf">hsi_bus_match</span><span class="p">(</span><span class="k">struct</span> <span class="n">device</span> <span class="o">*</span><span class="n">dev</span><span class="p">,</span> <span class="k">struct</span> <span class="n">device_driver</span> <span class="o">*</span><span class="n">driver</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="mi">42</span><span class="o">:</span>     <span class="k">if</span> <span class="p">(</span><span class="nf">of_driver_match_device</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">driver</span><span class="p">))</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="n">drivers</span><span class="o">/</span><span class="n">net</span><span class="o">/</span><span class="n">phy</span><span class="o">/</span><span class="n">mdio_bus</span><span class="p">.</span><span class="n">c</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="mi">979</span><span class="o">=</span><span class="k">static</span> <span class="kt">int</span> <span class="nf">mdio_bus_match</span><span class="p">(</span><span class="k">struct</span> <span class="n">device</span> <span class="o">*</span><span class="n">dev</span><span class="p">,</span> <span class="k">struct</span> <span class="n">device_driver</span> <span class="o">*</span><span class="n">drv</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="mi">989</span><span class="o">:</span>    <span class="k">if</span> <span class="p">(</span><span class="nf">of_driver_match_device</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">drv</span><span class="p">))</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="n">drivers</span><span class="o">/</span><span class="n">rpmsg</span><span class="o">/</span><span class="n">rpmsg_core</span><span class="p">.</span><span class="n">c</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="mi">475</span><span class="o">=</span><span class="k">static</span> <span class="kt">int</span> <span class="nf">rpmsg_dev_match</span><span class="p">(</span><span class="k">struct</span> <span class="n">device</span> <span class="o">*</span><span class="n">dev</span><span class="p">,</span> <span class="k">struct</span> <span class="n">device_driver</span> <span class="o">*</span><span class="n">drv</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="mi">492</span><span class="o">:</span>    <span class="k">return</span> <span class="nf">of_driver_match_device</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">drv</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="n">drivers</span><span class="o">/</span><span class="n">slimbus</span><span class="o">/</span><span class="n">core</span><span class="p">.</span><span class="n">c</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="mi">33</span><span class="o">=</span><span class="k">static</span> <span class="kt">int</span> <span class="nf">slim_device_match</span><span class="p">(</span><span class="k">struct</span> <span class="n">device</span> <span class="o">*</span><span class="n">dev</span><span class="p">,</span> <span class="k">struct</span> <span class="n">device_driver</span> <span class="o">*</span><span class="n">drv</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="mi">39</span><span class="o">:</span>     <span class="k">if</span> <span class="p">(</span><span class="nf">of_driver_match_device</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">drv</span><span class="p">))</span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="n">drivers</span><span class="o">/</span><span class="n">soc</span><span class="o">/</span><span class="n">qcom</span><span class="o">/</span><span class="n">apr</span><span class="p">.</span><span class="n">c</span>
+</span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="mi">341</span><span class="o">=</span><span class="k">static</span> <span class="kt">int</span> <span class="nf">apr_device_match</span><span class="p">(</span><span class="k">struct</span> <span class="n">device</span> <span class="o">*</span><span class="n">dev</span><span class="p">,</span> <span class="k">struct</span> <span class="n">device_driver</span> <span class="o">*</span><span class="n">drv</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="mi">348</span><span class="o">:</span>    <span class="k">if</span> <span class="p">(</span><span class="nf">of_driver_match_device</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">drv</span><span class="p">))</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="n">drivers</span><span class="o">/</span><span class="n">spi</span><span class="o">/</span><span class="n">spi</span><span class="p">.</span><span class="n">c</span>
+</span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="mi">363</span><span class="o">=</span><span class="k">static</span> <span class="kt">int</span> <span class="nf">spi_match_device</span><span class="p">(</span><span class="k">struct</span> <span class="n">device</span> <span class="o">*</span><span class="n">dev</span><span class="p">,</span> <span class="k">struct</span> <span class="n">device_driver</span> <span class="o">*</span><span class="n">drv</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="mi">373</span><span class="o">:</span>    <span class="k">if</span> <span class="p">(</span><span class="nf">of_driver_match_device</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">drv</span><span class="p">))</span>
+</span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="n">drivers</span><span class="o">/</span><span class="n">spmi</span><span class="o">/</span><span class="n">spmi</span><span class="p">.</span><span class="n">c</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="mi">46</span><span class="o">=</span><span class="k">static</span> <span class="kt">int</span> <span class="nf">spmi_device_match</span><span class="p">(</span><span class="k">struct</span> <span class="n">device</span> <span class="o">*</span><span class="n">dev</span><span class="p">,</span> <span class="k">struct</span> <span class="n">device_driver</span> <span class="o">*</span><span class="n">drv</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">33</span><span class="cl"><span class="mi">48</span><span class="o">:</span>     <span class="k">if</span> <span class="p">(</span><span class="nf">of_driver_match_device</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">drv</span><span class="p">))</span>
+</span></span><span class="line"><span class="ln">34</span><span class="cl"><span class="n">drivers</span><span class="o">/</span><span class="n">tty</span><span class="o">/</span><span class="n">serdev</span><span class="o">/</span><span class="n">core</span><span class="p">.</span><span class="n">c</span>
+</span></span><span class="line"><span class="ln">35</span><span class="cl"><span class="mi">86</span><span class="o">=</span><span class="k">static</span> <span class="kt">int</span> <span class="nf">serdev_device_match</span><span class="p">(</span><span class="k">struct</span> <span class="n">device</span> <span class="o">*</span><span class="n">dev</span><span class="p">,</span> <span class="k">struct</span> <span class="n">device_driver</span> <span class="o">*</span><span class="n">drv</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">36</span><span class="cl"><span class="mi">95</span><span class="o">:</span>     <span class="k">return</span> <span class="nf">of_driver_match_device</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">drv</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">37</span><span class="cl"><span class="n">drivers</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="n">common</span><span class="o">/</span><span class="n">ulpi</span><span class="p">.</span><span class="n">c</span>
+</span></span><span class="line"><span class="ln">38</span><span class="cl"><span class="mi">37</span><span class="o">=</span><span class="k">static</span> <span class="kt">int</span> <span class="nf">ulpi_match</span><span class="p">(</span><span class="k">struct</span> <span class="n">device</span> <span class="o">*</span><span class="n">dev</span><span class="p">,</span> <span class="k">struct</span> <span class="n">device_driver</span> <span class="o">*</span><span class="n">driver</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">39</span><span class="cl"><span class="mi">48</span><span class="o">:</span>             <span class="k">return</span> <span class="nf">of_driver_match_device</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">driver</span><span class="p">);</span>
+</span></span></code></pre></div>
+<h1 id="linux-acpi如何识别设备" data-numberify>linux acpi如何识别设备<a class="anchor ms-1" href="#linux-acpi如何识别设备"></a></h1>
+<p>在Linux系统中，ACPI（Advanced Configuration and Power Interface）是一种用于操作系统与硬件平台之间进行电源管理和配置的标准接口。ACPI定义了如何在操作系统中枚举、配置和管理硬件设备，包括电源管理设备、事件驱动设备等。</p>
+<p>对于通用硬件错误源（Generic Hardware Error Source，GHES）设备的识别，Linux内核通过ACPI表（如HEST，Hardware Error Source Table）来进行。HEST表描述了硬件错误源的信息，包括错误类型、错误状态等。Linux内核中的ACPI子系统会解析HEST表，并据此创建相应的错误处理设备。</p>
+<p>具体来说，Linux内核中的ACPI子系统通过以下步骤识别GHES设备：</p>
+<p>解析HEST表：在系统启动时，内核会解析HEST表，获取硬件错误源的信息。HEST表通常包含多个错误源描述，每个描述对应一个GHES设备。</p>
+<p>创建错误处理设备：对于HEST表中的每个GHES描述，内核会创建一个对应的错误处理设备。这些设备通常是platform_device类型的设备，表示一个通用的硬件错误源。</p>
+<p>注册错误处理设备：创建的设备会被注册到设备系统中，以便用户空间程序可以通过设备文件（如/dev/mem）或设备驱动来访问和控制这些设备。</p>
+<p>处理错误事件：一旦GHES设备检测到硬件错误事件，它会将事件信息通知给内核的错误处理子系统。内核会根据事件的类型和严重程度，采取相应的错误处理措施，如记录错误信息、重置设备、触发系统崩溃等。</p>
+<p>需要注意的是，具体的设备识别和错误处理过程可能会因硬件平台、操作系统版本和内核配置的不同而有所差异。因此，在实际应用中，建议参考相关的硬件文档、操作系统文档和内核源代码，以获取更详细和准确的信息。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// linux-6.6/drivers/acpi/apei/hest.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="kt">int</span> <span class="n">__init</span> <span class="nf">hest_parse_ghes</span><span class="p">(</span><span class="k">struct</span> <span class="n">acpi_hest_header</span> <span class="o">*</span><span class="n">hest_hdr</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">	<span class="k">struct</span> <span class="n">platform_device</span> <span class="o">*</span><span class="n">ghes_dev</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">	<span class="k">struct</span> <span class="n">ghes_arr</span> <span class="o">*</span><span class="n">ghes_arr</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">	<span class="kt">int</span> <span class="n">rc</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nf">is_generic_error</span><span class="p">(</span><span class="n">hest_hdr</span><span class="p">))</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">		<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">
+</span></span><span class="line"><span class="ln">11</span><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">((</span><span class="k">struct</span> <span class="n">acpi_hest_generic</span> <span class="o">*</span><span class="p">)</span><span class="n">hest_hdr</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">enabled</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">		<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">	<span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ghes_arr</span><span class="o">-&gt;</span><span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">		<span class="k">struct</span> <span class="n">acpi_hest_header</span> <span class="o">*</span><span class="n">hdr</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">		<span class="n">ghes_dev</span> <span class="o">=</span> <span class="n">ghes_arr</span><span class="o">-&gt;</span><span class="n">ghes_devs</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl">		<span class="n">hdr</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="k">struct</span> <span class="n">acpi_hest_header</span> <span class="o">**</span><span class="p">)</span><span class="n">ghes_dev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">.</span><span class="n">platform_data</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">		<span class="k">if</span> <span class="p">(</span><span class="n">hdr</span><span class="o">-&gt;</span><span class="n">source_id</span> <span class="o">==</span> <span class="n">hest_hdr</span><span class="o">-&gt;</span><span class="n">source_id</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">			<span class="nf">pr_warn</span><span class="p">(</span><span class="n">FW_WARN</span> <span class="n">HEST_PFX</span> <span class="s">&#34;Duplicated hardware error source ID: %d.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">				<span class="n">hdr</span><span class="o">-&gt;</span><span class="n">source_id</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">			<span class="k">return</span> <span class="o">-</span><span class="n">EIO</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl">	<span class="n">ghes_dev</span> <span class="o">=</span> <span class="nf">platform_device_alloc</span><span class="p">(</span><span class="s">&#34;GHES&#34;</span><span class="p">,</span> <span class="n">hest_hdr</span><span class="o">-&gt;</span><span class="n">source_id</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">ghes_dev</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl">		<span class="k">return</span> <span class="o">-</span><span class="n">ENOMEM</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">26</span><span class="cl">
+</span></span><span class="line"><span class="ln">27</span><span class="cl">	<span class="n">rc</span> <span class="o">=</span> <span class="nf">platform_device_add_data</span><span class="p">(</span><span class="n">ghes_dev</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hest_hdr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">));</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">rc</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">29</span><span class="cl">		<span class="k">goto</span> <span class="n">err</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">30</span><span class="cl">
+</span></span><span class="line"><span class="ln">31</span><span class="cl">	<span class="n">rc</span> <span class="o">=</span> <span class="nf">platform_device_add</span><span class="p">(</span><span class="n">ghes_dev</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">rc</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">33</span><span class="cl">		<span class="k">goto</span> <span class="n">err</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">34</span><span class="cl">	<span class="n">ghes_arr</span><span class="o">-&gt;</span><span class="n">ghes_devs</span><span class="p">[</span><span class="n">ghes_arr</span><span class="o">-&gt;</span><span class="n">count</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">ghes_dev</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">35</span><span class="cl">
+</span></span><span class="line"><span class="ln">36</span><span class="cl">	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">37</span><span class="cl"><span class="nl">err</span><span class="p">:</span>
+</span></span><span class="line"><span class="ln">38</span><span class="cl">	<span class="nf">platform_device_put</span><span class="p">(</span><span class="n">ghes_dev</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">39</span><span class="cl">	<span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">40</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></div>
+</div>
+</div><div class="card-footer">
+  <div class="post-navs d-flex justify-content-evenly"><div class="post-nav post-prev">
+      <i class="fas fa-fw fa-chevron-down post-prev-icon me-1" data-fa-transform="rotate-90"></i>
+      <a href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/kobject/kobject/">Linux内核数据结构kobject/kset/ktype</a>
+    </div><div class="post-nav post-next">
+      <a href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/fdt_dt/">Linux内核驱动模型（一）设备树展开</a>
+      <i class="fas fa-fw fa-chevron-down post-next-icon ms-1" data-fa-transform="rotate-270"></i>
+    </div></div>
+</div></article><div class="post-copyright mb-3 row card component" id="post-copyright">
+    <div class="card-header">
+        <h2 class="card-title fs-4 my-2 text-surface">版权</h2>
+    </div>
+    <div class="card-body"><a class="d-flex align-items-center flex-column" target="_blank" rel="license noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh">
+  <span><i class="fab fa-fw fa-2x fa-creative-commons"></i><i class="fab fa-fw fa-2x fa-creative-commons-by"></i><i class="fab fa-fw fa-2x fa-creative-commons-nc"></i><i class="fab fa-fw fa-2x fa-creative-commons-nd"></i></span>
+  CC BY-NC-ND 4.0 
+</a>
+
+
+    </div>
+</div><section class="related-posts row card component">
+      <div class="card-header">
+        <h2 class="card-title fs-4 my-2 text-surface">
+          相关文章
+        </h2>
+      </div>
+      <div class="card-body slide px-1">
+        <div class="slide-inner row gx-0"><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="Linux内核数据结构kobject/kset/ktype" src="https://kingdix10.github.io/covers/lines_obliquely_stripes_123801_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/kobject/kobject/">
+    Linux内核数据结构kobject/kset/ktype
+  </a>
+  <div class="post-meta mb-0">
+    2023/07/10
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="linux内核时间子系统（二）" src="https://kingdix10.github.io/covers/flowers_leaves_pattern_148777_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.1/time/timekeeping/">
+    linux内核时间子系统（二）
+  </a>
+  <div class="post-meta mb-0">
+    2023/02/22
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="linux thermal子系统简介" src="https://kingdix10.github.io/covers/blinds_lines_shade_143653_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/">
+    linux thermal子系统简介
+  </a>
+  <div class="post-meta mb-0">
+    2022/12/30
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="linux内核时间子系统（一）" src="https://kingdix10.github.io/covers/wood_texture_logs_159793_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.1/time/time/">
+    linux内核时间子系统（一）
+  </a>
+  <div class="post-meta mb-0">
+    2022/12/30
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="Linux ARM64页面大小和虚拟地址位数" src="https://kingdix10.github.io/covers/leaves_patterns_texture_127524_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtable/">
+    Linux ARM64页面大小和虚拟地址位数
+  </a>
+  <div class="post-meta mb-0">
+    2023/07/10
+
+  </div>
+</div>
+
+          </div></div>
+        <button class="slide-control-left">
+          <i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-90"></i>
+          <span class="visually-hidden">Left</span>
+        </button>
+        <button class="slide-control-right">
+          <i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-270"></i>
+          <span class="visually-hidden">Right</span>
+        </button>
+      </div>
+    </section></div>
+</div>
+<aside class="sidebar d-flex docs-sidebar col-xxl-3 position-sticky order-xxl-5">
+  <div class="container">
+    
+<div class="row component card">
+    <div class="card-body">
+        <form action="/zh-cn/search/">
+            <div class="input-group">
+                <input name="q" class="form-control rounded" placeholder="搜索">
+                <button class="btn btn-sm btn-search position-absolute end-0 border-0 border-start border-secondary p-2" type="submit">
+                    <i class="fas fa-fw fa-search text-primary"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    <div class="accordion post-toc d-none d-lg-block">
+  <div class="accordion-item row mb-4 card component" id="postTOC">
+    <div class="card-header accordion-header">
+      <h2 class="card-title fs-4 my-2 text-surface d-none d-lg-block">目录</h2>
+      <a class="accordion-button d-lg-none mb-1 collapsed shadow-none p-0 bg-transparent" role="button" data-bs-toggle="collapse" href="#post-toc" aria-expanded="false" aria-controls="post-toc">
+        目录
+      </a>
+    </div>
+    <div class="card-body collapse accordion-collapse accordion-body d-lg-block" id="post-toc">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-device_node-tree到device-tree">1. device_node tree到device tree</a>
+      <ul>
+        <li><a href="#11-of_device_alloc">1.1. of_device_alloc</a></li>
+        <li><a href="#12-of_platform_device_create_pdata">1.2. of_platform_device_create_pdata</a></li>
+        <li><a href="#13-添加platform_device的另一种方式">1.3. 添加platform_device的另一种方式</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-设备和驱动的匹配of_match_table">2. 设备和驱动的匹配：of_match_table</a></li>
+    <li><a href="#3-其他总线上的device_node-tree到device-tree">3. 其他总线上的device_node tree到device tree</a></li>
+    <li><a href="#linux-acpi如何识别设备">linux acpi如何识别设备</a></li>
+  </ul>
+</nav>
+    </div>
+  </div>
+</div>
+    
+
+
+
+
+
+
+  </div>
+</aside>
+
+      </div>
+    </main><footer class="footer mt-auto py-3 text-center container"><div class="offcanvas offcanvas-bottom h-auto" tabindex="-1" id="offcanvasActionsPanel"
+  aria-labelledby="offcanvasActionsPanelLabel">
+  <div class="offcanvas-header">
+    <div class="offcanvas-title h5" id="offcanvasActionsPanelLabel">
+      <i class="fas fa-fw fa-th-large me-1"></i>
+      操作
+    </div>
+    <button type="button" class="btn-close ms-auto" data-bs-dismiss="offcanvas" data-bs-target="offcanvasActionsPanel" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body mt-2"><div class="actions d-flex overflow-auto align-items-center">
+      <a role="button" class="action action-go-back d-flex flex-column align-items-center me-3" href="javascript: window.history.back();">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-90"></i></span> 返回
+      </a>
+      <a role="button" class="action action-reload-page d-flex flex-column align-items-center me-3">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-redo-alt"></i></span> 刷新
+      </a>
+      <a role="button" class="action action-copy-url d-flex flex-column align-items-center me-3">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-link"></i></span> 复制链接
+      </a>
+    </div>
+  </div>
+</div><div class="row text-center text-lg-start">
+  <div class="col-12 mt-2 col-lg-3">
+    <p class="mb-2">kingdix10&#39;s site</p>
+    <p class="text-secondary mb-2"><small>kingdix10 @ 拾月国度</small></p><div class="copyright mb-2 text-secondary">
+  <small>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</small>
+</div>
+
+
+
+<nav class="social-links nav justify-content-center justify-content-between mb-2 mt-3">
+      <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="https://github.com/kingdix10" title="GitHub" rel="me">
+        <i class="fa-fw fab fa-github"
+          ></i>
+      </a>
+      <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="https://www.zhihu.com/people/kingdix10" title="知乎" rel="me">
+        <i class="fa-fw fab fa-zhihu"
+           style="color: #056de8;"></i>
+      </a>
+  <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="/zh-cn/index.xml" title="RSS" rel="me">
+    <i class="fas fa-fw fa-rss" style="color: #ea6221;"></i>
+  </a>
+</nav>
+</div>
+  <div class="col-12 col-lg-8 offset-0 offset-lg-1"><ul class="nav justify-content-between footer-memu mb-3 row"><li class="nav-item col-12 col-md-6 col-lg-3 px-0"><ul class="nav flex-column align-items-start">
+      <li class="nav-item w-100"><a class="nav-link fw-bold fs-lg" href="javascript: void(0);">链接</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+GitHub"
+  href="https://github.com/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-github text-primary"></i></span>GitHub</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+Gitee"
+  href="https://gitee.com/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-github text-primary"></i></span>Gitee</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+Zhihu"
+  href="https://www.zhihu.com/people/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-zhihu text-primary"></i></span>Zhihu</a></li></ul></li></ul></div>
+</div>
+</footer>
+<script data-precache src="/assets/main/bundle.min.de08722b15dbab0d764debd50114ce3d28da8ee6c7b889ff8c82e6faad0b46dd.js" integrity="sha256-3ghyKxXbqw12TevVARTOPSjajubHuIn/jILm&#43;q0LRt0=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
+<script data-precache src="/assets/viewer/bundle.min.ffafad0d121aa7d1fb443510086dac514a0b152826cf094f02a1f3dec1f37918.js" integrity="sha256-/6&#43;tDRIap9H7RDUQCG2sUUoLFSgmzwlPAqHz3sHzeRg=" crossorigin="anonymous" defer></script><script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?8e042c957455c462d9b4c9da3ab642b0";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<script src="/js/sw-register.js" defer></script>
+
+  </body>
+</html>

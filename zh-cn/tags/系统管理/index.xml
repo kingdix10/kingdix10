@@ -15,7 +15,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/debian_setup/</guid>
       <description><![CDATA[1. 网址 1.1. Debian 官网：https://www.debian.org 下载链接： https://www.debian.org/distrib https://www.debian.org/distrib/netinst 如果不使用图形界面，可以下载网络安装ISO。 1.2. ElementaryOS elementar]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/canvas_picture_abstraction_138874_300x168.jpg" length="19551" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/paint_canvas_stains_124156_300x168.jpg" length="18821" type="image/.jpg" />
     </item>
     
     <item>
@@ -25,7 +25,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/docker_setup/</guid>
       <description><![CDATA[1. Docker安装 参考docker-ce | 镜像站使用帮助 | 清华大学开源软件镜像站，可以使用https://gitee.com/kingdix]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lines_intersection_oblique_153331_300x168.jpg" length="16159" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/code_text_colorful_140555_300x168.jpg" length="22830" type="image/.jpg" />
     </item>
     
     <item>
@@ -35,7 +35,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_sys/</guid>
       <description><![CDATA[1. pstree查看进程树 1$ pstree -ptA 2systemd(1)-+-VGAuthService(546) 3 |-cron(625) 4 |-dbus-daemon(626) 5 |-dhclient(1587) 6 |-dhclient(1831) 7 |-rinetd(707) 8 |-rsyslogd(629)-+-{in:imklog}(632) 9 | |-{in:imuxsock}(631) 10 | `-{rs:main Q:Reg}(633) 2. ps 1# 查看命名空间，需要用root权限，可以使用sudo 2ps -eo pid,pidns,user,group,cmd 3# ps查]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/paint_canvas_stains_124156_300x168.jpg" length="18821" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/water_waves_ripples_143522_300x168.jpg" length="11080" type="image/.jpg" />
     </item>
     
   </channel>

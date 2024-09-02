@@ -393,10 +393,32 @@ kingdix10
   <div class="posts mb-4"><article class="row card post component">
   <div class="card-header">
     <h2 class="card-title post-title my-2 fs-4">
+      <a href="/zh-cn/docs/04-kernel/linux-6.6/sched/task_life/">用trace追踪Linux进程的一生</a>
+    </h2>
+  </div>
+  <div class="card-body"><picture><img class="img-fluid" alt="用trace追踪Linux进程的一生" src="https://kingdix10.github.io/covers/texture_background_color_72786_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2024-08-31 08:00:00 &#43;0800 CST，更新于 2024-09-01 01:46:33 &#43;0800 CST。">2024/08/31</span><span class="post-reading-time me-1 mb-1">3 分钟阅读</span><a href="/zh-cn/categories/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>进程管理</a><a href="/zh-cn/series/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
+      <i class="fas fa-fw fa-columns me-1"></i>进程管理</a><a href="/zh-cn/tags/linux/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux</a><a href="/zh-cn/tags/linux-6.6/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux-6.6</a>
+</div>
+
+    <div class="post-summary"><p> 1. 简介 通常来说，shell要启动一个新的程序，会先fork一个新进程，然后执行exec系统调用将替换新进程的执行程序。posix规定了posix_spawn函数，封装了fork+exec的过程，提供了更加高效的接口。
+2. 追踪进程 2.1. 一个比hello world还简单的程序 C语言编程通常会以printf(&#34;hello world\n&#34;);作为第一个程序。这里写一个简单的程序来演示进程的创建、执行和退出。
+main函数的返回值会被作为进程的退出码传递给exit系统调用，如果使用void main(void)，进程的退出值可能是不确定的，这里为了方便理解，使main函数的返回值为0。
+1int main(void)...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/04-kernel/linux-6.6/sched/task_life/#post-content-body">阅读更多</a></div>
+    </div>
+  </div>
+</article>
+<article class="row card post component">
+  <div class="card-header">
+    <h2 class="card-title post-title my-2 fs-4">
       <a href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_domain_add/">Linux中断子系统（二）domain注册</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Linux中断子系统（二）domain注册" src="https://kingdix10.github.io/covers/bubbles_drops_macro_126764_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="Linux中断子系统（二）domain注册" src="https://kingdix10.github.io/covers/travel_map_compass_123078_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
@@ -418,7 +440,7 @@ __irq_domain_add的实现在kernel/irq/irqdomain.c，逻辑并不复杂，主要
       <a href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_create_mapping/">Linux中断子系统（三）设备中断注册</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Linux中断子系统（三）设备中断注册" src="https://kingdix10.github.io/covers/metal_texture_surface_157344_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="Linux中断子系统（三）设备中断注册" src="https://kingdix10.github.io/covers/pixels_cubes_shapes_127558_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
@@ -440,7 +462,7 @@ __irq_domain_add的实现在kernel/irq/irqdomain.c，逻辑并不复杂，主要
       <a href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/request_irq/">Linux中断子系统（四）申请中断request_irq</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Linux中断子系统（四）申请中断request_irq" src="https://kingdix10.github.io/covers/spots_stains_colorful_147593_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="Linux中断子系统（四）申请中断request_irq" src="https://kingdix10.github.io/covers/laptop_backlight_colorful_194324_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
@@ -460,7 +482,7 @@ __irq_domain_add的实现在kernel/irq/irqdomain.c，逻辑并不复杂，主要
       <a href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/handler_entry/">Linux中断子系统（五）中断处理</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Linux中断子系统（五）中断处理" src="https://kingdix10.github.io/covers/laptop_keyboard_glow_170138_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="Linux中断子系统（五）中断处理" src="https://kingdix10.github.io/covers/vintage_retro_camera_126517_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
@@ -481,7 +503,7 @@ ARM64自己定义handle_arch_irq的实现。
       <a href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/init/">Linux中断子系统（一）软硬件初始化</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Linux中断子系统（一）软硬件初始化" src="https://kingdix10.github.io/covers/code_letters_screen_137590_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="Linux中断子系统（一）软硬件初始化" src="https://kingdix10.github.io/covers/hologram_scheme_scifi_139294_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
@@ -506,7 +528,7 @@ irq_to_desc用于将virq转换为struct irq_desc指针。
       <a href="/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_mm/">Linux drm mm分析(基于intel ivpu驱动)</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Linux drm mm分析(基于intel ivpu驱动)" src="https://kingdix10.github.io/covers/code_letters_screen_137590_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="Linux drm mm分析(基于intel ivpu驱动)" src="https://kingdix10.github.io/covers/flowers_leaves_pattern_148777_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
@@ -525,9 +547,9 @@ irq_to_desc用于将virq转换为struct irq_desc指针。
       <a href="/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/">【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程" src="https://kingdix10.github.io/covers/shortcode.png" loading="lazy"
-     width="214"
-     height="200"/>
+  <div class="card-body"><picture><img class="img-fluid" alt="【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程" src="https://kingdix10.github.io/covers/leaves_patterns_autumn_129305_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
   </picture><div class="post-meta mb-3">
   <span class="post-date me-1 mb-1" title="创建于 2024-04-21 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2024/04/21</span><span class="post-reading-time me-1 mb-1">10 分钟阅读</span><a href="/zh-cn/categories/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
       <i class="fas fa-fw fa-folder me-1"></i>系统调用</a><a href="/zh-cn/series/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
@@ -544,12 +566,13 @@ irq_to_desc用于将virq转换为struct irq_desc指针。
       <a href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/">ARM64 Linux中断入口</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="ARM64 Linux中断入口" src="https://kingdix10.github.io/covers/cubes_colorful_bright_128866_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="ARM64 Linux中断入口" src="https://kingdix10.github.io/covers/wavy_curvy_lines_146044_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
   <span class="post-date me-1 mb-1" title="创建于 2024-04-21 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2024/04/21</span><span class="post-reading-time me-1 mb-1">17 分钟阅读</span><a href="/zh-cn/categories/%E4%B8%AD%E6%96%AD%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
-      <i class="fas fa-fw fa-folder me-1"></i>中断管理</a><a href="/zh-cn/tags/linux-6.6/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux-6.6</a><a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux内核</a>
+      <i class="fas fa-fw fa-folder me-1"></i>中断管理</a><a href="/zh-cn/series/%E4%B8%AD%E6%96%AD%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
+      <i class="fas fa-fw fa-columns me-1"></i>中断管理</a><a href="/zh-cn/tags/linux-6.6/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux-6.6</a><a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux内核</a>
 </div>
 
     <div class="post-summary"><p> 1. 简介 ARM64中断入口相关的代码主要在arch/arm64/kernel/entry.S，启动过程中，会将中断向量表vectors的起始虚拟地址写入到VBAR_EL1。
@@ -564,11 +587,11 @@ irq_to_desc用于将virq转换为struct irq_desc指针。
       <a href="/zh-cn/docs/04-kernel/linux-6.6/sched/a-fork/">Linux fork进程/线程简介</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Linux fork进程/线程简介" src="https://kingdix10.github.io/covers/wall_brick_purple_141823_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="Linux fork进程/线程简介" src="https://kingdix10.github.io/covers/walls_floor_light_50837_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
-  <span class="post-date me-1 mb-1" title="创建于 2024-02-03 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2024/02/03</span><span class="post-reading-time me-1 mb-1">4 分钟阅读</span><a href="/zh-cn/categories/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+  <span class="post-date me-1 mb-1" title="创建于 2024-02-03 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2024/02/03</span><span class="post-reading-time me-1 mb-1">5 分钟阅读</span><a href="/zh-cn/categories/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
       <i class="fas fa-fw fa-folder me-1"></i>进程管理</a><a href="/zh-cn/series/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
       <i class="fas fa-fw fa-columns me-1"></i>进程管理</a><a href="/zh-cn/tags/linux-6.6/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux-6.6</a><a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux内核</a><a href="/zh-cn/tags/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">进程管理</a>
 </div>
@@ -576,26 +599,6 @@ irq_to_desc用于将virq转换为struct irq_desc指针。
     <div class="post-summary"><p> 1. kernel_clone kernel_clone是内核创建进程/线程的核心函数，如下功能都是通过调用kernel_clone实现的。
 kernel_thread：创建内核进程 user_mode_thread：创建1号进程，1号进程的回调函数先是内核态的kernel_init，之后通过execve切换到用户进程 fork和clone系统调用：创建用户进程/线程 kernel_clone主要流程是copy_process函数实现task_struct结构的创建和初始化，而后通过wake_up_new_task将新进程/线程加入运行队列，并唤醒。详细流程见源码注释。
 1/// kernel/sched/core.c 2/* 3...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/04-kernel/linux-6.6/sched/a-fork/#post-content-body">阅读更多</a></div>
-    </div>
-  </div>
-</article>
-<article class="row card post component">
-  <div class="card-header">
-    <h2 class="card-title post-title my-2 fs-4">
-      <a href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_2/">Linux内核copy_process分析（二）</a>
-    </h2>
-  </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Linux内核copy_process分析（二）" src="https://kingdix10.github.io/covers/keyboard_laptop_gradient_203739_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture><div class="post-meta mb-3">
-  <span class="post-date me-1 mb-1" title="创建于 2024-02-03 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2024/02/03</span><span class="post-reading-time me-1 mb-1">8 分钟阅读</span><a href="/zh-cn/categories/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
-      <i class="fas fa-fw fa-folder me-1"></i>进程管理</a><a href="/zh-cn/series/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
-      <i class="fas fa-fw fa-columns me-1"></i>进程管理</a><a href="/zh-cn/tags/linux/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux</a><a href="/zh-cn/tags/linux-6.6/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux-6.6</a>
-</div>
-
-    <div class="post-summary"><p> 1. shm_init_task 在使能SYSVIPC的情况下，初始化task-&gt;sysvshm.shm_clist。
-1 /* copy all the process information */ 2 shm_init_task(p); 2. security_task_alloc 1 retval = security_task_alloc(p, clone_flags); /// Allocate a task&#39;s LSM blob 2 if (retval) 3 goto bad_fork_cleanup_audit; 3. copy_semundo 在不使能CONFIG_SYSVIPC的情况下，copy_semundo...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_2/#post-content-body">阅读更多</a></div>
     </div>
   </div>
 </article>
@@ -721,19 +724,23 @@ kernel_thread：创建内核进程 user_mode_thread：创建1号进程，1号进
                     <div class="tab-pane active" id="taxonomySeries" role="tabpanel" aria-labelledby="taxonomySeriesTab" tabindex="0">
                         <a href="/zh-cn/series/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="进程管理">
                             进程管理
-                            <span class="badge badge-sm text-secondary bg-white ms-1">11</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">13</span>
                         </a>
                         <a href="/zh-cn/series/linux%E5%91%BD%E4%BB%A4/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="linux命令">
                             linux命令
-                            <span class="badge badge-sm text-secondary bg-white ms-1">9</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">10</span>
+                        </a>
+                        <a href="/zh-cn/series/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="C语言">
+                            C语言
+                            <span class="badge badge-sm text-secondary bg-white ms-1">7</span>
                         </a>
                         <a href="/zh-cn/series/%E4%B8%AD%E6%96%AD%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="中断管理">
                             中断管理
-                            <span class="badge badge-sm text-secondary bg-white ms-1">6</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">7</span>
                         </a>
                         <a href="/zh-cn/series/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="内核基础">
                             内核基础
-                            <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">6</span>
                         </a>
                         <a href="/zh-cn/series/%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%9E%8B/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="设备驱动模型">
                             设备驱动模型
@@ -747,8 +754,8 @@ kernel_thread：创建内核进程 user_mode_thread：创建1号进程，1号进
                             启动流程
                             <span class="badge badge-sm text-secondary bg-white ms-1">4</span>
                         </a>
-                        <a href="/zh-cn/series/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="C语言">
-                            C语言
+                        <a href="/zh-cn/series/4412/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="4412">
+                            4412
                             <span class="badge badge-sm text-secondary bg-white ms-1">3</span>
                         </a>
                         <a href="/zh-cn/series/%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="内核调试">
@@ -757,6 +764,10 @@ kernel_thread：创建内核进程 user_mode_thread：创建1号进程，1号进
                         </a>
                         <a href="/zh-cn/series/%E4%BB%A3%E7%A0%81%E6%8A%80%E5%B7%A7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="代码技巧">
                             代码技巧
+                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
+                        </a>
+                        <a href="/zh-cn/series/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="内存管理">
+                            内存管理
                             <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
                         </a>
                         <a href="/zh-cn/series/%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="工具">
@@ -771,6 +782,10 @@ kernel_thread：创建内核进程 user_mode_thread：创建1号进程，1号进
                             时间子系统
                             <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
                         </a>
+                        <a href="/zh-cn/series/%E6%9C%AA%E5%88%86%E7%B1%BB/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="未分类">
+                            未分类
+                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
+                        </a>
                         <a href="/zh-cn/series/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="系统管理">
                             系统管理
                             <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
@@ -783,8 +798,8 @@ kernel_thread：创建内核进程 user_mode_thread：创建1号进程，1号进
                             DRM
                             <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
                         </a>
-                        <a href="/zh-cn/series/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="内存管理">
-                            内存管理
+                        <a href="/zh-cn/series/%E5%86%85%E6%A0%B8%E9%A9%B1%E5%8A%A8/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="内核驱动">
+                            内核驱动
                             <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
                         </a>
                         <a href="/zh-cn/series/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="系统调用">
@@ -795,7 +810,7 @@ kernel_thread：创建内核进程 user_mode_thread：创建1号进程，1号进
                     <div class="tab-pane" id="taxonomyCategories" role="tabpanel" aria-labelledby="taxonomyCategoriesTab" tabindex="0">
                         <a href="/zh-cn/categories/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="进程管理">
                             进程管理
-                            <span class="badge badge-sm text-secondary bg-white ms-1">11</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">13</span>
                         </a>
                         <a href="/zh-cn/categories/linux%E5%91%BD%E4%BB%A4/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="linux命令">
                             linux命令
@@ -815,7 +830,7 @@ kernel_thread：创建内核进程 user_mode_thread：创建1号进程，1号进
                         </a>
                         <a href="/zh-cn/categories/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="内核基础">
                             内核基础
-                            <span class="badge badge-sm text-secondary bg-white ms-1">6</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">7</span>
                         </a>
                         <a href="/zh-cn/categories/%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="内核调试">
                             内核调试
@@ -909,7 +924,7 @@ kernel_thread：创建内核进程 user_mode_thread：创建1号进程，1号进
                         </a>
                         <a href="/zh-cn/tags/linux-6.6/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="linux-6.6">
                             linux-6.6
-                            <span class="badge badge-sm text-secondary bg-white ms-1">22</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">24</span>
                         </a>
                         <a href="/zh-cn/tags/%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="工具">
                             工具
@@ -927,6 +942,10 @@ kernel_thread：创建内核进程 user_mode_thread：创建1号进程，1号进
                             内核驱动
                             <span class="badge badge-sm text-secondary bg-white ms-1">8</span>
                         </a>
+                        <a href="/zh-cn/tags/linux/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="Linux">
+                            Linux
+                            <span class="badge badge-sm text-secondary bg-white ms-1">7</span>
+                        </a>
                         <a href="/zh-cn/tags/linux%E5%91%BD%E4%BB%A4/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="linux命令">
                             linux命令
                             <span class="badge badge-sm text-secondary bg-white ms-1">6</span>
@@ -937,10 +956,6 @@ kernel_thread：创建内核进程 user_mode_thread：创建1号进程，1号进
                         </a>
                         <a href="/zh-cn/tags/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="C语言">
                             C语言
-                            <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
-                        </a>
-                        <a href="/zh-cn/tags/linux/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="Linux">
-                            Linux
                             <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
                         </a>
                         <a href="/zh-cn/tags/u-boot/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="u-boot">
@@ -1025,13 +1040,13 @@ kernel_thread：创建内核进程 user_mode_thread：创建1号进程，1号进
                         </a>
                         <a href="https://kingdix10.github.io/zh-cn/tags" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title='全部'>
                         全部
-                        <span class="badge badge-sm text-secondary bg-white ms-1">34</span>
+                        <span class="badge badge-sm text-secondary bg-white ms-1">35</span>
                         </a>
                     </div>
                 <div class="tab-pane" id="taxonomyArchives" role="tabpanel" aria-labelledby="taxonomyArchivesTab" tabindex="0">
 
     <a href="/zh-cn/archives/2024/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2024">
-    2024 <span class="badge badge-sm text-secondary bg-white ms-1">29</span>
+    2024 <span class="badge badge-sm text-secondary bg-white ms-1">32</span>
     </a>
 
     <a href="/zh-cn/archives/2023/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2023">
@@ -1098,7 +1113,55 @@ kernel_thread：创建内核进程 user_mode_thread：创建1号进程，1号进
   <div class="d-flex">
       <div
         class="flex-shrink-0 d-flex justify-content-center align-items-center"
-        style="max-width: 100px"><picture><img class="img-fluid" alt="编译工具杂记" src="https://kingdix10.github.io/covers/trunk_tree_texture_119590_300x168.jpg" loading="lazy"
+        style="max-width: 100px"><picture><img class="img-fluid" alt="用trace追踪Linux进程的一生" src="https://kingdix10.github.io/covers/texture_background_color_72786_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+      </div>
+    <div
+      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
+      <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/sched/task_life/">
+        用trace追踪Linux进程的一生
+      </a>
+      <div class="post-meta mt-2">
+        <span class="post-date">
+          2024/08/31
+        </span>
+      </div>
+    </div>
+  </div>
+                    </li>
+                    <li class="mb-2">
+    
+  
+  <div class="d-flex">
+      <div
+        class="flex-shrink-0 d-flex justify-content-center align-items-center"
+        style="max-width: 100px"><picture><img class="img-fluid" alt="Linux内核的通知链机制" src="https://kingdix10.github.io/covers/neon_lights_dark_133133_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+      </div>
+    <div
+      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
+      <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/notifier_chain/notifier_chain/">
+        Linux内核的通知链机制
+      </a>
+      <div class="post-meta mt-2">
+        <span class="post-date">
+          2024/08/14
+        </span>
+      </div>
+    </div>
+  </div>
+                    </li>
+                    <li class="mb-2">
+    
+  
+  <div class="d-flex">
+      <div
+        class="flex-shrink-0 d-flex justify-content-center align-items-center"
+        style="max-width: 100px"><picture><img class="img-fluid" alt="编译工具杂记" src="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture>
@@ -1122,7 +1185,7 @@ kernel_thread：创建内核进程 user_mode_thread：创建1号进程，1号进
   <div class="d-flex">
       <div
         class="flex-shrink-0 d-flex justify-content-center align-items-center"
-        style="max-width: 100px"><picture><img class="img-fluid" alt="VMware和Hyper-V回收虚拟磁盘空间" src="https://kingdix10.github.io/covers/mosaic_multicolored_texture_126795_300x168.jpg" loading="lazy"
+        style="max-width: 100px"><picture><img class="img-fluid" alt="VMware和Hyper-V回收虚拟磁盘空间" src="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture>
@@ -1146,7 +1209,7 @@ kernel_thread：创建内核进程 user_mode_thread：创建1号进程，1号进
   <div class="d-flex">
       <div
         class="flex-shrink-0 d-flex justify-content-center align-items-center"
-        style="max-width: 100px"><picture><img class="img-fluid" alt="make调试" src="https://kingdix10.github.io/covers/flowers_leaves_pattern_148777_300x168.jpg" loading="lazy"
+        style="max-width: 100px"><picture><img class="img-fluid" alt="make调试" src="https://kingdix10.github.io/covers/pattern_color_mosaic_131243_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture>
@@ -1159,54 +1222,6 @@ kernel_thread：创建内核进程 user_mode_thread：创建1号进程，1号进
       <div class="post-meta mt-2">
         <span class="post-date">
           2024/08/05
-        </span>
-      </div>
-    </div>
-  </div>
-                    </li>
-                    <li class="mb-2">
-    
-  
-  <div class="d-flex">
-      <div
-        class="flex-shrink-0 d-flex justify-content-center align-items-center"
-        style="max-width: 100px"><picture><img class="img-fluid" alt="rt-thread Cortex-A9 SMP启动" src="https://kingdix10.github.io/covers/metal_texture_surface_157344_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture>
-      </div>
-    <div
-      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
-      <a class="post-title" href="/zh-cn/docs/03-boot/rtthread_smp_cortex_a9/">
-        rt-thread Cortex-A9 SMP启动
-      </a>
-      <div class="post-meta mt-2">
-        <span class="post-date">
-          2024/08/04
-        </span>
-      </div>
-    </div>
-  </div>
-                    </li>
-                    <li class="mb-2">
-    
-  
-  <div class="d-flex">
-      <div
-        class="flex-shrink-0 d-flex justify-content-center align-items-center"
-        style="max-width: 100px"><picture><img class="img-fluid" alt="ssh连接wsl后执行Windows程序" src="https://kingdix10.github.io/covers/wavy_motley_metallic_139065_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture>
-      </div>
-    <div
-      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
-      <a class="post-title" href="/zh-cn/docs/01-os/win/ssh_wsl_exe/">
-        ssh连接wsl后执行Windows程序
-      </a>
-      <div class="post-meta mt-2">
-        <span class="post-date">
-          2024/07/29
         </span>
       </div>
     </div>
@@ -1237,7 +1252,7 @@ kernel_thread：创建内核进程 user_mode_thread：创建1号进程，1号进
       <div class="card-body collapse accordion-collapse accordion-body d-lg-block show" id="archives">
 
     <a href="/zh-cn/archives/2024/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2024">
-    2024 <span class="badge badge-sm text-secondary bg-white ms-1">29</span>
+    2024 <span class="badge badge-sm text-secondary bg-white ms-1">32</span>
     </a>
 
     <a href="/zh-cn/archives/2023/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2023">

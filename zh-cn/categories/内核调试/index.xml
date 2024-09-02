@@ -10,32 +10,32 @@
     <lastBuildDate>Sun, 03 Dec 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>ARM64 Crash调试环境搭建</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/arm64_setup/</link>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/arm64_setup/</link>
       <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/arm64_setup/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/arm64_setup/</guid>
       <description><![CDATA[1. ARM64 Crash调试环境搭建 主要参考资料： 内核源码 Documentation/admin-guide/kdump/kdump.rst或者Doc]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lava_texture_surface_140175_300x168.jpg" length="10556" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/pixels_cubes_shapes_127558_300x168.jpg" length="18339" type="image/.jpg" />
     </item>
     
     <item>
       <title>Crash帮助信息</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/help/</link>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/help/</link>
       <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/help/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/help/</guid>
       <description><![CDATA[Crash帮助信息，来自于crash &ndash;help]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/canvas_picture_abstraction_138874_300x168.jpg" length="19551" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/travel_map_compass_123078_300x168.jpg" length="14785" type="image/.jpg" />
     </item>
     
     <item>
       <title>Crash命令介绍</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/crash_cmd_set/</link>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/crash_cmd_set/</link>
       <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/kdump_crash/crash_cmd_set/</guid>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/crash_cmd_set/</guid>
       <description><![CDATA[1. Crash命令介绍 虽然使用硬件设备来调试有很多优点和方便之处，但是我一直希望代码是可以自己调试自己的，从而避免使用一些昂贵的外部的的设备。]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/dots_light_background_50767_300x168.jpg" length="5596" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/vintage_retro_camera_126517_300x168.jpg" length="11143" type="image/.jpg" />
     </item>
     
     <item>
@@ -45,7 +45,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-formats/</guid>
       <description><![CDATA[1. 说明 根据内核文档整理而成，具体格式含义可查看内核文档，或点击如何获得正确的printk格式占位符(v6.6)或如何获得正确的printk格]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/cables_wires_lights_130357_1280x720.jpg" length="276503" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/hologram_scheme_scifi_139294_300x168.jpg" length="9556" type="image/.jpg" />
     </item>
     
     <item>
@@ -55,7 +55,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/</guid>
       <description><![CDATA[1. printk /proc/sys/kernel/printk /sys/kernel/debug/printk/index/ 2. 常见pr_*()接口 include/linux/printk.h 三种类型的接口说明如下： pr_xxx：按照pr_fmt(fmt)指定的格式输出日志。 pr_xxx_once：]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/scifi_chip_structure_139654_300x168.jpg" length="17424" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/lens_camera_glare_147903_300x168.jpg" length="7000" type="image/.jpg" />
     </item>
     
   </channel>

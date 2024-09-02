@@ -1,0 +1,1382 @@
+<!doctype html>
+<html class="position-relative" itemscope itemtype="https://schema.org/WebPage" lang="zh-cn"
+  data-bs-theme="auto" data-palette="purple">
+  <head><script src="/assets/init/bundle.min.0bb93948508b32667bbc76d4f9a8123a3c3b2ef731048422b0c48f9ea39586e9.js" integrity="sha256-C7k5SFCLMmZ7vHbU&#43;agSOjw7LvcxBIQisMSPnqOVhuk=" crossorigin="anonymous"></script>
+<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ARM64 Crash调试环境搭建 - kingdix10&#39;s site</title>
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_16x16_resize_box_3.png" sizes="16x16" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_32x32_resize_box_3.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_150x150_resize_box_3.png" sizes="150x150" type="image/png">
+    <link rel="apple-touch-icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_180x180_resize_box_3.png" sizes="180x180" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_192x192_resize_box_3.png" sizes="192x192" type="image/png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#6f42c1">
+<meta name="keywords" content="调试工具" />
+  <meta name="description" content="1. ARM64 Crash调试环境搭建 主要参考资料： 内核源码 Documentation/admin-guide/kdump/kdump.rst或者Doc" />
+    <meta name="robots" content="index, follow" /><meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://kingdix10.github.io/covers/pixels_cubes_shapes_127558_300x168.jpg"/>
+
+<meta name="twitter:title" content="ARM64 Crash调试环境搭建"/>
+<meta name="twitter:description" content="1. ARM64 Crash调试环境搭建 主要参考资料： 内核源码 Documentation/admin-guide/kdump/kdump.rst或者Doc"/>
+<meta property="og:title" content="ARM64 Crash调试环境搭建" />
+<meta property="og:description" content="1. ARM64 Crash调试环境搭建 主要参考资料： 内核源码 Documentation/admin-guide/kdump/kdump.rst或者Doc" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/arm64_setup/" /><meta property="og:image" content="https://kingdix10.github.io/covers/pixels_cubes_shapes_127558_300x168.jpg" /><meta property="article:section" content="docs" />
+<meta property="article:published_time" content="2023-12-03T00:00:00+00:00" />
+<meta property="article:modified_time" content="2024-08-04T17:46:33+00:00" /><meta property="og:site_name" content="kingdix10&#39;s site" />
+
+
+<meta itemprop="name" content="ARM64 Crash调试环境搭建">
+<meta itemprop="description" content="1. ARM64 Crash调试环境搭建 主要参考资料： 内核源码 Documentation/admin-guide/kdump/kdump.rst或者Doc"><meta itemprop="datePublished" content="2023-12-03T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2024-08-04T17:46:33+00:00" />
+<meta itemprop="wordCount" content="2597"><meta itemprop="image" content="https://kingdix10.github.io/covers/pixels_cubes_shapes_127558_300x168.jpg">
+<meta itemprop="keywords" content="linux内核,内核调试,kdump crash,工具," />
+  <meta property="og:image:alt" content="ARM64 Crash调试环境搭建" />
+  <meta name="twitter:image:alt" content="ARM64 Crash调试环境搭建" />
+  <link rel="manifest" href="/zh-cn/manifest.json">
+
+<link data-precache rel="stylesheet" href="/assets/main/bundle.min.6e8e72e2fe73efb4b8d986e54f0d232c384007622b8c47a23864194fbd179af4.css" integrity="sha256-bo5y4v5z77S42YblTw0jLDhAB2IrjEeiOGQZT70XmvQ=" crossorigin="anonymous">
+
+    <link data-precache rel="stylesheet" href="/assets/viewer/bundle.min.8c1002839fa22c1350d6ae1eef6593120e108f973c41348be9b5065430566aaf.css" integrity="sha256-jBACg5&#43;iLBNQ1q4e72WTEg4Qj5c8QTSL6bUGVDBWaq8=" crossorigin="anonymous">
+
+
+</head>
+  <body><header class="mb-4 sticky-top">
+  
+<nav class="top-app-bar shadow navbar navbar-expand-xxl">
+  <div class="container">
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDocsNav"
+      aria-expanded="false" aria-label="Toggle docs navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+<a class="navbar-brand d-flex align-items-center flex-grow-1 flex-xxl-grow-0 justify-content-xxl-start justify-content-center ms-2 ms-xxl-0 mx-auto me-xxl-2"
+    href="https://kingdix10.github.io/zh-cn/">
+    <picture><img class="logo " alt="Logo" src="https://kingdix10.github.io/images/icon_yellow_transparent_72x72.png" loading="lazy" width="72" height="72" />
+</picture>
+kingdix10
+</a>
+
+    <div class="offcanvas-xxl offcanvas-end flex-grow-1" data-bs-scroll="true" tabindex="-1" id="navbarMenus" aria-labelledby="navbarMenusLabel">
+      <div class="offcanvas-header px-4 pb-0">
+        <div class="offcanvas-title h5" id="navbarMenusLabel">kingdix10</div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#navbarMenus" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body p-4 pt-0 p-xxl-0">
+        <hr class="d-xxl-none">
+        <ul class="navbar-nav flex-row flex-wrap align-items-center me-auto"><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn">
+<span class="menu-icon me-1"><i class="fas fa-home"></i></span>主页
+            </a>
+          </li><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn/news/">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-newspaper"></i></span>新闻
+            </a>
+          </li><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn/docs/">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-folder"></i></span>文档
+            </a>
+          </li>
+          <li class="nav-item col-12 col-xxl-auto dropdown px-0">
+            <a href="#"
+              class="nav-link dropdown-toggle"
+              id="navbarDropdownBlog" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-blog"></i></span>博客
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog" data-bs-popper="none">
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/archives/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-file-archive text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">归档</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/series/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-columns"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">专栏</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of series.</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/categories/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-folder text-success"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">分类</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of categories.</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/tags/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-tags"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">标签</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of tags.</p>
+                  </div></a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item col-12 col-xxl-auto dropdown px-0">
+            <a href="#"
+              class="nav-link dropdown-toggle"
+              id="navbarDropdownLinks" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-link"></i></span>链接
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownLinks" data-bs-popper="none">
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://github.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-github text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">GitHub</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">github.com/kingdix10</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://gitee.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-github text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">Gitee</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">gitee.com/kingdix10</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://www.zhihu.com/people/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-zhihu text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">Zhihu</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://www.cnblogs.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">博客园</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://blog.csdn.net/u014001096" target="_blank" rel="noopener noreferrer">
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">CSDN</p>
+                  </div></a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+            </ul>
+          </li>
+        </ul>
+        
+    <hr class="d-xxl-none">
+    <form class="search-bar ms-auto my-auto" action="/zh-cn/search/" novalidate>
+      <div class="input-group align-items-center">
+        <span class="btn btn-search disabled position-absolute left-0 border-0 px-1">
+          <i class="fas fa-fw fa-search fa-lg"></i>
+        </span>
+        <input
+          class="my-1 form-control border-white rounded-5 search-input bg-body"
+          name="q"
+          type="search"
+          placeholder="搜索"
+          aria-label="Search"
+          required>
+          <span class="search-shortcut position-absolute end-0 top-0 me-2">
+            <kbd class="text-dark bg-white opacity-75 rounded-3 shadow border border-primary py-1 fw-bold">/</kbd>
+          </span>
+      </div>
+    </form><hr class="d-xxl-none">
+        <ul class="navbar-nav flex-row flex-wrap align-items-center ms-md-auto">
+<li class="nav-item py-2 py-xxl-1 col-12 col-xxl-auto">
+
+
+<nav class="social-links nav justify-content-center flex-row">
+      <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="https://github.com/kingdix10" title="GitHub" rel="me">
+        <i class="fa-fw fab fa-github"
+          ></i>
+        <span class="ms-1 d-xxl-none">Github</span>
+      </a>
+      <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="https://www.zhihu.com/people/kingdix10" title="知乎" rel="me">
+        <i class="fa-fw fab fa-zhihu"
+          ></i>
+        <span class="ms-1 d-xxl-none">Zhihu</span>
+      </a>
+  <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="/zh-cn/index.xml" title="RSS" rel="me">
+    <i class="fas fa-fw fa-rss"></i>
+    <span class="ms-1 d-xxl-none">RSS</span>
+  </a>
+</nav>
+
+</li>
+<li class="nav-item py-2 py-xxl-1 col-12 col-xxl-auto">
+  <div class="vr d-none d-xxl-flex h-100 mx-xxl-2 text-white"></div>
+  <hr class="d-xxl-none my-2">
+</li>
+<li class="nav-item dropdown py-1 py-xxl-1 col-6 col-xxl-auto">
+    <a class="nav-link px-0 px-xxl-1" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-globe"></i>
+        <span class="d-xxl-none">语言</span>
+    </a>
+    <ul class="language-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+        <li>
+        <a class="dropdown-item active" href="/zh-cn/">
+            简体中文
+        </a>
+        </li>
+        <li>
+        <a class="dropdown-item" href="/en/">
+            English
+        </a>
+        </li></ul>
+</li>
+<li class="nav-item py-1 col-12 col-xxl-auto">
+  <div class="vr d-none d-xxl-flex h-100 mx-xxl-2 text-white"></div>
+  <hr class="d-xxl-none my-2">
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="fontSizeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-font"></i>
+        <span class="d-xxl-none">字体大小</span>
+    </a>
+    <ul class="font-size-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="fontSizeDropdown">
+        <li>
+            <button class="font-size-item dropdown-item" data-size="xs">
+                特小号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="sm">
+                小号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item active" data-size="md">
+                中等
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="lg">
+                大号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="xl">
+                特大号
+            </button>
+        </li>
+    </ul>
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="paletteDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-palette"></i>
+        <span class="d-xxl-none">配色</span>
+    </a>
+    <ul class="palette-dropdown-menu dropdown-menu dropdown-menu-end px-2 row g-2" aria-labelledby="paletteDropdown">
+            <li class="col-4 my-1">
+                <a role="button" id="palette-blue" aria-label="蓝色"
+                    class="btn btn-sm w-100 palette text-bg-blue" data-palette="blue">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-blue-gray" aria-label="蓝灰色"
+                    class="btn btn-sm w-100 palette text-bg-blue-gray" data-palette="blue-gray">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-brown" aria-label="棕色"
+                    class="btn btn-sm w-100 palette text-bg-brown" data-palette="brown">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-cyan" aria-label="青色"
+                    class="btn btn-sm w-100 palette text-bg-cyan" data-palette="cyan">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-green" aria-label="绿色"
+                    class="btn btn-sm w-100 palette text-bg-green" data-palette="green">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-indigo" aria-label="靛青色"
+                    class="btn btn-sm w-100 palette text-bg-indigo" data-palette="indigo">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-orange" aria-label="橙色"
+                    class="btn btn-sm w-100 palette text-bg-orange" data-palette="orange">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-pink" aria-label="粉色"
+                    class="btn btn-sm w-100 palette text-bg-pink" data-palette="pink">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-purple" aria-label="紫色"
+                    class="btn btn-sm w-100 palette text-bg-purple" data-palette="purple">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-red" aria-label="红色"
+                    class="btn btn-sm w-100 palette text-bg-red" data-palette="red">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-teal" aria-label="蓝绿色"
+                    class="btn btn-sm w-100 palette text-bg-teal" data-palette="teal">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-yellow" aria-label="黄色"
+                    class="btn btn-sm w-100 palette text-bg-yellow" data-palette="yellow">
+                </a>
+            </li>
+    </ul>
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="modeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="mode-icon fas fa-fw fa-adjust" id="modeIcon"></i>
+        <span class="d-xxl-none">模式</span>
+    </a>
+    <ul class="mode-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="modeDropdown">
+        <li class="mode-item" data-color-mode="light" data-icon="sun">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-sun"></i> 浅色
+            </button>
+        </li>
+        <li class="mode-item" data-color-mode="dark" data-icon="moon">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-moon"></i> 深色
+            </button>
+        </li>
+        <li class="mode-item active" data-color-mode="auto" data-icon="adjust">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-adjust"></i> 自动
+            </button>
+        </li>
+    </ul>
+</li>
+        </ul>
+      </div>
+    </div>
+    <div class="d-flex">
+      <button class="navbar-toggler order-5 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarMenus"
+        aria-controls="navbarMenus" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-ellipsis-h"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+</header>
+
+    <main class="container">
+      <div class="row content"><noscript>
+    <div class="alert alert-danger" role="alert">你的浏览器不支持 JavaScript。</div>
+</noscript>
+<aside class="docs-nav col-xxl-2" tabindex="-1" data-bs-hide="focusout">
+  <div class="offcanvas-xxl offcanvas-start" id="offcanvasDocsNav" aria-labelledby="offcanvasDocsNavLabel">
+    <div class="offcanvas-header border-bottom">
+      <div class="offcanvas-title h5" id="offcanvasDocsNavLabel">浏览文档</div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#offcanvasDocsNav"></button>
+    </div>
+    <div class="offcanvas-body pt-2 flex-column"><div class="mb-3" style="margin-left: -0.5rem;">
+</div>
+<ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3 text-primary">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/"><span class="docs-nav-title-icon me-1"><i class="fas fa-fw fa-book"></i></span><span class="docs-nav-title">Linux内核分析</span></a>
+            <a class="btn-toggle ms-1" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-8d43cfa49df325f277d6f4234a021467" aria-expanded="true" aria-controls="nav-8d43cfa49df325f277d6f4234a021467">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse  show border-primary" id="nav-8d43cfa49df325f277d6f4234a021467">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/"><span class="docs-nav-title">linux-6.1/5.10</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-8ea97fb7a0a0d68cedef1b63b4664daa" aria-expanded="false" aria-controls="nav-8ea97fb7a0a0d68cedef1b63b4664daa">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-8ea97fb7a0a0d68cedef1b63b4664daa">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/"><span class="docs-nav-title">linux thermal子系统简介</span></a>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/"><span class="docs-nav-title">进程管理</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-83c2de274b2e4577ecf37614ae1dc5db" aria-expanded="false" aria-controls="nav-83c2de274b2e4577ecf37614ae1dc5db">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-83c2de274b2e4577ecf37614ae1dc5db">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/task_0/"><span class="docs-nav-title">Linux 0号线程swapper简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/task_1/"><span class="docs-nav-title">Linux 1号线程init简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/task_2/"><span class="docs-nav-title">Linux 2号线程kthreadd简介</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/drivers/"><span class="docs-nav-title">内核驱动</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-d3b01a1b86aa6db82f0e7b3aaac6b5d2" aria-expanded="false" aria-controls="nav-d3b01a1b86aa6db82f0e7b3aaac6b5d2">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-d3b01a1b86aa6db82f0e7b3aaac6b5d2">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/"><span class="docs-nav-title">设备模型</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-debf5d4911c9878135b99f6e8f2a44cd" aria-expanded="false" aria-controls="nav-debf5d4911c9878135b99f6e8f2a44cd">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-debf5d4911c9878135b99f6e8f2a44cd">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/dt_to_dt/"><span class="docs-nav-title">Linux内核驱动模型（二）设备树转换</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/initcall/"><span class="docs-nav-title">Linux内核驱动模型（三）驱动初始化</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/device_model/"><span class="docs-nav-title">Linux内核驱动模型（四）核心结构体</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/fdt_dt/"><span class="docs-nav-title">Linux内核驱动模型（一）设备树展开</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/kobject/kobject/"><span class="docs-nav-title">Linux内核数据结构kobject/kset/ktype</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/"><span class="docs-nav-title">时间子系统</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c9f99e03f1800548b626b43e128eb70f" aria-expanded="false" aria-controls="nav-c9f99e03f1800548b626b43e128eb70f">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-c9f99e03f1800548b626b43e128eb70f">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/timekeeping/"><span class="docs-nav-title">linux内核时间子系统（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/time/"><span class="docs-nav-title">linux内核时间子系统（一）</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3 text-primary">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/"><span class="docs-nav-title">linux-6.6</span></a>
+            <a class="btn-toggle ms-1" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c105b2ef486b2fc777c1f47c8c02d8c9" aria-expanded="true" aria-controls="nav-c105b2ef486b2fc777c1f47c8c02d8c9">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse  show border-primary" id="nav-c105b2ef486b2fc777c1f47c8c02d8c9">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/"><span class="docs-nav-title">【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_mm/"><span class="docs-nav-title">Linux drm mm分析(基于intel ivpu驱动)</span></a>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/devicemodel/"><span class="docs-nav-title">linux-6.1</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c2d7103f5fb31202d4516726f7f8b937" aria-expanded="false" aria-controls="nav-c2d7103f5fb31202d4516726f7f8b937">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-c2d7103f5fb31202d4516726f7f8b937">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/notifier_chain/notifier_chain/"><span class="docs-nav-title">Linux内核的通知链机制</span></a>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/"><span class="docs-nav-title">进程管理</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-655e5bdc71766563bee0b49f680e7299" aria-expanded="false" aria-controls="nav-655e5bdc71766563bee0b49f680e7299">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-655e5bdc71766563bee0b49f680e7299">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/execve/"><span class="docs-nav-title">exec系统调用简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/a-fork/"><span class="docs-nav-title">Linux fork进程/线程简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/relationship/"><span class="docs-nav-title">Linux进程和线程关系</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/pid_namespace/"><span class="docs-nav-title">Linux进程命名空间（pid namespace）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/task_state/"><span class="docs-nav-title">Linux进程状态与生命周期</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_2/"><span class="docs-nav-title">Linux内核copy_process分析（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_3/"><span class="docs-nav-title">Linux内核copy_process分析（三）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_1/"><span class="docs-nav-title">Linux内核copy_process分析（一）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_table/"><span class="docs-nav-title">Linux内核sched_class汇总</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/task_life/"><span class="docs-nav-title">用trace追踪Linux进程的一生</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/"><span class="docs-nav-title">内存管理</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-de97508460ed4f8a4a3e7ac2798cb58e" aria-expanded="false" aria-controls="nav-de97508460ed4f8a4a3e7ac2798cb58e">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-de97508460ed4f8a4a3e7ac2798cb58e">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc/"><span class="docs-nav-title">kmalloc分配内存的大小</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtable/"><span class="docs-nav-title">Linux ARM64页面大小和虚拟地址位数</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3 text-primary">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/"><span class="docs-nav-title">内核调试</span></a>
+            <a class="btn-toggle ms-1" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-38c732a7b9755fe00848e5f2dcd802d9" aria-expanded="true" aria-controls="nav-38c732a7b9755fe00848e5f2dcd802d9">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse  show border-primary" id="nav-38c732a7b9755fe00848e5f2dcd802d9">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3 text-primary" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/arm64_setup/"><span class="docs-nav-title">ARM64 Crash调试环境搭建</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/help/"><span class="docs-nav-title">Crash帮助信息</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/crash_cmd_set/"><span class="docs-nav-title">Crash命令介绍</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/printk-formats/"><span class="docs-nav-title">Linux printk日志输出格式控制</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/dynamic_debug/"><span class="docs-nav-title">linux内核dynamic_debug</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/"><span class="docs-nav-title">printk的pr_fmt</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/boot/entry/"><span class="docs-nav-title">内核启动流程（一）</span></a>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/drivers/"><span class="docs-nav-title">内核驱动</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-f13ac328747f9149370d84b8c8f95a46" aria-expanded="false" aria-controls="nav-f13ac328747f9149370d84b8c8f95a46">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-f13ac328747f9149370d84b8c8f95a46">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/fs/"><span class="docs-nav-title">文件系统</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-6c01ebad189fffa4467424d95bb94649" aria-expanded="false" aria-controls="nav-6c01ebad189fffa4467424d95bb94649">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-6c01ebad189fffa4467424d95bb94649">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/"><span class="docs-nav-title">杂项</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-4c6ab7a6d5e5a1b2fc403b3d23256450" aria-expanded="false" aria-controls="nav-4c6ab7a6d5e5a1b2fc403b3d23256450">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-4c6ab7a6d5e5a1b2fc403b3d23256450">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/jump_label/"><span class="docs-nav-title">ARM64 jump label源码分析</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/atomic/"><span class="docs-nav-title">linux atomic接口简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/linux-err-return/"><span class="docs-nav-title">Linux的errno简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/asm_macors/"><span class="docs-nav-title">Linux内核常见ARM64汇编宏</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/optimize_tips/"><span class="docs-nav-title">Linux内核代码的编写和优化技巧</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/kernel_boot_security/"><span class="docs-nav-title">保证内核启动安全的几种方式</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/"><span class="docs-nav-title">中断子系统</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-0e8011cfba83e7078ddfdac6dd9bdab4" aria-expanded="false" aria-controls="nav-0e8011cfba83e7078ddfdac6dd9bdab4">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-0e8011cfba83e7078ddfdac6dd9bdab4">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/"><span class="docs-nav-title">ARM64 Linux中断入口</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_flow/"><span class="docs-nav-title">Linux中断处理流程图</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_domain_add/"><span class="docs-nav-title">Linux中断子系统（二）domain注册</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_create_mapping/"><span class="docs-nav-title">Linux中断子系统（三）设备中断注册</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/request_irq/"><span class="docs-nav-title">Linux中断子系统（四）申请中断request_irq</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/handler_entry/"><span class="docs-nav-title">Linux中断子系统（五）中断处理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/init/"><span class="docs-nav-title">Linux中断子系统（一）软硬件初始化</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/"><span class="docs-nav-title">编程语言</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c763ce92a79b45df97e2263a975854b9" aria-expanded="false" aria-controls="nav-c763ce92a79b45df97e2263a975854b9">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-c763ce92a79b45df97e2263a975854b9">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/"><span class="docs-nav-title">C/C&#43;&#43;</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-97f02fde471866056c482bd758f3802a" aria-expanded="false" aria-controls="nav-97f02fde471866056c482bd758f3802a">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-97f02fde471866056c482bd758f3802a">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/c_assert/"><span class="docs-nav-title">C语言编译断言</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/macro_link_args/"><span class="docs-nav-title">gcc宏定义中的连接符和可变参数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/gcc_tools/"><span class="docs-nav-title">编译工具杂记</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/gcc_predefine/"><span class="docs-nav-title">编译器预定义宏</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/array_func/"><span class="docs-nav-title">多维数组作为函数参数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/array_type/"><span class="docs-nav-title">数组a、&amp;a、&amp;a[0]、&amp;a[0][0]的区别与联系</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/c_struct_cmp/"><span class="docs-nav-title">用memcmp比较结构体会有什么问题</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/python/"><span class="docs-nav-title">Python</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-ffa1725fdabf7411c32ceb6eae66fd17" aria-expanded="false" aria-controls="nav-ffa1725fdabf7411c32ceb6eae66fd17">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-ffa1725fdabf7411c32ceb6eae66fd17">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/compile/"><span class="docs-nav-title">构建工具</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-cffaf2396700969f3f8596d2093784ef" aria-expanded="false" aria-controls="nav-cffaf2396700969f3f8596d2093784ef">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-cffaf2396700969f3f8596d2093784ef">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/compile/make_debug/"><span class="docs-nav-title">make调试</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/"><span class="docs-nav-title">开发环境</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-fd57bc387b9c3a4d19f1801fc65cd5b4" aria-expanded="false" aria-controls="nav-fd57bc387b9c3a4d19f1801fc65cd5b4">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-fd57bc387b9c3a4d19f1801fc65cd5b4">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/samba/"><span class="docs-nav-title">samba服务器搭建和使用</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/vdisk_compact/"><span class="docs-nav-title">VMware和Hyper-V回收虚拟磁盘空间</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/resizefs/"><span class="docs-nav-title">磁盘和文件系统扩容/缩容</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/"><span class="docs-nav-title">启动</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-05b799579ad52d4ccfa92fd6313b23f7" aria-expanded="false" aria-controls="nav-05b799579ad52d4ccfa92fd6313b23f7">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-05b799579ad52d4ccfa92fd6313b23f7">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/rtthread_smp_cortex_a9/"><span class="docs-nav-title">rt-thread Cortex-A9 SMP启动</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/uboot_mem/"><span class="docs-nav-title">U-Boot从dtb获取内存布局并传递到内核</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/u-boot-stubs/"><span class="docs-nav-title">u-boot的stubs机制</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/crc32_func/"><span class="docs-nav-title">U-Boot和Linux内核的CRC函数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/u-boot-bootflow/"><span class="docs-nav-title">U-Boot启动分析</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/uboot_misc_note/"><span class="docs-nav-title">U-Boot杂项记录</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/u-boot_commands/"><span class="docs-nav-title">常见u-boot命令</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/boot_flow/"><span class="docs-nav-title">嵌入式系统启动流程</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/"><span class="docs-nav-title">系统工具</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-eb1c5d775f73e30b3a27244e12a84f81" aria-expanded="false" aria-controls="nav-eb1c5d775f73e30b3a27244e12a84f81">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-eb1c5d775f73e30b3a27244e12a84f81">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/debian_setup/"><span class="docs-nav-title">Debian安装和配置</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/docker_setup/"><span class="docs-nav-title">Docker安装和配置</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/git/git_misc/"><span class="docs-nav-title">git配置和操作</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/jupyter_to_markdown/"><span class="docs-nav-title">jupyter转Markdown</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_tips/"><span class="docs-nav-title">Linux Bash技巧</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_decorate/"><span class="docs-nav-title">Linux Bash终端美化</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_network/"><span class="docs-nav-title">linux常用命令-网络</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_text/"><span class="docs-nav-title">linux常用命令-文本处理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_file/"><span class="docs-nav-title">linux常用命令-文件管理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_sys/"><span class="docs-nav-title">linux常用命令-系统管理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_benchmark/"><span class="docs-nav-title">linux常用命令-性能</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/sourceinsight/"><span class="docs-nav-title">sourceinsight快速建工程</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/ssh_wsl_exe/"><span class="docs-nav-title">ssh连接wsl后执行Windows程序</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/win_python3/"><span class="docs-nav-title">解决Windows不能使用python3.10的问题</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/"><span class="docs-nav-title">杂项</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-4967b62f3b1964eee9739b39b25cd3eb" aria-expanded="false" aria-controls="nav-4967b62f3b1964eee9739b39b25cd3eb">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-4967b62f3b1964eee9739b39b25cd3eb">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/"><span class="docs-nav-title">4412</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-0cca8bc16c798175efb847597812f8c0" aria-expanded="false" aria-controls="nav-0cca8bc16c798175efb847597812f8c0">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-0cca8bc16c798175efb847597812f8c0">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/exynos4412/"><span class="docs-nav-title">Exynos4412启动介绍</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/mkbl1/"><span class="docs-nav-title">Exynos4412自制BL1</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/mkbl2/"><span class="docs-nav-title">Exynos4412自制BL2</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul></div>
+  </div>
+</aside><div class="col-xxl-7 ms-auto">
+  <div class="container-fluid"><nav class="row card component" aria-label="breadcrumb">
+  <div class="card-body pb-0">
+    <ol class="hbs-breadcrumb breadcrumb flex-nowrap"><li class="breadcrumb-item text-surface"><a href="/zh-cn/">主页</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/">文档</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/04-kernel/">Linux内核分析</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/04-kernel/linux-6.6/">linux-6.6</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/04-kernel/linux-6.6/debug/">内核调试</a></li><li class="breadcrumb-item active">ARM64 Crash调试环境搭建</li></ol>
+  </div>
+</nav><div class="post-panel-wrapper position-relative d-flex justify-content-center">
+  <div class="d-flex flex-row justify-content-center rounded-5 border post-panel position-fixed px-3 py-1 surface shadow-1">
+    
+    
+
+    
+    
+    
+<a class="action action-toc d-block d-xxl-none" href="#post-toc-container" role="button" title="目录">
+  <i class="fas fa-fw fa-list-alt"></i>
+</a>
+    <a class="action action-copyright" href="#post-copyright" role="button" aria-label="Copyright" title="版权">
+  <i class="fas fa-fw fa-copyright"></i>
+</a>
+    
+    
+<a id="sidebarToggler" class="action action-sidebar-toggler d-none d-xxl-block" role="button" title="切换侧边栏">
+  <i class="fas fa-fw fa-expand-alt" data-fa-transform="rotate-45"></i>
+</a>
+
+    
+  </div>
+</div><article class="row card component mb-4 post">
+<div class="card-header ">
+    <h1 class="card-title post-title my-2">ARM64 Crash调试环境搭建</h1>
+</div>
+<div class="card-body"><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2023-12-03 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2023/12/03</span><span class="post-reading-time me-1 mb-1">6 分钟阅读</span><a href="/zh-cn/categories/kdump-crash/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>Kdump Crash</a><a href="/zh-cn/categories/%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>内核调试</a><a href="/zh-cn/series/%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
+      <i class="fas fa-fw fa-columns me-1"></i>内核调试</a><a href="/zh-cn/tags/kdump-crash/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Kdump Crash</a><a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux内核</a><a href="/zh-cn/tags/%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">工具</a><a href="/zh-cn/tags/%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">内核调试</a>
+</div>
+
+<div class="mt-2 mb-3 d-block d-xxl-none">
+    <h2 class="text-surface mb-3">目录</h2>
+    <div id="post-toc-container">
+        </div>
+    <hr class="text-secondary">
+</div><div class="post-content mb-3" data-bs-spy="scroll" data-bs-target="#TableOfContents" tabindex="0">
+        <div id="post-content-body">
+<h1 id="1-arm64-crash调试环境搭建" data-numberify>1. ARM64 Crash调试环境搭建<a class="anchor ms-1" href="#1-arm64-crash调试环境搭建"></a></h1>
+<p>主要参考资料：</p>
+<ul>
+<li>内核源码 <code>Documentation/admin-guide/kdump/kdump.rst</code>或者<a href="https://www.kernel.org/doc/html/v6.6/admin-guide/kdump/kdump.html" target="_blank" rel="noopener noreferrer">Documentation for Kdump - The kexec-based Crash Dumping Solution<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li>Crash白皮书：<a href="https://crash-utility.github.io/crash_whitepaper.html" target="_blank" rel="noopener noreferrer">https://crash-utility.github.io/crash_whitepaper.html<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li>Crash github：<a href="https://github.com/crash-utility/crash" target="_blank" rel="noopener noreferrer">https://github.com/crash-utility/crash<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li>Oracle: <a href="https://docs.oracle.com/en/operating-systems/oracle-linux/6/admin/crash-debugger-use.html" target="_blank" rel="noopener noreferrer">Using the crash Debugger<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+</ul>
+
+<h2 id="11-x86_64主机编译arm64-crash工具" data-numberify>1.1. x86_64主机编译ARM64 Crash工具<a class="anchor ms-1" href="#11-x86_64主机编译arm64-crash工具"></a></h2>
+<p>在x86机器上安装的Crash工具不能直接调试ARM64的coredump文件。可以通过重新编译Crash源码来生成调试ARM64 coredump文件的Crash。参考<a href="https://github.com/crash-utility/crash/tree/8.0.3" target="_blank" rel="noopener noreferrer">https://github.com/crash-utility/crash/tree/8.0.3<i class="fas fa-external-link-square-alt ms-1"></i></a>的README中提供的编译方法，解压代码后，执行 <code>make target=ARM64</code>即可。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln"> 1</span><span class="cl">  To build the crash utility:
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">    $ tar -xf crash-8.0.3.tar.gz
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">    $ cd crash-8.0.3
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">    $ make
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">  The initial build will take several minutes  because the embedded gdb module
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">  must be configured and built.  Alternatively, the crash source RPM file
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">  may be installed and built, and the resultant crash binary RPM file installed.
+</span></span><span class="line"><span class="ln">10</span><span class="cl">
+</span></span><span class="line"><span class="ln">11</span><span class="cl">  The crash binary can only be used on systems of the same architecture as
+</span></span><span class="line"><span class="ln">12</span><span class="cl">  the host build system.  There are a few optional manners of building the
+</span></span><span class="line"><span class="ln">13</span><span class="cl">  crash binary:
+</span></span><span class="line"><span class="ln">14</span><span class="cl">
+</span></span><span class="line"><span class="ln">15</span><span class="cl">  o  On an x86_64 host, a 32-bit x86 binary that can be used to analyze
+</span></span><span class="line"><span class="ln">16</span><span class="cl">     32-bit x86 dumpfiles may be built by typing &#34;make target=X86&#34;.
+</span></span><span class="line"><span class="ln">17</span><span class="cl">  o  On an x86 or x86_64 host, a 32-bit x86 binary that can be used to analyze
+</span></span><span class="line"><span class="ln">18</span><span class="cl">     32-bit arm dumpfiles may be built by typing &#34;make target=ARM&#34;.
+</span></span><span class="line"><span class="ln">19</span><span class="cl">  o  On an x86 or x86_64 host, a 32-bit x86 binary that can be used to analyze
+</span></span><span class="line"><span class="ln">20</span><span class="cl">     32-bit mips dumpfiles may be built by typing &#34;make target=MIPS&#34;.
+</span></span><span class="line"><span class="ln">21</span><span class="cl">  o  On an ppc64 host, a 32-bit ppc binary that can be used to analyze
+</span></span><span class="line"><span class="ln">22</span><span class="cl">     32-bit ppc dumpfiles may be built by typing &#34;make target=PPC&#34;.
+</span></span><span class="line"><span class="ln">23</span><span class="cl">  o  On an x86_64 host, an x86_64 binary that can be used to analyze
+</span></span><span class="line"><span class="ln">24</span><span class="cl">     arm64 dumpfiles may be built by typing &#34;make target=ARM64&#34;.
+</span></span><span class="line"><span class="ln">25</span><span class="cl">  o  On an x86_64 host, an x86_64 binary that can be used to analyze
+</span></span><span class="line"><span class="ln">26</span><span class="cl">     ppc64le dumpfiles may be built by typing &#34;make target=PPC64&#34;.
+</span></span><span class="line"><span class="ln">27</span><span class="cl">  o  On an x86_64 host, an x86_64 binary that can be used to analyze
+</span></span><span class="line"><span class="ln">28</span><span class="cl">     riscv64 dumpfiles may be built by typing &#34;make target=RISCV64&#34;.
+</span></span></code></pre></div>
+<h2 id="12-x86_64主机使用docker安装arm64-crash工具" data-numberify>1.2. x86_64主机使用Docker安装ARM64 Crash工具<a class="anchor ms-1" href="#12-x86_64主机使用docker安装arm64-crash工具"></a></h2>
+<p>编译安装的方法需要自己解决依赖，编译也相对耗时，这里使用Docker来解决。后续也使用这种方式来介绍。</p>
+<p>Docker的安装可以参考清华大学开源软件镜像站<a href="https://mirrors.tuna.tsinghua.edu.cn/help/docker-ce/" target="_blank" rel="noopener noreferrer">Docker CE 软件仓库镜像使用帮助<i class="fas fa-external-link-square-alt ms-1"></i></a>，之后可以直接使用，也可以参考其他资料配置国内加速源。安装Docker后按如下步骤执行。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1"># 安装ARM64的运行支持</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">sudo apt-get install qemu-user-static binfmt-support
+</span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="c1"># 拉取arm64v8的debian镜像</span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl">docker pull arm64v8/debian:bookworm-20230814
+</span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="c1"># 启动docker容器，并挂载宿主机目录，Crash调试时需要vmlinux文件</span>
+</span></span><span class="line"><span class="ln">6</span><span class="cl">docker run  -it --privileged -v /storage/data:/data arm64v8/debian:bookworm-20230814 bash
+</span></span></code></pre></div><p>启动docker容器，可以安装Crash工具和辅助工具。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">apt install crash vim less
+</span></span></code></pre></div><p>安装完成后，可以在宿主机使用 <code>docker commit [OPTIONS] CONTAINER [REPOSITORY[:TAG]]</code>将容器保存为镜像，之后可以在宿主机上使用镜像启动容器。</p>
+<p>docker容器内使用 <code>crash  --buildinfo</code>可以查看Crash工具支持的架构，这里提示 <code>build_target</code>是ARM64。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">crash   --buildinfo
+</span></span><span class="line"><span class="ln">2</span><span class="cl">   build_command: crash
+</span></span><span class="line"><span class="ln">3</span><span class="cl">      build_data: reproducible build
+</span></span><span class="line"><span class="ln">4</span><span class="cl">    build_target: ARM64
+</span></span><span class="line"><span class="ln">5</span><span class="cl">   build_version: 8.0.2
+</span></span><span class="line"><span class="ln">6</span><span class="cl">compiler version: gcc <span class="o">(</span>Debian 12.2.0-9<span class="o">)</span> 12.2.0
+</span></span></code></pre></div>
+<h1 id="2-编译配置" data-numberify>2. 编译配置<a class="anchor ms-1" href="#2-编译配置"></a></h1>
+<p>这里不过多介绍编译的细节，只介绍编译所需要的配置。</p>
+
+<h2 id="21-内核配置和编译" data-numberify>2.1. 内核配置和编译<a class="anchor ms-1" href="#21-内核配置和编译"></a></h2>
+<p>ARM64的内核编译需要打开如下宏，文档中没有提到 <code>CONFIG_RANDOMIZE_BASE</code>和 <code>CONFIG_PROC_KCORE</code>，但也是需要的，而且传递到内核的cmdline不能有nokaslr。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-mk" data-lang="mk"><span class="line"><span class="ln">1</span><span class="cl"><span class="nv">CONFIG_KEXEC</span><span class="o">=</span>y
+</span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="nv">CONFIG_SYSFS</span><span class="o">=</span>y
+</span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="nv">CONFIG_DEBUG_INFO</span><span class="o">=</span>y
+</span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="nv">CONFIG_RELOCATABLE</span><span class="o">=</span>y
+</span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="nv">CONFIG_RANDOMIZE_BASE</span><span class="o">=</span>y
+</span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="nv">CONFIG_CRASH_DUMP</span><span class="o">=</span>y
+</span></span><span class="line"><span class="ln">7</span><span class="cl"><span class="nv">CONFIG_PROC_KCORE</span><span class="o">=</span>y
+</span></span><span class="line"><span class="ln">8</span><span class="cl"><span class="nv">CONFIG_PROC_VMCORE</span><span class="o">=</span>y
+</span></span></code></pre></div><p>为了可以使用sysrq触发panic，还需要开启如下几个选项。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-mk" data-lang="mk"><span class="line"><span class="ln">1</span><span class="cl"><span class="nv">CONFIG_MAGIC_SYSRQ</span><span class="o">=</span>y
+</span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="nv">CONFIG_MAGIC_SYSRQ_DEFAULT_ENABLE</span><span class="o">=</span>0x1
+</span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="nv">CONFIG_MAGIC_SYSRQ_SERIAL</span><span class="o">=</span>y
+</span></span></code></pre></div>
+<h2 id="22-buildroot配置和编译" data-numberify>2.2. buildroot配置和编译<a class="anchor ms-1" href="#22-buildroot配置和编译"></a></h2>
+<p>使能kexec工具。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-mk" data-lang="mk"><span class="line"><span class="ln">1</span><span class="cl"><span class="nv">BR2_PACKAGE_KEXEC</span><span class="o">=</span>y
+</span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="nv">BR2_PACKAGE_KEXEC_ZLIB</span><span class="o">=</span>y
+</span></span></code></pre></div>
+<h1 id="3-运行" data-numberify>3. 运行<a class="anchor ms-1" href="#3-运行"></a></h1>
+
+<h2 id="31-qemu启动kernel" data-numberify>3.1. qemu启动kernel<a class="anchor ms-1" href="#31-qemu启动kernel"></a></h2>
+<p>qemu启动内核的命令如下，可以根据自己需要修改。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">qemu-system-aarch64 -nographic  -cpu cortex-a57 -M <span class="nv">type</span><span class="o">=</span>virt,mte<span class="o">=</span>off,virtualization<span class="o">=</span>false,gic-version<span class="o">=</span><span class="m">3</span> -semihosting -semihosting-config <span class="nv">enable</span><span class="o">=</span>on,target<span class="o">=</span>native -smp <span class="m">2</span> -m <span class="m">1024</span> -netdev user,id<span class="o">=</span>net0 -device virtio-net-device,netdev<span class="o">=</span>net0 -object rng-random,filename<span class="o">=</span>/dev/urandom,id<span class="o">=</span>rng0 -device virtio-rng-pci,rng<span class="o">=</span>rng0,max-bytes<span class="o">=</span>1024,period<span class="o">=</span><span class="m">1000</span> <span class="se">\
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="se"></span>	-kernel /data/eel/images/arm64/kernel/linux-6.6/arm64_debug_defconfig/arch/arm64/boot/Image -drive <span class="k">if</span><span class="o">=</span>none,format<span class="o">=</span>raw,file<span class="o">=</span>/data/eel/images/arm64/rootfs/buildroot-2023.02/mine_arm64_defconfig/images/rootfs.ext4,id<span class="o">=</span>hd0 -device virtio-blk-device,drive<span class="o">=</span>hd0 <span class="se">\
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="se"></span>	-append <span class="s2">&#34;console=ttyAMA0 crashkernel=512M-1G:64M,1G-:128M loglevel=6 initcall_debug no_console_suspend root=/dev/vda rw init=/linuxrc&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="se"></span>	-fsdev local,id<span class="o">=</span>share_comm,path<span class="o">=</span>/data/eel/share,security_model<span class="o">=</span>none -device virtio-9p-device,fsdev<span class="o">=</span>share_comm,mount_tag<span class="o">=</span>mnt_comm -fsdev local,id<span class="o">=</span>share_arch,path<span class="o">=</span>/data/eel/images/arm64,security_model<span class="o">=</span>none -device virtio-9p-device,fsdev<span class="o">=</span>share_arch,mount_tag<span class="o">=</span>mnt_arch -fsdev local,id<span class="o">=</span>share_eel,path<span class="o">=</span>/data/eel,security_model<span class="o">=</span>passthrough,readonly<span class="o">=</span>on -device virtio-9p-device,fsdev<span class="o">=</span>share_eel,mount_tag<span class="o">=</span>mnt_eel
+</span></span></code></pre></div><p>这里要注意cmdline参数不能带有nokaslr。cmdline要添加crashkernel，表示为crashkernel预留的内存。</p>
+<ul>
+<li>crashkernel=64M：为crashkernel预留64M内存。</li>
+<li>crashkernel=512M-1G:64M,1G-:128M：当系统总内存在512M-1G，预留64M，当系统总内存大于1G，预留128M。</li>
+</ul>
+<p>另外需要将宿主机的目录映射到qemu内，以便qemu内可以读取编译生成的kernel Image文件，也可以把产生的vmcore文件导出到host。这里映射了3个目录，其中第一个是 <code>-fsdev local,id=share_comm,path=/data/eel/share,security_model=none -device virtio-9p-device,fsdev=share_comm,mount_tag=mnt_comm</code>。qemu内，可以通 <code>过mount -t 9p share_comm /mnt</code>来挂载。</p>
+
+<h2 id="32-kexec加载内核" data-numberify>3.2. kexec加载内核<a class="anchor ms-1" href="#32-kexec加载内核"></a></h2>
+<p>qemu启动linux后，需要用kexec加载crashkernel，注意 <code>maxcpus=1 reset_devices</code>是必须的。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">kexec <span class="se">\
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="se"></span>    --append<span class="o">=</span><span class="s2">&#34;console=ttyAMA0 rootfstype=ext4 rootwait root=/dev/vda rw maxcpus=1 reset_devices&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="se"></span>    -p /data/eel/images/arm64/kernel/linux-6.6/arm64_debug_defconfig/arch/arm64/boot/Image
+</span></span></code></pre></div><p>上述命令如果没有输出，则表示执行成功。想要看到详细的信息，可以加上 <code>-d</code>选项。</p>
+
+<h2 id="33-触发panic" data-numberify>3.3. 触发panic<a class="anchor ms-1" href="#33-触发panic"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="nb">echo</span> c &gt; /proc/sysrq-trigger
+</span></span></code></pre></div><p>重启时的日志，可以看到panic后，自动启动新的内核。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln"> 1</span><span class="cl"># echo c &gt; /proc/sysrq-trigger
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">[  374.873622][  T160] sysrq: Trigger a crash
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">[  374.874185][  T160] Kernel panic - not syncing: sysrq triggered crash
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">[  374.874602][  T160] CPU: 0 PID: 160 Comm: sh Kdump: loaded Not tainted 6.6.0-g3149bc21d316-dirty #2 1c048aede95eceae4e303b1d563e246e55cb9a9d
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">[  374.875175][  T160] Hardware name: linux,dummy-virt (DT)
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">[  374.875392][  T160] Call trace:
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">[  374.875474][  T160]  dump_backtrace+0x104/0x130
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">[  374.875674][  T160]  show_stack+0x20/0x50
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">[  374.875723][  T160]  dump_stack_lvl+0x90/0xbc
+</span></span><span class="line"><span class="ln">10</span><span class="cl">[  374.875847][  T160]  dump_stack+0x18/0x34
+</span></span><span class="line"><span class="ln">11</span><span class="cl">[  374.875972][  T160]  panic+0x1a0/0x38c
+</span></span><span class="line"><span class="ln">12</span><span class="cl">[  374.876039][  T160]  sysrq_handle_crash+0x24/0x2c
+</span></span><span class="line"><span class="ln">13</span><span class="cl">[  374.876173][  T160]  __handle_sysrq+0xdc/0x1a4
+</span></span><span class="line"><span class="ln">14</span><span class="cl">[  374.876231][  T160]  write_sysrq_trigger+0x78/0xa0
+</span></span><span class="line"><span class="ln">15</span><span class="cl">[  374.876418][  T160]  proc_reg_write+0xc8/0x100
+</span></span><span class="line"><span class="ln">16</span><span class="cl">[  374.876546][  T160]  vfs_write+0x168/0x330
+</span></span><span class="line"><span class="ln">17</span><span class="cl">[  374.876724][  T160]  ksys_write+0x70/0xfc
+</span></span><span class="line"><span class="ln">18</span><span class="cl">[  374.876906][  T160]  __arm64_sys_write+0x24/0x30
+</span></span><span class="line"><span class="ln">19</span><span class="cl">[  374.877146][  T160]  el0_svc_common.constprop.0+0xfc/0x1f4
+</span></span><span class="line"><span class="ln">20</span><span class="cl">[  374.877254][  T160]  do_el0_svc+0xb4/0xc0
+</span></span><span class="line"><span class="ln">21</span><span class="cl">[  374.877339][  T160]  el0_svc+0x48/0xa0
+</span></span><span class="line"><span class="ln">22</span><span class="cl">[  374.877420][  T160]  el0t_64_sync_handler+0xc8/0x14c
+</span></span><span class="line"><span class="ln">23</span><span class="cl">[  374.877642][  T160]  el0t_64_sync+0x19c/0x1a0
+</span></span><span class="line"><span class="ln">24</span><span class="cl">[  374.878124][  T160] SMP: stopping secondary CPUs
+</span></span><span class="line"><span class="ln">25</span><span class="cl">[  374.878981][  T160] Starting crashdump kernel...
+</span></span><span class="line"><span class="ln">26</span><span class="cl">[  374.879230][  T160] Bye!
+</span></span><span class="line"><span class="ln">27</span><span class="cl">[    0.000000][    T0] Booting Linux on physical CPU 0x0000000000 [0x411fd070]
+</span></span><span class="line"><span class="ln">28</span><span class="cl">[    0.000000][    T0] Linux version 6.6.0-g3149bc21d316-dirty (dix@EEL) (aarch64-linux-gnu-gcc (GCC) 11.3.1 20220604 [releases/gcc-11 revision 591c0f4b92548e3ae2e8173f4f93984b1c7f62bb], GNU ld (Linaro_Binutils-2022.06) 2.37.20220122) #2 SMP PREEMPT Tue Sep 19 01:09:13 CST 2023
+</span></span><span class="line"><span class="ln">29</span><span class="cl">[    0.000000][    T0] Machine model: linux,dummy-virt
+</span></span><span class="line"><span class="ln">30</span><span class="cl">[    0.000000][    T0] efi: UEFI not found.
+</span></span><span class="line"><span class="ln">31</span><span class="cl">[    0.000000][    T0] OF: fdt: Reserving 1 KiB of memory at 0x7ebff000 for elfcorehdr
+</span></span></code></pre></div><p>新的内核是用kexec加载好的内核，如果用<code>cat /proc/cpuinfo</code>查看的话，会显示只有一个核。</p>
+
+<h2 id="34-保存vmcore" data-numberify>3.4. 保存vmcore<a class="anchor ms-1" href="#34-保存vmcore"></a></h2>
+<p>panic重启后生成的文件在 <code>/proc/vmcore</code>，正常启动则没有这个文件。将vmcore保存到与宿主机共享的目录</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">cat /proc/vmcore &gt; /mnt/vmcore_arm64_6.6
+</span></span></code></pre></div>
+<h1 id="4-crash调试" data-numberify>4. Crash调试<a class="anchor ms-1" href="#4-crash调试"></a></h1>
+<p>进入ARM64 Docker使用Crash工具分析</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">crash vmcore_arm64_6.6  /data/eel/output/arm64/kernel/linux-6.6/arm64_debug_defconfig/vmlinux
+</span></span></code></pre></div><p>加载需要一点时间，完成后会显示如下信息。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln"> 1</span><span class="cl">      KERNEL: /data/eel/output/arm64/kernel/linux-6.6/arm64_debug_defconfig/vmlinux
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">    DUMPFILE: vmcore_arm64_6.6
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">        CPUS: <span class="m">2</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">        DATE: Sat Sep <span class="m">23</span> 09:47:30 CST <span class="m">2023</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">      UPTIME: 00:06:14
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">LOAD AVERAGE: 0.00, 0.00, 0.00
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">       TASKS: <span class="m">60</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">    NODENAME: buildroot
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">     RELEASE: 6.6.0-g3149bc21d316-dirty
+</span></span><span class="line"><span class="ln">10</span><span class="cl">     VERSION: <span class="c1">#2 SMP PREEMPT Tue Sep 19 01:09:13 CST 2023</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">     MACHINE: aarch64  <span class="o">(</span>unknown Mhz<span class="o">)</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">      MEMORY: <span class="m">1</span> GB
+</span></span><span class="line"><span class="ln">13</span><span class="cl">       PANIC: <span class="s2">&#34;Kernel panic - not syncing: sysrq triggered crash&#34;</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">         PID: <span class="m">160</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">     COMMAND: <span class="s2">&#34;sh&#34;</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl">        TASK: ffff65a602b68ec0  <span class="o">[</span>THREAD_INFO: ffff65a602b68ec0<span class="o">]</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">         CPU: <span class="m">0</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">       STATE: TASK_RUNNING <span class="o">(</span>PANIC<span class="o">)</span>
+</span></span></code></pre></div><p>这里先简单使用 <code>bt</code>来看一下panic时的调用栈，可以看到是sysrq触发了panic。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln"> 1</span><span class="cl">crash&gt; bt
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">PID: <span class="m">160</span>      TASK: ffff65a602b68ec0  CPU: <span class="m">0</span>    COMMAND: <span class="s2">&#34;sh&#34;</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"> <span class="c1">#0 [ffff800008413a10] machine_kexec at ffffd6678e834e98</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"> <span class="c1">#1 [ffff800008413a40] __crash_kexec at ffffd6678e9148bc</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"> <span class="c1">#2 [ffff800008413bd0] panic at ffffd6678f4f6a34</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl"> <span class="c1">#3 [ffff800008413cb0] sysrq_handle_crash at ffffd6678eee25f4</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"> <span class="c1">#4 [ffff800008413cc0] __handle_sysrq at ffffd6678eee2e58</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl"> <span class="c1">#5 [ffff800008413d10] write_sysrq_trigger at ffffd6678eee34b4</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"> <span class="c1">#6 [ffff800008413d30] proc_reg_write at ffffd6678eb88714</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"> <span class="c1">#7 [ffff800008413d50] vfs_write at ffffd6678eaf3c24</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"> <span class="c1">#8 [ffff800008413df0] ksys_write at ffffd6678eaf3f80</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl"> <span class="c1">#9 [ffff800008413e30] __arm64_sys_write at ffffd6678eaf4030</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="c1">#10 [ffff800008413e40] el0_svc_common.constprop.0 at ffffd6678e829528</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="c1">#11 [ffff800008413e70] do_el0_svc at ffffd6678e8296d4</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="c1">#12 [ffff800008413e80] el0_svc at ffffd6678f5085c4</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="c1">#13 [ffff800008413ea0] el0t_64_sync_handler at ffffd6678f509948</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="c1">#14 [ffff800008413fe0] el0t_64_sync at ffffd6678e811de4</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">     PC: 0000ffffb540c450   LR: 0000aaaad6f36968   SP: 0000fffff1d1fe50
+</span></span><span class="line"><span class="ln">19</span><span class="cl">    X29: 0000fffff1d1fe50  X28: 0000aaaaf5de4700  X27: <span class="m">0000000000000000</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">    X26: 0000aaaaf5de46e0  X25: <span class="m">0000000000000020</span>  X24: 0000fffff1d1ff20
+</span></span><span class="line"><span class="ln">21</span><span class="cl">    X23: <span class="m">0000000000000001</span>  X22: 0000ffffb55527a0  X21: <span class="m">0000000000000002</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">    X20: 0000aaaaf5deb100  X19: <span class="m">0000000000000001</span>  X18: <span class="m">0000000000000001</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl">    X17: 0000ffffb540c420  X16: 0000aaaad6ff1948  X15: 65645f34366d7261
+</span></span><span class="line"><span class="ln">24</span><span class="cl">    X14: <span class="m">0000000000000001</span>  X13: <span class="m">0072656767697274</span>  X12: 2d71727379732f63
+</span></span><span class="line"><span class="ln">25</span><span class="cl">    X11: 2f686372612f6769  X10: <span class="m">0000000000000000</span>   X9: <span class="m">0000000000000020</span>
+</span></span><span class="line"><span class="ln">26</span><span class="cl">     X8: <span class="m">0000000000000040</span>   X7: 7f7f7f7f7f7f7f7f   X6: <span class="m">0000000000000063</span>
+</span></span><span class="line"><span class="ln">27</span><span class="cl">     X5: fffffffffffffffe   X4: <span class="m">0000000000000001</span>   X3: 0000ffffb5552010
+</span></span><span class="line"><span class="ln">28</span><span class="cl">     X2: <span class="m">0000000000000002</span>   X1: 0000aaaaf5deb100   X0: <span class="m">0000000000000001</span>
+</span></span><span class="line"><span class="ln">29</span><span class="cl">    ORIG_X0: <span class="m">0000000000000001</span>  SYSCALLNO: <span class="m">40</span>  PSTATE: <span class="m">80000000</span>
+</span></span></code></pre></div></div>
+</div>
+</div><div class="card-footer">
+  <div class="post-navs d-flex justify-content-evenly"><div class="post-nav post-prev">
+      <i class="fas fa-fw fa-chevron-down post-prev-icon me-1" data-fa-transform="rotate-90"></i>
+      <a href="/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/help/">Crash帮助信息</a>
+    </div></div>
+</div></article><div class="post-copyright mb-3 row card component" id="post-copyright">
+    <div class="card-header">
+        <h2 class="card-title fs-4 my-2 text-surface">版权</h2>
+    </div>
+    <div class="card-body"><a class="d-flex align-items-center flex-column" target="_blank" rel="license noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh">
+  <span><i class="fab fa-fw fa-2x fa-creative-commons"></i><i class="fab fa-fw fa-2x fa-creative-commons-by"></i><i class="fab fa-fw fa-2x fa-creative-commons-nc"></i><i class="fab fa-fw fa-2x fa-creative-commons-nd"></i></span>
+  CC BY-NC-ND 4.0 
+</a>
+
+
+    </div>
+</div><section class="related-posts row card component">
+      <div class="card-header">
+        <h2 class="card-title fs-4 my-2 text-surface">
+          相关文章
+        </h2>
+      </div>
+      <div class="card-body slide px-1">
+        <div class="slide-inner row gx-0"><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="Crash命令介绍" src="https://kingdix10.github.io/covers/vintage_retro_camera_126517_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/crash_cmd_set/">
+    Crash命令介绍
+  </a>
+  <div class="post-meta mb-0">
+    2023/12/03
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="Crash帮助信息" src="https://kingdix10.github.io/covers/travel_map_compass_123078_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/help/">
+    Crash帮助信息
+  </a>
+  <div class="post-meta mb-0">
+    2023/12/03
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="jupyter转Markdown" src="https://kingdix10.github.io/covers/walls_floor_light_50837_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/01-os/jupyter_to_markdown/">
+    jupyter转Markdown
+  </a>
+  <div class="post-meta mb-0">
+    2023/12/03
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="linux常用命令-网络" src="https://kingdix10.github.io/covers/texture_background_color_72786_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/01-os/linux/shell/cmd_network/">
+    linux常用命令-网络
+  </a>
+  <div class="post-meta mb-0">
+    2023/12/03
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="保证内核启动安全的几种方式" src="https://kingdix10.github.io/covers/code_text_colorful_140555_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/misc/kernel_boot_security/">
+    保证内核启动安全的几种方式
+  </a>
+  <div class="post-meta mb-0">
+    2023/12/03
+
+  </div>
+</div>
+
+          </div></div>
+        <button class="slide-control-left">
+          <i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-90"></i>
+          <span class="visually-hidden">Left</span>
+        </button>
+        <button class="slide-control-right">
+          <i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-270"></i>
+          <span class="visually-hidden">Right</span>
+        </button>
+      </div>
+    </section></div>
+</div>
+<aside class="sidebar d-flex docs-sidebar col-xxl-3 position-sticky order-xxl-5">
+  <div class="container">
+    
+<div class="row component card">
+    <div class="card-body">
+        <form action="/zh-cn/search/">
+            <div class="input-group">
+                <input name="q" class="form-control rounded" placeholder="搜索">
+                <button class="btn btn-sm btn-search position-absolute end-0 border-0 border-start border-secondary p-2" type="submit">
+                    <i class="fas fa-fw fa-search text-primary"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    <div class="accordion post-toc d-none d-lg-block">
+  <div class="accordion-item row mb-4 card component" id="postTOC">
+    <div class="card-header accordion-header">
+      <h2 class="card-title fs-4 my-2 text-surface d-none d-lg-block">目录</h2>
+      <a class="accordion-button d-lg-none mb-1 collapsed shadow-none p-0 bg-transparent" role="button" data-bs-toggle="collapse" href="#post-toc" aria-expanded="false" aria-controls="post-toc">
+        目录
+      </a>
+    </div>
+    <div class="card-body collapse accordion-collapse accordion-body d-lg-block" id="post-toc">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-arm64-crash调试环境搭建">1. ARM64 Crash调试环境搭建</a>
+      <ul>
+        <li><a href="#11-x86_64主机编译arm64-crash工具">1.1. x86_64主机编译ARM64 Crash工具</a></li>
+        <li><a href="#12-x86_64主机使用docker安装arm64-crash工具">1.2. x86_64主机使用Docker安装ARM64 Crash工具</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-编译配置">2. 编译配置</a>
+      <ul>
+        <li><a href="#21-内核配置和编译">2.1. 内核配置和编译</a></li>
+        <li><a href="#22-buildroot配置和编译">2.2. buildroot配置和编译</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-运行">3. 运行</a>
+      <ul>
+        <li><a href="#31-qemu启动kernel">3.1. qemu启动kernel</a></li>
+        <li><a href="#32-kexec加载内核">3.2. kexec加载内核</a></li>
+        <li><a href="#33-触发panic">3.3. 触发panic</a></li>
+        <li><a href="#34-保存vmcore">3.4. 保存vmcore</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-crash调试">4. Crash调试</a></li>
+  </ul>
+</nav>
+    </div>
+  </div>
+</div>
+    
+
+
+
+
+
+
+  </div>
+</aside>
+
+      </div>
+    </main><footer class="footer mt-auto py-3 text-center container"><div class="offcanvas offcanvas-bottom h-auto" tabindex="-1" id="offcanvasActionsPanel"
+  aria-labelledby="offcanvasActionsPanelLabel">
+  <div class="offcanvas-header">
+    <div class="offcanvas-title h5" id="offcanvasActionsPanelLabel">
+      <i class="fas fa-fw fa-th-large me-1"></i>
+      操作
+    </div>
+    <button type="button" class="btn-close ms-auto" data-bs-dismiss="offcanvas" data-bs-target="offcanvasActionsPanel" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body mt-2"><div class="actions d-flex overflow-auto align-items-center">
+      <a role="button" class="action action-go-back d-flex flex-column align-items-center me-3" href="javascript: window.history.back();">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-90"></i></span> 返回
+      </a>
+      <a role="button" class="action action-reload-page d-flex flex-column align-items-center me-3">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-redo-alt"></i></span> 刷新
+      </a>
+      <a role="button" class="action action-copy-url d-flex flex-column align-items-center me-3">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-link"></i></span> 复制链接
+      </a>
+    </div>
+  </div>
+</div><div class="row text-center text-lg-start">
+  <div class="col-12 mt-2 col-lg-3">
+    <p class="mb-2">kingdix10&#39;s site</p>
+    <p class="text-secondary mb-2"><small>kingdix10 @ 拾月国度</small></p><div class="copyright mb-2 text-secondary">
+  <small>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</small>
+</div>
+
+
+
+<nav class="social-links nav justify-content-center justify-content-between mb-2 mt-3">
+      <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="https://github.com/kingdix10" title="GitHub" rel="me">
+        <i class="fa-fw fab fa-github"
+          ></i>
+      </a>
+      <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="https://www.zhihu.com/people/kingdix10" title="知乎" rel="me">
+        <i class="fa-fw fab fa-zhihu"
+           style="color: #056de8;"></i>
+      </a>
+  <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="/zh-cn/index.xml" title="RSS" rel="me">
+    <i class="fas fa-fw fa-rss" style="color: #ea6221;"></i>
+  </a>
+</nav>
+</div>
+  <div class="col-12 col-lg-8 offset-0 offset-lg-1"><ul class="nav justify-content-between footer-memu mb-3 row"><li class="nav-item col-12 col-md-6 col-lg-3 px-0"><ul class="nav flex-column align-items-start">
+      <li class="nav-item w-100"><a class="nav-link fw-bold fs-lg" href="javascript: void(0);">链接</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+GitHub"
+  href="https://github.com/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-github text-primary"></i></span>GitHub</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+Gitee"
+  href="https://gitee.com/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-github text-primary"></i></span>Gitee</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+Zhihu"
+  href="https://www.zhihu.com/people/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-zhihu text-primary"></i></span>Zhihu</a></li></ul></li></ul></div>
+</div>
+</footer>
+<script data-precache src="/assets/main/bundle.min.de08722b15dbab0d764debd50114ce3d28da8ee6c7b889ff8c82e6faad0b46dd.js" integrity="sha256-3ghyKxXbqw12TevVARTOPSjajubHuIn/jILm&#43;q0LRt0=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
+<script data-precache src="/assets/viewer/bundle.min.ffafad0d121aa7d1fb443510086dac514a0b152826cf094f02a1f3dec1f37918.js" integrity="sha256-/6&#43;tDRIap9H7RDUQCG2sUUoLFSgmzwlPAqHz3sHzeRg=" crossorigin="anonymous" defer></script><script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?8e042c957455c462d9b4c9da3ab642b0";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<script src="/js/sw-register.js" defer></script>
+
+  </body>
+</html>

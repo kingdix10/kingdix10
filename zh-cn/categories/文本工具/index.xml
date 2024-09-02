@@ -15,7 +15,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_text/</guid>
       <description><![CDATA[1. grep 1.1. 常用选项 1# 输出start到end 2grep -o &#39;start.*end&#39; file 3# 文件作为文本处理 4grep -a &#39;xxx&#39; file 5# 忽略二进制文件 6grep -rsnI &#39;xxx&#39; ./ 7# 递归目录 8grep -r &#39;xxx&#39; ./ 9 10# 忽略大小写(-i, --ignore-case) 11#]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/water_waves_ripples_143522_300x168.jpg" length="11080" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/lines_intersection_oblique_153331_300x168.jpg" length="16159" type="image/.jpg" />
     </item>
     
   </channel>

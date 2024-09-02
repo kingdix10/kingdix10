@@ -1,0 +1,1697 @@
+<!doctype html>
+<html class="position-relative" itemscope itemtype="https://schema.org/WebPage" lang="zh-cn"
+  data-bs-theme="auto" data-palette="purple">
+  <head><script src="/assets/init/bundle.min.0bb93948508b32667bbc76d4f9a8123a3c3b2ef731048422b0c48f9ea39586e9.js" integrity="sha256-C7k5SFCLMmZ7vHbU&#43;agSOjw7LvcxBIQisMSPnqOVhuk=" crossorigin="anonymous"></script>
+<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Linux内核驱动模型（三）驱动初始化 - kingdix10&#39;s site</title>
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_16x16_resize_box_3.png" sizes="16x16" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_32x32_resize_box_3.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_150x150_resize_box_3.png" sizes="150x150" type="image/png">
+    <link rel="apple-touch-icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_180x180_resize_box_3.png" sizes="180x180" type="image/png">
+    <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_192x192_resize_box_3.png" sizes="192x192" type="image/png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#6f42c1">
+<meta name="keywords" content="启动流程, 设备驱动模型, 设备驱动" />
+  <meta name="description" content="initcall和module_init" />
+    <meta name="robots" content="index, follow" /><meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://kingdix10.github.io/covers/scheme_glow_blue_140190_1280x720.jpg"/>
+
+<meta name="twitter:title" content="Linux内核驱动模型（三）驱动初始化"/>
+<meta name="twitter:description" content="initcall和module_init"/>
+<meta property="og:title" content="Linux内核驱动模型（三）驱动初始化" />
+<meta property="og:description" content="initcall和module_init" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/initcall/" /><meta property="og:image" content="https://kingdix10.github.io/covers/scheme_glow_blue_140190_1280x720.jpg" /><meta property="article:section" content="docs" />
+<meta property="article:published_time" content="2023-07-20T00:00:00+00:00" />
+<meta property="article:modified_time" content="2024-08-04T17:46:33+00:00" /><meta property="og:site_name" content="kingdix10&#39;s site" />
+
+
+<meta itemprop="name" content="Linux内核驱动模型（三）驱动初始化">
+<meta itemprop="description" content="initcall和module_init"><meta itemprop="datePublished" content="2023-07-20T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2024-08-04T17:46:33+00:00" />
+<meta itemprop="wordCount" content="4798"><meta itemprop="image" content="https://kingdix10.github.io/covers/scheme_glow_blue_140190_1280x720.jpg">
+<meta itemprop="keywords" content="linux内核,内核驱动,linux-6.1," />
+  <meta property="og:image:alt" content="Linux内核驱动模型（三）驱动初始化" />
+  <meta name="twitter:image:alt" content="Linux内核驱动模型（三）驱动初始化" />
+  <link rel="manifest" href="/zh-cn/manifest.json">
+
+<link data-precache rel="stylesheet" href="/assets/main/bundle.min.6e8e72e2fe73efb4b8d986e54f0d232c384007622b8c47a23864194fbd179af4.css" integrity="sha256-bo5y4v5z77S42YblTw0jLDhAB2IrjEeiOGQZT70XmvQ=" crossorigin="anonymous">
+
+    <link data-precache rel="stylesheet" href="/assets/viewer/bundle.min.8c1002839fa22c1350d6ae1eef6593120e108f973c41348be9b5065430566aaf.css" integrity="sha256-jBACg5&#43;iLBNQ1q4e72WTEg4Qj5c8QTSL6bUGVDBWaq8=" crossorigin="anonymous">
+
+
+</head>
+  <body><header class="mb-4 sticky-top">
+  
+<nav class="top-app-bar shadow navbar navbar-expand-xxl">
+  <div class="container">
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDocsNav"
+      aria-expanded="false" aria-label="Toggle docs navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+<a class="navbar-brand d-flex align-items-center flex-grow-1 flex-xxl-grow-0 justify-content-xxl-start justify-content-center ms-2 ms-xxl-0 mx-auto me-xxl-2"
+    href="https://kingdix10.github.io/zh-cn/">
+    <picture><img class="logo " alt="Logo" src="https://kingdix10.github.io/images/icon_yellow_transparent_72x72.png" loading="lazy" width="72" height="72" />
+</picture>
+kingdix10
+</a>
+
+    <div class="offcanvas-xxl offcanvas-end flex-grow-1" data-bs-scroll="true" tabindex="-1" id="navbarMenus" aria-labelledby="navbarMenusLabel">
+      <div class="offcanvas-header px-4 pb-0">
+        <div class="offcanvas-title h5" id="navbarMenusLabel">kingdix10</div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#navbarMenus" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body p-4 pt-0 p-xxl-0">
+        <hr class="d-xxl-none">
+        <ul class="navbar-nav flex-row flex-wrap align-items-center me-auto"><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn">
+<span class="menu-icon me-1"><i class="fas fa-home"></i></span>主页
+            </a>
+          </li><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn/news/">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-newspaper"></i></span>新闻
+            </a>
+          </li><li class="nav-item col-6 col-xxl-auto">
+            <a class="nav-link py-2 px-0 px-xxl-2" href="https://kingdix10.github.io/zh-cn/docs/">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-folder"></i></span>文档
+            </a>
+          </li>
+          <li class="nav-item col-12 col-xxl-auto dropdown px-0">
+            <a href="#"
+              class="nav-link dropdown-toggle"
+              id="navbarDropdownBlog" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-blog"></i></span>博客
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog" data-bs-popper="none">
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/archives/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-file-archive text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">归档</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/series/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-columns"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">专栏</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of series.</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/categories/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-folder text-success"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">分类</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of categories.</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://kingdix10.github.io/zh-cn/tags/">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fas fa-fw fa-tags"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">标签</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">List of tags.</p>
+                  </div></a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item col-12 col-xxl-auto dropdown px-0">
+            <a href="#"
+              class="nav-link dropdown-toggle"
+              id="navbarDropdownLinks" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+<span class="menu-icon me-1"><i class="fas fa-fw fa-link"></i></span>链接
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownLinks" data-bs-popper="none">
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://github.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-github text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">GitHub</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">github.com/kingdix10</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://gitee.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-github text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-1">Gitee</p>
+                      <p class="dropdown-item-description mb-0 text-secondary">gitee.com/kingdix10</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://www.zhihu.com/people/kingdix10" target="_blank" rel="noopener noreferrer">
+                    <span class="dropdown-item-icon me-2 p-2 rounded">
+                      <i class="fab fa-fw fa-zhihu text-primary"></i>
+                    </span>
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">Zhihu</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://www.cnblogs.com/kingdix10" target="_blank" rel="noopener noreferrer">
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">博客园</p>
+                  </div></a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center text-wrap text-xxl-nowrap"
+                  href="https://blog.csdn.net/u014001096" target="_blank" rel="noopener noreferrer">
+                  <div class="dropdown-item-content">
+                    <p class="dropdown-item-title mb-0">CSDN</p>
+                  </div></a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+            </ul>
+          </li>
+        </ul>
+        
+    <hr class="d-xxl-none">
+    <form class="search-bar ms-auto my-auto" action="/zh-cn/search/" novalidate>
+      <div class="input-group align-items-center">
+        <span class="btn btn-search disabled position-absolute left-0 border-0 px-1">
+          <i class="fas fa-fw fa-search fa-lg"></i>
+        </span>
+        <input
+          class="my-1 form-control border-white rounded-5 search-input bg-body"
+          name="q"
+          type="search"
+          placeholder="搜索"
+          aria-label="Search"
+          required>
+          <span class="search-shortcut position-absolute end-0 top-0 me-2">
+            <kbd class="text-dark bg-white opacity-75 rounded-3 shadow border border-primary py-1 fw-bold">/</kbd>
+          </span>
+      </div>
+    </form><hr class="d-xxl-none">
+        <ul class="navbar-nav flex-row flex-wrap align-items-center ms-md-auto">
+<li class="nav-item py-2 py-xxl-1 col-12 col-xxl-auto">
+
+
+<nav class="social-links nav justify-content-center flex-row">
+      <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="https://github.com/kingdix10" title="GitHub" rel="me">
+        <i class="fa-fw fab fa-github"
+          ></i>
+        <span class="ms-1 d-xxl-none">Github</span>
+      </a>
+      <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="https://www.zhihu.com/people/kingdix10" title="知乎" rel="me">
+        <i class="fa-fw fab fa-zhihu"
+          ></i>
+        <span class="ms-1 d-xxl-none">Zhihu</span>
+      </a>
+  <a class="nav-link social-link col-6 col-xxl-auto p-1" target="_blank" href="/zh-cn/index.xml" title="RSS" rel="me">
+    <i class="fas fa-fw fa-rss"></i>
+    <span class="ms-1 d-xxl-none">RSS</span>
+  </a>
+</nav>
+
+</li>
+<li class="nav-item py-2 py-xxl-1 col-12 col-xxl-auto">
+  <div class="vr d-none d-xxl-flex h-100 mx-xxl-2 text-white"></div>
+  <hr class="d-xxl-none my-2">
+</li>
+<li class="nav-item dropdown py-1 py-xxl-1 col-6 col-xxl-auto">
+    <a class="nav-link px-0 px-xxl-1" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-globe"></i>
+        <span class="d-xxl-none">语言</span>
+    </a>
+    <ul class="language-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+        <li>
+        <a class="dropdown-item active" href="/zh-cn/">
+            简体中文
+        </a>
+        </li>
+        <li>
+        <a class="dropdown-item" href="/en/">
+            English
+        </a>
+        </li></ul>
+</li>
+<li class="nav-item py-1 col-12 col-xxl-auto">
+  <div class="vr d-none d-xxl-flex h-100 mx-xxl-2 text-white"></div>
+  <hr class="d-xxl-none my-2">
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="fontSizeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-font"></i>
+        <span class="d-xxl-none">字体大小</span>
+    </a>
+    <ul class="font-size-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="fontSizeDropdown">
+        <li>
+            <button class="font-size-item dropdown-item" data-size="xs">
+                特小号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="sm">
+                小号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item active" data-size="md">
+                中等
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="lg">
+                大号
+            </button>
+        </li>
+        <li>
+            <button class="font-size-item dropdown-item" data-size="xl">
+                特大号
+            </button>
+        </li>
+    </ul>
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="paletteDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-fw fa-palette"></i>
+        <span class="d-xxl-none">配色</span>
+    </a>
+    <ul class="palette-dropdown-menu dropdown-menu dropdown-menu-end px-2 row g-2" aria-labelledby="paletteDropdown">
+            <li class="col-4 my-1">
+                <a role="button" id="palette-blue" aria-label="蓝色"
+                    class="btn btn-sm w-100 palette text-bg-blue" data-palette="blue">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-blue-gray" aria-label="蓝灰色"
+                    class="btn btn-sm w-100 palette text-bg-blue-gray" data-palette="blue-gray">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-brown" aria-label="棕色"
+                    class="btn btn-sm w-100 palette text-bg-brown" data-palette="brown">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-cyan" aria-label="青色"
+                    class="btn btn-sm w-100 palette text-bg-cyan" data-palette="cyan">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-green" aria-label="绿色"
+                    class="btn btn-sm w-100 palette text-bg-green" data-palette="green">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-indigo" aria-label="靛青色"
+                    class="btn btn-sm w-100 palette text-bg-indigo" data-palette="indigo">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-orange" aria-label="橙色"
+                    class="btn btn-sm w-100 palette text-bg-orange" data-palette="orange">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-pink" aria-label="粉色"
+                    class="btn btn-sm w-100 palette text-bg-pink" data-palette="pink">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-purple" aria-label="紫色"
+                    class="btn btn-sm w-100 palette text-bg-purple" data-palette="purple">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-red" aria-label="红色"
+                    class="btn btn-sm w-100 palette text-bg-red" data-palette="red">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-teal" aria-label="蓝绿色"
+                    class="btn btn-sm w-100 palette text-bg-teal" data-palette="teal">
+                </a>
+            </li>
+            <li class="col-4 my-1">
+                <a role="button" id="palette-yellow" aria-label="黄色"
+                    class="btn btn-sm w-100 palette text-bg-yellow" data-palette="yellow">
+                </a>
+            </li>
+    </ul>
+</li>
+<li class="nav-item dropdown col-6 col-xxl-auto">
+    <a class="nav-link px-0 py-2 px-xxl-1" href="#" id="modeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="mode-icon fas fa-fw fa-adjust" id="modeIcon"></i>
+        <span class="d-xxl-none">模式</span>
+    </a>
+    <ul class="mode-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="modeDropdown">
+        <li class="mode-item" data-color-mode="light" data-icon="sun">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-sun"></i> 浅色
+            </button>
+        </li>
+        <li class="mode-item" data-color-mode="dark" data-icon="moon">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-moon"></i> 深色
+            </button>
+        </li>
+        <li class="mode-item active" data-color-mode="auto" data-icon="adjust">
+            <button class="dropdown-item">
+                <i class="mode-icon fas fa-fw fa-adjust"></i> 自动
+            </button>
+        </li>
+    </ul>
+</li>
+        </ul>
+      </div>
+    </div>
+    <div class="d-flex">
+      <button class="navbar-toggler order-5 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarMenus"
+        aria-controls="navbarMenus" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-ellipsis-h"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+</header>
+
+    <main class="container">
+      <div class="row content"><noscript>
+    <div class="alert alert-danger" role="alert">你的浏览器不支持 JavaScript。</div>
+</noscript>
+<aside class="docs-nav col-xxl-2" tabindex="-1" data-bs-hide="focusout">
+  <div class="offcanvas-xxl offcanvas-start" id="offcanvasDocsNav" aria-labelledby="offcanvasDocsNavLabel">
+    <div class="offcanvas-header border-bottom">
+      <div class="offcanvas-title h5" id="offcanvasDocsNavLabel">浏览文档</div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#offcanvasDocsNav"></button>
+    </div>
+    <div class="offcanvas-body pt-2 flex-column"><div class="mb-3" style="margin-left: -0.5rem;">
+</div>
+<ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3 text-primary">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/"><span class="docs-nav-title-icon me-1"><i class="fas fa-fw fa-book"></i></span><span class="docs-nav-title">Linux内核分析</span></a>
+            <a class="btn-toggle ms-1" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-8d43cfa49df325f277d6f4234a021467" aria-expanded="true" aria-controls="nav-8d43cfa49df325f277d6f4234a021467">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse  show border-primary" id="nav-8d43cfa49df325f277d6f4234a021467">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3 text-primary">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/"><span class="docs-nav-title">linux-6.1/5.10</span></a>
+            <a class="btn-toggle ms-1" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-8ea97fb7a0a0d68cedef1b63b4664daa" aria-expanded="true" aria-controls="nav-8ea97fb7a0a0d68cedef1b63b4664daa">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse  show border-primary" id="nav-8ea97fb7a0a0d68cedef1b63b4664daa">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/"><span class="docs-nav-title">linux thermal子系统简介</span></a>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/"><span class="docs-nav-title">进程管理</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-83c2de274b2e4577ecf37614ae1dc5db" aria-expanded="false" aria-controls="nav-83c2de274b2e4577ecf37614ae1dc5db">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-83c2de274b2e4577ecf37614ae1dc5db">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/task_0/"><span class="docs-nav-title">Linux 0号线程swapper简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/task_1/"><span class="docs-nav-title">Linux 1号线程init简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/sched/task_2/"><span class="docs-nav-title">Linux 2号线程kthreadd简介</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/drivers/"><span class="docs-nav-title">内核驱动</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-d3b01a1b86aa6db82f0e7b3aaac6b5d2" aria-expanded="false" aria-controls="nav-d3b01a1b86aa6db82f0e7b3aaac6b5d2">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-d3b01a1b86aa6db82f0e7b3aaac6b5d2">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3 text-primary">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/"><span class="docs-nav-title">设备模型</span></a>
+            <a class="btn-toggle ms-1" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-debf5d4911c9878135b99f6e8f2a44cd" aria-expanded="true" aria-controls="nav-debf5d4911c9878135b99f6e8f2a44cd">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse  show border-primary" id="nav-debf5d4911c9878135b99f6e8f2a44cd">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/dt_to_dt/"><span class="docs-nav-title">Linux内核驱动模型（二）设备树转换</span></a>
+        </li><li class="mb-2 py-1 ms-3 text-primary" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/initcall/"><span class="docs-nav-title">Linux内核驱动模型（三）驱动初始化</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/device_model/"><span class="docs-nav-title">Linux内核驱动模型（四）核心结构体</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/fdt_dt/"><span class="docs-nav-title">Linux内核驱动模型（一）设备树展开</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/kobject/kobject/"><span class="docs-nav-title">Linux内核数据结构kobject/kset/ktype</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/"><span class="docs-nav-title">时间子系统</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c9f99e03f1800548b626b43e128eb70f" aria-expanded="false" aria-controls="nav-c9f99e03f1800548b626b43e128eb70f">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-c9f99e03f1800548b626b43e128eb70f">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/timekeeping/"><span class="docs-nav-title">linux内核时间子系统（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/time/time/"><span class="docs-nav-title">linux内核时间子系统（一）</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/"><span class="docs-nav-title">linux-6.6</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c105b2ef486b2fc777c1f47c8c02d8c9" aria-expanded="false" aria-controls="nav-c105b2ef486b2fc777c1f47c8c02d8c9">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-c105b2ef486b2fc777c1f47c8c02d8c9">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/"><span class="docs-nav-title">【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_mm/"><span class="docs-nav-title">Linux drm mm分析(基于intel ivpu驱动)</span></a>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/devicemodel/"><span class="docs-nav-title">linux-6.1</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c2d7103f5fb31202d4516726f7f8b937" aria-expanded="false" aria-controls="nav-c2d7103f5fb31202d4516726f7f8b937">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-c2d7103f5fb31202d4516726f7f8b937">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/notifier_chain/notifier_chain/"><span class="docs-nav-title">Linux内核的通知链机制</span></a>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/"><span class="docs-nav-title">进程管理</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-655e5bdc71766563bee0b49f680e7299" aria-expanded="false" aria-controls="nav-655e5bdc71766563bee0b49f680e7299">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-655e5bdc71766563bee0b49f680e7299">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/execve/"><span class="docs-nav-title">exec系统调用简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/a-fork/"><span class="docs-nav-title">Linux fork进程/线程简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/relationship/"><span class="docs-nav-title">Linux进程和线程关系</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/pid_namespace/"><span class="docs-nav-title">Linux进程命名空间（pid namespace）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/task_state/"><span class="docs-nav-title">Linux进程状态与生命周期</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_2/"><span class="docs-nav-title">Linux内核copy_process分析（二）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_3/"><span class="docs-nav-title">Linux内核copy_process分析（三）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_1/"><span class="docs-nav-title">Linux内核copy_process分析（一）</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_table/"><span class="docs-nav-title">Linux内核sched_class汇总</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/task_life/"><span class="docs-nav-title">用trace追踪Linux进程的一生</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/"><span class="docs-nav-title">内存管理</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-de97508460ed4f8a4a3e7ac2798cb58e" aria-expanded="false" aria-controls="nav-de97508460ed4f8a4a3e7ac2798cb58e">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-de97508460ed4f8a4a3e7ac2798cb58e">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc/"><span class="docs-nav-title">kmalloc分配内存的大小</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtable/"><span class="docs-nav-title">Linux ARM64页面大小和虚拟地址位数</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/"><span class="docs-nav-title">内核调试</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-38c732a7b9755fe00848e5f2dcd802d9" aria-expanded="false" aria-controls="nav-38c732a7b9755fe00848e5f2dcd802d9">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-38c732a7b9755fe00848e5f2dcd802d9">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/arm64_setup/"><span class="docs-nav-title">ARM64 Crash调试环境搭建</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/help/"><span class="docs-nav-title">Crash帮助信息</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/crash_cmd_set/"><span class="docs-nav-title">Crash命令介绍</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/printk-formats/"><span class="docs-nav-title">Linux printk日志输出格式控制</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/dynamic_debug/"><span class="docs-nav-title">linux内核dynamic_debug</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/"><span class="docs-nav-title">printk的pr_fmt</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/boot/entry/"><span class="docs-nav-title">内核启动流程（一）</span></a>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/drivers/"><span class="docs-nav-title">内核驱动</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-f13ac328747f9149370d84b8c8f95a46" aria-expanded="false" aria-controls="nav-f13ac328747f9149370d84b8c8f95a46">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-f13ac328747f9149370d84b8c8f95a46">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/fs/"><span class="docs-nav-title">文件系统</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-6c01ebad189fffa4467424d95bb94649" aria-expanded="false" aria-controls="nav-6c01ebad189fffa4467424d95bb94649">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-6c01ebad189fffa4467424d95bb94649">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/"><span class="docs-nav-title">杂项</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-4c6ab7a6d5e5a1b2fc403b3d23256450" aria-expanded="false" aria-controls="nav-4c6ab7a6d5e5a1b2fc403b3d23256450">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-4c6ab7a6d5e5a1b2fc403b3d23256450">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/jump_label/"><span class="docs-nav-title">ARM64 jump label源码分析</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/atomic/"><span class="docs-nav-title">linux atomic接口简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/linux-err-return/"><span class="docs-nav-title">Linux的errno简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/asm_macors/"><span class="docs-nav-title">Linux内核常见ARM64汇编宏</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/optimize_tips/"><span class="docs-nav-title">Linux内核代码的编写和优化技巧</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/kernel_boot_security/"><span class="docs-nav-title">保证内核启动安全的几种方式</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/"><span class="docs-nav-title">中断子系统</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-0e8011cfba83e7078ddfdac6dd9bdab4" aria-expanded="false" aria-controls="nav-0e8011cfba83e7078ddfdac6dd9bdab4">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-0e8011cfba83e7078ddfdac6dd9bdab4">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/"><span class="docs-nav-title">ARM64 Linux中断入口</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_flow/"><span class="docs-nav-title">Linux中断处理流程图</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_domain_add/"><span class="docs-nav-title">Linux中断子系统（二）domain注册</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_create_mapping/"><span class="docs-nav-title">Linux中断子系统（三）设备中断注册</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/request_irq/"><span class="docs-nav-title">Linux中断子系统（四）申请中断request_irq</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/handler_entry/"><span class="docs-nav-title">Linux中断子系统（五）中断处理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/init/"><span class="docs-nav-title">Linux中断子系统（一）软硬件初始化</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/"><span class="docs-nav-title">编程语言</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-c763ce92a79b45df97e2263a975854b9" aria-expanded="false" aria-controls="nav-c763ce92a79b45df97e2263a975854b9">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-c763ce92a79b45df97e2263a975854b9">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/"><span class="docs-nav-title">C/C&#43;&#43;</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-97f02fde471866056c482bd758f3802a" aria-expanded="false" aria-controls="nav-97f02fde471866056c482bd758f3802a">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-97f02fde471866056c482bd758f3802a">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/c_assert/"><span class="docs-nav-title">C语言编译断言</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/macro_link_args/"><span class="docs-nav-title">gcc宏定义中的连接符和可变参数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/gcc_tools/"><span class="docs-nav-title">编译工具杂记</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/gcc_predefine/"><span class="docs-nav-title">编译器预定义宏</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/array_func/"><span class="docs-nav-title">多维数组作为函数参数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/array_type/"><span class="docs-nav-title">数组a、&amp;a、&amp;a[0]、&amp;a[0][0]的区别与联系</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/c_struct_cmp/"><span class="docs-nav-title">用memcmp比较结构体会有什么问题</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/python/"><span class="docs-nav-title">Python</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-ffa1725fdabf7411c32ceb6eae66fd17" aria-expanded="false" aria-controls="nav-ffa1725fdabf7411c32ceb6eae66fd17">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-ffa1725fdabf7411c32ceb6eae66fd17">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/compile/"><span class="docs-nav-title">构建工具</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-cffaf2396700969f3f8596d2093784ef" aria-expanded="false" aria-controls="nav-cffaf2396700969f3f8596d2093784ef">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-cffaf2396700969f3f8596d2093784ef">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/compile/make_debug/"><span class="docs-nav-title">make调试</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/"><span class="docs-nav-title">开发环境</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-fd57bc387b9c3a4d19f1801fc65cd5b4" aria-expanded="false" aria-controls="nav-fd57bc387b9c3a4d19f1801fc65cd5b4">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-fd57bc387b9c3a4d19f1801fc65cd5b4">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/samba/"><span class="docs-nav-title">samba服务器搭建和使用</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/vdisk_compact/"><span class="docs-nav-title">VMware和Hyper-V回收虚拟磁盘空间</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/02-dev_env/resizefs/"><span class="docs-nav-title">磁盘和文件系统扩容/缩容</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/"><span class="docs-nav-title">启动</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-05b799579ad52d4ccfa92fd6313b23f7" aria-expanded="false" aria-controls="nav-05b799579ad52d4ccfa92fd6313b23f7">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-05b799579ad52d4ccfa92fd6313b23f7">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/rtthread_smp_cortex_a9/"><span class="docs-nav-title">rt-thread Cortex-A9 SMP启动</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/uboot_mem/"><span class="docs-nav-title">U-Boot从dtb获取内存布局并传递到内核</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/u-boot-stubs/"><span class="docs-nav-title">u-boot的stubs机制</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/crc32_func/"><span class="docs-nav-title">U-Boot和Linux内核的CRC函数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/u-boot-bootflow/"><span class="docs-nav-title">U-Boot启动分析</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/uboot_misc_note/"><span class="docs-nav-title">U-Boot杂项记录</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/u-boot_commands/"><span class="docs-nav-title">常见u-boot命令</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/boot_flow/"><span class="docs-nav-title">嵌入式系统启动流程</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/"><span class="docs-nav-title">系统工具</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-eb1c5d775f73e30b3a27244e12a84f81" aria-expanded="false" aria-controls="nav-eb1c5d775f73e30b3a27244e12a84f81">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-eb1c5d775f73e30b3a27244e12a84f81">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/debian_setup/"><span class="docs-nav-title">Debian安装和配置</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/docker_setup/"><span class="docs-nav-title">Docker安装和配置</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/git/git_misc/"><span class="docs-nav-title">git配置和操作</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/jupyter_to_markdown/"><span class="docs-nav-title">jupyter转Markdown</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_tips/"><span class="docs-nav-title">Linux Bash技巧</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_decorate/"><span class="docs-nav-title">Linux Bash终端美化</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_network/"><span class="docs-nav-title">linux常用命令-网络</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_text/"><span class="docs-nav-title">linux常用命令-文本处理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_file/"><span class="docs-nav-title">linux常用命令-文件管理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_sys/"><span class="docs-nav-title">linux常用命令-系统管理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_benchmark/"><span class="docs-nav-title">linux常用命令-性能</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/sourceinsight/"><span class="docs-nav-title">sourceinsight快速建工程</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/ssh_wsl_exe/"><span class="docs-nav-title">ssh连接wsl后执行Windows程序</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/win_python3/"><span class="docs-nav-title">解决Windows不能使用python3.10的问题</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/99-jottings/"><span class="docs-nav-title">杂项</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-4967b62f3b1964eee9739b39b25cd3eb" aria-expanded="false" aria-controls="nav-4967b62f3b1964eee9739b39b25cd3eb">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-4967b62f3b1964eee9739b39b25cd3eb">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"></ul>
+            </div>
+          </div>
+        </li><li class="mb-2" tabindex="-1">
+          <div class="py-1 d-flex justify-content-between align-items-center ms-3">
+            <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/"><span class="docs-nav-title">4412</span></a>
+            <a class="btn-toggle ms-1 collapsed" role="button" data-bs-toggle="collapse"
+              data-bs-target="#nav-0cca8bc16c798175efb847597812f8c0" aria-expanded="false" aria-controls="nav-0cca8bc16c798175efb847597812f8c0">
+              <i class="btn-toggle-icon fas fa-chevron-down ms-auto" data-fa-transform="rotate-270"></i>
+            </a>
+          </div>
+          <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-0cca8bc16c798175efb847597812f8c0">
+            <div class="btn-toggle-nav fw-normal ms-2 small">
+              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/exynos4412/"><span class="docs-nav-title">Exynos4412启动介绍</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/mkbl1/"><span class="docs-nav-title">Exynos4412自制BL1</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/exynos4412/mkbl2/"><span class="docs-nav-title">Exynos4412自制BL2</span></a>
+        </li></ul>
+            </div>
+          </div>
+        </li></ul></div>
+  </div>
+</aside><div class="col-xxl-7 ms-auto">
+  <div class="container-fluid"><nav class="row card component" aria-label="breadcrumb">
+  <div class="card-body pb-0">
+    <ol class="hbs-breadcrumb breadcrumb flex-nowrap"><li class="breadcrumb-item text-surface"><a href="/zh-cn/">主页</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/">文档</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/04-kernel/">Linux内核分析</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/04-kernel/linux-6.1/">linux-6.1/5.10</a></li><li class="breadcrumb-item text-surface"><a href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/">设备模型</a></li><li class="breadcrumb-item active">Linux内核驱动模型（三）驱动初始化</li></ol>
+  </div>
+</nav><div class="post-panel-wrapper position-relative d-flex justify-content-center">
+  <div class="d-flex flex-row justify-content-center rounded-5 border post-panel position-fixed px-3 py-1 surface shadow-1">
+    
+    
+
+    
+    
+    
+<a class="action action-toc d-block d-xxl-none" href="#post-toc-container" role="button" title="目录">
+  <i class="fas fa-fw fa-list-alt"></i>
+</a>
+    <a class="action action-copyright" href="#post-copyright" role="button" aria-label="Copyright" title="版权">
+  <i class="fas fa-fw fa-copyright"></i>
+</a>
+    
+    
+<a id="sidebarToggler" class="action action-sidebar-toggler d-none d-xxl-block" role="button" title="切换侧边栏">
+  <i class="fas fa-fw fa-expand-alt" data-fa-transform="rotate-45"></i>
+</a>
+
+    
+  </div>
+</div><article class="row card component mb-4 post">
+<div class="card-header ">
+    <h1 class="card-title post-title my-2">Linux内核驱动模型（三）驱动初始化</h1>
+</div>
+<div class="card-body"><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2023-07-20 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2023/07/20</span><span class="post-reading-time me-1 mb-1">10 分钟阅读</span><a href="/zh-cn/categories/%E8%AE%BE%E5%A4%87%E6%A8%A1%E5%9E%8B/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>设备模型</a><a href="/zh-cn/series/%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%9E%8B/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
+      <i class="fas fa-fw fa-columns me-1"></i>设备驱动模型</a><a href="/zh-cn/tags/linux-6.1/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux-6.1</a><a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux内核</a><a href="/zh-cn/tags/%E5%86%85%E6%A0%B8%E9%A9%B1%E5%8A%A8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">内核驱动</a>
+</div>
+
+      <p class="lead mb-3 text-body-emphasis">initcall和module_init</p>
+<div class="mt-2 mb-3 d-block d-xxl-none">
+    <h2 class="text-surface mb-3">目录</h2>
+    <div id="post-toc-container">
+        </div>
+    <hr class="text-secondary">
+</div><div class="post-content mb-3" data-bs-spy="scroll" data-bs-target="#TableOfContents" tabindex="0">
+        <div id="post-content-body">
+<h1 id="1-module_init是什么" data-numberify>1. module_init是什么<a class="anchor ms-1" href="#1-module_init是什么"></a></h1>
+<p>module_init是Linux内核开发和驱动开发中非常常见的宏，其定义在 <code>include/linux/module.h</code>中，可以看到，module_init的实现会根据是否定义MODULE而有所不同。MODULE决定了我们编写的驱动，是与内核编译到一起，还是单独编译为ko。</p>
+
+<h2 id="11-module的定义" data-numberify>1.1. MODULE的定义<a class="anchor ms-1" href="#11-module的定义"></a></h2>
+<p>MODULE是通过在编译时，通过编译器的参数来传入的。如下是Makefile中的内容，在编译ko时，会使用如下两个编译选项，如果是链接到内核，则不会使用如下选项。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1">/// Makefile
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="c1"></span><span class="nl">KBUILD_AFLAGS_MODULE</span>  <span class="p">:</span><span class="o">=</span> <span class="o">-</span><span class="n">DMODULE</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="nl">KBUILD_CFLAGS_MODULE</span>  <span class="p">:</span><span class="o">=</span> <span class="o">-</span><span class="n">DMODULE</span>
+</span></span></code></pre></div><p>如果想看编译某个文件时是否由 <code>-DMODULE</code>选项，可以直接查看编译生成 <code>.xxx.o.cmd</code>文件。</p>
+<p>下面先分析MODULE未使能的情况。</p>
+
+<h1 id="2-module未使能" data-numberify>2. MODULE未使能<a class="anchor ms-1" href="#2-module未使能"></a></h1>
+<p>MODULE未定义的情况下，module_init是一种特殊的initcall。initcall是内核用于声明初始化函数以及控制函数调用顺序的机制。
+initcall有多个级别，module_init实际就是device_initcall，其级别为6。initcall最终会声明一个initcall_t静态变量，链接时放到内核的 <code>.init.data</code>段。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// include/linux/module.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cp">#ifndef MODULE
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cp"></span><span class="cm">/**
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> * module_init() - driver initialization entry point
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> * @x: function to be run at kernel boot time or module insertion
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> * module_init() will either be called during do_initcalls() (if
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> * builtin) or at module insertion time (if a module).  There can only
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> * be one per module.
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cp">#define module_init(x)  __initcall(x);
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cm"> * module_exit() - driver exit entry point
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cm"> * @x: function to be run when driver is removed
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cm"> * module_exit() will wrap the driver clean-up code
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="cm"> * with cleanup_module() when used with rmmod when
+</span></span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="cm"> * the driver is a module.  If the driver is statically
+</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="cm"> * compiled into the kernel, module_exit() has no effect.
+</span></span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="cm"> * There can only be one per module.
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="cp">#define module_exit(x)  __exitcall(x);
+</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="cp">#else </span><span class="cm">/* MODULE */</span><span class="cp">
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="cp"></span><span class="c1">/// ... ...
+</span></span></span></code></pre></div>
+<h2 id="21-initcall分析" data-numberify>2.1. initcall分析<a class="anchor ms-1" href="#21-initcall分析"></a></h2>
+<p>首先通过 <code>arch64-linux-gnu-nm -n vmlinux | grep -E -C 2 '_initcall.*(_start|_end)$'</code>来看一下编译的最终结果。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln"> 1</span><span class="cl">ffff8000094fc228 d __setup_debug_boot_weak_hash_enable
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">ffff8000094fc240 d __initcall__kmod_ptrace__414_42_trace_init_flags_sys_enterearly
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">ffff8000094fc240 D __initcall_start
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">ffff8000094fc240 D __setup_end
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">ffff8000094fc244 d __initcall__kmod_ptrace__416_66_trace_init_flags_sys_exitearly
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">--
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">ffff8000094fc2a8 d __initcall__kmod_earlycon__376_41_efi_earlycon_remap_fbearly
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">ffff8000094fc2ac d __initcall__kmod_dummy_timer__364_37_dummy_timer_registerearly
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">ffff8000094fc2b0 D __initcall0_start
+</span></span><span class="line"><span class="ln">10</span><span class="cl">ffff8000094fc2b0 d __initcall__kmod_core__527_975_bpf_jit_charge_init0
+</span></span><span class="line"><span class="ln">11</span><span class="cl">ffff8000094fc2b4 d __initcall__kmod_shm__486_153_ipc_ns_init0
+</span></span><span class="line"><span class="ln">12</span><span class="cl">--
+</span></span><span class="line"><span class="ln">13</span><span class="cl">ffff8000094fc2bc d __initcall__kmod_pci__516_6911_pci_realloc_setup_params0
+</span></span><span class="line"><span class="ln">14</span><span class="cl">ffff8000094fc2c0 d __initcall__kmod_inet_fragment__696_216_inet_frag_wq_init0
+</span></span><span class="line"><span class="ln">15</span><span class="cl">ffff8000094fc2c4 D __initcall1_start
+</span></span><span class="line"><span class="ln">16</span><span class="cl">ffff8000094fc2c4 d __initcall__kmod_fpsimd__388_2058_fpsimd_init1
+</span></span><span class="line"><span class="ln">17</span><span class="cl">ffff8000094fc2c8 d __initcall__kmod_process__462_734_tagged_addr_init1
+</span></span><span class="line"><span class="ln">18</span><span class="cl">--
+</span></span><span class="line"><span class="ln">19</span><span class="cl">ffff8000094fc3cc d __initcall__kmod_genetlink__620_1498_genl_init1
+</span></span><span class="line"><span class="ln">20</span><span class="cl">ffff8000094fc3d0 d __initcall__kmod_trace_boot__394_671_trace_boot_init1s
+</span></span><span class="line"><span class="ln">21</span><span class="cl">ffff8000094fc3d4 D __initcall2_start
+</span></span><span class="line"><span class="ln">22</span><span class="cl">ffff8000094fc3d4 d __initcall__kmod_debug_monitors__391_139_debug_monitors_init2
+</span></span><span class="line"><span class="ln">23</span><span class="cl">ffff8000094fc3d8 d __initcall__kmod_index__322_194_pi_init2
+</span></span><span class="line"><span class="ln">24</span><span class="cl">--
+</span></span><span class="line"><span class="ln">25</span><span class="cl">ffff8000094fc460 d __initcall__kmod_rpmsg_core__351_710_rpmsg_init2
+</span></span><span class="line"><span class="ln">26</span><span class="cl">ffff8000094fc464 d __initcall__kmod_kobject_uevent__622_814_kobject_uevent_init2
+</span></span><span class="line"><span class="ln">27</span><span class="cl">ffff8000094fc468 D __initcall3_start
+</span></span><span class="line"><span class="ln">28</span><span class="cl">ffff8000094fc468 d __initcall__kmod_setup__397_281_reserve_memblock_reserved_regions3
+</span></span><span class="line"><span class="ln">29</span><span class="cl">ffff8000094fc46c d __initcall__kmod_vdso__390_363_aarch32_alloc_vdso_pages3
+</span></span><span class="line"><span class="ln">30</span><span class="cl">--
+</span></span><span class="line"><span class="ln">31</span><span class="cl">ffff8000094fc4a8 d __initcall__kmod_dmi_id__332_259_dmi_id_init3
+</span></span><span class="line"><span class="ln">32</span><span class="cl">ffff8000094fc4ac d __initcall__kmod_platform__462_596_of_platform_default_populate_init3s
+</span></span><span class="line"><span class="ln">33</span><span class="cl">ffff8000094fc4b0 D __initcall4_start
+</span></span><span class="line"><span class="ln">34</span><span class="cl">ffff8000094fc4b0 d __initcall__kmod_setup__399_406_topology_init4
+</span></span><span class="line"><span class="ln">35</span><span class="cl">ffff8000094fc4b4 d __initcall__kmod_mte__458_603_register_mte_tcf_preferred_sysctl4
+</span></span><span class="line"><span class="ln">36</span><span class="cl">--
+</span></span><span class="line"><span class="ln">37</span><span class="cl">ffff8000094fc694 d __initcall__kmod_vgaarb__423_1564_vga_arb_device_init4s
+</span></span><span class="line"><span class="ln">38</span><span class="cl">ffff8000094fc698 d __initcall__kmod_watchdog__465_479_watchdog_init4s
+</span></span><span class="line"><span class="ln">39</span><span class="cl">ffff8000094fc69c D __initcall5_start
+</span></span><span class="line"><span class="ln">40</span><span class="cl">ffff8000094fc69c d __initcall__kmod_debug_monitors__389_63_create_debug_debugfs_entry5
+</span></span><span class="line"><span class="ln">41</span><span class="cl">ffff8000094fc6a0 d __initcall__kmod_resource__402_2029_iomem_init_inode5
+</span></span><span class="line"><span class="ln">42</span><span class="cl">--
+</span></span><span class="line"><span class="ln">43</span><span class="cl">ffff8000094fc784 d __initcall__kmod_acpi__398_141_acpi_reserve_resources5s
+</span></span><span class="line"><span class="ln">44</span><span class="cl">ffff8000094fc788 d __initcall__kmod_initramfs__399_762_populate_rootfsrootfs
+</span></span><span class="line"><span class="ln">45</span><span class="cl">ffff8000094fc788 D __initcallrootfs_start
+</span></span><span class="line"><span class="ln">46</span><span class="cl">ffff8000094fc78c D __initcall6_start
+</span></span><span class="line"><span class="ln">47</span><span class="cl">ffff8000094fc78c d __initcall__kmod_setup__401_440_register_arm64_panic_block6
+</span></span><span class="line"><span class="ln">48</span><span class="cl">ffff8000094fc790 d __initcall__kmod_cpuinfo__334_359_cpuinfo_regs_init6
+</span></span><span class="line"><span class="ln">49</span><span class="cl">--
+</span></span><span class="line"><span class="ln">50</span><span class="cl">ffff8000094fcd40 d __initcall__kmod_9pnet_virtio__634_831_p9_virtio_init6
+</span></span><span class="line"><span class="ln">51</span><span class="cl">ffff8000094fcd44 d __initcall__kmod_dns_resolver__330_382_init_dns_resolver6
+</span></span><span class="line"><span class="ln">52</span><span class="cl">ffff8000094fcd48 D __initcall7_start
+</span></span><span class="line"><span class="ln">53</span><span class="cl">ffff8000094fcd48 d __initcall__kmod_mounts__426_40_kernel_do_mounts_initrd_sysctls_init7
+</span></span><span class="line"><span class="ln">54</span><span class="cl">ffff8000094fcd4c d __initcall__kmod_panic__390_97_kernel_panic_sysctls_init7
+</span></span><span class="line"><span class="ln">55</span><span class="cl">--
+</span></span><span class="line"><span class="ln">56</span><span class="cl">ffff8000094fce6c d __initcall__kmod_core__606_6212_regulator_init_complete7s
+</span></span><span class="line"><span class="ln">57</span><span class="cl">ffff8000094fce70 d __initcall__kmod_platform__464_603_of_platform_sync_state_init7s
+</span></span><span class="line"><span class="ln">58</span><span class="cl">ffff8000094fce74 D __con_initcall_start
+</span></span><span class="line"><span class="ln">59</span><span class="cl">ffff8000094fce74 d __initcall__kmod_vt__408_3548_con_initcon
+</span></span><span class="line"><span class="ln">60</span><span class="cl">ffff8000094fce74 D __initcall_end
+</span></span><span class="line"><span class="ln">61</span><span class="cl">ffff8000094fce78 d __initcall__kmod_hvc_console__376_246_hvc_console_initcon
+</span></span><span class="line"><span class="ln">62</span><span class="cl">ffff8000094fce7c d __initcall__kmod_8250__387_690_univ8250_console_initcon
+</span></span><span class="line"><span class="ln">63</span><span class="cl">ffff8000094fce80 D __con_initcall_end
+</span></span><span class="line"><span class="ln">64</span><span class="cl">ffff8000094fce80 D __initramfs_start
+</span></span></code></pre></div><p>以 <code>__initcall__kmod_cpuinfo__334_359_cpuinfo_regs_init6</code>为例来说明一下module_init的效果。</p>
+<p><code>__initcall__kmod_cpuinfo__334_359_cpuinfo_regs_init6</code>是一个initcall_t类型的静态变量，变量名称可以由 <code>__initcall_name(initcall, __initcall_id(fn), id)</code>得出。</p>
+<p>将变量名拆分开来可得：<code>__ initcall __ [kmod_cpuinfo __ 334 _ 359 _ cpuinfo_regs_init] 6</code>，<code>[]</code>内的内容由 <code>__initcall_id(fn)</code>生成，其格式为 <code>&lt;modname&gt;__&lt;counter&gt;_&lt;line&gt;_&lt;fn&gt;</code>：</p>
+<ul>
+<li>modname：<code>__KBUILD_MODNAME</code>，来自于 <code>scripts/Makefile.lib:127:  -D__KBUILD_MODNAME=kmod_$(call name-fix-token,$(modname))</code>，<code>kmod_</code>是固定的，<code>__KBUILD_MODNAME</code>在这里是kmod_cpuinfo。</li>
+<li>counter：来自于 <code>__COUNTER__</code>，是编译器内部定义的计数器，每使用一次 <code>__COUNTER__</code>，其值为自动加一，这里是334。</li>
+<li>line：这个是声明所在的行号，对应的源码为 <code>arch/arm64/kernel/cpuinfo.c:359:device_initcall(cpuinfo_regs_init);</code>，这里是359。</li>
+<li>fn：函数名，这里是cpuinfo_regs_init。</li>
+</ul>
+<p>除去 <code>[]</code>内的部分，变量名的其他部分由 <code>__initcall_name</code>生成，其格式为 <code>__&lt;prefix&gt;__&lt;iid&gt;&lt;id&gt;</code>：</p>
+<ul>
+<li>prefix：固定为initcall</li>
+<li>iid：<code>__initcall_id(fn)</code>生成的内容</li>
+<li>id：<code>__define_initcall</code>的第二个参数</li>
+</ul>
+
+<h2 id="22-initcall的源码" data-numberify>2.2. initcall的源码<a class="anchor ms-1" href="#22-initcall的源码"></a></h2>
+<p>下面是 <code>include/linux/init.h</code>的源码，上边是以未定义<code>CONFIG_LTO_CLANG</code>和<code>CONFIG_HAVE_ARCH_PREL32_RELOCATIONS</code>来分析的。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">  1</span><span class="cl"><span class="c1">/// include/linux/init.h
+</span></span></span><span class="line"><span class="ln">  2</span><span class="cl"><span class="c1"></span><span class="cp">#ifndef MODULE
+</span></span></span><span class="line"><span class="ln">  3</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">  4</span><span class="cl"><span class="cp">#ifndef __ASSEMBLY__
+</span></span></span><span class="line"><span class="ln">  5</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">  6</span><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="ln">  7</span><span class="cl"><span class="cm"> * initcalls are now grouped by functionality into separate
+</span></span></span><span class="line"><span class="ln">  8</span><span class="cl"><span class="cm"> * subsections. Ordering inside the subsections is determined
+</span></span></span><span class="line"><span class="ln">  9</span><span class="cl"><span class="cm"> * by link order.
+</span></span></span><span class="line"><span class="ln"> 10</span><span class="cl"><span class="cm"> * For backwards compatibility, initcall() puts the call in
+</span></span></span><span class="line"><span class="ln"> 11</span><span class="cl"><span class="cm"> * the device init subsection.
+</span></span></span><span class="line"><span class="ln"> 12</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 13</span><span class="cl"><span class="cm"> * The `id&#39; arg to __define_initcall() is needed so that multiple initcalls
+</span></span></span><span class="line"><span class="ln"> 14</span><span class="cl"><span class="cm"> * can point at the same handler without causing duplicate-symbol build errors.
+</span></span></span><span class="line"><span class="ln"> 15</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 16</span><span class="cl"><span class="cm"> * Initcalls are run by placing pointers in initcall sections that the
+</span></span></span><span class="line"><span class="ln"> 17</span><span class="cl"><span class="cm"> * kernel iterates at runtime. The linker can do dead code / data elimination
+</span></span></span><span class="line"><span class="ln"> 18</span><span class="cl"><span class="cm"> * and remove that completely, so the initcall sections have to be marked
+</span></span></span><span class="line"><span class="ln"> 19</span><span class="cl"><span class="cm"> * as KEEP() in the linker script.
+</span></span></span><span class="line"><span class="ln"> 20</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln"> 21</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 22</span><span class="cl"><span class="cm">/* Format: &lt;modname&gt;__&lt;counter&gt;_&lt;line&gt;_&lt;fn&gt; */</span>
+</span></span><span class="line"><span class="ln"> 23</span><span class="cl"><span class="cp">#define __initcall_id(fn)                                       \
+</span></span></span><span class="line"><span class="ln"> 24</span><span class="cl"><span class="cp">        __PASTE(__KBUILD_MODNAME,                               \
+</span></span></span><span class="line"><span class="ln"> 25</span><span class="cl"><span class="cp">        __PASTE(__,                                             \
+</span></span></span><span class="line"><span class="ln"> 26</span><span class="cl"><span class="cp">        __PASTE(__COUNTER__,                                    \
+</span></span></span><span class="line"><span class="ln"> 27</span><span class="cl"><span class="cp">        __PASTE(_,                                              \
+</span></span></span><span class="line"><span class="ln"> 28</span><span class="cl"><span class="cp">        __PASTE(__LINE__,                                       \
+</span></span></span><span class="line"><span class="ln"> 29</span><span class="cl"><span class="cp">        __PASTE(_, fn))))))
+</span></span></span><span class="line"><span class="ln"> 30</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 31</span><span class="cl"><span class="cm">/* Format: __&lt;prefix&gt;__&lt;iid&gt;&lt;id&gt; */</span>
+</span></span><span class="line"><span class="ln"> 32</span><span class="cl"><span class="cp">#define __initcall_name(prefix, __iid, id)                      \
+</span></span></span><span class="line"><span class="ln"> 33</span><span class="cl"><span class="cp">        __PASTE(__,                                             \
+</span></span></span><span class="line"><span class="ln"> 34</span><span class="cl"><span class="cp">        __PASTE(prefix,                                         \
+</span></span></span><span class="line"><span class="ln"> 35</span><span class="cl"><span class="cp">        __PASTE(__,                                             \
+</span></span></span><span class="line"><span class="ln"> 36</span><span class="cl"><span class="cp">        __PASTE(__iid, id))))
+</span></span></span><span class="line"><span class="ln"> 37</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 38</span><span class="cl"><span class="cp">#ifdef CONFIG_LTO_CLANG
+</span></span></span><span class="line"><span class="ln"> 39</span><span class="cl"><span class="cp"></span><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 40</span><span class="cl"><span class="cm"> * With LTO, the compiler doesn&#39;t necessarily obey link order for
+</span></span></span><span class="line"><span class="ln"> 41</span><span class="cl"><span class="cm"> * initcalls. In order to preserve the correct order, we add each
+</span></span></span><span class="line"><span class="ln"> 42</span><span class="cl"><span class="cm"> * variable into its own section and generate a linker script (in
+</span></span></span><span class="line"><span class="ln"> 43</span><span class="cl"><span class="cm"> * scripts/link-vmlinux.sh) to specify the order of the sections.
+</span></span></span><span class="line"><span class="ln"> 44</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln"> 45</span><span class="cl"><span class="cp">#define __initcall_section(__sec, __iid)                        \
+</span></span></span><span class="line"><span class="ln"> 46</span><span class="cl"><span class="cp">        #__sec &#34;.init..&#34; #__iid
+</span></span></span><span class="line"><span class="ln"> 47</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 48</span><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 49</span><span class="cl"><span class="cm"> * With LTO, the compiler can rename static functions to avoid
+</span></span></span><span class="line"><span class="ln"> 50</span><span class="cl"><span class="cm"> * global naming collisions. We use a global stub function for
+</span></span></span><span class="line"><span class="ln"> 51</span><span class="cl"><span class="cm"> * initcalls to create a stable symbol name whose address can be
+</span></span></span><span class="line"><span class="ln"> 52</span><span class="cl"><span class="cm"> * taken in inline assembly when PREL32 relocations are used.
+</span></span></span><span class="line"><span class="ln"> 53</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln"> 54</span><span class="cl"><span class="cp">#define __initcall_stub(fn, __iid, id)                          \
+</span></span></span><span class="line"><span class="ln"> 55</span><span class="cl"><span class="cp">        __initcall_name(initstub, __iid, id)
+</span></span></span><span class="line"><span class="ln"> 56</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 57</span><span class="cl"><span class="cp">#define __define_initcall_stub(__stub, fn)                      \
+</span></span></span><span class="line"><span class="ln"> 58</span><span class="cl"><span class="cp">        int __init __stub(void);                                \
+</span></span></span><span class="line"><span class="ln"> 59</span><span class="cl"><span class="cp">        int __init __stub(void)                                 \
+</span></span></span><span class="line"><span class="ln"> 60</span><span class="cl"><span class="cp">        {                                                       \
+</span></span></span><span class="line"><span class="ln"> 61</span><span class="cl"><span class="cp">                return fn();                                    \
+</span></span></span><span class="line"><span class="ln"> 62</span><span class="cl"><span class="cp">        }                                                       \
+</span></span></span><span class="line"><span class="ln"> 63</span><span class="cl"><span class="cp">        __ADDRESSABLE(__stub)
+</span></span></span><span class="line"><span class="ln"> 64</span><span class="cl"><span class="cp">#else
+</span></span></span><span class="line"><span class="ln"> 65</span><span class="cl"><span class="cp">#define __initcall_section(__sec, __iid)                        \
+</span></span></span><span class="line"><span class="ln"> 66</span><span class="cl"><span class="cp">        #__sec &#34;.init&#34;
+</span></span></span><span class="line"><span class="ln"> 67</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 68</span><span class="cl"><span class="cp">#define __initcall_stub(fn, __iid, id)  fn
+</span></span></span><span class="line"><span class="ln"> 69</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 70</span><span class="cl"><span class="cp">#define __define_initcall_stub(__stub, fn)                      \
+</span></span></span><span class="line"><span class="ln"> 71</span><span class="cl"><span class="cp">        __ADDRESSABLE(fn)
+</span></span></span><span class="line"><span class="ln"> 72</span><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="ln"> 73</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 74</span><span class="cl"><span class="cp">#ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
+</span></span></span><span class="line"><span class="ln"> 75</span><span class="cl"><span class="cp">#define ____define_initcall(fn, __stub, __name, __sec)          \
+</span></span></span><span class="line"><span class="ln"> 76</span><span class="cl"><span class="cp">        __define_initcall_stub(__stub, fn)                      \
+</span></span></span><span class="line"><span class="ln"> 77</span><span class="cl"><span class="cp">        asm(&#34;.section   \&#34;&#34; __sec &#34;\&#34;, \&#34;a\&#34;            \n&#34;     \
+</span></span></span><span class="line"><span class="ln"> 78</span><span class="cl"><span class="cp">            __stringify(__name) &#34;:                      \n&#34;     \
+</span></span></span><span class="line"><span class="ln"> 79</span><span class="cl"><span class="cp">            &#34;.long      &#34; __stringify(__stub) &#34; - .     \n&#34;     \
+</span></span></span><span class="line"><span class="ln"> 80</span><span class="cl"><span class="cp">            &#34;.previous                                  \n&#34;);   \
+</span></span></span><span class="line"><span class="ln"> 81</span><span class="cl"><span class="cp">        static_assert(__same_type(initcall_t, &amp;fn));
+</span></span></span><span class="line"><span class="ln"> 82</span><span class="cl"><span class="cp">#else
+</span></span></span><span class="line"><span class="ln"> 83</span><span class="cl"><span class="cp">#define ____define_initcall(fn, __unused, __name, __sec)        \
+</span></span></span><span class="line"><span class="ln"> 84</span><span class="cl"><span class="cp">        static initcall_t __name __used                         \
+</span></span></span><span class="line"><span class="ln"> 85</span><span class="cl"><span class="cp">                __attribute__((__section__(__sec))) = fn;
+</span></span></span><span class="line"><span class="ln"> 86</span><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="ln"> 87</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 88</span><span class="cl"><span class="cp">#define __unique_initcall(fn, id, __sec, __iid)                 \
+</span></span></span><span class="line"><span class="ln"> 89</span><span class="cl"><span class="cp">        ____define_initcall(fn,                                 \
+</span></span></span><span class="line"><span class="ln"> 90</span><span class="cl"><span class="cp">                __initcall_stub(fn, __iid, id),                 \
+</span></span></span><span class="line"><span class="ln"> 91</span><span class="cl"><span class="cp">                __initcall_name(initcall, __iid, id),           \
+</span></span></span><span class="line"><span class="ln"> 92</span><span class="cl"><span class="cp">                __initcall_section(__sec, __iid))
+</span></span></span><span class="line"><span class="ln"> 93</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 94</span><span class="cl"><span class="cp">#define ___define_initcall(fn, id, __sec)                       \
+</span></span></span><span class="line"><span class="ln"> 95</span><span class="cl"><span class="cp">        __unique_initcall(fn, id, __sec, __initcall_id(fn))
+</span></span></span><span class="line"><span class="ln"> 96</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 97</span><span class="cl"><span class="cp">#define __define_initcall(fn, id) ___define_initcall(fn, id, .initcall##id)
+</span></span></span><span class="line"><span class="ln"> 98</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 99</span><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="ln">100</span><span class="cl"><span class="cm"> * Early initcalls run before initializing SMP.
+</span></span></span><span class="line"><span class="ln">101</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">102</span><span class="cl"><span class="cm"> * Only for built-in code, not modules.
+</span></span></span><span class="line"><span class="ln">103</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">104</span><span class="cl"><span class="cp">#define early_initcall(fn)              __define_initcall(fn, early)
+</span></span></span><span class="line"><span class="ln">105</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">106</span><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="ln">107</span><span class="cl"><span class="cm"> * A &#34;pure&#34; initcall has no dependencies on anything else, and purely
+</span></span></span><span class="line"><span class="ln">108</span><span class="cl"><span class="cm"> * initializes variables that couldn&#39;t be statically initialized.
+</span></span></span><span class="line"><span class="ln">109</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">110</span><span class="cl"><span class="cm"> * This only exists for built-in code, not for modules.
+</span></span></span><span class="line"><span class="ln">111</span><span class="cl"><span class="cm"> * Keep main.c:initcall_level_names[] in sync.
+</span></span></span><span class="line"><span class="ln">112</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">113</span><span class="cl"><span class="cp">#define pure_initcall(fn)               __define_initcall(fn, 0)
+</span></span></span><span class="line"><span class="ln">114</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">115</span><span class="cl"><span class="cp">#define core_initcall(fn)               __define_initcall(fn, 1)
+</span></span></span><span class="line"><span class="ln">116</span><span class="cl"><span class="cp">#define core_initcall_sync(fn)          __define_initcall(fn, 1s)
+</span></span></span><span class="line"><span class="ln">117</span><span class="cl"><span class="cp">#define postcore_initcall(fn)           __define_initcall(fn, 2)
+</span></span></span><span class="line"><span class="ln">118</span><span class="cl"><span class="cp">#define postcore_initcall_sync(fn)      __define_initcall(fn, 2s)
+</span></span></span><span class="line"><span class="ln">119</span><span class="cl"><span class="cp">#define arch_initcall(fn)               __define_initcall(fn, 3)
+</span></span></span><span class="line"><span class="ln">120</span><span class="cl"><span class="cp">#define arch_initcall_sync(fn)          __define_initcall(fn, 3s)
+</span></span></span><span class="line"><span class="ln">121</span><span class="cl"><span class="cp">#define subsys_initcall(fn)             __define_initcall(fn, 4)
+</span></span></span><span class="line"><span class="ln">122</span><span class="cl"><span class="cp">#define subsys_initcall_sync(fn)        __define_initcall(fn, 4s)
+</span></span></span><span class="line"><span class="ln">123</span><span class="cl"><span class="cp">#define fs_initcall(fn)                 __define_initcall(fn, 5)
+</span></span></span><span class="line"><span class="ln">124</span><span class="cl"><span class="cp">#define fs_initcall_sync(fn)            __define_initcall(fn, 5s)
+</span></span></span><span class="line"><span class="ln">125</span><span class="cl"><span class="cp">#define rootfs_initcall(fn)             __define_initcall(fn, rootfs)
+</span></span></span><span class="line"><span class="ln">126</span><span class="cl"><span class="cp">#define device_initcall(fn)             __define_initcall(fn, 6)
+</span></span></span><span class="line"><span class="ln">127</span><span class="cl"><span class="cp">#define device_initcall_sync(fn)        __define_initcall(fn, 6s)
+</span></span></span><span class="line"><span class="ln">128</span><span class="cl"><span class="cp">#define late_initcall(fn)               __define_initcall(fn, 7)
+</span></span></span><span class="line"><span class="ln">129</span><span class="cl"><span class="cp">#define late_initcall_sync(fn)          __define_initcall(fn, 7s)
+</span></span></span><span class="line"><span class="ln">130</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">131</span><span class="cl"><span class="cp">#define __initcall(fn) device_initcall(fn)
+</span></span></span><span class="line"><span class="ln">132</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">133</span><span class="cl"><span class="cp">#define __exitcall(fn)                                          \
+</span></span></span><span class="line"><span class="ln">134</span><span class="cl"><span class="cp">        static exitcall_t __exitcall_##fn __exit_call = fn
+</span></span></span><span class="line"><span class="ln">135</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">136</span><span class="cl"><span class="cp">#define console_initcall(fn)    ___define_initcall(fn, con, .con_initcall)
+</span></span></span><span class="line"><span class="ln">137</span><span class="cl"><span class="cp"></span><span class="c1">/// ... ...
+</span></span></span></code></pre></div>
+<h2 id="23-rootfs_initcall是什么" data-numberify>2.3. rootfs_initcall是什么<a class="anchor ms-1" href="#23-rootfs_initcall是什么"></a></h2>
+<p>rootfs_initcall在5s之后，rootfs_initcall指向的函数也会在do_basic_setup中被调用到。rootfs要从存储介质中读取文件系统镜像，需要在执行rootfs_initcall指向的函数之前，将存储介质准备好，比如：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1">/// drivers/mmc/core/core.c
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="c1"></span><span class="nf">subsys_initcall</span><span class="p">(</span><span class="n">mmc_init</span><span class="p">);</span>
+</span></span></code></pre></div>
+<h2 id="24-console_initcall" data-numberify>2.4. console_initcall<a class="anchor ms-1" href="#24-console_initcall"></a></h2>
+<p>为了能尽早输出日志，内核将console相关的initcall单独存放，由console_initcall声明。相关初始化函数在console_init中调用。console_init则在start_kernel中尽量选择较早的时机调用。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// kernel/printk/printk.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * Initialize the console device. This is called *early*, so
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> * we can&#39;t necessarily depend on lots of kernel help here.
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> * Just do some early initializations, and do the complex setup
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> * later.
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="kt">void</span> <span class="n">__init</span> <span class="nf">console_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">    <span class="kt">int</span> <span class="n">ret</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">    <span class="kt">initcall_t</span> <span class="n">call</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="kt">initcall_entry_t</span> <span class="o">*</span><span class="n">ce</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">
+</span></span><span class="line"><span class="ln">14</span><span class="cl">    <span class="cm">/* Setup the default TTY line discipline. */</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">    <span class="nf">n_tty_init</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl">
+</span></span><span class="line"><span class="ln">17</span><span class="cl">    <span class="cm">/*
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="cm">     * set up the console device so that later boot sequences can
+</span></span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="cm">     * inform about problems etc..
+</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl">    <span class="n">ce</span> <span class="o">=</span> <span class="n">__con_initcall_start</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">    <span class="nf">trace_initcall_level</span><span class="p">(</span><span class="s">&#34;console&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="n">ce</span> <span class="o">&lt;</span> <span class="n">__con_initcall_end</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl">        <span class="n">call</span> <span class="o">=</span> <span class="nf">initcall_from_entry</span><span class="p">(</span><span class="n">ce</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl">        <span class="nf">trace_initcall_start</span><span class="p">(</span><span class="n">call</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">26</span><span class="cl">        <span class="n">ret</span> <span class="o">=</span> <span class="nf">call</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln">27</span><span class="cl">        <span class="nf">trace_initcall_finish</span><span class="p">(</span><span class="n">call</span><span class="p">,</span> <span class="n">ret</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl">        <span class="n">ce</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">29</span><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div>
+<h2 id="25-链接脚本中initcall段" data-numberify>2.5. 链接脚本中initcall段<a class="anchor ms-1" href="#25-链接脚本中initcall段"></a></h2>
+<p>initcall声明的变量会放到以 <code>.initcall</code>开头命名的段中，每个级别对应一个 <code>.initcall</code>段，而这些段又会按顺序放到 <code>.init.data</code>段中。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// include/asm-generic/vmlinux.lds.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cp">#define INIT_CALLS_LEVEL(level)						\
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cp">        __initcall##level##_start = .;				\
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cp">        KEEP(*(.initcall##level##.init))			\
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cp">        KEEP(*(.initcall##level##s.init))			\
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cp">
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cp">#define INIT_CALLS							\
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cp">        __initcall_start = .;					\
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cp">        KEEP(*(.initcallearly.init))				\
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cp">        INIT_CALLS_LEVEL(0)					\
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cp">        INIT_CALLS_LEVEL(1)					\
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cp">        INIT_CALLS_LEVEL(2)					\
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cp">        INIT_CALLS_LEVEL(3)					\
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cp">        INIT_CALLS_LEVEL(4)					\
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cp">        INIT_CALLS_LEVEL(5)					\
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cp">        INIT_CALLS_LEVEL(rootfs)				\
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cp">        INIT_CALLS_LEVEL(6)					\
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="cp">        INIT_CALLS_LEVEL(7)					\
+</span></span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="cp">        __initcall_end = .;
+</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="cp">#define CON_INITCALL							\
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="cp">        __con_initcall_start = .;				\
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="cp">        KEEP(*(.con_initcall.init))				\
+</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="cp">        __con_initcall_end = .;
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// arch/arm64/kernel/vmlinux.lds.S
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="p">.</span><span class="n">init</span><span class="p">.</span><span class="nl">data</span> <span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">    <span class="n">INIT_DATA</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">    <span class="nf">INIT_SETUP</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">    <span class="n">INIT_CALLS</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    <span class="n">CON_INITCALL</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="n">INIT_RAM_FS</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">    <span class="o">*</span><span class="p">(.</span><span class="n">init</span><span class="p">.</span><span class="n">altinstructions</span> <span class="p">.</span><span class="n">init</span><span class="p">.</span><span class="n">bss</span><span class="p">)</span>  <span class="cm">/* from the EFI stub */</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="p">.</span><span class="n">exit</span><span class="p">.</span><span class="nl">data</span> <span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">    <span class="n">EXIT_DATA</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div>
+<h2 id="26-initcall的执行时机" data-numberify>2.6. initcall的执行时机<a class="anchor ms-1" href="#26-initcall的执行时机"></a></h2>
+<p>由initcall指定的函数会在do_pre_smp_initcalls和do_basic_setup执行。do_pre_smp_initcalls执行early_initcall指定的函数，这个是在多核处理器和调度系统初始化之前执行的。do_basic_setup会按initcall的级别，依次执行指定的函数。由于lds中没有根据函数名排序，同级别initcall指定的函数的执行顺序会由链接时initcall的布局决定。多次编译的顺序也可能不同。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// init/main.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="n">noinline</span> <span class="kt">void</span> <span class="n">__init</span> <span class="nf">kernel_init_freeable</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">    <span class="c1">/// ... ...
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="c1"></span>    <span class="nf">rcu_init_tasks_generic</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    <span class="nf">do_pre_smp_initcalls</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="nf">lockup_detector_init</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    <span class="nf">smp_init</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">    <span class="nf">sched_init_smp</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">
+</span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="nf">padata_init</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">    <span class="nf">page_alloc_init_late</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">    <span class="cm">/* Initialize page ext after all struct pages are initialized. */</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nf">early_page_ext_enabled</span><span class="p">())</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl">        <span class="nf">page_ext_init</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">
+</span></span><span class="line"><span class="ln">18</span><span class="cl">    <span class="nf">do_basic_setup</span><span class="p">();</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">    <span class="c1">/// ... ...
+</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></div><p><picture><img class="img-fluid " alt="initcall_func" src="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/initcall/initcall_func.png" loading="lazy" width="353" height="903" />
+</picture>
+
+</p>
+
+<h2 id="27-initcall调试" data-numberify>2.7. initcall调试<a class="anchor ms-1" href="#27-initcall调试"></a></h2>
+<p>调用initcall函数时，如果打开了initcall_debug，内核会以KERN_DEBUG等级打印trace信息。</p>
+<p>可以通过向bootargs内添加initcall_debug来打开initcall_debug。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1"># cat /proc/sys/kernel/printk</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">6	4	1	<span class="m">7</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="c1"># cat /proc/cmdline</span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="nv">console</span><span class="o">=</span>ttyAMA0 nokaslr <span class="nv">crashkernel</span><span class="o">=</span>512M-1G:64M,1G-:128M <span class="nv">loglevel</span><span class="o">=</span><span class="m">6</span> initcall_debug no_console_suspend <span class="nv">root</span><span class="o">=</span>/dev/vda rw <span class="nv">init</span><span class="o">=</span>/linuxrc
+</span></span></code></pre></div><p>打开后，启动信息可以看到类似如下信息，如果启动过程中，loglevel比debug等级要低，可以使用dmesg命令查看。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln"> 1</span><span class="cl">[    0.051543][    T1] calling  trace_init_flags_sys_enter+0x0/0x30 @ 1
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">[    0.051631][    T1] initcall trace_init_flags_sys_enter+0x0/0x30 returned 0 after 0 usecs
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">[    0.051728][    T1] calling  trace_init_flags_sys_exit+0x0/0x30 @ 1
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">[    0.051748][    T1] initcall trace_init_flags_sys_exit+0x0/0x30 returned 0 after 0 usecs
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">[    0.051766][    T1] calling  cpu_suspend_init+0x0/0x68 @ 1
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">[    0.051801][    T1] initcall cpu_suspend_init+0x0/0x68 returned 0 after 0 usecs
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">[    0.051814][    T1] calling  asids_init+0x0/0x110 @ 1
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">[    0.051910][    T1] initcall asids_init+0x0/0x110 returned 0 after 0 usecs
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">[    0.051927][    T1] calling  spawn_ksoftirqd+0x0/0x60 @ 1
+</span></span><span class="line"><span class="ln">10</span><span class="cl">[    0.052809][    T1] initcall spawn_ksoftirqd+0x0/0x60 returned 0 after 4000 usecs
+</span></span><span class="line"><span class="ln">11</span><span class="cl">[    0.052840][    T1] calling  init_signal_sysctls+0x0/0x50 @ 1
+</span></span><span class="line"><span class="ln">12</span><span class="cl">[    0.052894][    T1] initcall init_signal_sysctls+0x0/0x50 returned 0 after 0 usecs
+</span></span><span class="line"><span class="ln">13</span><span class="cl">[    0.052912][    T1] calling  init_umh_sysctls+0x0/0x50 @ 1
+</span></span><span class="line"><span class="ln">14</span><span class="cl">[    0.052963][    T1] initcall init_umh_sysctls+0x0/0x50 returned 0 after 0 usecs
+</span></span></code></pre></div><p>在安装驱动，比如<code>insmod hello.ko</code>时，也会有类似的信息，比如：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="p">[</span>   <span class="mf">39.313554</span><span class="p">][</span>  <span class="n">T141</span><span class="p">]</span> <span class="n">calling</span>  <span class="n">hello_init</span><span class="o">+</span><span class="mh">0x0</span><span class="o">/</span><span class="mh">0xff8</span> <span class="p">[</span><span class="n">hello</span><span class="p">]</span> <span class="err">@</span> <span class="mi">141</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="p">[</span>   <span class="mf">39.314090</span><span class="p">][</span>  <span class="n">T141</span><span class="p">]</span> <span class="n">initcall</span> <span class="n">hello_init</span><span class="o">+</span><span class="mh">0x0</span><span class="o">/</span><span class="mh">0xff8</span> <span class="p">[</span><span class="n">hello</span><span class="p">]</span> <span class="n">returned</span> <span class="mi">0</span> <span class="n">after</span> <span class="mi">105</span> <span class="n">usecs</span>
+</span></span></code></pre></div>
+<h1 id="3-module使能" data-numberify>3. MODULE使能<a class="anchor ms-1" href="#3-module使能"></a></h1>
+<p>Linux中有些模块既可以链接到内核，也可以选择编译为ko，而这些模块的初始化函数可能是以initcall方式指定的。为了两者相互兼容，会把initcall定义为module_init。</p>
+<p>下面分析module_init的实现，源码见《module_init源码》</p>
+<ul>
+<li><code>__copy(initfn)</code>：从initfn复制函数属性，从gcc-9开始支持。</li>
+<li><code>__attribute__((alias(#initfn)))</code>：为init_module创建别名，指向原来的initfn。</li>
+<li><code>___ADDRESSABLE(init_module, __initdata)</code>：声明一个initcall_t变量，并放到 <code>.init.data</code>段，变量名类似 <code>__UNIQUE_ID___addressable_init_module326</code>。</li>
+</ul>
+<p><code>__inittest</code>：代码中没有找到调用的地方，但是从v2.6.0对<a href="https://elixir.bootlin.com/linux/v2.6.0/source/include/linux/init.h#L157" target="_blank" rel="noopener noreferrer">module_init<i class="fas fa-external-link-square-alt ms-1"></i></a>的注释来看，猜测是为了防止编译器警告。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="cm">/* These macros create a dummy inline: gcc 2.9x does not count alias
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="cm"> as usage, hence the `unused function&#39; warning when __init functions
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="cm"> are declared static. We use the dummy __*_module_inline functions
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="cm"> both to kill the warning and check the type of the init/cleanup
+</span></span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="cm"> function. */</span>
+</span></span></code></pre></div><p>init_module是initfn的别名，其地址也是相同的，但是initfn通常会是static函数，而init_module是一个global函数。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="n">Disassembly</span> <span class="n">of</span> <span class="n">section</span> <span class="p">.</span><span class="n">init</span><span class="p">.</span><span class="nl">text</span><span class="p">:</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">
+</span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="mo">0000000000000000</span> <span class="o">&lt;</span><span class="n">init_module</span><span class="o">&gt;:</span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="nf">hello_init</span><span class="p">()</span><span class="o">:</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl">   <span class="mi">0</span><span class="o">:</span>   <span class="n">d503201f</span>        <span class="n">nop</span>
+</span></span><span class="line"><span class="ln">6</span><span class="cl">   <span class="mi">4</span><span class="o">:</span>   <span class="n">d503201f</span>        <span class="n">nop</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1">/// t代表static，T代表global
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="c1"></span><span class="mo">0000000000000000</span> <span class="mo">00000000000000</span><span class="n">c8</span> <span class="n">t</span> <span class="n">hello_init</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="mo">0000000000000000</span> <span class="mo">00000000000000</span><span class="n">c8</span> <span class="n">T</span> <span class="n">init_module</span>
+</span></span></code></pre></div>
+<h2 id="31-module_init源码" data-numberify>3.1. module_init源码<a class="anchor ms-1" href="#31-module_init源码"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// include/linux/module.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1">/// ... ...
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="c1"></span><span class="cp">#else </span><span class="cm">/* MODULE */</span><span class="cp">
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> * In most cases loadable modules do not need custom
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> * initcall levels. There are still some valid cases where
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> * a driver may be needed early if built in, and does not
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> * matter when built as a loadable module. Like bus
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> * snooping debug drivers.
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cp">#define early_initcall(fn)              module_init(fn)
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cp">#define core_initcall(fn)               module_init(fn)
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cp">#define core_initcall_sync(fn)          module_init(fn)
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cp">#define postcore_initcall(fn)           module_init(fn)
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cp">#define postcore_initcall_sync(fn)      module_init(fn)
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cp">#define arch_initcall(fn)               module_init(fn)
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="cp">#define subsys_initcall(fn)             module_init(fn)
+</span></span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="cp">#define subsys_initcall_sync(fn)        module_init(fn)
+</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="cp">#define fs_initcall(fn)                 module_init(fn)
+</span></span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="cp">#define fs_initcall_sync(fn)            module_init(fn)
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="cp">#define rootfs_initcall(fn)             module_init(fn)
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="cp">#define device_initcall(fn)             module_init(fn)
+</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="cp">#define device_initcall_sync(fn)        module_init(fn)
+</span></span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="cp">#define late_initcall(fn)               module_init(fn)
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="cp">#define late_initcall_sync(fn)          module_init(fn)
+</span></span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="cp">#define console_initcall(fn)            module_init(fn)
+</span></span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="cm">/* Each module must use one module_init(). */</span>
+</span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="cp">#define module_init(initfn)                                     \
+</span></span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="cp">        static inline initcall_t __maybe_unused __inittest(void)                \
+</span></span></span><span class="line"><span class="ln">33</span><span class="cl"><span class="cp">        { return initfn; }                                      \
+</span></span></span><span class="line"><span class="ln">34</span><span class="cl"><span class="cp">        int init_module(void) __copy(initfn)                    \
+</span></span></span><span class="line"><span class="ln">35</span><span class="cl"><span class="cp">                __attribute__((alias(#initfn)));                \
+</span></span></span><span class="line"><span class="ln">36</span><span class="cl"><span class="cp">        ___ADDRESSABLE(init_module, __initdata);
+</span></span></span><span class="line"><span class="ln">37</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">38</span><span class="cl"><span class="cm">/* This is only required if you want to be unloadable. */</span>
+</span></span><span class="line"><span class="ln">39</span><span class="cl"><span class="cp">#define module_exit(exitfn)                                     \
+</span></span></span><span class="line"><span class="ln">40</span><span class="cl"><span class="cp">        static inline exitcall_t __maybe_unused __exittest(void)                \
+</span></span></span><span class="line"><span class="ln">41</span><span class="cl"><span class="cp">        { return exitfn; }                                      \
+</span></span></span><span class="line"><span class="ln">42</span><span class="cl"><span class="cp">        void cleanup_module(void) __copy(exitfn)                \
+</span></span></span><span class="line"><span class="ln">43</span><span class="cl"><span class="cp">                __attribute__((alias(#exitfn)));                \
+</span></span></span><span class="line"><span class="ln">44</span><span class="cl"><span class="cp">        ___ADDRESSABLE(cleanup_module, __exitdata);
+</span></span></span><span class="line"><span class="ln">45</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">46</span><span class="cl"><span class="cp">#endif
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1">/// include/linux/init.h
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="c1"></span><span class="cp">#define __initdata      __section(&#34;.init.data&#34;)
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// include/linux/compiler.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * Force the compiler to emit &#39;sym&#39; as a symbol, so that we can reference
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> * it from inline assembler. Necessary in case &#39;sym&#39; could be inlined
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> * otherwise, or eliminated entirely due to lack of references that are
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> * visible to the compiler.
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cp">#define ___ADDRESSABLE(sym, __attrs) \
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cp">    static void * __used __attrs \
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cp">        __UNIQUE_ID(__PASTE(__addressable_,sym)) = (void *)&amp;sym;
+</span></span></span></code></pre></div>
+<h2 id="32-init_module的执行时机" data-numberify>3.2. init_module的执行时机<a class="anchor ms-1" href="#32-init_module的执行时机"></a></h2>
+<p>命令行下使用 <code>insmod</code>或 <code>modprobe</code>安装模块，最终系统调用为 <code>init_module</code>或 <code>finit_module</code>。
+可以使用 <code>strace insmod test.ko</code>查看使用的具体的系统调用。</p>
+<p>系统调用init_module和finit_module用来从用户态加载ko文件，<code>man 2 init_module</code>可以看到两者的介绍。init_module接收一个ELF文件的路径，而finit_module接收一个文件描述符。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// kernel/module/main.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="nf">SYSCALL_DEFINE3</span><span class="p">(</span><span class="n">init_module</span><span class="p">,</span> <span class="kt">void</span> <span class="n">__user</span> <span class="o">*</span><span class="p">,</span> <span class="n">umod</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">        <span class="kt">unsigned</span> <span class="kt">long</span><span class="p">,</span> <span class="n">len</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="n">__user</span> <span class="o">*</span><span class="p">,</span> <span class="n">uargs</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">    <span class="c1">/// ... ...
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="c1"></span>    <span class="k">return</span> <span class="nf">load_module</span><span class="p">(</span><span class="o">&amp;</span><span class="n">info</span><span class="p">,</span> <span class="n">uargs</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="nf">SYSCALL_DEFINE3</span><span class="p">(</span><span class="n">finit_module</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="n">__user</span> <span class="o">*</span><span class="p">,</span> <span class="n">uargs</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">flags</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">    <span class="c1">/// ... ...
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="c1"></span>    <span class="k">return</span> <span class="nf">load_module</span><span class="p">(</span><span class="o">&amp;</span><span class="n">info</span><span class="p">,</span> <span class="n">uargs</span><span class="p">,</span> <span class="n">flags</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>init_module和finit_module最后都会调到load_module，load_module的流程如下：</p>
+<p><picture><img class="img-fluid " alt="init_module" src="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/initcall/init_module.png" loading="lazy" width="1701" height="2013" />
+</picture>
+
+</p>
+
+<h1 id="4-参考资料" data-numberify>4. 参考资料<a class="anchor ms-1" href="#4-参考资料"></a></h1>
+<ol>
+<li><a href="https://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html#__COUNTER__" target="_blank" rel="noopener noreferrer">gcc __COUNTER__<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li><a href="https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-copy-function-attribute" target="_blank" rel="noopener noreferrer">copy (function)<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li><a href="https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-alias-function-attribute" target="_blank" rel="noopener noreferrer">alias (&ldquo;target&rdquo;)<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li><a href="https://blog.csdn.net/tyustli/article/details/102535483" target="_blank" rel="noopener noreferrer">__attribute__((alias)) 变量属性<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li><a href="https://blog.csdn.net/tyustli/article/details/102535281" target="_blank" rel="noopener noreferrer">__attribute__((alias)) 函数属性<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li><a href="https://blog.csdn.net/bugouyonggan/article/details/8136938" target="_blank" rel="noopener noreferrer">linux 内核驱动中__attribute__((alias(#x)))别名问题<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+</ol>
+</div>
+</div>
+</div><div class="card-footer">
+  <div class="post-navs d-flex justify-content-evenly"><div class="post-nav post-prev">
+      <i class="fas fa-fw fa-chevron-down post-prev-icon me-1" data-fa-transform="rotate-90"></i>
+      <a href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/device_model/">Linux内核驱动模型（四）核心结构体</a>
+    </div></div>
+</div></article><div class="post-copyright mb-3 row card component" id="post-copyright">
+    <div class="card-header">
+        <h2 class="card-title fs-4 my-2 text-surface">版权</h2>
+    </div>
+    <div class="card-body"><a class="d-flex align-items-center flex-column" target="_blank" rel="license noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh">
+  <span><i class="fab fa-fw fa-2x fa-creative-commons"></i><i class="fab fa-fw fa-2x fa-creative-commons-by"></i><i class="fab fa-fw fa-2x fa-creative-commons-nc"></i><i class="fab fa-fw fa-2x fa-creative-commons-nd"></i></span>
+  CC BY-NC-ND 4.0 
+</a>
+
+
+    </div>
+</div><section class="related-posts row card component">
+      <div class="card-header">
+        <h2 class="card-title fs-4 my-2 text-surface">
+          相关文章
+        </h2>
+      </div>
+      <div class="card-body slide px-1">
+        <div class="slide-inner row gx-0"><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="Linux内核驱动模型（一）设备树展开" src="https://kingdix10.github.io/covers/iridescent_colorful_lines_130978_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/fdt_dt/">
+    Linux内核驱动模型（一）设备树展开
+  </a>
+  <div class="post-meta mb-0">
+    2023/07/12
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="Linux内核驱动模型（四）核心结构体" src="https://kingdix10.github.io/covers/dunes_sand_texture_151004_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/device_model/">
+    Linux内核驱动模型（四）核心结构体
+  </a>
+  <div class="post-meta mb-0">
+    2023/07/12
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="Linux内核数据结构kobject/kset/ktype" src="https://kingdix10.github.io/covers/lines_obliquely_stripes_123801_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/kobject/kobject/">
+    Linux内核数据结构kobject/kset/ktype
+  </a>
+  <div class="post-meta mb-0">
+    2023/07/10
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="Linux内核驱动模型（二）设备树转换" src="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/dt_to_dt/">
+    Linux内核驱动模型（二）设备树转换
+  </a>
+  <div class="post-meta mb-0">
+    2023/07/10
+
+  </div>
+</div>
+
+          </div><div class="col-12 col-md-6 col-lg-4 me-2">
+            <div class="post-card card card-body p-0 border-0 surface">
+  
+  <picture><img class="img-fluid" alt="linux内核时间子系统（二）" src="https://kingdix10.github.io/covers/flowers_leaves_pattern_148777_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.1/time/timekeeping/">
+    linux内核时间子系统（二）
+  </a>
+  <div class="post-meta mb-0">
+    2023/02/22
+
+  </div>
+</div>
+
+          </div></div>
+        <button class="slide-control-left">
+          <i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-90"></i>
+          <span class="visually-hidden">Left</span>
+        </button>
+        <button class="slide-control-right">
+          <i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-270"></i>
+          <span class="visually-hidden">Right</span>
+        </button>
+      </div>
+    </section></div>
+</div>
+<aside class="sidebar d-flex docs-sidebar col-xxl-3 position-sticky order-xxl-5">
+  <div class="container">
+    
+<div class="row component card">
+    <div class="card-body">
+        <form action="/zh-cn/search/">
+            <div class="input-group">
+                <input name="q" class="form-control rounded" placeholder="搜索">
+                <button class="btn btn-sm btn-search position-absolute end-0 border-0 border-start border-secondary p-2" type="submit">
+                    <i class="fas fa-fw fa-search text-primary"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    <div class="accordion post-toc d-none d-lg-block">
+  <div class="accordion-item row mb-4 card component" id="postTOC">
+    <div class="card-header accordion-header">
+      <h2 class="card-title fs-4 my-2 text-surface d-none d-lg-block">目录</h2>
+      <a class="accordion-button d-lg-none mb-1 collapsed shadow-none p-0 bg-transparent" role="button" data-bs-toggle="collapse" href="#post-toc" aria-expanded="false" aria-controls="post-toc">
+        目录
+      </a>
+    </div>
+    <div class="card-body collapse accordion-collapse accordion-body d-lg-block" id="post-toc">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-module_init是什么">1. module_init是什么</a>
+      <ul>
+        <li><a href="#11-module的定义">1.1. MODULE的定义</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-module未使能">2. MODULE未使能</a>
+      <ul>
+        <li><a href="#21-initcall分析">2.1. initcall分析</a></li>
+        <li><a href="#22-initcall的源码">2.2. initcall的源码</a></li>
+        <li><a href="#23-rootfs_initcall是什么">2.3. rootfs_initcall是什么</a></li>
+        <li><a href="#24-console_initcall">2.4. console_initcall</a></li>
+        <li><a href="#25-链接脚本中initcall段">2.5. 链接脚本中initcall段</a></li>
+        <li><a href="#26-initcall的执行时机">2.6. initcall的执行时机</a></li>
+        <li><a href="#27-initcall调试">2.7. initcall调试</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-module使能">3. MODULE使能</a>
+      <ul>
+        <li><a href="#31-module_init源码">3.1. module_init源码</a></li>
+        <li><a href="#32-init_module的执行时机">3.2. init_module的执行时机</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-参考资料">4. 参考资料</a></li>
+  </ul>
+</nav>
+    </div>
+  </div>
+</div>
+    
+
+
+
+
+
+
+  </div>
+</aside>
+
+      </div>
+    </main><footer class="footer mt-auto py-3 text-center container"><div class="offcanvas offcanvas-bottom h-auto" tabindex="-1" id="offcanvasActionsPanel"
+  aria-labelledby="offcanvasActionsPanelLabel">
+  <div class="offcanvas-header">
+    <div class="offcanvas-title h5" id="offcanvasActionsPanelLabel">
+      <i class="fas fa-fw fa-th-large me-1"></i>
+      操作
+    </div>
+    <button type="button" class="btn-close ms-auto" data-bs-dismiss="offcanvas" data-bs-target="offcanvasActionsPanel" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body mt-2"><div class="actions d-flex overflow-auto align-items-center">
+      <a role="button" class="action action-go-back d-flex flex-column align-items-center me-3" href="javascript: window.history.back();">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-chevron-circle-down" data-fa-transform="rotate-90"></i></span> 返回
+      </a>
+      <a role="button" class="action action-reload-page d-flex flex-column align-items-center me-3">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-redo-alt"></i></span> 刷新
+      </a>
+      <a role="button" class="action action-copy-url d-flex flex-column align-items-center me-3">
+        <span class="action-icon mb-2"><i class="fas fa-2x fa-link"></i></span> 复制链接
+      </a>
+    </div>
+  </div>
+</div><div class="row text-center text-lg-start">
+  <div class="col-12 mt-2 col-lg-3">
+    <p class="mb-2">kingdix10&#39;s site</p>
+    <p class="text-secondary mb-2"><small>kingdix10 @ 拾月国度</small></p><div class="copyright mb-2 text-secondary">
+  <small>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</small>
+</div>
+
+
+
+<nav class="social-links nav justify-content-center justify-content-between mb-2 mt-3">
+      <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="https://github.com/kingdix10" title="GitHub" rel="me">
+        <i class="fa-fw fab fa-github"
+          ></i>
+      </a>
+      <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="https://www.zhihu.com/people/kingdix10" title="知乎" rel="me">
+        <i class="fa-fw fab fa-zhihu"
+           style="color: #056de8;"></i>
+      </a>
+  <a class="nav-link social-link p-0 me-1 mb-2" target="_blank" href="/zh-cn/index.xml" title="RSS" rel="me">
+    <i class="fas fa-fw fa-rss" style="color: #ea6221;"></i>
+  </a>
+</nav>
+</div>
+  <div class="col-12 col-lg-8 offset-0 offset-lg-1"><ul class="nav justify-content-between footer-memu mb-3 row"><li class="nav-item col-12 col-md-6 col-lg-3 px-0"><ul class="nav flex-column align-items-start">
+      <li class="nav-item w-100"><a class="nav-link fw-bold fs-lg" href="javascript: void(0);">链接</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+GitHub"
+  href="https://github.com/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-github text-primary"></i></span>GitHub</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+Gitee"
+  href="https://gitee.com/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-github text-primary"></i></span>Gitee</a></li><li class="nav-item w-100"><a class="nav-link text-nowrap overflow-hidden" title="
+Zhihu"
+  href="https://www.zhihu.com/people/kingdix10" target="_blank" rel="noopener noreferrer">
+<span class="menu-icon me-1"><i class="fab fa-fw fa-zhihu text-primary"></i></span>Zhihu</a></li></ul></li></ul></div>
+</div>
+</footer>
+<script data-precache src="/assets/main/bundle.min.de08722b15dbab0d764debd50114ce3d28da8ee6c7b889ff8c82e6faad0b46dd.js" integrity="sha256-3ghyKxXbqw12TevVARTOPSjajubHuIn/jILm&#43;q0LRt0=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
+<script data-precache src="/assets/viewer/bundle.min.ffafad0d121aa7d1fb443510086dac514a0b152826cf094f02a1f3dec1f37918.js" integrity="sha256-/6&#43;tDRIap9H7RDUQCG2sUUoLFSgmzwlPAqHz3sHzeRg=" crossorigin="anonymous" defer></script><script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?8e042c957455c462d9b4c9da3ab642b0";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<script src="/js/sw-register.js" defer></script>
+
+  </body>
+</html>

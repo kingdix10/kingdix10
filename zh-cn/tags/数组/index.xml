@@ -15,7 +15,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/array_func/</guid>
       <description><![CDATA[1. 方法一：传递数组 C语言对多维数组的存储是按照一维数组来处理的，数组的每个维度在内存中按顺序存储。所以将多维数组作为参数传递时，必须指定多维]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/pixels_circles_colorful_121100_300x168.jpg" length="23064" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/pattern_frosty_frost_134125_300x168.jpg" length="18643" type="image/.jpg" />
     </item>
     
     <item>
@@ -25,7 +25,7 @@
       
       <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/array_type/</guid>
       <description><![CDATA[1. 测试结果 分别声明一个一维数组a1[8]和二维数组a2[4][8]，查看各个表达式的类型、地址、与首地址的差值，以及内存地址内存储的int变]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/fabric_texture_colorful_142186_300x168.jpg" length="17451" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_300x168.jpg" length="21351" type="image/.jpg" />
     </item>
     
   </channel>
