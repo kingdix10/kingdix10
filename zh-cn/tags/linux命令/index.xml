@@ -19,16 +19,6 @@
     </item>
     
     <item>
-      <title>linux常用命令-性能</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_benchmark/</link>
-      <pubDate>Sun, 28 Jul 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_benchmark/</guid>
-      <description><![CDATA[iozone 1#!/bin/bash 2 3dd_test_file_one() 4{ 5 cnt=$1 6 bs_uint=$2 7 outdir=$3 8 9 dd if=/dev/urandom of=${outdir}/test_${cnt}${bs_uint}.bin \ 10 bs=1${bs_uint} count=${cnt} 11} 12 13dd_test_file() 14{ 15 outdir=$1 16 17 mkdir -p ${outdir} 18 19 dd_test_file_one 1 k ${outdir} 20 dd_test_file_one 4 k ${outdir} 21 dd_test_file_one 64 k ${outdir} 22 dd_test_file_one 512 k ${outdir} 23 dd_test_file_one 1 M ${outdir} 24 dd_test_file_one 4 M ${outdir} 25 dd_test_file_one 64 M ${outdir} 26 dd_test_file_one 128]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/paint_wall_shabby_135205_300x168.jpg" length="17321" type="image/.jpg" />
-    </item>
-    
-    <item>
       <title>linux常用命令-系统管理</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_sys/</link>
       <pubDate>Sat, 09 Mar 2024 00:00:00 +0000</pubDate>

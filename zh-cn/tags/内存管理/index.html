@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="position-relative" itemscope itemtype="https://schema.org/WebPage" lang="zh-cn"
   data-bs-theme="auto" data-palette="purple">
-  <head><script src="/assets/init/bundle.min.0bb93948508b32667bbc76d4f9a8123a3c3b2ef731048422b0c48f9ea39586e9.js" integrity="sha256-C7k5SFCLMmZ7vHbU&#43;agSOjw7LvcxBIQisMSPnqOVhuk=" crossorigin="anonymous"></script>
+  <head><script src="/assets/init/bundle.min.dc6846f18e2cf3391fbf7090251d3ea2ebdd588ef2bd63575463ba9cc7bc8b04.js" integrity="sha256-3GhG8Y4s8zkfv3CQJR0&#43;ouvdWI7yvWNXVGO6nMe8iwQ=" crossorigin="anonymous"></script>
 <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>内存管理 - 标签 - kingdix10&#39;s site</title>
@@ -393,10 +393,52 @@ kingdix10
   <div class="posts mb-4"><article class="row card post component">
   <div class="card-header">
     <h2 class="card-title post-title my-2 fs-4">
+      <a href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_vmalloc/">kmalloc和vmalloc对比</a>
+    </h2>
+  </div>
+  <div class="card-body"><picture><img class="img-fluid" alt="kmalloc和vmalloc对比" src="https://kingdix10.github.io/covers/drone_camera_technology_171576_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2024-09-30 08:00:00 &#43;0800 CST，更新于 2024-09-30 16:31:44 &#43;0800 CST。">2024/09/30</span><span class="post-reading-time me-1 mb-1">3 分钟阅读</span><a href="/zh-cn/categories/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>内存管理</a><a href="/zh-cn/series/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
+      <i class="fas fa-fw fa-columns me-1"></i>内存管理</a><a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux内核</a><a href="/zh-cn/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">内存管理</a>
+</div>
+
+    <div class="post-summary"><p> 1. kmalloc和vmalloc对比 以ARM64为例，不考虑高端内存。
+1.1. 实现原理 kmalloc和vmalloc底层函数都是__alloc_pages。
+kmalloc会根据申请大小是否大于KMALLOC_MAX_CACHE_SIZE来决定使用slab还是__alloc_pages，而slab最终也是调用__alloc_pages。
+1.2. 初始化 默认情况下，kmalloc和vmalloc都不会对申请的内存做初始。 可以通过kzalloc或vzalloc申请内存并初始化为0。
+1.3. 对齐 kmalloc按块分配，通常为2^n对齐，每次分配的大小也是2^n。根据实现，可能也支持96或者192字节。...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_vmalloc/#post-content-body">阅读更多</a></div>
+    </div>
+  </div>
+</article>
+<article class="row card post component">
+  <div class="card-header">
+    <h2 class="card-title post-title my-2 fs-4">
+      <a href="/zh-cn/docs/04-kernel/linux-6.6/mm/vmalloc/">vmalloc原理</a>
+    </h2>
+  </div>
+  <div class="card-body"><picture><img class="img-fluid" alt="vmalloc原理" src="https://kingdix10.github.io/covers/metal_texture_surface_157344_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2024-06-01 08:00:00 &#43;0800 CST，更新于 2024-09-02 17:12:10 &#43;0800 CST。">2024/06/01</span><span class="post-reading-time me-1 mb-1">3 分钟阅读</span><a href="/zh-cn/categories/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>内存管理</a><a href="/zh-cn/series/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
+      <i class="fas fa-fw fa-columns me-1"></i>内存管理</a><a href="/zh-cn/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">内存管理</a>
+</div>
+
+    <div class="post-summary"><p> 1. 全局数据结构 1/// mm/vmalloc.c 2/* Export for kexec only */ 3LIST_HEAD(vmap_area_list); 4static struct rb_root vmap_area_root = RB_ROOT; 5/// ... ... 6 7/* 8 * This kmem_cache is used for vmap_area objects. Instead of 9 * allocating from slab we reuse an object from this cache to 10 * make things faster. Especially in...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/04-kernel/linux-6.6/mm/vmalloc/#post-content-body">阅读更多</a></div>
+    </div>
+  </div>
+</article>
+<article class="row card post component">
+  <div class="card-header">
+    <h2 class="card-title post-title my-2 fs-4">
       <a href="/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_mm/">Linux drm mm分析(基于intel ivpu驱动)</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="Linux drm mm分析(基于intel ivpu驱动)" src="https://kingdix10.github.io/covers/flowers_leaves_pattern_148777_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="Linux drm mm分析(基于intel ivpu驱动)" src="https://kingdix10.github.io/covers/bubbles_drops_macro_126764_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
@@ -432,21 +474,63 @@ kingdix10
 <article class="row card post component">
   <div class="card-header">
     <h2 class="card-title post-title my-2 fs-4">
-      <a href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc/">kmalloc分配内存的大小</a>
+      <a href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_size/">kmalloc分配内存的大小(基于linux-5.15)</a>
     </h2>
   </div>
-  <div class="card-body"><picture><img class="img-fluid" alt="kmalloc分配内存的大小" src="https://kingdix10.github.io/covers/wall_brick_neon_150470_300x168.jpg" loading="lazy"
+  <div class="card-body"><picture><img class="img-fluid" alt="kmalloc分配内存的大小(基于linux-5.15)" src="https://kingdix10.github.io/covers/laptop_keyboard_glow_170138_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture><div class="post-meta mb-3">
-  <span class="post-date me-1 mb-1" title="创建于 2022-12-30 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2022/12/30</span><span class="post-reading-time me-1 mb-1">8 分钟阅读</span><a href="/zh-cn/categories/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+  <span class="post-date me-1 mb-1" title="创建于 2022-12-30 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2022/12/30</span><span class="post-reading-time me-1 mb-1">9 分钟阅读</span><a href="/zh-cn/categories/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
       <i class="fas fa-fw fa-folder me-1"></i>内存管理</a><a href="/zh-cn/series/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
       <i class="fas fa-fw fa-columns me-1"></i>内存管理</a><a href="/zh-cn/tags/linux-5.15/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux-5.15</a><a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux内核</a><a href="/zh-cn/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">内存管理</a>
 </div>
 
-    <div class="post-summary"><p> 1. kmalloc分配内存的大小 本文基于linux-5.15分析。
-kmalloc会根据申请的内存大小来决定来决定使用块分配器(slab/slub/slob)或页分配器进行内存分配。控制kmalloc分配行为的主要有如下三个宏。
-macro desc KMALLOC_MAX_SIZE kmalloc可以分配的最大内存，超过此大小时返回NULL KMALLOC_MAX_CACHE_SIZE kmalloc使用slab分配器分配的最大内存，超过此大小后会通过伙伴系统分配页 KMALLOC_MIN_SIZE kmalloc可以分配的最小内存，小于此大小时，kmalloc内部会按此大小分配 1.1....</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc/#post-content-body">阅读更多</a></div>
+    <div class="post-summary"><p> 1. kmalloc分配内存的大小 本文基于linux-5.15分析，linux-6.6已经删除slob，后续也会将slab移除。
+kmalloc会根据申请的内存大小来决定来决定使用块分配器(slab/slub/slob)或页分配器进行内存分配。 控制kmalloc分配行为的主要有如下三个宏。
+macro desc KMALLOC_MAX_SIZE kmalloc可以分配的最大内存，超过此大小时返回NULL KMALLOC_MAX_CACHE_SIZE kmalloc使用slab分配器分配的最大内存，超过此大小后会通过伙伴系统分配页 KMALLOC_MIN_SIZE kmalloc可以分配的最小内存，小于此大小时，kmalloc内...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_size/#post-content-body">阅读更多</a></div>
+    </div>
+  </div>
+</article>
+<article class="row card post component">
+  <div class="card-header">
+    <h2 class="card-title post-title my-2 fs-4">
+      <a href="/zh-cn/docs/04-kernel/linux-6.6/mm/mm_api/">内存管理API汇总</a>
+    </h2>
+  </div>
+  <div class="card-body"><picture><img class="img-fluid" alt="内存管理API汇总" src="https://kingdix10.github.io/covers/squares_structure_glow_140857_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2022-12-30 08:00:00 &#43;0800 CST，更新于 2024-08-05 02:10:49 &#43;0800 CST。">2022/12/30</span><span class="post-reading-time me-1 mb-1">4 分钟阅读</span><a href="/zh-cn/categories/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>内存管理</a><a href="/zh-cn/series/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
+      <i class="fas fa-fw fa-columns me-1"></i>内存管理</a><a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux内核</a><a href="/zh-cn/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">内存管理</a>
+</div>
+
+    <div class="post-summary"><p> 1. 总览 如下为内核开发或驱动开发常见的内存管理API关系，其他如CMA分配器等相关API未列出。
+1.1. 框架图 1.2. 函数图总览 2. memblock分配器 memblock分配器主要用于Linux启动时的内存分配，被memblock_alloc分配后未被释放的内存，不会被加入到页管理器中。
+api param desc memblock_alloc size, align size表示要申请的大小，align表示内存对齐大小 3. 页分配器 页分配器相关的函数或宏在include/linux/gfp.h中声明。常用的函数如下：
+return api param unsigned long...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/04-kernel/linux-6.6/mm/mm_api/#post-content-body">阅读更多</a></div>
+    </div>
+  </div>
+</article>
+<article class="row card post component">
+  <div class="card-header">
+    <h2 class="card-title post-title my-2 fs-4">
+      <a href="/zh-cn/docs/04-kernel/linux-6.6/mm/why_idmap/">为什么要有idmap</a>
+    </h2>
+  </div>
+  <div class="card-body"><picture><img class="img-fluid" alt="为什么要有idmap" src="https://kingdix10.github.io/covers/backlight_neon_electronics_144683_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture><div class="post-meta mb-3">
+  <span class="post-date me-1 mb-1" title="创建于 2022-12-30 08:00:00 &#43;0800 CST，更新于 2024-08-05 02:10:49 &#43;0800 CST。">2022/12/30</span><span class="post-reading-time me-1 mb-1">2 分钟阅读</span><a href="/zh-cn/categories/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
+      <i class="fas fa-fw fa-folder me-1"></i>内存管理</a><a href="/zh-cn/series/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
+      <i class="fas fa-fw fa-columns me-1"></i>内存管理</a><a href="/zh-cn/tags/%E6%81%92%E7%AD%89%E6%98%A0%E5%B0%84/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">恒等映射</a><a href="/zh-cn/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">内存管理</a>
+</div>
+
+    <div class="post-summary"><p>要开启MMU，需要建立页表映射，而且需要处理缓存一致性的问题，这样内核启动的依赖条件就会变得复杂。为了降低启动代码的复杂度，约定在Linux内核启动时，MMU是关闭的。这样也就意味着不能利用高速缓存的性能。为了获得更好的性能，也为了后续可以给不同的地址空间设置不同的访问属性以更好地管理内存，需要在某个阶段把MMU打开，并使能高速缓存。
+但是，在关闭MMU的情况下，处理器访问的是物理地址，而MMU打开时，处理器访问的地址变成了虚拟地址。现代处理器大多数是多级流水线架构，处理器会提前预取多条指令到流水线中。打开MMU只需要向SCTLR_ELx寄存器写入特定值即可，运行到此处时，处理器已经提前预取了多条指令，这些指令要操作的地址实际是物理...</p><div><a class="btn btn-sm btn-outline-primary btn-read-more" href="/zh-cn/docs/04-kernel/linux-6.6/mm/why_idmap/#post-content-body">阅读更多</a></div>
     </div>
   </div>
 </article>
@@ -549,11 +633,15 @@ macro desc KMALLOC_MAX_SIZE kmalloc可以分配的最大内存，超过此大小
                     <div class="tab-pane active" id="taxonomySeries" role="tabpanel" aria-labelledby="taxonomySeriesTab" tabindex="0">
                         <a href="/zh-cn/series/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="进程管理">
                             进程管理
-                            <span class="badge badge-sm text-secondary bg-white ms-1">13</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">11</span>
                         </a>
                         <a href="/zh-cn/series/linux%E5%91%BD%E4%BB%A4/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="linux命令">
                             linux命令
-                            <span class="badge badge-sm text-secondary bg-white ms-1">10</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">9</span>
+                        </a>
+                        <a href="/zh-cn/series/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="内核基础">
+                            内核基础
+                            <span class="badge badge-sm text-secondary bg-white ms-1">8</span>
                         </a>
                         <a href="/zh-cn/series/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="C语言">
                             C语言
@@ -563,9 +651,13 @@ macro desc KMALLOC_MAX_SIZE kmalloc可以分配的最大内存，超过此大小
                             中断管理
                             <span class="badge badge-sm text-secondary bg-white ms-1">7</span>
                         </a>
-                        <a href="/zh-cn/series/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="内核基础">
-                            内核基础
-                            <span class="badge badge-sm text-secondary bg-white ms-1">6</span>
+                        <a href="/zh-cn/series/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="内存管理">
+                            内存管理
+                            <span class="badge badge-sm text-secondary bg-white ms-1">7</span>
+                        </a>
+                        <a href="/zh-cn/series/%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="内核调试">
+                            内核调试
+                            <span class="badge badge-sm text-secondary bg-white ms-1">7</span>
                         </a>
                         <a href="/zh-cn/series/%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%9E%8B/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="设备驱动模型">
                             设备驱动模型
@@ -583,20 +675,16 @@ macro desc KMALLOC_MAX_SIZE kmalloc可以分配的最大内存，超过此大小
                             4412
                             <span class="badge badge-sm text-secondary bg-white ms-1">3</span>
                         </a>
-                        <a href="/zh-cn/series/%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="内核调试">
-                            内核调试
+                        <a href="/zh-cn/series/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="系统管理">
+                            系统管理
                             <span class="badge badge-sm text-secondary bg-white ms-1">3</span>
                         </a>
                         <a href="/zh-cn/series/%E4%BB%A3%E7%A0%81%E6%8A%80%E5%B7%A7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="代码技巧">
                             代码技巧
                             <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
                         </a>
-                        <a href="/zh-cn/series/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="内存管理">
-                            内存管理
-                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
-                        </a>
-                        <a href="/zh-cn/series/%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="工具">
-                            工具
+                        <a href="/zh-cn/series/%E5%86%85%E6%A0%B8%E9%A9%B1%E5%8A%A8/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="内核驱动">
+                            内核驱动
                             <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
                         </a>
                         <a href="/zh-cn/series/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="开发环境">
@@ -607,24 +695,12 @@ macro desc KMALLOC_MAX_SIZE kmalloc可以分配的最大内存，超过此大小
                             时间子系统
                             <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
                         </a>
-                        <a href="/zh-cn/series/%E6%9C%AA%E5%88%86%E7%B1%BB/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="未分类">
-                            未分类
-                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
-                        </a>
-                        <a href="/zh-cn/series/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="系统管理">
-                            系统管理
-                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
-                        </a>
-                        <a href="/zh-cn/series/%E7%BC%96%E8%AF%91/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="编译">
-                            编译
-                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
-                        </a>
                         <a href="/zh-cn/series/drm/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="DRM">
                             DRM
                             <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
                         </a>
-                        <a href="/zh-cn/series/%E5%86%85%E6%A0%B8%E9%A9%B1%E5%8A%A8/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="内核驱动">
-                            内核驱动
+                        <a href="/zh-cn/series/%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="工具">
+                            工具
                             <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
                         </a>
                         <a href="/zh-cn/series/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-series me-2 mb-2" title="系统调用">
@@ -635,35 +711,43 @@ macro desc KMALLOC_MAX_SIZE kmalloc可以分配的最大内存，超过此大小
                     <div class="tab-pane" id="taxonomyCategories" role="tabpanel" aria-labelledby="taxonomyCategoriesTab" tabindex="0">
                         <a href="/zh-cn/categories/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="进程管理">
                             进程管理
-                            <span class="badge badge-sm text-secondary bg-white ms-1">13</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">11</span>
+                        </a>
+                        <a href="/zh-cn/categories/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="C语言">
+                            C语言
+                            <span class="badge badge-sm text-secondary bg-white ms-1">9</span>
                         </a>
                         <a href="/zh-cn/categories/linux%E5%91%BD%E4%BB%A4/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="linux命令">
                             linux命令
-                            <span class="badge badge-sm text-secondary bg-white ms-1">10</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">9</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="内核基础">
+                            内核基础
+                            <span class="badge badge-sm text-secondary bg-white ms-1">9</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="内核调试">
+                            内核调试
+                            <span class="badge badge-sm text-secondary bg-white ms-1">9</span>
                         </a>
                         <a href="/zh-cn/categories/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="启动流程">
                             启动流程
                             <span class="badge badge-sm text-secondary bg-white ms-1">9</span>
                         </a>
-                        <a href="/zh-cn/categories/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="C语言">
-                            C语言
-                            <span class="badge badge-sm text-secondary bg-white ms-1">8</span>
-                        </a>
                         <a href="/zh-cn/categories/%E4%B8%AD%E6%96%AD%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="中断管理">
                             中断管理
                             <span class="badge badge-sm text-secondary bg-white ms-1">7</span>
                         </a>
-                        <a href="/zh-cn/categories/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="内核基础">
-                            内核基础
+                        <a href="/zh-cn/categories/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="内存管理">
+                            内存管理
                             <span class="badge badge-sm text-secondary bg-white ms-1">7</span>
-                        </a>
-                        <a href="/zh-cn/categories/%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="内核调试">
-                            内核调试
-                            <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
                         </a>
                         <a href="/zh-cn/categories/%E8%AE%BE%E5%A4%87%E6%A8%A1%E5%9E%8B/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="设备模型">
                             设备模型
                             <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="系统管理">
+                            系统管理
+                            <span class="badge badge-sm text-secondary bg-white ms-1">4</span>
                         </a>
                         <a href="/zh-cn/categories/4412/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="4412">
                             4412
@@ -677,44 +761,32 @@ macro desc KMALLOC_MAX_SIZE kmalloc可以分配的最大内存，超过此大小
                             开发环境
                             <span class="badge badge-sm text-secondary bg-white ms-1">3</span>
                         </a>
-                        <a href="/zh-cn/categories/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="系统管理">
-                            系统管理
-                            <span class="badge badge-sm text-secondary bg-white ms-1">3</span>
-                        </a>
-                        <a href="/zh-cn/categories/windows/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="Windows">
-                            Windows
+                        <a href="/zh-cn/categories/thermal%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="thermal子系统">
+                            thermal子系统
                             <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
                         </a>
                         <a href="/zh-cn/categories/%E4%BB%A3%E7%A0%81%E6%8A%80%E5%B7%A7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="代码技巧">
                             代码技巧
                             <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
                         </a>
-                        <a href="/zh-cn/categories/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="内存管理">
-                            内存管理
-                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
-                        </a>
-                        <a href="/zh-cn/categories/%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="工具">
-                            工具
-                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
-                        </a>
                         <a href="/zh-cn/categories/%E6%97%B6%E9%97%B4%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="时间子系统">
                             时间子系统
-                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
-                        </a>
-                        <a href="/zh-cn/categories/%E7%BC%96%E8%AF%91/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="编译">
-                            编译
                             <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
                         </a>
                         <a href="/zh-cn/categories/drm/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="DRM">
                             DRM
                             <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
                         </a>
-                        <a href="/zh-cn/categories/thermal%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="thermal子系统">
-                            thermal子系统
-                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
-                        </a>
                         <a href="/zh-cn/categories/u-boot/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="u-boot">
                             u-boot
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                        <a href="/zh-cn/categories/windows/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="Windows">
+                            Windows
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                        <a href="/zh-cn/categories/%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="工具">
+                            工具
                             <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
                         </a>
                         <a href="/zh-cn/categories/%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-category me-2 mb-2" title="文件管理">
@@ -745,11 +817,11 @@ macro desc KMALLOC_MAX_SIZE kmalloc可以分配的最大内存，超过此大小
                     <div class="tab-pane" id="taxonomyTags" role="tabpanel" aria-labelledby="taxonomyTagsTab" tabindex="0">
                         <a href="/zh-cn/tags/linux%E5%86%85%E6%A0%B8/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="linux内核">
                             linux内核
-                            <span class="badge badge-sm text-secondary bg-white ms-1">34</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">40</span>
                         </a>
                         <a href="/zh-cn/tags/linux-6.6/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="linux-6.6">
                             linux-6.6
-                            <span class="badge badge-sm text-secondary bg-white ms-1">24</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">20</span>
                         </a>
                         <a href="/zh-cn/tags/%E5%B7%A5%E5%85%B7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="工具">
                             工具
@@ -759,36 +831,40 @@ macro desc KMALLOC_MAX_SIZE kmalloc可以分配的最大内存，超过此大小
                             linux-6.1
                             <span class="badge badge-sm text-secondary bg-white ms-1">11</span>
                         </a>
-                        <a href="/zh-cn/tags/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="启动流程">
-                            启动流程
+                        <a href="/zh-cn/tags/%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="内核调试">
+                            内核调试
                             <span class="badge badge-sm text-secondary bg-white ms-1">9</span>
                         </a>
                         <a href="/zh-cn/tags/%E5%86%85%E6%A0%B8%E9%A9%B1%E5%8A%A8/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="内核驱动">
                             内核驱动
-                            <span class="badge badge-sm text-secondary bg-white ms-1">8</span>
+                            <span class="badge badge-sm text-secondary bg-white ms-1">9</span>
                         </a>
-                        <a href="/zh-cn/tags/linux/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="Linux">
-                            Linux
-                            <span class="badge badge-sm text-secondary bg-white ms-1">7</span>
-                        </a>
-                        <a href="/zh-cn/tags/linux%E5%91%BD%E4%BB%A4/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="linux命令">
-                            linux命令
-                            <span class="badge badge-sm text-secondary bg-white ms-1">6</span>
-                        </a>
-                        <a href="/zh-cn/tags/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="进程管理">
-                            进程管理
-                            <span class="badge badge-sm text-secondary bg-white ms-1">6</span>
+                        <a href="/zh-cn/tags/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="启动流程">
+                            启动流程
+                            <span class="badge badge-sm text-secondary bg-white ms-1">9</span>
                         </a>
                         <a href="/zh-cn/tags/c%E8%AF%AD%E8%A8%80/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="C语言">
                             C语言
+                            <span class="badge badge-sm text-secondary bg-white ms-1">7</span>
+                        </a>
+                        <a href="/zh-cn/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="内存管理">
+                            内存管理
+                            <span class="badge badge-sm text-secondary bg-white ms-1">7</span>
+                        </a>
+                        <a href="/zh-cn/tags/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="进程管理">
+                            进程管理
+                            <span class="badge badge-sm text-secondary bg-white ms-1">7</span>
+                        </a>
+                        <a href="/zh-cn/tags/linux/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="Linux">
+                            Linux
+                            <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
+                        </a>
+                        <a href="/zh-cn/tags/linux%E5%91%BD%E4%BB%A4/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="linux命令">
+                            linux命令
                             <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
                         </a>
                         <a href="/zh-cn/tags/u-boot/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="u-boot">
                             u-boot
-                            <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
-                        </a>
-                        <a href="/zh-cn/tags/%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="内核调试">
-                            内核调试
                             <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
                         </a>
                         <a href="/zh-cn/tags/4412/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="4412">
@@ -799,20 +875,20 @@ macro desc KMALLOC_MAX_SIZE kmalloc可以分配的最大内存，超过此大小
                             kdump crash
                             <span class="badge badge-sm text-secondary bg-white ms-1">3</span>
                         </a>
-                        <a href="/zh-cn/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="内存管理">
-                            内存管理
-                            <span class="badge badge-sm text-secondary bg-white ms-1">3</span>
-                        </a>
                         <a href="/zh-cn/tags/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="系统管理">
                             系统管理
                             <span class="badge badge-sm text-secondary bg-white ms-1">3</span>
+                        </a>
+                        <a href="/zh-cn/tags/arm64/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="ARM64">
+                            ARM64
+                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
                         </a>
                         <a href="/zh-cn/tags/bash/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="Bash">
                             Bash
                             <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
                         </a>
-                        <a href="/zh-cn/tags/windows/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="Windows">
-                            Windows
+                        <a href="/zh-cn/tags/ftrace/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="ftrace">
+                            ftrace
                             <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
                         </a>
                         <a href="/zh-cn/tags/%E4%BB%A3%E7%A0%81%E6%8A%80%E5%B7%A7/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="代码技巧">
@@ -823,17 +899,9 @@ macro desc KMALLOC_MAX_SIZE kmalloc可以分配的最大内存，超过此大小
                             数组
                             <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
                         </a>
-                        <a href="/zh-cn/tags/%E7%BC%96%E8%AF%91/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="编译">
-                            编译
-                            <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
-                        </a>
                         <a href="/zh-cn/tags/%E7%BC%96%E8%AF%91%E5%99%A8/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="编译器">
                             编译器
                             <span class="badge badge-sm text-secondary bg-white ms-1">2</span>
-                        </a>
-                        <a href="/zh-cn/tags/arm64/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="ARM64">
-                            ARM64
-                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
                         </a>
                         <a href="/zh-cn/tags/atomic/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="atomic">
                             atomic
@@ -855,8 +923,12 @@ macro desc KMALLOC_MAX_SIZE kmalloc可以分配的最大内存，超过此大小
                             samba
                             <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
                         </a>
-                        <a href="/zh-cn/tags/wsl/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="wsl">
-                            wsl
+                        <a href="/zh-cn/tags/trace-cmd/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="trace-cmd">
+                            trace-cmd
+                            <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
+                        </a>
+                        <a href="/zh-cn/tags/windows/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="Windows">
+                            Windows
                             <span class="badge badge-sm text-secondary bg-white ms-1">1</span>
                         </a>
                         <a href="/zh-cn/tags/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title="开发环境">
@@ -865,25 +937,25 @@ macro desc KMALLOC_MAX_SIZE kmalloc可以分配的最大内存，超过此大小
                         </a>
                         <a href="https://kingdix10.github.io/zh-cn/tags" class="btn btn-sm btn-secondary post-taxonomy ps-3 post-tag me-2 mb-2" title='全部'>
                         全部
-                        <span class="badge badge-sm text-secondary bg-white ms-1">35</span>
+                        <span class="badge badge-sm text-secondary bg-white ms-1">36</span>
                         </a>
                     </div>
                 <div class="tab-pane" id="taxonomyArchives" role="tabpanel" aria-labelledby="taxonomyArchivesTab" tabindex="0">
 
     <a href="/zh-cn/archives/2024/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2024">
-    2024 <span class="badge badge-sm text-secondary bg-white ms-1">32</span>
+    2024 <span class="badge badge-sm text-secondary bg-white ms-1">33</span>
     </a>
 
     <a href="/zh-cn/archives/2023/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2023">
-    2023 <span class="badge badge-sm text-secondary bg-white ms-1">28</span>
+    2023 <span class="badge badge-sm text-secondary bg-white ms-1">27</span>
     </a>
 
     <a href="/zh-cn/archives/2022/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2022">
-    2022 <span class="badge badge-sm text-secondary bg-white ms-1">17</span>
+    2022 <span class="badge badge-sm text-secondary bg-white ms-1">22</span>
     </a>
 
     <a href="/zh-cn/archives/2019/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2019">
-    2019 <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
+    2019 <span class="badge badge-sm text-secondary bg-white ms-1">4</span>
     </a>
 
 
@@ -938,7 +1010,103 @@ macro desc KMALLOC_MAX_SIZE kmalloc可以分配的最大内存，超过此大小
   <div class="d-flex">
       <div
         class="flex-shrink-0 d-flex justify-content-center align-items-center"
-        style="max-width: 100px"><picture><img class="img-fluid" alt="用trace追踪Linux进程的一生" src="https://kingdix10.github.io/covers/texture_background_color_72786_300x168.jpg" loading="lazy"
+        style="max-width: 100px"><picture><img class="img-fluid" alt="kmalloc和vmalloc对比" src="https://kingdix10.github.io/covers/drone_camera_technology_171576_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+      </div>
+    <div
+      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
+      <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_vmalloc/">
+        kmalloc和vmalloc对比
+      </a>
+      <div class="post-meta mt-2">
+        <span class="post-date">
+          2024/09/30
+        </span>
+      </div>
+    </div>
+  </div>
+                    </li>
+                    <li class="mb-2">
+    
+  
+  <div class="d-flex">
+      <div
+        class="flex-shrink-0 d-flex justify-content-center align-items-center"
+        style="max-width: 100px"><picture><img class="img-fluid" alt="Linux中的栈" src="https://kingdix10.github.io/covers/water_waves_ripples_143522_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+      </div>
+    <div
+      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
+      <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/misc/stack/">
+        Linux中的栈
+      </a>
+      <div class="post-meta mt-2">
+        <span class="post-date">
+          2024/09/10
+        </span>
+      </div>
+    </div>
+  </div>
+                    </li>
+                    <li class="mb-2">
+    
+  
+  <div class="d-flex">
+      <div
+        class="flex-shrink-0 d-flex justify-content-center align-items-center"
+        style="max-width: 100px"><picture><img class="img-fluid" alt="trace-cmd实例" src="https://kingdix10.github.io/covers/leaves_patterns_autumn_129305_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+      </div>
+    <div
+      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
+      <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/trace_cmd_usage/">
+        trace-cmd实例
+      </a>
+      <div class="post-meta mt-2">
+        <span class="post-date">
+          2024/09/04
+        </span>
+      </div>
+    </div>
+  </div>
+                    </li>
+                    <li class="mb-2">
+    
+  
+  <div class="d-flex">
+      <div
+        class="flex-shrink-0 d-flex justify-content-center align-items-center"
+        style="max-width: 100px"><picture><img class="img-fluid" alt="Linux使用ftrace进行boottime跟踪" src="https://kingdix10.github.io/covers/code_text_colorful_140555_300x168.jpg" loading="lazy"
+     width="300"
+     height="168"/>
+  </picture>
+      </div>
+    <div
+      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
+      <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/boottime_trace/">
+        Linux使用ftrace进行boottime跟踪
+      </a>
+      <div class="post-meta mt-2">
+        <span class="post-date">
+          2024/09/04
+        </span>
+      </div>
+    </div>
+  </div>
+                    </li>
+                    <li class="mb-2">
+    
+  
+  <div class="d-flex">
+      <div
+        class="flex-shrink-0 d-flex justify-content-center align-items-center"
+        style="max-width: 100px"><picture><img class="img-fluid" alt="用trace追踪Linux进程的一生" src="https://kingdix10.github.io/covers/pink_color_background_153889_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture>
@@ -951,102 +1119,6 @@ macro desc KMALLOC_MAX_SIZE kmalloc可以分配的最大内存，超过此大小
       <div class="post-meta mt-2">
         <span class="post-date">
           2024/08/31
-        </span>
-      </div>
-    </div>
-  </div>
-                    </li>
-                    <li class="mb-2">
-    
-  
-  <div class="d-flex">
-      <div
-        class="flex-shrink-0 d-flex justify-content-center align-items-center"
-        style="max-width: 100px"><picture><img class="img-fluid" alt="Linux内核的通知链机制" src="https://kingdix10.github.io/covers/neon_lights_dark_133133_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture>
-      </div>
-    <div
-      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
-      <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/notifier_chain/notifier_chain/">
-        Linux内核的通知链机制
-      </a>
-      <div class="post-meta mt-2">
-        <span class="post-date">
-          2024/08/14
-        </span>
-      </div>
-    </div>
-  </div>
-                    </li>
-                    <li class="mb-2">
-    
-  
-  <div class="d-flex">
-      <div
-        class="flex-shrink-0 d-flex justify-content-center align-items-center"
-        style="max-width: 100px"><picture><img class="img-fluid" alt="编译工具杂记" src="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture>
-      </div>
-    <div
-      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
-      <a class="post-title" href="/zh-cn/docs/05-program/ccpp/gcc_tools/">
-        编译工具杂记
-      </a>
-      <div class="post-meta mt-2">
-        <span class="post-date">
-          2024/08/05
-        </span>
-      </div>
-    </div>
-  </div>
-                    </li>
-                    <li class="mb-2">
-    
-  
-  <div class="d-flex">
-      <div
-        class="flex-shrink-0 d-flex justify-content-center align-items-center"
-        style="max-width: 100px"><picture><img class="img-fluid" alt="VMware和Hyper-V回收虚拟磁盘空间" src="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture>
-      </div>
-    <div
-      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
-      <a class="post-title" href="/zh-cn/docs/02-dev_env/vdisk_compact/">
-        VMware和Hyper-V回收虚拟磁盘空间
-      </a>
-      <div class="post-meta mt-2">
-        <span class="post-date">
-          2024/08/05
-        </span>
-      </div>
-    </div>
-  </div>
-                    </li>
-                    <li class="mb-2">
-    
-  
-  <div class="d-flex">
-      <div
-        class="flex-shrink-0 d-flex justify-content-center align-items-center"
-        style="max-width: 100px"><picture><img class="img-fluid" alt="make调试" src="https://kingdix10.github.io/covers/pattern_color_mosaic_131243_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture>
-      </div>
-    <div
-      class="flex-grow-1 d-flex flex-column h-auto justify-content-center ms-3">
-      <a class="post-title" href="/zh-cn/docs/05-program/compile/make_debug/">
-        make调试
-      </a>
-      <div class="post-meta mt-2">
-        <span class="post-date">
-          2024/08/05
         </span>
       </div>
     </div>
@@ -1077,19 +1149,19 @@ macro desc KMALLOC_MAX_SIZE kmalloc可以分配的最大内存，超过此大小
       <div class="card-body collapse accordion-collapse accordion-body d-lg-block show" id="archives">
 
     <a href="/zh-cn/archives/2024/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2024">
-    2024 <span class="badge badge-sm text-secondary bg-white ms-1">32</span>
+    2024 <span class="badge badge-sm text-secondary bg-white ms-1">33</span>
     </a>
 
     <a href="/zh-cn/archives/2023/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2023">
-    2023 <span class="badge badge-sm text-secondary bg-white ms-1">28</span>
+    2023 <span class="badge badge-sm text-secondary bg-white ms-1">27</span>
     </a>
 
     <a href="/zh-cn/archives/2022/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2022">
-    2022 <span class="badge badge-sm text-secondary bg-white ms-1">17</span>
+    2022 <span class="badge badge-sm text-secondary bg-white ms-1">22</span>
     </a>
 
     <a href="/zh-cn/archives/2019/" class="btn btn-sm btn-secondary post-taxonomy ps-3 me-2 mb-2" title="2019">
-    2019 <span class="badge badge-sm text-secondary bg-white ms-1">5</span>
+    2019 <span class="badge badge-sm text-secondary bg-white ms-1">4</span>
     </a>
 
 
@@ -1161,7 +1233,7 @@ Zhihu"
 <span class="menu-icon me-1"><i class="fab fa-fw fa-zhihu text-primary"></i></span>Zhihu</a></li></ul></li></ul></div>
 </div>
 </footer>
-<script data-precache src="/assets/main/bundle.min.de08722b15dbab0d764debd50114ce3d28da8ee6c7b889ff8c82e6faad0b46dd.js" integrity="sha256-3ghyKxXbqw12TevVARTOPSjajubHuIn/jILm&#43;q0LRt0=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
+<script data-precache src="/assets/main/bundle.min.87a6f33b4f10cfffd4d1501f8f35bf6bb4945d0f09c5747ecad2a3130f59b74d.js" integrity="sha256-h6bzO08Qz//U0VAfjzW/a7SUXQ8JxXR&#43;ytKjEw9Zt00=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
 <script data-precache src="/assets/viewer/bundle.min.ffafad0d121aa7d1fb443510086dac514a0b152826cf094f02a1f3dec1f37918.js" integrity="sha256-/6&#43;tDRIap9H7RDUQCG2sUUoLFSgmzwlPAqHz3sHzeRg=" crossorigin="anonymous" defer></script><script>
   var _hmt = _hmt || [];
   (function() {

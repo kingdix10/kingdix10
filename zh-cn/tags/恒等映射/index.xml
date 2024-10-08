@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>恒等映射 on kingdix10&#39;s site</title>
+    <link>https://kingdix10.github.io/zh-cn/tags/%E6%81%92%E7%AD%89%E6%98%A0%E5%B0%84/</link>
+    <description>Recent content in 恒等映射 on kingdix10&#39;s site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</copyright>
+    <lastBuildDate>Fri, 30 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/%E6%81%92%E7%AD%89%E6%98%A0%E5%B0%84/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>为什么要有idmap</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/why_idmap/</link>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/why_idmap/</guid>
+      <description><![CDATA[要开启MMU，需要建立页表映射，而且需要处理缓存一致性的问题，这样内核启动的依赖条件就会变得复杂。为了降低启动代码的复杂度，约定在Linux]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/backlight_neon_electronics_144683_300x168.jpg" length="9613" type="image/.jpg" />
+    </item>
+    
+  </channel>
+</rss>
+

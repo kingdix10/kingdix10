@@ -9,13 +9,13 @@
 </copyright>
     <lastBuildDate>Fri, 30 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/linux-5.15/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>kmalloc分配内存的大小</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc/</link>
+      <title>kmalloc分配内存的大小(基于linux-5.15)</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_size/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc/</guid>
-      <description><![CDATA[1. kmalloc分配内存的大小 本文基于linux-5.15分析。 kmalloc会根据申请的内存大小来决定来决定使用块分配器(slab/slu]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wall_brick_neon_150470_300x168.jpg" length="13857" type="image/.jpg" />
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_size/</guid>
+      <description><![CDATA[1. kmalloc分配内存的大小 本文基于linux-5.15分析，linux-6.6已经删除slob，后续也会将slab移除。 kmalloc会]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/laptop_keyboard_glow_170138_300x168.jpg" length="3604" type="image/.jpg" />
     </item>
     
   </channel>

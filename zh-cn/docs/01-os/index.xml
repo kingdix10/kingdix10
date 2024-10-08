@@ -7,17 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
-    <lastBuildDate>Mon, 29 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/docs/01-os/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>ssh连接wsl后执行Windows程序</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/01-os/win/ssh_wsl_exe/</link>
-      <pubDate>Mon, 29 Jul 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/win/ssh_wsl_exe/</guid>
-      <description><![CDATA[1. 准备工作 wsl需要安装openssh-server，有可能需要修改/etc/sshd_config中端口号。 2. wsl运行程序 ssh连接ws]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/cockpit_panel_display_169481_300x168.jpg" length="10012" type="image/.jpg" />
-    </item>
-    
+    <lastBuildDate>Sun, 28 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/docs/01-os/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Debian安装和配置</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/debian_setup/</link>
@@ -46,16 +36,6 @@
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_text/</guid>
       <description><![CDATA[1. grep 1.1. 常用选项 1# 输出start到end 2grep -o &#39;start.*end&#39; file 3# 文件作为文本处理 4grep -a &#39;xxx&#39; file 5# 忽略二进制文件 6grep -rsnI &#39;xxx&#39; ./ 7# 递归目录 8grep -r &#39;xxx&#39; ./ 9 10# 忽略大小写(-i, --ignore-case) 11#]]></description>
     <enclosure url="https://kingdix10.github.io/covers/lines_intersection_oblique_153331_300x168.jpg" length="16159" type="image/.jpg" />
-    </item>
-    
-    <item>
-      <title>linux常用命令-性能</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_benchmark/</link>
-      <pubDate>Sun, 28 Jul 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_benchmark/</guid>
-      <description><![CDATA[iozone 1#!/bin/bash 2 3dd_test_file_one() 4{ 5 cnt=$1 6 bs_uint=$2 7 outdir=$3 8 9 dd if=/dev/urandom of=${outdir}/test_${cnt}${bs_uint}.bin \ 10 bs=1${bs_uint} count=${cnt} 11} 12 13dd_test_file() 14{ 15 outdir=$1 16 17 mkdir -p ${outdir} 18 19 dd_test_file_one 1 k ${outdir} 20 dd_test_file_one 4 k ${outdir} 21 dd_test_file_one 64 k ${outdir} 22 dd_test_file_one 512 k ${outdir} 23 dd_test_file_one 1 M ${outdir} 24 dd_test_file_one 4 M ${outdir} 25 dd_test_file_one 64 M ${outdir} 26 dd_test_file_one 128]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/paint_wall_shabby_135205_300x168.jpg" length="17321" type="image/.jpg" />
     </item>
     
     <item>
@@ -89,16 +69,6 @@
     </item>
     
     <item>
-      <title>jupyter转Markdown</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/01-os/jupyter_to_markdown/</link>
-      <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/jupyter_to_markdown/</guid>
-      <description><![CDATA[1apt install jupyter-core 或者 1python3 -m pip install jupyter 转换： 1jupyter nbconvert --to markdown xxx.ipynb]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/walls_floor_light_50837_300x168.jpg" length="14340" type="image/.jpg" />
-    </item>
-    
-    <item>
       <title>linux常用命令-网络</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_network/</link>
       <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
@@ -126,6 +96,16 @@
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/bash_decorate/</guid>
       <description><![CDATA[1. PS1示例 先说一下bash版本 1$ bash --version 2GNU bash, version 5.1.4(1)-release (x86_64-pc-linux-gnu) 3Copyright (C) 2020 Free Software Foundation, Inc. 4License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt; 5 6This is free software; you are free to change and redistribute it. 7There is NO WARRANTY, to the extent permitted by law. bash中的P]]></description>
     <enclosure url="https://kingdix10.github.io/covers/keyboard_laptop_gradient_203739_300x168.jpg" length="10539" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>Windows系统迁移</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/01-os/win/os_migrate/</link>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/win/os_migrate/</guid>
+      <description><![CDATA[1. 旧机器拷贝 WEPE制作U盘启动盘 保留原硬盘，接新硬盘 开机选择进入PE 新硬盘改为GPT分区表，删除所有分区 拷贝或创建EFI分区，大小约为10]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/canvas_picture_abstraction_138874_300x168.jpg" length="19551" type="image/.jpg" />
     </item>
     
     <item>

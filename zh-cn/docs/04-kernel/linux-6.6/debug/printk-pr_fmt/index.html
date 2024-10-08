@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="position-relative" itemscope itemtype="https://schema.org/WebPage" lang="zh-cn"
   data-bs-theme="auto" data-palette="purple">
-  <head><script src="/assets/init/bundle.min.0bb93948508b32667bbc76d4f9a8123a3c3b2ef731048422b0c48f9ea39586e9.js" integrity="sha256-C7k5SFCLMmZ7vHbU&#43;agSOjw7LvcxBIQisMSPnqOVhuk=" crossorigin="anonymous"></script>
+  <head><script src="/assets/init/bundle.min.dc6846f18e2cf3391fbf7090251d3ea2ebdd588ef2bd63575463ba9cc7bc8b04.js" integrity="sha256-3GhG8Y4s8zkfv3CQJR0&#43;ouvdWI7yvWNXVGO6nMe8iwQ=" crossorigin="anonymous"></script>
 <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>printk的pr_fmt - kingdix10&#39;s site</title>
@@ -11,26 +11,26 @@
     <link rel="apple-touch-icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_180x180_resize_box_3.png" sizes="180x180" type="image/png">
     <link rel="icon" href="/favicon_hue47f7bc6656f0d7127c2215d260e644f_15816_192x192_resize_box_3.png" sizes="192x192" type="image/png">
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#6f42c1">
-<meta name="keywords" content="printk" />
-  <meta name="description" content="1. printk /proc/sys/kernel/printk /sys/kernel/debug/printk/index/ 2. 常见pr_*()接口 include/linux/printk.h 三种类型的接口说明如下： pr_xxx：按照pr_fmt(fmt)指定的格式输出日志。 pr_xxx_once：" />
+<meta name="keywords" content="内核调试, printk" />
+  <meta name="description" content="1. printk 打印级别控制：/proc/sys/kernel/printk printk_index：/sys/kernel/debug/printk/" />
     <meta name="robots" content="index, follow" /><meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://kingdix10.github.io/covers/lens_camera_glare_147903_300x168.jpg"/>
+<meta name="twitter:image" content="https://kingdix10.github.io/covers/wall_brick_purple_141823_300x168.jpg"/>
 
 <meta name="twitter:title" content="printk的pr_fmt"/>
-<meta name="twitter:description" content="1. printk /proc/sys/kernel/printk /sys/kernel/debug/printk/index/ 2. 常见pr_*()接口 include/linux/printk.h 三种类型的接口说明如下： pr_xxx：按照pr_fmt(fmt)指定的格式输出日志。 pr_xxx_once："/>
+<meta name="twitter:description" content="1. printk 打印级别控制：/proc/sys/kernel/printk printk_index：/sys/kernel/debug/printk/"/>
 <meta property="og:title" content="printk的pr_fmt" />
-<meta property="og:description" content="1. printk /proc/sys/kernel/printk /sys/kernel/debug/printk/index/ 2. 常见pr_*()接口 include/linux/printk.h 三种类型的接口说明如下： pr_xxx：按照pr_fmt(fmt)指定的格式输出日志。 pr_xxx_once：" />
+<meta property="og:description" content="1. printk 打印级别控制：/proc/sys/kernel/printk printk_index：/sys/kernel/debug/printk/" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/" /><meta property="og:image" content="https://kingdix10.github.io/covers/lens_camera_glare_147903_300x168.jpg" /><meta property="article:section" content="docs" />
+<meta property="og:url" content="https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/" /><meta property="og:image" content="https://kingdix10.github.io/covers/wall_brick_purple_141823_300x168.jpg" /><meta property="article:section" content="docs" />
 <meta property="article:published_time" content="2022-12-30T00:00:00+00:00" />
 <meta property="article:modified_time" content="2024-08-04T17:46:33+00:00" /><meta property="og:site_name" content="kingdix10&#39;s site" />
 
 
 <meta itemprop="name" content="printk的pr_fmt">
-<meta itemprop="description" content="1. printk /proc/sys/kernel/printk /sys/kernel/debug/printk/index/ 2. 常见pr_*()接口 include/linux/printk.h 三种类型的接口说明如下： pr_xxx：按照pr_fmt(fmt)指定的格式输出日志。 pr_xxx_once："><meta itemprop="datePublished" content="2022-12-30T00:00:00+00:00" />
+<meta itemprop="description" content="1. printk 打印级别控制：/proc/sys/kernel/printk printk_index：/sys/kernel/debug/printk/"><meta itemprop="datePublished" content="2022-12-30T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2024-08-04T17:46:33+00:00" />
-<meta itemprop="wordCount" content="1712"><meta itemprop="image" content="https://kingdix10.github.io/covers/lens_camera_glare_147903_300x168.jpg">
-<meta itemprop="keywords" content="linux-6.6,内核调试," />
+<meta itemprop="wordCount" content="1932"><meta itemprop="image" content="https://kingdix10.github.io/covers/wall_brick_purple_141823_300x168.jpg">
+<meta itemprop="keywords" content="内核调试," />
   <meta property="og:image:alt" content="printk的pr_fmt" />
   <meta name="twitter:image:alt" content="printk的pr_fmt" />
   <link rel="manifest" href="/zh-cn/manifest.json">
@@ -422,6 +422,8 @@ kingdix10
           <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-8ea97fb7a0a0d68cedef1b63b4664daa">
             <div class="btn-toggle-nav fw-normal ms-2 small">
               <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/thermal/linux-5.10/thermal_5.10/"><span class="docs-nav-title">Linux thermal子系统(基于5.10)</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/"><span class="docs-nav-title">linux thermal子系统简介</span></a>
         </li><li class="mb-2" tabindex="-1">
           <div class="py-1 d-flex justify-content-between align-items-center ms-3">
@@ -548,13 +550,9 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/task_state/"><span class="docs-nav-title">Linux进程状态与生命周期</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_2/"><span class="docs-nav-title">Linux内核copy_process分析（二）</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_3/"><span class="docs-nav-title">Linux内核copy_process分析（三）</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_1/"><span class="docs-nav-title">Linux内核copy_process分析（一）</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_table/"><span class="docs-nav-title">Linux内核sched_class汇总</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/schedule1/"><span class="docs-nav-title">进程调度简介</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/task_life/"><span class="docs-nav-title">用trace追踪Linux进程的一生</span></a>
         </li></ul>
@@ -571,9 +569,19 @@ kingdix10
           <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-de97508460ed4f8a4a3e7ac2798cb58e">
             <div class="btn-toggle-nav fw-normal ms-2 small">
               <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc/"><span class="docs-nav-title">kmalloc分配内存的大小</span></a>
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/memory_size_layout/"><span class="docs-nav-title">ARM64 Linux内核内存大小和布局</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_size/"><span class="docs-nav-title">kmalloc分配内存的大小(基于linux-5.15)</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_vmalloc/"><span class="docs-nav-title">kmalloc和vmalloc对比</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtable/"><span class="docs-nav-title">Linux ARM64页面大小和虚拟地址位数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/vmalloc/"><span class="docs-nav-title">vmalloc原理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/mm_api/"><span class="docs-nav-title">内存管理API汇总</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/why_idmap/"><span class="docs-nav-title">为什么要有idmap</span></a>
         </li></ul>
             </div>
           </div>
@@ -596,9 +604,15 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/printk-formats/"><span class="docs-nav-title">Linux printk日志输出格式控制</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/sysrq/"><span class="docs-nav-title">Linux sysrq简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/dynamic_debug/"><span class="docs-nav-title">linux内核dynamic_debug</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/boottime_trace/"><span class="docs-nav-title">Linux使用ftrace进行boottime跟踪</span></a>
         </li><li class="mb-2 py-1 ms-3 text-primary" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/"><span class="docs-nav-title">printk的pr_fmt</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/trace_cmd_usage/"><span class="docs-nav-title">trace-cmd实例</span></a>
         </li></ul>
             </div>
           </div>
@@ -651,7 +665,11 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/optimize_tips/"><span class="docs-nav-title">Linux内核代码的编写和优化技巧</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/stack/"><span class="docs-nav-title">Linux中的栈</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/kernel_boot_security/"><span class="docs-nav-title">保证内核启动安全的几种方式</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/fp/"><span class="docs-nav-title">栈帧寄存器相关的编译选项</span></a>
         </li></ul>
             </div>
           </div>
@@ -713,8 +731,6 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/macro_link_args/"><span class="docs-nav-title">gcc宏定义中的连接符和可变参数</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/gcc_tools/"><span class="docs-nav-title">编译工具杂记</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/gcc_predefine/"><span class="docs-nav-title">编译器预定义宏</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/array_func/"><span class="docs-nav-title">多维数组作为函数参数</span></a>
@@ -748,9 +764,7 @@ kingdix10
           </div>
           <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-cffaf2396700969f3f8596d2093784ef">
             <div class="btn-toggle-nav fw-normal ms-2 small">
-              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/compile/make_debug/"><span class="docs-nav-title">make调试</span></a>
-        </li></ul>
+              <ul class="list-unstyled mb-2 w-100"></ul>
             </div>
           </div>
         </li></ul>
@@ -798,8 +812,6 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/uboot_misc_note/"><span class="docs-nav-title">U-Boot杂项记录</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/u-boot_commands/"><span class="docs-nav-title">常见u-boot命令</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/boot_flow/"><span class="docs-nav-title">嵌入式系统启动流程</span></a>
         </li></ul>
             </div>
@@ -821,8 +833,6 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/git/git_misc/"><span class="docs-nav-title">git配置和操作</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/jupyter_to_markdown/"><span class="docs-nav-title">jupyter转Markdown</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_tips/"><span class="docs-nav-title">Linux Bash技巧</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_decorate/"><span class="docs-nav-title">Linux Bash终端美化</span></a>
@@ -835,11 +845,9 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_sys/"><span class="docs-nav-title">linux常用命令-系统管理</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_benchmark/"><span class="docs-nav-title">linux常用命令-性能</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/sourceinsight/"><span class="docs-nav-title">sourceinsight快速建工程</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/ssh_wsl_exe/"><span class="docs-nav-title">ssh连接wsl后执行Windows程序</span></a>
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/os_migrate/"><span class="docs-nav-title">Windows系统迁移</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/win_python3/"><span class="docs-nav-title">解决Windows不能使用python3.10的问题</span></a>
         </li></ul>
@@ -914,7 +922,7 @@ kingdix10
   <span class="post-date me-1 mb-1" title="创建于 2022-12-30 08:00:00 &#43;0800 CST，更新于 2024-08-05 01:46:33 &#43;0800 CST。">2022/12/30</span><span class="post-reading-time me-1 mb-1">4 分钟阅读</span><a href="/zh-cn/categories/%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
       <i class="fas fa-fw fa-folder me-1"></i>内核调试</a><a href="/zh-cn/categories/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-category">
       <i class="fas fa-fw fa-folder me-1"></i>内核基础</a><a href="/zh-cn/series/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-series">
-      <i class="fas fa-fw fa-columns me-1"></i>内核基础</a><a href="/zh-cn/tags/linux-6.6/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">Linux-6.6</a><a href="/zh-cn/tags/%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">内核调试</a>
+      <i class="fas fa-fw fa-columns me-1"></i>内核基础</a><a href="/zh-cn/tags/%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95/" class="btn btn-sm btn-secondary mb-1 me-2 py-0 pe-1 post-taxonomy post-taxonomy-sm post-tag">内核调试</a>
 </div>
 
 <div class="mt-2 mb-3 d-block d-xxl-none">
@@ -925,16 +933,47 @@ kingdix10
 </div><div class="post-content mb-3" data-bs-spy="scroll" data-bs-target="#TableOfContents" tabindex="0">
         <div id="post-content-body">
 <h1 id="1-printk" data-numberify>1. printk<a class="anchor ms-1" href="#1-printk"></a></h1>
-<p><code>/proc/sys/kernel/printk</code>
-<code>/sys/kernel/debug/printk/index/</code></p>
+<p>打印级别控制：<code>/proc/sys/kernel/printk</code></p>
+<p>printk_index：<code>/sys/kernel/debug/printk/index/</code></p>
 
-<h1 id="2-常见pr_接口" data-numberify>2. 常见pr_*()接口<a class="anchor ms-1" href="#2-常见pr_接口"></a></h1>
-<p><code>include/linux/printk.h</code></p>
+<h1 id="2-pr_fmt和dev_fmt" data-numberify>2. pr_fmt和dev_fmt<a class="anchor ms-1" href="#2-pr_fmt和dev_fmt"></a></h1>
+<p>在阅读<code>Linux</code>内核或其他开源代码时，在文件的开始部分，通常能看到类似如下代码。但是代码中又没有看到使用的地方。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="cp">#define pr_fmt(fmt) KBUILD_MODNAME &#34;: &#34; fmt
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;...&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;...&gt;</span><span class="cp">
+</span></span></span></code></pre></div><p>其实<code>pr_fmt</code>是通常和大名鼎鼎的<code>printk</code>一起来合作实现其他宏，比较常见的就是<code>pr_*()</code>系列宏，另外一些模块或驱动中也会利用<code>pr_fmt</code>来输出日志信息。使用<code>pr_fmt</code>可以在要输出的信息前再添加额外的信息。
+如果在<code>#include &lt;linux/printk.h&gt;</code>之前没有定义<code>pr_fmt</code>，<code>include/linux/printk.h</code>中会将<code>pr_fmt(fmt)</code>定义为<code>fmt</code>，也就是输出信息的原始格式。如果在<code>#include &lt;linux/printk.h&gt;</code>之后定义<code>pr_fmt</code>，编译时就会提示重复定义警告或错误。所以通常来说，对<code>pr_fmt</code>的定义都是放到了文件的最前端。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// include/linux/printk.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cm">/**
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * pr_fmt - used by the pr_*() macros to generate the printk format string
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> * @fmt: format string passed from a pr_*() macro
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> * This macro can be used to generate a unified format string for pr_*()
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> * macros. A common use is to prefix all pr_*() messages in a file with a common
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> * string. For example, defining this at the top of a source file:
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> *        #define pr_fmt(fmt) KBUILD_MODNAME &#34;: &#34; fmt
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cm"> * would prefix all pr_info, pr_emerg... messages in the file with the module
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cm"> * name.
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cp">#ifndef pr_fmt
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cp">#define pr_fmt(fmt) fmt
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cp">#endif
+</span></span></span></code></pre></div><p><code>dev_fmt</code>与<code>pr_fmt</code>类似，也是用来定义打印信息的前缀。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1">/// include/linux/dev_printk.h
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="c1"></span><span class="cp">#ifndef dev_fmt
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="cp">#define dev_fmt(fmt) fmt
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="cp">#endif
+</span></span></span></code></pre></div>
+<h1 id="3-常见pr_接口" data-numberify>3. 常见pr_*()接口<a class="anchor ms-1" href="#3-常见pr_接口"></a></h1>
+<p>接口定义在<code>include/linux/printk.h</code>。</p>
 <p>三种类型的接口说明如下：</p>
 <ul>
 <li>pr_xxx：按照<code>pr_fmt(fmt)</code>指定的格式输出日志。</li>
 <li>pr_xxx_once：日志只输出一次。</li>
-<li>pr_xxx_ratelimited：通常来说终端是慢速设备，pr_xxx_ratelimited可以限制日志输出速率，避免信息过多导致CPU阻塞。</li>
+<li>pr_xxx_ratelimited：通常来说终端是慢速设备，<code>pr_xxx_ratelimited</code>可以限制日志输出速率，避免信息过多导致CPU阻塞。</li>
 </ul>
 <table>
 <thead>
@@ -1074,9 +1113,9 @@ kingdix10
 <td style="text-align:left">informational</td>
 </tr>
 <tr>
-<td style="text-align:left">dev_debug</td>
-<td style="text-align:left">dev_debug_once</td>
-<td style="text-align:left">dev_debug_ratelimited</td>
+<td style="text-align:left">dev_dbg</td>
+<td style="text-align:left">dev_dbg_once</td>
+<td style="text-align:left">dev_dbg_ratelimited</td>
 <td style="text-align:left">KERN_DEBUG/dynamic</td>
 <td style="text-align:left">(dynamic) debug-level message conditionally</td>
 </tr>
@@ -1092,101 +1131,91 @@ kingdix10
 </span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cp">		dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
 </span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cp">})
 </span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cp">#endif
-</span></span></span></code></pre></div><p>除此之外，还有<code>netdev_xxx</code>和<code>netif_xxx</code>系列接口，而且提供了<code>netdev_vdbg</code>、<code>netif_vdbg</code>和<code>netif_cond_dbg</code>来更精细化的控制，只是linux-6.6还不能使用类似<code>pr_fmt(fmt)</code>来提供更丰富的打印格式。</p>
+</span></span></span></code></pre></div><p>除此之外，还有<code>netdev_xxx</code>和<code>netif_xxx</code>系列接口，另外提供了<code>netdev_vdbg</code>、<code>netif_vdbg</code>和<code>netif_cond_dbg</code>等宏来实现更精细化的输出。</p>
 
-<h2 id="21-pr_devel和pr_debug" data-numberify>2.1. pr_devel和pr_debug<a class="anchor ms-1" href="#21-pr_devel和pr_debug"></a></h2>
+<h2 id="31-pr_devel和pr_debugbug" data-numberify>3.1. pr_devel和pr_debugbug`<a class="anchor ms-1" href="#31-pr_devel和pr_debugbug"></a></h2>
 <p><code>pr_*()</code>中比较特殊的是<code>pr_devel</code>和<code>pr_debug</code>，它们需要在特定条件下才会有实际作用。</p>
 <ol>
 <li><code>pr_devel</code>在没有定义<code>DEBUG</code>的情况下不做任何工作。</li>
 <li><code>pr_debug</code>在<code>pr_devel</code>的基础上增加了动态调试部分，如果使能了动态调试，则实际为<code>dynamic_pr_debug</code>，否则与<code>pr_devel</code>效果一致。</li>
 </ol>
-<p>关于动态调试，可以参考TODO。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="cp">#ifdef DEBUG
-</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="cp">#define pr_devel(fmt, ...) \
-</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="cp">    printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="cp">#else
-</span></span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="cp">#define pr_devel(fmt, ...) \
-</span></span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="cp">    no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-</span></span></span><span class="line"><span class="ln">7</span><span class="cl"><span class="cp">#endif
-</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cm">/* If you are writing a driver, please use dev_dbg instead */</span>
-</span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cp">#if defined(CONFIG_DYNAMIC_DEBUG) || \
-</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cp">    (defined(CONFIG_DYNAMIC_DEBUG_CORE) &amp;&amp; defined(DYNAMIC_DEBUG_MODULE))
-</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/dynamic_debug.h&gt;</span><span class="cp">
-</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cp"></span>
-</span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cp">#define pr_debug(fmt, ...) \
-</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cp">    dynamic_pr_debug(fmt, ##__VA_ARGS__)
-</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cp">#elif defined(DEBUG)
-</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cp">#define pr_debug(fmt, ...) \
-</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cp">    printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cp">#else
-</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cp">#define pr_debug(fmt, ...) \
-</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cp">    no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cp">#endif
-</span></span></span></code></pre></div>
-<h1 id="3-关于no_printk" data-numberify>3. 关于no_printk<a class="anchor ms-1" href="#3-关于no_printk"></a></h1>
-<p>no_printk表示信息不会被输出，但是为了在不同的配置下，内核都可以正常工作，这里需要让编译器对传入pr_xxx的参数进行检查。</p>
-
-<h1 id="4-pr_fmt和dev_fmt" data-numberify>4. pr_fmt和dev_fmt<a class="anchor ms-1" href="#4-pr_fmt和dev_fmt"></a></h1>
-<p>在阅读<code>Linux</code>内核或其他开源代码时，在文件的开始部分，通常能看到类似如下代码。但是代码中又没有看到使用的地方。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="cp">#define pr_fmt(fmt) KBUILD_MODNAME &#34;: &#34; fmt
-</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="cp"></span>
-</span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;...&gt;</span><span class="cp">
-</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;...&gt;</span><span class="cp">
-</span></span></span></code></pre></div><p>其实<code>pr_fmt</code>是通常和大名鼎鼎的<code>printk</code>一起来合作实现其他宏，比较常见的就是<code>pr_*()</code>系列宏，另外一些模块或驱动中也会利用<code>pr_fmt</code>来输出日志信息。使用<code>pr_fmt</code>可以在要输出的信息前再添加额外的信息。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// include/linux/printk.h
 </span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cm">/**
-</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * pr_fmt - used by the pr_*() macros to generate the printk format string
-</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> * @fmt: format string passed from a pr_*() macro
-</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> *
-</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> * This macro can be used to generate a unified format string for pr_*()
-</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> * macros. A common use is to prefix all pr_*() messages in a file with a common
-</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> * string. For example, defining this at the top of a source file:
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * pr_devel - Print a debug-level message conditionally
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> * @fmt: format string
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> * @...: arguments for the format string
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> * This macro expands to a printk with KERN_DEBUG loglevel if DEBUG is
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> * defined. Otherwise it does nothing.
 </span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> *
-</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> *        #define pr_fmt(fmt) KBUILD_MODNAME &#34;: &#34; fmt
-</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cm"> *
-</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cm"> * would prefix all pr_info, pr_emerg... messages in the file with the module
-</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cm"> * name.
-</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cm"> */</span>
-</span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cp">#ifndef pr_fmt
-</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cp">#define pr_fmt(fmt) fmt
-</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cp">#endif
-</span></span></span></code></pre></div><p>如果在<code>#include &lt;linux/printk.h&gt;</code>之前没有定义<code>pr_fmt</code>，<code>include/linux/printk.h</code>中会将<code>pr_fmt(fmt)</code>定义为<code>fmt</code>，也就是输出信息的原始格式。如果在<code>#include &lt;linux/printk.h&gt;</code>之后定义<code>pr_fmt</code>，编译时就会提示重复定义警告或错误。所以通常来说，对<code>pr_fmt</code>的定义都是放到了文件的最前端。</p>
-
-<h1 id="5-dev_xxx" data-numberify>5. dev_xxx<a class="anchor ms-1" href="#5-dev_xxx"></a></h1>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1">/// include/linux/dev_printk.h
-</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="c1"></span><span class="cp">#ifndef dev_fmt
-</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="cp">#define dev_fmt(fmt) fmt
-</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> * It uses pr_fmt() to generate the format string.
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cp">#ifdef DEBUG
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cp">#define pr_devel(fmt, ...) \
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cp">	printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cp">#else
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cp">#define pr_devel(fmt, ...) \
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cp">	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="cp">#endif
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cm">/* If you are writing a driver, please use dev_dbg instead */</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cp">#if defined(CONFIG_DYNAMIC_DEBUG) || \
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cp">	(defined(CONFIG_DYNAMIC_DEBUG_CORE) &amp;&amp; defined(DYNAMIC_DEBUG_MODULE))
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/dynamic_debug.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> * pr_debug - Print a debug-level message conditionally
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> * @fmt: format string
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> * @...: arguments for the format string
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cm"> * This macro expands to dynamic_pr_debug() if CONFIG_DYNAMIC_DEBUG is
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cm"> * set. Otherwise, if DEBUG is defined, it&#39;s equivalent to a printk with
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cm"> * KERN_DEBUG loglevel. If DEBUG is not defined it does nothing.
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cm"> * It uses pr_fmt() to generate the format string (dynamic_pr_debug() uses
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cm"> * pr_fmt() internally).
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="cp">#define pr_debug(fmt, ...)			\
+</span></span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="cp">	dynamic_pr_debug(fmt, ##__VA_ARGS__)
+</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="cp">#elif defined(DEBUG)
+</span></span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="cp">#define pr_debug(fmt, ...) \
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="cp">	printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="cp">#else
+</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="cp">#define pr_debug(fmt, ...) \
+</span></span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="cp">	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="cp">#endif
 </span></span></span></code></pre></div>
-<h1 id="6-常用pr_fmt定义" data-numberify>6. 常用pr_fmt定义<a class="anchor ms-1" href="#6-常用pr_fmt定义"></a></h1>
+<h2 id="32-关于no_printk" data-numberify>3.2. 关于no_printk<a class="anchor ms-1" href="#32-关于no_printk"></a></h2>
+<p><code>no_printk</code>表示信息不会被输出，但是为了在不同的配置下，内核都可以正常工作，需要让编译器对传入<code>pr_xxx</code>的参数进行检查。</p>
 
-<h2 id="61-打印模块名函数名和行号" data-numberify>6.1. 打印模块名、函数名和行号<a class="anchor ms-1" href="#61-打印模块名函数名和行号"></a></h2>
+<h1 id="4-常用pr_fmt定义" data-numberify>4. 常用pr_fmt定义<a class="anchor ms-1" href="#4-常用pr_fmt定义"></a></h1>
+
+<h2 id="41-打印模块名函数名和行号" data-numberify>4.1. 打印模块名、函数名和行号<a class="anchor ms-1" href="#41-打印模块名函数名和行号"></a></h2>
 <p><code>KBUILD_MODNAME</code>是编译时通过编译选项指定的，无需自己定义。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="cp">#define pr_fmt(fmt) \
 </span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="cp">    KBUILD_MODNAME &#34;: [%s:%d] &#34; fmt, __func__, __LINE__
 </span></span></span></code></pre></div>
-<h2 id="62-打印cpu号" data-numberify>6.2. 打印CPU号<a class="anchor ms-1" href="#62-打印cpu号"></a></h2>
+<h2 id="42-打印cpu号" data-numberify>4.2. 打印CPU号<a class="anchor ms-1" href="#42-打印cpu号"></a></h2>
 <p>使用<code>raw_smp_processor_id</code>需要包含<code>linux/smp.h</code>。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="cp">#define pr_fmt(fmt) \
 </span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="cp">    KBUILD_MODNAME &#34;: &lt;C%u&gt; &#34; fmt, raw_smp_processor_id()
 </span></span></span></code></pre></div>
-<h2 id="63-打印线程pid和线程名" data-numberify>6.3. 打印线程pid和线程名<a class="anchor ms-1" href="#63-打印线程pid和线程名"></a></h2>
+<h2 id="43-打印线程pid和线程名" data-numberify>4.3. 打印线程pid和线程名<a class="anchor ms-1" href="#43-打印线程pid和线程名"></a></h2>
 <p>线程的<code>task_struct</code>使用<code>current</code>宏来获取，需要包含<code>linux/sched.h</code>。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="cp">#define pr_fmt(fmt) \
 </span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="cp">    &#34;{t%d-%s} &#34; fmt, current-&gt;pid, current-&gt;comm
 </span></span></span></code></pre></div>
-<h2 id="64-打印进程pid和进程名" data-numberify>6.4. 打印进程pid和进程名<a class="anchor ms-1" href="#64-打印进程pid和进程名"></a></h2>
+<h2 id="44-打印进程pid和进程名" data-numberify>4.4. 打印进程pid和进程名<a class="anchor ms-1" href="#44-打印进程pid和进程名"></a></h2>
 <p>进程的<code>task_struct</code>可以通过<code>current-&gt;group_leader</code>来获取。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="cp">#define pr_fmt(fmt) \
 </span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="cp">    &#34;{p%d-%s} &#34; fmt, \
 </span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="cp">    current-&gt;group_leader-&gt;pid, current-&gt;group_leader-&gt;comm
 </span></span></span></code></pre></div>
-<h2 id="65-打印进程pid和线程pid" data-numberify>6.5. 打印进程pid和线程pid<a class="anchor ms-1" href="#65-打印进程pid和线程pid"></a></h2>
+<h2 id="45-打印进程pid和线程pid" data-numberify>4.5. 打印进程pid和线程pid<a class="anchor ms-1" href="#45-打印进程pid和线程pid"></a></h2>
 <p>进程pid <code>current-&gt;tgid</code>与<code>current-&gt;group_leader-&gt;pid</code>相同。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="cp">#define pr_fmt(fmt) \
 </span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="cp">    &#34;{p%d:t%d} &#34; fmt, current-&gt;tgid, current-&gt;pid
 </span></span></span></code></pre></div>
-<h2 id="66-大杂烩" data-numberify>6.6. 大杂烩<a class="anchor ms-1" href="#66-大杂烩"></a></h2>
+<h2 id="46-大杂烩" data-numberify>4.6. 大杂烩<a class="anchor ms-1" href="#46-大杂烩"></a></h2>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="cp">#define pr_fmt(fmt) \
 </span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="cp">    KBUILD_MODNAME &#34;: &lt;C%u&gt;{p%d-%s}{t%d-%s}[%s:%d] &#34; fmt, raw_smp_processor_id(), \
 </span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="cp">    current-&gt;group_leader-&gt;pid, current-&gt;group_leader-&gt;comm, \
@@ -1219,7 +1248,7 @@ kingdix10
         <div class="slide-inner row gx-0"><div class="col-12 col-md-6 col-lg-4 me-2">
             <div class="post-card card card-body p-0 border-0 surface">
   
-  <picture><img class="img-fluid" alt="Linux printk日志输出格式控制" src="https://kingdix10.github.io/covers/hologram_scheme_scifi_139294_300x168.jpg" loading="lazy"
+  <picture><img class="img-fluid" alt="Linux printk日志输出格式控制" src="https://kingdix10.github.io/covers/keyboard_backlight_light_159518_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture>
@@ -1236,7 +1265,7 @@ kingdix10
           </div><div class="col-12 col-md-6 col-lg-4 me-2">
             <div class="post-card card card-body p-0 border-0 surface">
   
-  <picture><img class="img-fluid" alt="linux内核dynamic_debug" src="https://kingdix10.github.io/covers/wavy_curvy_lines_146044_300x168.jpg" loading="lazy"
+  <picture><img class="img-fluid" alt="linux内核dynamic_debug" src="https://kingdix10.github.io/covers/travel_map_compass_123078_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture>
@@ -1253,30 +1282,13 @@ kingdix10
           </div><div class="col-12 col-md-6 col-lg-4 me-2">
             <div class="post-card card card-body p-0 border-0 surface">
   
-  <picture><img class="img-fluid" alt="Linux中断处理流程图" src="https://kingdix10.github.io/covers/code_programming_text_140050_300x168.jpg" loading="lazy"
+  <picture><img class="img-fluid" alt="Linux sysrq简介" src="https://kingdix10.github.io/covers/pixels_cubes_shapes_127558_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture>
 
-  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_flow/">
-    Linux中断处理流程图
-  </a>
-  <div class="post-meta mb-0">
-    2022/12/30
-
-  </div>
-</div>
-
-          </div><div class="col-12 col-md-6 col-lg-4 me-2">
-            <div class="post-card card card-body p-0 border-0 surface">
-  
-  <picture><img class="img-fluid" alt="Linux内核sched_class汇总" src="https://kingdix10.github.io/covers/wavy_motley_metallic_139065_300x168.jpg" loading="lazy"
-     width="300"
-     height="168"/>
-  </picture>
-
-  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_table/">
-    Linux内核sched_class汇总
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/debug/sysrq/">
+    Linux sysrq简介
   </a>
   <div class="post-meta mb-0">
     2022/12/30
@@ -1325,22 +1337,21 @@ kingdix10
       <nav id="TableOfContents">
   <ul>
     <li><a href="#1-printk">1. printk</a></li>
-    <li><a href="#2-常见pr_接口">2. 常见pr_*()接口</a>
+    <li><a href="#2-pr_fmt和dev_fmt">2. pr_fmt和dev_fmt</a></li>
+    <li><a href="#3-常见pr_接口">3. 常见pr_*()接口</a>
       <ul>
-        <li><a href="#21-pr_devel和pr_debug">2.1. <code>pr_devel</code>和<code>pr_debug</code></a></li>
+        <li><a href="#31-pr_devel和pr_debugbug">3.1. pr_devel和pr_debugbug`</a></li>
+        <li><a href="#32-关于no_printk">3.2. 关于no_printk</a></li>
       </ul>
     </li>
-    <li><a href="#3-关于no_printk">3. 关于no_printk</a></li>
-    <li><a href="#4-pr_fmt和dev_fmt">4. pr_fmt和dev_fmt</a></li>
-    <li><a href="#5-dev_xxx">5. dev_xxx</a></li>
-    <li><a href="#6-常用pr_fmt定义">6. 常用pr_fmt定义</a>
+    <li><a href="#4-常用pr_fmt定义">4. 常用pr_fmt定义</a>
       <ul>
-        <li><a href="#61-打印模块名函数名和行号">6.1. 打印模块名、函数名和行号</a></li>
-        <li><a href="#62-打印cpu号">6.2. 打印CPU号</a></li>
-        <li><a href="#63-打印线程pid和线程名">6.3. 打印线程pid和线程名</a></li>
-        <li><a href="#64-打印进程pid和进程名">6.4. 打印进程pid和进程名</a></li>
-        <li><a href="#65-打印进程pid和线程pid">6.5. 打印进程pid和线程pid</a></li>
-        <li><a href="#66-大杂烩">6.6. 大杂烩</a></li>
+        <li><a href="#41-打印模块名函数名和行号">4.1. 打印模块名、函数名和行号</a></li>
+        <li><a href="#42-打印cpu号">4.2. 打印CPU号</a></li>
+        <li><a href="#43-打印线程pid和线程名">4.3. 打印线程pid和线程名</a></li>
+        <li><a href="#44-打印进程pid和进程名">4.4. 打印进程pid和进程名</a></li>
+        <li><a href="#45-打印进程pid和线程pid">4.5. 打印进程pid和线程pid</a></li>
+        <li><a href="#46-大杂烩">4.6. 大杂烩</a></li>
       </ul>
     </li>
   </ul>
@@ -1417,7 +1428,7 @@ Zhihu"
 <span class="menu-icon me-1"><i class="fab fa-fw fa-zhihu text-primary"></i></span>Zhihu</a></li></ul></li></ul></div>
 </div>
 </footer>
-<script data-precache src="/assets/main/bundle.min.de08722b15dbab0d764debd50114ce3d28da8ee6c7b889ff8c82e6faad0b46dd.js" integrity="sha256-3ghyKxXbqw12TevVARTOPSjajubHuIn/jILm&#43;q0LRt0=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
+<script data-precache src="/assets/main/bundle.min.87a6f33b4f10cfffd4d1501f8f35bf6bb4945d0f09c5747ecad2a3130f59b74d.js" integrity="sha256-h6bzO08Qz//U0VAfjzW/a7SUXQ8JxXR&#43;ytKjEw9Zt00=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
 <script data-precache src="/assets/viewer/bundle.min.ffafad0d121aa7d1fb443510086dac514a0b152826cf094f02a1f3dec1f37918.js" integrity="sha256-/6&#43;tDRIap9H7RDUQCG2sUUoLFSgmzwlPAqHz3sHzeRg=" crossorigin="anonymous" defer></script><script>
   var _hmt = _hmt || [];
   (function() {

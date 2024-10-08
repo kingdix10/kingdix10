@@ -7,17 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
-    <lastBuildDate>Mon, 05 Aug 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>编译工具杂记</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/gcc_tools/</link>
-      <pubDate>Mon, 05 Aug 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/gcc_tools/</guid>
-      <description><![CDATA[1. gcc 在线文档：https://gcc.gnu.org/onlinedocs 1.1. 编译选项 1# -Wall 2# -Werror/-Werror= 1.2. 调试选项 1## -save-temps=obj 2 3# -fcallgraph-info 2. objcopy 1objcopy -I binary -O elf32-little --change-section-address .data=0x08000000 input.bin output.elf 3. gdb 1target]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" length="24563" type="image/.jpg" />
-    </item>
-    
+    <lastBuildDate>Tue, 16 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>用memcmp比较结构体会有什么问题</title>
       <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/c_struct_cmp/</link>

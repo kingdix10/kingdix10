@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>trace-cmd on kingdix10&#39;s site</title>
+    <link>https://kingdix10.github.io/zh-cn/tags/trace-cmd/</link>
+    <description>Recent content in trace-cmd on kingdix10&#39;s site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
+</copyright>
+    <lastBuildDate>Wed, 04 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/trace-cmd/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>trace-cmd实例</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/trace_cmd_usage/</link>
+      <pubDate>Wed, 04 Sep 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/trace_cmd_usage/</guid>
+      <description><![CDATA[1. trace-cmd trace-cmd需要root权限。 1.1. 使用步骤 1# 保存成文件 2trace-cmd record 3trace-cmd report 1# 从tracefs读取 2trace-cmd start 3trace-cmd stop 4trace-cmd show 5 6trace-cmd clear 7trace-cmd restart 8trace-cmd show 1.2. 常见需要忽略的函数 1#]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_autumn_129305_300x168.jpg" length="15566" type="image/.jpg" />
+    </item>
+    
+  </channel>
+</rss>
+

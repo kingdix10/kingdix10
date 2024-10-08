@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="position-relative" itemscope itemtype="https://schema.org/WebPage" lang="zh-cn"
   data-bs-theme="auto" data-palette="purple">
-  <head><script src="/assets/init/bundle.min.0bb93948508b32667bbc76d4f9a8123a3c3b2ef731048422b0c48f9ea39586e9.js" integrity="sha256-C7k5SFCLMmZ7vHbU&#43;agSOjw7LvcxBIQisMSPnqOVhuk=" crossorigin="anonymous"></script>
+  <head><script src="/assets/init/bundle.min.dc6846f18e2cf3391fbf7090251d3ea2ebdd588ef2bd63575463ba9cc7bc8b04.js" integrity="sha256-3GhG8Y4s8zkfv3CQJR0&#43;ouvdWI7yvWNXVGO6nMe8iwQ=" crossorigin="anonymous"></script>
 <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Linux内核sched_class汇总 - kingdix10&#39;s site</title>
@@ -14,14 +14,14 @@
 <meta name="keywords" content="进程管理" />
   <meta name="description" content="idle/fair/rt/dl/stop sched_class成员值汇总" />
     <meta name="robots" content="index, follow" /><meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://kingdix10.github.io/covers/wavy_motley_metallic_139065_300x168.jpg"/>
+<meta name="twitter:image" content="https://kingdix10.github.io/covers/mosaic_multicolored_texture_126795_300x168.jpg"/>
 
 <meta name="twitter:title" content="Linux内核sched_class汇总"/>
 <meta name="twitter:description" content="idle/fair/rt/dl/stop sched_class成员值汇总"/>
 <meta property="og:title" content="Linux内核sched_class汇总" />
 <meta property="og:description" content="idle/fair/rt/dl/stop sched_class成员值汇总" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_table/" /><meta property="og:image" content="https://kingdix10.github.io/covers/wavy_motley_metallic_139065_300x168.jpg" /><meta property="article:section" content="docs" />
+<meta property="og:url" content="https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_table/" /><meta property="og:image" content="https://kingdix10.github.io/covers/mosaic_multicolored_texture_126795_300x168.jpg" /><meta property="article:section" content="docs" />
 <meta property="article:published_time" content="2022-12-30T00:00:00+00:00" />
 <meta property="article:modified_time" content="2024-08-04T17:46:33+00:00" /><meta property="og:site_name" content="kingdix10&#39;s site" />
 
@@ -29,7 +29,7 @@
 <meta itemprop="name" content="Linux内核sched_class汇总">
 <meta itemprop="description" content="idle/fair/rt/dl/stop sched_class成员值汇总"><meta itemprop="datePublished" content="2022-12-30T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2024-08-04T17:46:33+00:00" />
-<meta itemprop="wordCount" content="296"><meta itemprop="image" content="https://kingdix10.github.io/covers/wavy_motley_metallic_139065_300x168.jpg">
+<meta itemprop="wordCount" content="450"><meta itemprop="image" content="https://kingdix10.github.io/covers/mosaic_multicolored_texture_126795_300x168.jpg">
 <meta itemprop="keywords" content="linux内核,进程管理,linux-6.6," />
   <meta property="og:image:alt" content="Linux内核sched_class汇总" />
   <meta name="twitter:image:alt" content="Linux内核sched_class汇总" />
@@ -422,6 +422,8 @@ kingdix10
           <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-8ea97fb7a0a0d68cedef1b63b4664daa">
             <div class="btn-toggle-nav fw-normal ms-2 small">
               <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/thermal/linux-5.10/thermal_5.10/"><span class="docs-nav-title">Linux thermal子系统(基于5.10)</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/"><span class="docs-nav-title">linux thermal子系统简介</span></a>
         </li><li class="mb-2" tabindex="-1">
           <div class="py-1 d-flex justify-content-between align-items-center ms-3">
@@ -547,14 +549,10 @@ kingdix10
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/pid_namespace/"><span class="docs-nav-title">Linux进程命名空间（pid namespace）</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/task_state/"><span class="docs-nav-title">Linux进程状态与生命周期</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_2/"><span class="docs-nav-title">Linux内核copy_process分析（二）</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_3/"><span class="docs-nav-title">Linux内核copy_process分析（三）</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_1/"><span class="docs-nav-title">Linux内核copy_process分析（一）</span></a>
         </li><li class="mb-2 py-1 ms-3 text-primary" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_table/"><span class="docs-nav-title">Linux内核sched_class汇总</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/schedule1/"><span class="docs-nav-title">进程调度简介</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/task_life/"><span class="docs-nav-title">用trace追踪Linux进程的一生</span></a>
         </li></ul>
@@ -571,9 +569,19 @@ kingdix10
           <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-de97508460ed4f8a4a3e7ac2798cb58e">
             <div class="btn-toggle-nav fw-normal ms-2 small">
               <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc/"><span class="docs-nav-title">kmalloc分配内存的大小</span></a>
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/memory_size_layout/"><span class="docs-nav-title">ARM64 Linux内核内存大小和布局</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_size/"><span class="docs-nav-title">kmalloc分配内存的大小(基于linux-5.15)</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_vmalloc/"><span class="docs-nav-title">kmalloc和vmalloc对比</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtable/"><span class="docs-nav-title">Linux ARM64页面大小和虚拟地址位数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/vmalloc/"><span class="docs-nav-title">vmalloc原理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/mm_api/"><span class="docs-nav-title">内存管理API汇总</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/why_idmap/"><span class="docs-nav-title">为什么要有idmap</span></a>
         </li></ul>
             </div>
           </div>
@@ -596,9 +604,15 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/printk-formats/"><span class="docs-nav-title">Linux printk日志输出格式控制</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/sysrq/"><span class="docs-nav-title">Linux sysrq简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/dynamic_debug/"><span class="docs-nav-title">linux内核dynamic_debug</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/boottime_trace/"><span class="docs-nav-title">Linux使用ftrace进行boottime跟踪</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/"><span class="docs-nav-title">printk的pr_fmt</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/trace_cmd_usage/"><span class="docs-nav-title">trace-cmd实例</span></a>
         </li></ul>
             </div>
           </div>
@@ -651,7 +665,11 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/optimize_tips/"><span class="docs-nav-title">Linux内核代码的编写和优化技巧</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/stack/"><span class="docs-nav-title">Linux中的栈</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/kernel_boot_security/"><span class="docs-nav-title">保证内核启动安全的几种方式</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/fp/"><span class="docs-nav-title">栈帧寄存器相关的编译选项</span></a>
         </li></ul>
             </div>
           </div>
@@ -713,8 +731,6 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/macro_link_args/"><span class="docs-nav-title">gcc宏定义中的连接符和可变参数</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/gcc_tools/"><span class="docs-nav-title">编译工具杂记</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/gcc_predefine/"><span class="docs-nav-title">编译器预定义宏</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/array_func/"><span class="docs-nav-title">多维数组作为函数参数</span></a>
@@ -748,9 +764,7 @@ kingdix10
           </div>
           <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-cffaf2396700969f3f8596d2093784ef">
             <div class="btn-toggle-nav fw-normal ms-2 small">
-              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/compile/make_debug/"><span class="docs-nav-title">make调试</span></a>
-        </li></ul>
+              <ul class="list-unstyled mb-2 w-100"></ul>
             </div>
           </div>
         </li></ul>
@@ -798,8 +812,6 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/uboot_misc_note/"><span class="docs-nav-title">U-Boot杂项记录</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/u-boot_commands/"><span class="docs-nav-title">常见u-boot命令</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/boot_flow/"><span class="docs-nav-title">嵌入式系统启动流程</span></a>
         </li></ul>
             </div>
@@ -821,8 +833,6 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/git/git_misc/"><span class="docs-nav-title">git配置和操作</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/jupyter_to_markdown/"><span class="docs-nav-title">jupyter转Markdown</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_tips/"><span class="docs-nav-title">Linux Bash技巧</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_decorate/"><span class="docs-nav-title">Linux Bash终端美化</span></a>
@@ -835,11 +845,9 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_sys/"><span class="docs-nav-title">linux常用命令-系统管理</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_benchmark/"><span class="docs-nav-title">linux常用命令-性能</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/sourceinsight/"><span class="docs-nav-title">sourceinsight快速建工程</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/ssh_wsl_exe/"><span class="docs-nav-title">ssh连接wsl后执行Windows程序</span></a>
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/os_migrate/"><span class="docs-nav-title">Windows系统迁移</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/win_python3/"><span class="docs-nav-title">解决Windows不能使用python3.10的问题</span></a>
         </li></ul>
@@ -923,7 +931,9 @@ kingdix10
         </div>
     <hr class="text-secondary">
 </div><div class="post-content mb-3" data-bs-spy="scroll" data-bs-target="#TableOfContents" tabindex="0">
-        <div id="post-content-body"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// kernel/sched/sched.h
+        <div id="post-content-body">
+<h1 id="1-vmlinux中shced_class的位置" data-numberify>1. vmlinux中shced_class的位置<a class="anchor ms-1" href="#1-vmlinux中shced_class的位置"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// kernel/sched/sched.h
 </span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cm">/*
 </span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * Helper to define a sched_class instance; each one is placed in a separate
 </span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> * section which is ordered by the linker script:
@@ -956,8 +966,31 @@ kingdix10
 </span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="k">extern</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">rt_sched_class</span><span class="p">;</span>
 </span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="k">extern</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">fair_sched_class</span><span class="p">;</span>
 </span></span><span class="line"><span class="ln">33</span><span class="cl"><span class="k">extern</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">idle_sched_class</span><span class="p">;</span>
-</span></span></code></pre></div>
-<h1 id="shced_class列表" data-numberify>shced_class列表<a class="anchor ms-1" href="#shced_class列表"></a></h1>
+</span></span></code></pre></div><p><code>sched_class</code>定义。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln">1</span><span class="cl"># git grep -Inw DEFINE_SCHED_CLASS kernel/sched/*.c
+</span></span><span class="line"><span class="ln">2</span><span class="cl">kernel/sched/deadline.c:2718:DEFINE_SCHED_CLASS(dl) = {
+</span></span><span class="line"><span class="ln">3</span><span class="cl">kernel/sched/fair.c:12904:DEFINE_SCHED_CLASS(fair) = {
+</span></span><span class="line"><span class="ln">4</span><span class="cl">kernel/sched/idle.c:478:DEFINE_SCHED_CLASS(idle) = {
+</span></span><span class="line"><span class="ln">5</span><span class="cl">kernel/sched/rt.c:2699:DEFINE_SCHED_CLASS(rt) = {
+</span></span><span class="line"><span class="ln">6</span><span class="cl">kernel/sched/stop_task.c:117:DEFINE_SCHED_CLASS(stop) = {
+</span></span></code></pre></div><p><code>vmlinux.lds.h</code>控制链接布局。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// include/asm-generic/vmlinux.lds.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * The order of the sched class addresses are important, as they are
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> * used to determine the order of the priority of each sched class in
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> * relation to each other.
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cp">#define SCHED_DATA				\
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cp">	STRUCT_ALIGN();				\
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cp">	__sched_class_highest = .;		\
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cp">	*(__stop_sched_class)			\
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cp">	*(__dl_sched_class)			\
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cp">	*(__rt_sched_class)			\
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cp">	*(__fair_sched_class)			\
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cp">	*(__idle_sched_class)			\
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cp">	__sched_class_lowest = .;
+</span></span></span></code></pre></div>
+<h1 id="2-shced_class列表" data-numberify>2. shced_class列表<a class="anchor ms-1" href="#2-shced_class列表"></a></h1>
 <table>
 <thead>
 <tr>
@@ -1196,6 +1229,12 @@ kingdix10
 </tr>
 </tbody>
 </table>
+
+<h1 id="3-调用关系" data-numberify>3. 调用关系<a class="anchor ms-1" href="#3-调用关系"></a></h1>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_table/sched_class_caller.png" loading="lazy" width="1219" height="2963" />
+</picture>
+
+</p>
 </div>
 </div>
 </div><div class="card-footer">
@@ -1224,13 +1263,13 @@ kingdix10
         <div class="slide-inner row gx-0"><div class="col-12 col-md-6 col-lg-4 me-2">
             <div class="post-card card card-body p-0 border-0 surface">
   
-  <picture><img class="img-fluid" alt="Linux printk日志输出格式控制" src="https://kingdix10.github.io/covers/hologram_scheme_scifi_139294_300x168.jpg" loading="lazy"
+  <picture><img class="img-fluid" alt="Linux thermal子系统(基于5.10)" src="https://kingdix10.github.io/covers/gradient_orange_shades_131495_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture>
 
-  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/debug/printk-formats/">
-    Linux printk日志输出格式控制
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.1/thermal/linux-5.10/thermal_5.10/">
+    Linux thermal子系统(基于5.10)
   </a>
   <div class="post-meta mb-0">
     2022/12/30
@@ -1241,7 +1280,7 @@ kingdix10
           </div><div class="col-12 col-md-6 col-lg-4 me-2">
             <div class="post-card card card-body p-0 border-0 surface">
   
-  <picture><img class="img-fluid" alt="Linux中断处理流程图" src="https://kingdix10.github.io/covers/code_programming_text_140050_300x168.jpg" loading="lazy"
+  <picture><img class="img-fluid" alt="Linux中断处理流程图" src="https://kingdix10.github.io/covers/desert_sand_wavy_141026_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture>
@@ -1275,13 +1314,13 @@ kingdix10
           </div><div class="col-12 col-md-6 col-lg-4 me-2">
             <div class="post-card card card-body p-0 border-0 surface">
   
-  <picture><img class="img-fluid" alt="kmalloc分配内存的大小" src="https://kingdix10.github.io/covers/wall_brick_neon_150470_300x168.jpg" loading="lazy"
+  <picture><img class="img-fluid" alt="kmalloc分配内存的大小(基于linux-5.15)" src="https://kingdix10.github.io/covers/laptop_keyboard_glow_170138_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture>
 
-  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc/">
-    kmalloc分配内存的大小
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_size/">
+    kmalloc分配内存的大小(基于linux-5.15)
   </a>
   <div class="post-meta mb-0">
     2022/12/30
@@ -1346,7 +1385,9 @@ kingdix10
     <div class="card-body collapse accordion-collapse accordion-body d-lg-block" id="post-toc">
       <nav id="TableOfContents">
   <ul>
-    <li><a href="#shced_class列表">shced_class列表</a></li>
+    <li><a href="#1-vmlinux中shced_class的位置">1. vmlinux中shced_class的位置</a></li>
+    <li><a href="#2-shced_class列表">2. shced_class列表</a></li>
+    <li><a href="#3-调用关系">3. 调用关系</a></li>
   </ul>
 </nav>
     </div>
@@ -1421,7 +1462,7 @@ Zhihu"
 <span class="menu-icon me-1"><i class="fab fa-fw fa-zhihu text-primary"></i></span>Zhihu</a></li></ul></li></ul></div>
 </div>
 </footer>
-<script data-precache src="/assets/main/bundle.min.de08722b15dbab0d764debd50114ce3d28da8ee6c7b889ff8c82e6faad0b46dd.js" integrity="sha256-3ghyKxXbqw12TevVARTOPSjajubHuIn/jILm&#43;q0LRt0=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
+<script data-precache src="/assets/main/bundle.min.87a6f33b4f10cfffd4d1501f8f35bf6bb4945d0f09c5747ecad2a3130f59b74d.js" integrity="sha256-h6bzO08Qz//U0VAfjzW/a7SUXQ8JxXR&#43;ytKjEw9Zt00=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
 <script data-precache src="/assets/viewer/bundle.min.ffafad0d121aa7d1fb443510086dac514a0b152826cf094f02a1f3dec1f37918.js" integrity="sha256-/6&#43;tDRIap9H7RDUQCG2sUUoLFSgmzwlPAqHz3sHzeRg=" crossorigin="anonymous" defer></script><script>
   var _hmt = _hmt || [];
   (function() {

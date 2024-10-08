@@ -38,6 +38,16 @@
     <enclosure url="https://kingdix10.github.io/covers/water_waves_ripples_143522_300x168.jpg" length="11080" type="image/.jpg" />
     </item>
     
+    <item>
+      <title>Windows系统迁移</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/01-os/win/os_migrate/</link>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/win/os_migrate/</guid>
+      <description><![CDATA[1. 旧机器拷贝 WEPE制作U盘启动盘 保留原硬盘，接新硬盘 开机选择进入PE 新硬盘改为GPT分区表，删除所有分区 拷贝或创建EFI分区，大小约为10]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/canvas_picture_abstraction_138874_300x168.jpg" length="19551" type="image/.jpg" />
+    </item>
+    
   </channel>
 </rss>
 

@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="position-relative" itemscope itemtype="https://schema.org/WebPage" lang="zh-cn"
   data-bs-theme="auto" data-palette="purple">
-  <head><script src="/assets/init/bundle.min.0bb93948508b32667bbc76d4f9a8123a3c3b2ef731048422b0c48f9ea39586e9.js" integrity="sha256-C7k5SFCLMmZ7vHbU&#43;agSOjw7LvcxBIQisMSPnqOVhuk=" crossorigin="anonymous"></script>
+  <head><script src="/assets/init/bundle.min.dc6846f18e2cf3391fbf7090251d3ea2ebdd588ef2bd63575463ba9cc7bc8b04.js" integrity="sha256-3GhG8Y4s8zkfv3CQJR0&#43;ouvdWI7yvWNXVGO6nMe8iwQ=" crossorigin="anonymous"></script>
 <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>内核启动流程（一） - kingdix10&#39;s site</title>
@@ -14,14 +14,14 @@
 <meta name="keywords" content="启动流程" />
   <meta name="description" content="head.S分析" />
     <meta name="robots" content="index, follow" /><meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://kingdix10.github.io/covers/code_text_colorful_140555_300x168.jpg"/>
+<meta name="twitter:image" content="https://kingdix10.github.io/covers/keyboard_laptop_gradient_203739_300x168.jpg"/>
 
 <meta name="twitter:title" content="内核启动流程（一）"/>
 <meta name="twitter:description" content="head.S分析"/>
 <meta property="og:title" content="内核启动流程（一）" />
 <meta property="og:description" content="head.S分析" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/boot/entry/" /><meta property="og:image" content="https://kingdix10.github.io/covers/code_text_colorful_140555_300x168.jpg" /><meta property="article:section" content="docs" />
+<meta property="og:url" content="https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/boot/entry/" /><meta property="og:image" content="https://kingdix10.github.io/covers/keyboard_laptop_gradient_203739_300x168.jpg" /><meta property="article:section" content="docs" />
 <meta property="article:published_time" content="2022-12-30T00:00:00+00:00" />
 <meta property="article:modified_time" content="2024-08-04T17:46:33+00:00" /><meta property="og:site_name" content="kingdix10&#39;s site" />
 
@@ -29,7 +29,7 @@
 <meta itemprop="name" content="内核启动流程（一）">
 <meta itemprop="description" content="head.S分析"><meta itemprop="datePublished" content="2022-12-30T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2024-08-04T17:46:33+00:00" />
-<meta itemprop="wordCount" content="8628"><meta itemprop="image" content="https://kingdix10.github.io/covers/code_text_colorful_140555_300x168.jpg">
+<meta itemprop="wordCount" content="8707"><meta itemprop="image" content="https://kingdix10.github.io/covers/keyboard_laptop_gradient_203739_300x168.jpg">
 <meta itemprop="keywords" content="linux内核,启动流程," />
   <meta property="og:image:alt" content="内核启动流程（一）" />
   <meta name="twitter:image:alt" content="内核启动流程（一）" />
@@ -422,6 +422,8 @@ kingdix10
           <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-8ea97fb7a0a0d68cedef1b63b4664daa">
             <div class="btn-toggle-nav fw-normal ms-2 small">
               <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/thermal/linux-5.10/thermal_5.10/"><span class="docs-nav-title">Linux thermal子系统(基于5.10)</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/"><span class="docs-nav-title">linux thermal子系统简介</span></a>
         </li><li class="mb-2" tabindex="-1">
           <div class="py-1 d-flex justify-content-between align-items-center ms-3">
@@ -548,13 +550,9 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/task_state/"><span class="docs-nav-title">Linux进程状态与生命周期</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_2/"><span class="docs-nav-title">Linux内核copy_process分析（二）</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_3/"><span class="docs-nav-title">Linux内核copy_process分析（三）</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/b-copy_process_1/"><span class="docs-nav-title">Linux内核copy_process分析（一）</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_table/"><span class="docs-nav-title">Linux内核sched_class汇总</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/schedule1/"><span class="docs-nav-title">进程调度简介</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/sched/task_life/"><span class="docs-nav-title">用trace追踪Linux进程的一生</span></a>
         </li></ul>
@@ -571,9 +569,19 @@ kingdix10
           <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-de97508460ed4f8a4a3e7ac2798cb58e">
             <div class="btn-toggle-nav fw-normal ms-2 small">
               <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc/"><span class="docs-nav-title">kmalloc分配内存的大小</span></a>
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/memory_size_layout/"><span class="docs-nav-title">ARM64 Linux内核内存大小和布局</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_size/"><span class="docs-nav-title">kmalloc分配内存的大小(基于linux-5.15)</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_vmalloc/"><span class="docs-nav-title">kmalloc和vmalloc对比</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtable/"><span class="docs-nav-title">Linux ARM64页面大小和虚拟地址位数</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/vmalloc/"><span class="docs-nav-title">vmalloc原理</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/mm_api/"><span class="docs-nav-title">内存管理API汇总</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/mm/why_idmap/"><span class="docs-nav-title">为什么要有idmap</span></a>
         </li></ul>
             </div>
           </div>
@@ -596,9 +604,15 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/printk-formats/"><span class="docs-nav-title">Linux printk日志输出格式控制</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/sysrq/"><span class="docs-nav-title">Linux sysrq简介</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/dynamic_debug/"><span class="docs-nav-title">linux内核dynamic_debug</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/boottime_trace/"><span class="docs-nav-title">Linux使用ftrace进行boottime跟踪</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/"><span class="docs-nav-title">printk的pr_fmt</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/trace_cmd_usage/"><span class="docs-nav-title">trace-cmd实例</span></a>
         </li></ul>
             </div>
           </div>
@@ -651,7 +665,11 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/optimize_tips/"><span class="docs-nav-title">Linux内核代码的编写和优化技巧</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/stack/"><span class="docs-nav-title">Linux中的栈</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/kernel_boot_security/"><span class="docs-nav-title">保证内核启动安全的几种方式</span></a>
+        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/04-kernel/linux-6.6/misc/fp/"><span class="docs-nav-title">栈帧寄存器相关的编译选项</span></a>
         </li></ul>
             </div>
           </div>
@@ -713,8 +731,6 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/macro_link_args/"><span class="docs-nav-title">gcc宏定义中的连接符和可变参数</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/gcc_tools/"><span class="docs-nav-title">编译工具杂记</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/gcc_predefine/"><span class="docs-nav-title">编译器预定义宏</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/ccpp/array_func/"><span class="docs-nav-title">多维数组作为函数参数</span></a>
@@ -748,9 +764,7 @@ kingdix10
           </div>
           <div class="docs-nav-subnavs border-start mt-2 collapse " id="nav-cffaf2396700969f3f8596d2093784ef">
             <div class="btn-toggle-nav fw-normal ms-2 small">
-              <ul class="list-unstyled mb-2 w-100"><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/05-program/compile/make_debug/"><span class="docs-nav-title">make调试</span></a>
-        </li></ul>
+              <ul class="list-unstyled mb-2 w-100"></ul>
             </div>
           </div>
         </li></ul>
@@ -798,8 +812,6 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/uboot_misc_note/"><span class="docs-nav-title">U-Boot杂项记录</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/u-boot_commands/"><span class="docs-nav-title">常见u-boot命令</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/03-boot/u-boot/boot_flow/"><span class="docs-nav-title">嵌入式系统启动流程</span></a>
         </li></ul>
             </div>
@@ -821,8 +833,6 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/git/git_misc/"><span class="docs-nav-title">git配置和操作</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/jupyter_to_markdown/"><span class="docs-nav-title">jupyter转Markdown</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_tips/"><span class="docs-nav-title">Linux Bash技巧</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/bash_decorate/"><span class="docs-nav-title">Linux Bash终端美化</span></a>
@@ -835,11 +845,9 @@ kingdix10
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_sys/"><span class="docs-nav-title">linux常用命令-系统管理</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/linux/shell/cmd_benchmark/"><span class="docs-nav-title">linux常用命令-性能</span></a>
-        </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/sourceinsight/"><span class="docs-nav-title">sourceinsight快速建工程</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
-          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/ssh_wsl_exe/"><span class="docs-nav-title">ssh连接wsl后执行Windows程序</span></a>
+          <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/os_migrate/"><span class="docs-nav-title">Windows系统迁移</span></a>
         </li><li class="mb-2 py-1 ms-3" tabindex="-1">
           <a class="docs-nav-link d-flex align-items-center" href="/zh-cn/docs/01-os/win/win_python3/"><span class="docs-nav-title">解决Windows不能使用python3.10的问题</span></a>
         </li></ul>
@@ -1025,7 +1033,7 @@ kingdix10
 </span></span><span class="line"><span class="ln"> 3</span><span class="cl">    <span class="o">+--</span> <span class="nf">record_mmu_state</span><span class="p">()</span>              <span class="c1">/// 记录当前MMU状态，保存到x19
 </span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="c1"></span>    <span class="o">+--</span> <span class="nf">preserve_boot_args</span><span class="p">()</span>            <span class="c1">/// 保存x0~x3到boot_args[0~3]
 </span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="c1"></span>    <span class="o">+--</span> <span class="nf">create_idmap</span><span class="p">()</span>                  <span class="c1">/// 建立恒等映射init_idmap_pg_dir和内核镜像映射init_pg_dir的页表
-</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="c1"></span><span class="o">*</span>   <span class="o">+--</span> <span class="nf">dcache_clean_poc</span><span class="p">()</span>              <span class="c1">/// 清空.idmap.text段数据缓存
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="c1"></span>    <span class="o">+--</span> <span class="nf">dcache_clean_poc</span><span class="p">()</span>              <span class="c1">/// 清空.idmap.text段数据缓存
 </span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="c1"></span>    <span class="o">+--</span> <span class="nf">init_kernel_el</span><span class="p">()</span>                <span class="c1">/// 根据内核运行异常等级进行配置，返回启动模式
 </span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="c1"></span>    <span class="o">|</span>   <span class="o">+--</span> <span class="nf">init_el1</span><span class="p">()</span>                  <span class="c1">/// 通常情况下从EL1启动内核
 </span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="c1"></span>    <span class="o">|</span>   <span class="err">\</span><span class="o">--</span> <span class="nf">init_el2</span><span class="p">()</span>                  <span class="c1">/// 从EL2启动内核，用于开启VHE(Virtualization Host Extensions)
@@ -1277,8 +1285,8 @@ create_idmap首先将整个区间（包含内核镜像和FDT）映射为RX属性
 <h1 id="5-开启mmu__primary_switch" data-numberify>5. 开启MMU：__primary_switch<a class="anchor ms-1" href="#5-开启mmu__primary_switch"></a></h1>
 <p><code>__primary_switch</code>表示重要的切换，这个非常重要的切换就是开启MMU。开启MMU(<code>__enable_mmu</code>)前，CPU访问的是物理地址，<code>__enable_mmu</code>之后，CPU访问的是虚拟地址。这个虚拟地址最高位为0，使用的是TTBR0，而此时TTBR0执行的页表是init_idmap_pg_dir。而reserved_pg_dir这个时候还没有填充。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="nf">SYM_FUNC_START_LOCAL</span><span class="p">(</span><span class="n">__primary_switch</span><span class="p">)</span>
-</span></span><span class="line"><span class="ln"> 2</span><span class="cl">    <span class="n">adrp</span>	<span class="n">x1</span><span class="p">,</span> <span class="n">reserved_pg_dir</span>     <span class="c1">/// ttbr1
-</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="c1"></span>    <span class="n">adrp</span>	<span class="n">x2</span><span class="p">,</span> <span class="n">init_idmap_pg_dir</span>   <span class="c1">/// ttbr0
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">    <span class="n">adrp</span>	<span class="n">x1</span><span class="p">,</span> <span class="n">reserved_pg_dir</span>     <span class="c1">/// 传递给__enable_mmu的参数，用于配置ttbr1
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="c1"></span>    <span class="n">adrp</span>	<span class="n">x2</span><span class="p">,</span> <span class="n">init_idmap_pg_dir</span>   <span class="c1">/// 传递给__enable_mmu的参数，用于配置ttbr0
 </span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="c1"></span>    <span class="n">bl</span>	<span class="n">__enable_mmu</span>                <span class="c1">/// 开启MMU
 </span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="c1"></span><span class="cp">#ifdef CONFIG_RELOCATABLE
 </span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cp"></span>    <span class="n">adrp</span>	<span class="n">x23</span><span class="p">,</span> <span class="n">KERNEL_START</span>
@@ -1296,18 +1304,24 @@ create_idmap首先将整个区间（包含内核镜像和FDT）映射为RX属性
 </span></span><span class="line"><span class="ln">18</span><span class="cl">    <span class="n">orr</span>	<span class="n">x23</span><span class="p">,</span> <span class="n">x23</span><span class="p">,</span> <span class="n">x0</span>			<span class="c1">// record kernel offset
 </span></span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="c1"></span><span class="cp">#endif
 </span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="cp">#endif
-</span></span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="cp"></span>    <span class="n">bl</span>	<span class="n">clear_page_tables</span>           <span class="c1">/// 清空init_pg_dir
-</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="c1"></span>    <span class="n">bl</span>	<span class="n">create_kernel_mapping</span>       <span class="c1">/// 填充init_pg_dir
-</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="ln">24</span><span class="cl">    <span class="n">adrp</span>	<span class="n">x1</span><span class="p">,</span> <span class="n">init_pg_dir</span>
-</span></span><span class="line"><span class="ln">25</span><span class="cl">    <span class="n">load_ttbr1</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span>           <span class="c1">/// 加载init_pg_dir到ttbr1，为跳转到新的地址做准备
-</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="c1"></span><span class="cp">#ifdef CONFIG_RELOCATABLE
-</span></span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="cp"></span>    <span class="n">bl</span>	<span class="n">__relocate_kernel</span>
-</span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="cp">#endif
-</span></span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="cp"></span>    <span class="n">ldr</span>	<span class="n">x8</span><span class="p">,</span> <span class="o">=</span><span class="n">__primary_switched</span>     <span class="c1">/// __primary_switched编译时的地址，如果使能了CONFIG_RELOCATABLE，__relocate_kernel会给__primary_switched加上一个偏移
-</span></span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="c1"></span>    <span class="n">adrp</span>	<span class="n">x0</span><span class="p">,</span> <span class="n">KERNEL_START</span>		<span class="c1">// __pa(KERNEL_START)   /// 运行时的物理地址
-</span></span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="c1"></span>    <span class="n">br</span>	<span class="n">x8</span>                          <span class="c1">/// 跳转到__primary_switched虚拟地址运行
-</span></span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="c1"></span><span class="nf">SYM_FUNC_END</span><span class="p">(</span><span class="n">__primary_switch</span><span class="p">)</span>
+</span></span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="cp"></span>    <span class="c1">/// 清空init_pg_dir
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="c1"></span>    <span class="n">bl</span>	<span class="n">clear_page_tables</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl">    <span class="c1">/// 填充init_pg_dir，以块映射的方式映射内核镜像
+</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="c1"></span>    <span class="n">bl</span>	<span class="n">create_kernel_mapping</span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl">
+</span></span><span class="line"><span class="ln">26</span><span class="cl">    <span class="n">adrp</span>	<span class="n">x1</span><span class="p">,</span> <span class="n">init_pg_dir</span>
+</span></span><span class="line"><span class="ln">27</span><span class="cl">    <span class="n">load_ttbr1</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span>           <span class="c1">/// 加载init_pg_dir到ttbr1，为跳转到新的地址做准备
+</span></span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="c1"></span><span class="cp">#ifdef CONFIG_RELOCATABLE
+</span></span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="cp"></span>    <span class="n">bl</span>	<span class="n">__relocate_kernel</span>
+</span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="cp"></span>    <span class="c1">/// __primary_switched编译时的地址赋值给x8
+</span></span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="c1"></span>    <span class="c1">/// 如果使能了CONFIG_RELOCATABLE，__relocate_kernel会给__primary_switched加上一个偏移
+</span></span></span><span class="line"><span class="ln">33</span><span class="cl"><span class="c1"></span>    <span class="n">ldr</span>	<span class="n">x8</span><span class="p">,</span> <span class="o">=</span><span class="n">__primary_switched</span>
+</span></span><span class="line"><span class="ln">34</span><span class="cl">    <span class="c1">/// 运行时的物理地址
+</span></span></span><span class="line"><span class="ln">35</span><span class="cl"><span class="c1"></span>    <span class="n">adrp</span>	<span class="n">x0</span><span class="p">,</span> <span class="n">KERNEL_START</span>		<span class="c1">// __pa(KERNEL_START)
+</span></span></span><span class="line"><span class="ln">36</span><span class="cl"><span class="c1"></span>    <span class="c1">/// 跳转到__primary_switched虚拟地址运行
+</span></span></span><span class="line"><span class="ln">37</span><span class="cl"><span class="c1"></span>    <span class="n">br</span>	<span class="n">x8</span>
+</span></span><span class="line"><span class="ln">38</span><span class="cl"><span class="nf">SYM_FUNC_END</span><span class="p">(</span><span class="n">__primary_switch</span><span class="p">)</span>
 </span></span></code></pre></div><p>在 <code>__primary_switch</code>的最后，使用 <code>adrp x0, KERNEL_START</code>记录了 <code>_text</code>的地址，也就是内核镜像起始的物理地址。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="cp">#define KERNEL_START		_text
 </span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="cp">#define KERNEL_END		_end
@@ -1656,13 +1670,13 @@ x29(FP) = SP_ELx + S_STACKFRAME</p>
           </div><div class="col-12 col-md-6 col-lg-4 me-2">
             <div class="post-card card card-body p-0 border-0 surface">
   
-  <picture><img class="img-fluid" alt="Linux内核sched_class汇总" src="https://kingdix10.github.io/covers/wavy_motley_metallic_139065_300x168.jpg" loading="lazy"
+  <picture><img class="img-fluid" alt="Linux thermal子系统(基于5.10)" src="https://kingdix10.github.io/covers/gradient_orange_shades_131495_300x168.jpg" loading="lazy"
      width="300"
      height="168"/>
   </picture>
 
-  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_table/">
-    Linux内核sched_class汇总
+  <a class="post-title" href="/zh-cn/docs/04-kernel/linux-6.1/thermal/linux-5.10/thermal_5.10/">
+    Linux thermal子系统(基于5.10)
   </a>
   <div class="post-meta mb-0">
     2022/12/30
@@ -1843,7 +1857,7 @@ Zhihu"
 <span class="menu-icon me-1"><i class="fab fa-fw fa-zhihu text-primary"></i></span>Zhihu</a></li></ul></li></ul></div>
 </div>
 </footer>
-<script data-precache src="/assets/main/bundle.min.de08722b15dbab0d764debd50114ce3d28da8ee6c7b889ff8c82e6faad0b46dd.js" integrity="sha256-3ghyKxXbqw12TevVARTOPSjajubHuIn/jILm&#43;q0LRt0=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
+<script data-precache src="/assets/main/bundle.min.87a6f33b4f10cfffd4d1501f8f35bf6bb4945d0f09c5747ecad2a3130f59b74d.js" integrity="sha256-h6bzO08Qz//U0VAfjzW/a7SUXQ8JxXR&#43;ytKjEw9Zt00=" crossorigin="anonymous" async></script><script data-precache src="/assets/icons/bundle.min.13ec5d94691ffeccc1199f2bd83b57c09206a03a6a25f696c572a1461d58b674.js" integrity="sha256-E&#43;xdlGkf/szBGZ8r2DtXwJIGoDpqJfaWxXKhRh1YtnQ=" crossorigin="anonymous" defer></script>
 <script data-precache src="/assets/viewer/bundle.min.ffafad0d121aa7d1fb443510086dac514a0b152826cf094f02a1f3dec1f37918.js" integrity="sha256-/6&#43;tDRIap9H7RDUQCG2sUUoLFSgmzwlPAqHz3sHzeRg=" crossorigin="anonymous" defer></script><script>
   var _hmt = _hmt || [];
   (function() {

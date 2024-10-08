@@ -18,16 +18,6 @@
     <enclosure url="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg" length="10737" type="image/.jpg" />
     </item>
     
-    <item>
-      <title>jupyter转Markdown</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/01-os/jupyter_to_markdown/</link>
-      <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/jupyter_to_markdown/</guid>
-      <description><![CDATA[1apt install jupyter-core 或者 1python3 -m pip install jupyter 转换： 1jupyter nbconvert --to markdown xxx.ipynb]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/walls_floor_light_50837_300x168.jpg" length="14340" type="image/.jpg" />
-    </item>
-    
   </channel>
 </rss>
 
