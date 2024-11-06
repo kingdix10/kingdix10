@@ -4,27 +4,52 @@
     <title>kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/</link>
     <description>Recent content on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
-    <lastBuildDate>Mon, 30 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 01 Nov 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RiscV内核初始化</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/boot/entry_riscv/</link>
+      <pubDate>Fri, 01 Nov 2024 00:00:00 +0000</pubDate>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/boot/entry_riscv/</guid>
+      <description><![CDATA[<h1 id="linux-66" data-numberify>linux-6.6<a class="anchor ms-1" href="#linux-66"></a></h1>
+<p><code>arch/riscv/kernel/head.S</code>只有不到500行。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// arch/riscv/kernel/head.S
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="nf">_start</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="err">\</span><span class="o">--</span> <span class="nf">_start_kernel</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">    <span class="o">+--</span> <span class="nf">reset_regs</span><span class="p">()</span>            <span class="c1">/// if CONFIG_RISCV_M_MODE
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="c1"></span>    <span class="o">+--</span> <span class="nf">setup_vm</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    <span class="o">+--</span> <span class="nf">relocate_enable_mmu</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="o">+--</span> <span class="nf">setup_trap_vector</span><span class="p">()</span>     <span class="c1">/// 设置CSR_TVEC为handle_exception
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="c1"></span>    <span class="o">+--</span> <span class="nf">kasan_early_init</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    <span class="o">+--</span> <span class="nf">soc_early_init</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">    <span class="err">\</span><span class="o">--</span> <span class="nf">start_kernel</span><span class="p">()</span>
+</span></span></code></pre></div>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/camera_lens_strap_145518_300x168.jpg" length="15893" type="image/.jpg" />
+    </item>
+    
     <item>
       <title>kmalloc和vmalloc对比</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_vmalloc/</link>
       <pubDate>Mon, 30 Sep 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_vmalloc/</guid>
-      <description><![CDATA[1. kmalloc和vmalloc对比 以ARM64为例，不考虑高端内存。 1.1. 实现原理 kmalloc和vmalloc底层函数都是__alloc_p]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/drone_camera_technology_171576_300x168.jpg" length="10102" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-kmalloc和vmalloc对比" data-numberify>1. kmalloc和vmalloc对比<a class="anchor ms-1" href="#1-kmalloc和vmalloc对比"></a></h1>
+<p>以ARM64为例，不考虑高端内存。</p>
+
+<h2 id="11-实现原理" data-numberify>1.1. 实现原理<a class="anchor ms-1" href="#11-实现原理"></a></h2>
+<p><code>kmalloc</code>和<code>vmalloc</code>底层函数都是<code>__alloc_pages</code>。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/wall_brick_neon_150470_300x168.jpg" length="13857" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux中的栈</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/stack/</link>
       <pubDate>Tue, 10 Sep 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/stack/</guid>
-      <description><![CDATA[1. 内核栈 在每一个进程的生命周期中，必然会通过到系统调用陷入内核。在执行系统调用陷入内核之后，这些内核代码所使用的栈并不是原先进程用户空间中的]]></description>
+      <description><![CDATA[<h1 id="1-内核栈" data-numberify>1. 内核栈<a class="anchor ms-1" href="#1-内核栈"></a></h1>
+<p>在每一个进程的生命周期中，必然会通过到系统调用陷入内核。在执行系统调用陷入内核之后，这些内核代码所使用的栈并不是原先进程用户空间中的栈，而是一个单独内核空间的栈，这个称作进程内核栈。</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/water_waves_ripples_143522_300x168.jpg" length="11080" type="image/.jpg" />
     </item>
     
@@ -32,69 +57,124 @@
       <title>Linux使用ftrace进行boottime跟踪</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/boottime_trace/</link>
       <pubDate>Wed, 04 Sep 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/boottime_trace/</guid>
-      <description><![CDATA[1. 简介 要使用ftrace进行boottime追踪，可以使用内核参数(bootargs)或者bootconfig来进行配置。 关键的函数如下： 1+--]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/code_text_colorful_140555_300x168.jpg" length="22830" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-简介" data-numberify>1. 简介<a class="anchor ms-1" href="#1-简介"></a></h1>
+<p>要使用ftrace进行boottime追踪，可以使用内核参数(bootargs)或者bootconfig来进行配置。</p>
+<p>关键的函数如下：</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lines_multicolored_rainbow_125651_300x168.jpg" length="11453" type="image/.jpg" />
     </item>
     
     <item>
       <title>trace-cmd实例</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/trace_cmd_usage/</link>
       <pubDate>Wed, 04 Sep 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/trace_cmd_usage/</guid>
-      <description><![CDATA[1. trace-cmd trace-cmd需要root权限。 1.1. 使用步骤 1# 保存成文件 2trace-cmd record 3trace-cmd report 1# 从tracefs读取 2trace-cmd start 3trace-cmd stop 4trace-cmd show 5 6trace-cmd clear 7trace-cmd restart 8trace-cmd show 1.2. 常见需要忽略的函数 1#]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_autumn_129305_300x168.jpg" length="15566" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-trace-cmd" data-numberify>1. trace-cmd<a class="anchor ms-1" href="#1-trace-cmd"></a></h1>
+<p><code>trace-cmd</code>需要root权限。</p>
+
+<h2 id="11-使用步骤" data-numberify>1.1. 使用步骤<a class="anchor ms-1" href="#11-使用步骤"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1"># 保存成文件</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">trace-cmd record
+</span></span><span class="line"><span class="ln">3</span><span class="cl">trace-cmd report
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1"># 从tracefs读取</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">trace-cmd start
+</span></span><span class="line"><span class="ln">3</span><span class="cl">trace-cmd stop
+</span></span><span class="line"><span class="ln">4</span><span class="cl">trace-cmd show
+</span></span><span class="line"><span class="ln">5</span><span class="cl">
+</span></span><span class="line"><span class="ln">6</span><span class="cl">trace-cmd clear
+</span></span><span class="line"><span class="ln">7</span><span class="cl">trace-cmd restart
+</span></span><span class="line"><span class="ln">8</span><span class="cl">trace-cmd show
+</span></span></code></pre></div>
+<h2 id="12-常见需要忽略的函数" data-numberify>1.2. 常见需要忽略的函数<a class="anchor ms-1" href="#12-常见需要忽略的函数"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cp"># 内存分配
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cp"></span><span class="o">-</span><span class="n">n</span> <span class="n">kmem_cache_alloc</span> <span class="o">-</span><span class="n">n</span> <span class="n">__kmalloc</span> <span class="o">-</span><span class="n">n</span> <span class="n">kmalloc_trace</span> <span class="o">-</span><span class="n">n</span> <span class="n">kfree</span> <span class="o">-</span><span class="n">n</span> <span class="n">kmalloc_slab</span> <span class="o">-</span><span class="n">n</span> <span class="n">__kmalloc_node_track_caller</span> <span class="o">-</span><span class="n">n</span> <span class="n">vmalloc</span> <span class="o">-</span><span class="n">n</span> <span class="n">vfree</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cp"># 调度
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cp"></span><span class="o">-</span><span class="n">n</span> <span class="n">__cond_resched</span> <span class="o">-</span><span class="n">n</span> <span class="n">__wake_up</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cp"># 中断
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cp"></span><span class="o">-</span><span class="n">n</span> <span class="n">irq_enter_rcu</span> <span class="o">-</span><span class="n">n</span> <span class="n">irq_exit_rcu</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cp"># 锁
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cp"></span><span class="o">-</span><span class="n">n</span> <span class="err">&#39;</span><span class="o">*</span><span class="n">_</span><span class="o">*</span><span class="n">lock</span><span class="err">&#39;</span> <span class="o">-</span><span class="n">n</span> <span class="o">*</span><span class="n">_lock_irqsave</span> <span class="o">-</span><span class="n">n</span> <span class="o">*</span><span class="n">_unlock_irqrestore</span> <span class="o">-</span><span class="n">n</span> <span class="n">down_write</span> <span class="o">-</span><span class="n">n</span> <span class="n">up_write</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="o">-</span><span class="n">n</span> <span class="n">mutex_lock</span> <span class="o">-</span><span class="n">n</span> <span class="n">mutex_unlock</span> \
+</span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="o">-</span><span class="n">n</span> <span class="n">_raw_spin_lock</span> <span class="o">-</span><span class="n">n</span> <span class="n">_raw_spin_unlock</span> \
+</span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="o">-</span><span class="n">n</span> <span class="n">_raw_spin_lock_irqsave</span> <span class="o">-</span><span class="n">n</span> <span class="n">_raw_spin_unlock_irqrestore</span> \
+</span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="o">-</span><span class="n">n</span> <span class="n">__rcu_read_lock</span> <span class="o">-</span><span class="n">n</span> <span class="n">__rcu_read_unlock</span> \
+</span></span></code></pre></div>
+<h1 id="2-trace-cmd实例" data-numberify>2. trace-cmd实例<a class="anchor ms-1" href="#2-trace-cmd实例"></a></h1>
+
+<h2 id="21-跟踪已存在的进程" data-numberify>2.1. 跟踪已存在的进程<a class="anchor ms-1" href="#21-跟踪已存在的进程"></a></h2>
+<p>使用<code>function_graph</code></p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/wall_brick_purple_141823_300x168.jpg" length="14935" type="image/.jpg" />
     </item>
     
     <item>
       <title>用trace追踪Linux进程的一生</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/task_life/</link>
       <pubDate>Sat, 31 Aug 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/task_life/</guid>
-      <description><![CDATA[1. 简介 通常来说，shell要启动一个新的程序，会先fork一个新进程，然后执行exec系统调用将替换新进程的执行程序。posix规定了pos]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/pink_color_background_153889_300x168.jpg" length="1430" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-简介" data-numberify>1. 简介<a class="anchor ms-1" href="#1-简介"></a></h1>
+<p>通常来说，<code>shell</code>要启动一个新的程序，会先<code>fork</code>一个新进程，然后执行<code>exec</code>系统调用将替换新进程的执行程序。<code>posix</code>规定了<code>posix_spawn</code>函数，封装了<code>fork</code>+<code>exec</code>的过程，提供了更加高效的接口。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/cockpit_panel_display_169481_300x168.jpg" length="10012" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux内核的通知链机制</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/notifier_chain/notifier_chain/</link>
       <pubDate>Wed, 14 Aug 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/notifier_chain/notifier_chain/</guid>
-      <description><![CDATA[1. 简介 Linux内核中的notifier_chain是一种用于跨模块通信的机制。当一个模块需要通知其他模块某些事件时，它可以使用notifi]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/code_letters_screen_137590_300x168.jpg" length="10341" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-简介" data-numberify>1. 简介<a class="anchor ms-1" href="#1-简介"></a></h1>
+<p>Linux内核中的notifier_chain是一种用于跨模块通信的机制。当一个模块需要通知其他模块某些事件时，它可以使用notifier_chain将这些事件通知给其他模块。这种机制使得模块之间的耦合度降低，提高了代码的可维护性和可扩展性。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/bubbles_drops_macro_126764_300x168.jpg" length="23506" type="image/.jpg" />
     </item>
     
     <item>
       <title>VMware和Hyper-V回收虚拟磁盘空间</title>
       <link>https://kingdix10.github.io/zh-cn/docs/02-dev_env/vdisk_compact/</link>
       <pubDate>Mon, 05 Aug 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/02-dev_env/vdisk_compact/</guid>
-      <description><![CDATA[1. 基本原理 文件系统未占用的空间数据写完全0，会被视为空闲空间，可以被虚拟机软件回收。 操作步骤： 虚拟机内，空闲空间数据写0。 关闭虚拟机 回收虚拟]]></description>
+      <description><![CDATA[<h1 id="1-基本原理" data-numberify>1. 基本原理<a class="anchor ms-1" href="#1-基本原理"></a></h1>
+<p>文件系统未占用的空间数据写完全0，会被视为空闲空间，可以被虚拟机软件回收。</p>
+<p>操作步骤：</p>
+<ol>
+<li>虚拟机内，空闲空间数据写0。</li>
+<li>关闭虚拟机</li>
+<li>回收虚拟磁盘文件空间</li>
+</ol>
+
+<h1 id="2-文件系统和磁盘空闲区间擦除" data-numberify>2. 文件系统和磁盘空闲区间擦除<a class="anchor ms-1" href="#2-文件系统和磁盘空闲区间擦除"></a></h1>
+<p>对于根文件系统，只能使用<code>dd</code>命令创建全零文件模拟擦除。</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg" length="10737" type="image/.jpg" />
     </item>
     
     <item>
       <title>rt-thread Cortex-A9 SMP启动</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/03-boot/rtthread_smp_cortex_a9/</link>
+      <link>https://kingdix10.github.io/zh-cn/docs/03-boot/rtthread_bootflow/</link>
       <pubDate>Sun, 04 Aug 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/rtthread_smp_cortex_a9/</guid>
-      <description><![CDATA[rt-thread版本：4.0]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/metal_texture_surface_157344_300x168.jpg" length="9729" type="image/.jpg" />
+      <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/rtthread_bootflow/</guid>
+      <description><![CDATA[<p><code>rt-thread</code>版本：v5.0.0</p>
+<p>qemu-vexpress-a9</p>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/03-boot/rtthread_bootflow/rt-thread-smp-cortex-a9.png" loading="lazy" width="2493" height="805" />
+</picture>
+
+</p>
+<p>qemu arm64</p>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/03-boot/rtthread_bootflow/rt-thread_qemu_aarch64.png" loading="lazy" width="2437" height="863" />
+</picture>
+
+</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/spots_stains_colorful_147593_300x168.jpg" length="20423" type="image/.jpg" />
     </item>
     
     <item>
       <title>栈帧寄存器相关的编译选项</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/fp/</link>
       <pubDate>Mon, 29 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/fp/</guid>
-      <description><![CDATA[1. 编译选项 -fomit-frame-pointer表示在函数调用时不需要存储堆栈帧指针。此选项可减小生成的代码镜像大小， 一般在启用-On优化]]></description>
+      <description><![CDATA[<h1 id="1-编译选项" data-numberify>1. 编译选项<a class="anchor ms-1" href="#1-编译选项"></a></h1>
+<p><code>-fomit-frame-pointer</code>表示在函数调用时不需要存储堆栈帧指针。此选项可减小生成的代码镜像大小， 一般在启用<code>-On</code>优化后会自动打开，也有的平台是默认打开的。</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/wall_brick_purple_141823_300x168.jpg" length="14935" type="image/.jpg" />
     </item>
     
@@ -102,49 +182,171 @@
       <title>Debian安装和配置</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/debian_setup/</link>
       <pubDate>Sun, 28 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/debian_setup/</guid>
-      <description><![CDATA[1. 网址 1.1. Debian 官网：https://www.debian.org 下载链接： https://www.debian.org/distrib https://www.debian.org/distrib/netinst 如果不使用图形界面，可以下载网络安装ISO。 1.2. ElementaryOS elementar]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/paint_canvas_stains_124156_300x168.jpg" length="18821" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-网址" data-numberify>1. 网址<a class="anchor ms-1" href="#1-网址"></a></h1>
+
+<h2 id="11-debian" data-numberify>1.1. Debian<a class="anchor ms-1" href="#11-debian"></a></h2>
+<p>官网：<a href="https://www.debian.org" target="_blank" rel="noopener noreferrer">https://www.debian.org<i class="fas fa-external-link-square-alt ms-1"></i></a></p>
+<p>下载链接：</p>
+<ul>
+<li><a href="https://www.debian.org/distrib" target="_blank" rel="noopener noreferrer">https://www.debian.org/distrib<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li><a href="https://www.debian.org/distrib/netinst" target="_blank" rel="noopener noreferrer">https://www.debian.org/distrib/netinst<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+</ul>
+<p>如果不使用图形界面，可以下载网络安装ISO。</p>
+
+<h2 id="12-elementaryos" data-numberify>1.2. ElementaryOS<a class="anchor ms-1" href="#12-elementaryos"></a></h2>
+<p>elementaryOS基于Ubuntu。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lava_texture_surface_140175_300x168.jpg" length="10556" type="image/.jpg" />
     </item>
     
     <item>
       <title>Docker安装和配置</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/docker_setup/</link>
       <pubDate>Sun, 28 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/docker_setup/</guid>
-      <description><![CDATA[1. Docker安装 参考docker-ce | 镜像站使用帮助 | 清华大学开源软件镜像站，可以使用https://gitee.com/kingdix]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/code_text_colorful_140555_300x168.jpg" length="22830" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-docker安装" data-numberify>1. Docker安装<a class="anchor ms-1" href="#1-docker安装"></a></h1>
+<p>参考<a href="https://mirrors.tuna.tsinghua.edu.cn/help/docker-ce" target="_blank" rel="noopener noreferrer">docker-ce | 镜像站使用帮助 | 清华大学开源软件镜像站<i class="fas fa-external-link-square-alt ms-1"></i></a>，可以使用<a href="https://gitee.com/kingdix10/envsetup" target="_blank" rel="noopener noreferrer">https://gitee.com/kingdix10/envsetup<i class="fas fa-external-link-square-alt ms-1"></i></a>下的工具脚本。</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">script</th>
+          <th style="text-align: left">function</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">debian_install_docker.sh</td>
+          <td style="text-align: left">安装docker，使用tsinghua apt源</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">docker_conf_mirrors.sh</td>
+          <td style="text-align: left">修改docker镜像源</td>
+      </tr>
+  </tbody>
+</table>
+
+<h2 id="11-添加用户到docker组" data-numberify>1.1. 添加用户到docker组<a class="anchor ms-1" href="#11-添加用户到docker组"></a></h2>
+<p>安装docker需要添加用户到docker组，否则需要以root运行。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/paint_wall_shabby_135205_300x168.jpg" length="17321" type="image/.jpg" />
     </item>
     
     <item>
       <title>linux常用命令-文本处理</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_text/</link>
       <pubDate>Sun, 28 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_text/</guid>
-      <description><![CDATA[1. grep 1.1. 常用选项 1# 输出start到end 2grep -o &#39;start.*end&#39; file 3# 文件作为文本处理 4grep -a &#39;xxx&#39; file 5# 忽略二进制文件 6grep -rsnI &#39;xxx&#39; ./ 7# 递归目录 8grep -r &#39;xxx&#39; ./ 9 10# 忽略大小写(-i, --ignore-case) 11#]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lines_intersection_oblique_153331_300x168.jpg" length="16159" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-grep" data-numberify>1. grep<a class="anchor ms-1" href="#1-grep"></a></h1>
+
+<h2 id="11-常用选项" data-numberify>1.1. 常用选项<a class="anchor ms-1" href="#11-常用选项"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1"># 输出start到end</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">grep -o <span class="s1">&#39;start.*end&#39;</span> file
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="c1"># 文件作为文本处理</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">grep -a <span class="s1">&#39;xxx&#39;</span> file
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="c1"># 忽略二进制文件</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">grep -rsnI <span class="s1">&#39;xxx&#39;</span> ./
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="c1"># 递归目录</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">grep -r <span class="s1">&#39;xxx&#39;</span> ./
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="c1"># 忽略大小写(-i, --ignore-case)</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="c1"># 全词匹配(-w, --word-regexp)</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="c1"># 输出计数(-c, --count)</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="c1"># 显示行号(-n, --line-number)</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="c1"># 只列出匹配的文件名(-l, --files-with-matches)</span>
+</span></span></code></pre></div>
+<h2 id="12-其他选项" data-numberify>1.2. 其他选项<a class="anchor ms-1" href="#12-其他选项"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1"># --color：显示颜色，默认开启</span>
+</span></span></code></pre></div>
+<h1 id="2-sed示例" data-numberify>2. sed示例<a class="anchor ms-1" href="#2-sed示例"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1"># 在第5行前插入新行</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">sed -i <span class="s1">&#39;5i\string&#39;</span> file
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="c1"># 全词匹配替换</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">sed -e <span class="s1">&#39;s%\&lt;old\&gt;%new%g&#39;</span> file
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="c1"># 忽略大小写匹配替换</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">sed -e <span class="s1">&#39;s%\&lt;old\&gt;%new%ig&#39;</span> file
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="c1"># 输出图片链接，输出完整 &#34;![...](...)&#34;</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">sed -n <span class="s1">&#39;/!\[.*\]\(.*\)/p&#39;</span> *.md
+</span></span><span class="line"><span class="ln">11</span><span class="cl">sed -n <span class="s1">&#39;s/!\[.*\]\(.*\)/\0/p&#39;</span> *.md
+</span></span><span class="line"><span class="ln">12</span><span class="cl">
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="c1"># 输出图片链接，只输出 &#34;(...)&#34;</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">sed -n <span class="s1">&#39;s/!\[.*\]\(.*\)/\1/p&#39;</span> *.md
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">sed -i <span class="se">\
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="se"></span>    -e <span class="s1">&#39;/^description:/a\featured: false&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="se"></span>    -e <span class="s1">&#39;/^image:.*/d&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="se"></span>    -e <span class="s1">&#39;/^hidden:/a\image:\nfigurePositionShow:\nfeatureImage:\nfeatureImageAlt:\nfeatureImageCap:\nthumbnail:\nshareImage:\ncodeMaxLines:\ncodeLineNumbers:\n&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="se"></span>    -e <span class="s1">&#39;/^tags:$/i\series:&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="se"></span>    <span class="nv">$*</span>
+</span></span></code></pre></div>
+<h1 id="3-awk" data-numberify>3. awk<a class="anchor ms-1" href="#3-awk"></a></h1>
+
+<h1 id="4-patch" data-numberify>4. patch<a class="anchor ms-1" href="#4-patch"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">patch -t -p <span class="m">1</span> &lt; patchfile.patch
+</span></span></code></pre></div>
+<h1 id="5-hexdump" data-numberify>5. hexdump<a class="anchor ms-1" href="#5-hexdump"></a></h1>
+
+<h2 id="51-按4字节显示" data-numberify>5.1. 按4字节显示<a class="anchor ms-1" href="#51-按4字节显示"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">hexdump -e <span class="s1">&#39;\&#34;0x%08_ax: \&#34;&#39;</span> -e <span class="s1">&#39;4/4 \&#34;%08X \&#34;&#39;</span> -e <span class="s1">&#39;\&#34;\n\&#34;&#39;</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="nb">alias</span> <span class="nv">xdump</span><span class="o">=</span><span class="s1">&#39;hexdump -e &#39;</span><span class="se">\&#39;</span><span class="s1">&#39;&#34;0x%08_ax: &#34;&#39;</span><span class="se">\&#39;</span><span class="s1">&#39; -e &#39;</span><span class="se">\&#39;</span><span class="s1">&#39;4/4 &#34;%08X &#34;&#39;</span><span class="se">\&#39;</span><span class="s1">&#39; -e &#39;</span><span class="se">\&#39;</span><span class="s1">&#39;&#34;\n&#34;&#39;</span><span class="se">\&#39;</span><span class="s1">&#39;&#39;</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln"> 1</span><span class="cl">hexdump -v -n <span class="m">128</span> /sys/devices/platform/soc/243000.efuse/nvmem*/nvmem -e <span class="se">\
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="se"></span><span class="s1">&#39;&#34;compat: 0x&#34;       24/1 &#34;%x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="s1">&#34;AICORE\t: 0x&#34;      1/1 &#34;%02x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="s1">&#34;compat: 0x&#34;        43/1 &#34;%x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="s1">&#34;DATE\t: 0x&#34;        8/1  &#34;%02x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="s1">&#34;compat: 0x&#34;        32/1 &#34;%x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="s1">&#34;===========SYSTEM SOFTWARE===========\n&#34;
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="s1">&#34;board_type\t: 0x&#34;   1/1 &#34;%02x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="s1">&#34;bom_version\t: 0x&#34;  2/1 &#34;%02x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="s1">&#34;ddr_info\t: 0x&#34;     2/1 &#34;%02x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="s1">&#34;flash_info\t: 0x&#34;   2/1 &#34;%02x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="s1">&#34;pmic\t: 0x&#34;         3/1 &#34;%02x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="s1">&#34;pmic_sw\t: 0x&#34;      1/1 &#34;%02x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="s1">&#34;vendor\t: 0x&#34;       2/1 &#34;%02x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="s1">&#34;SN\t: &#34;             4/1 &#34;%02x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="s1">&#34;others\t: 0x&#34;       3/1 &#34;%02x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="s1">&#39;</span> <span class="p">|</span> grep DATE <span class="p">|</span> awk <span class="s1">&#39;{print $3}&#39;</span> <span class="p">|</span> tac -rs .. <span class="p">|</span> <span class="nb">echo</span> <span class="s2">&#34;</span><span class="k">$(</span>tr -d <span class="s1">&#39;\n&#39;</span><span class="k">)</span><span class="s2">&#34;</span>
+</span></span></code></pre></div>
+<h1 id="iconv" data-numberify>iconv<a class="anchor ms-1" href="#iconv"></a></h1>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/camera_lens_strap_145518_300x168.jpg" length="15893" type="image/.jpg" />
     </item>
     
     <item>
       <title>git配置和操作</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/git/git_misc/</link>
       <pubDate>Sat, 27 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/git/git_misc/</guid>
-      <description><![CDATA[官方资料：Git Community Book 中文版 1. 个人gitconfig 1# cat ~/.gitconfig 2 3[color] 4 ui = auto 5 6[safe] 7# directory = * 8 9[core] 10# 支持中文 11 quotepath = false 12 editor = vim 13# 14 pager = less -x1,5 15# 支持https下]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wall_brick_purple_141823_300x168.jpg" length="14935" type="image/.jpg" />
+      <description><![CDATA[<p>官方资料：<a href="http://gitbook.liuhui998.com/index.html" target="_blank" rel="noopener noreferrer">Git Community Book 中文版<i class="fas fa-external-link-square-alt ms-1"></i></a></p>
+
+<h1 id="1-个人gitconfig" data-numberify>1. 个人gitconfig<a class="anchor ms-1" href="#1-个人gitconfig"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln"> 1</span><span class="cl"># cat ~/.gitconfig
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">[color]
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">	ui = auto
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">[safe]
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">#	directory = *
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">[core]
+</span></span><span class="line"><span class="ln">10</span><span class="cl"># 支持中文
+</span></span><span class="line"><span class="ln">11</span><span class="cl">	quotepath = false
+</span></span><span class="line"><span class="ln">12</span><span class="cl">	editor = vim
+</span></span><span class="line"><span class="ln">13</span><span class="cl">#
+</span></span><span class="line"><span class="ln">14</span><span class="cl">	pager = less -x1,5
+</span></span><span class="line"><span class="ln">15</span><span class="cl"># 支持https下保存用户名密码
+</span></span><span class="line"><span class="ln">16</span><span class="cl">[credential]
+</span></span><span class="line"><span class="ln">17</span><span class="cl">	helper = store
+</span></span></code></pre></div><p>参考<a href="https://zhuanlan.zhihu.com/p/133706032" target="_blank" rel="noopener noreferrer">git 显示中文和解决中文乱码<i class="fas fa-external-link-square-alt ms-1"></i></a></p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/code_text_colorful_140555_300x168.jpg" length="22830" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux中断子系统（二）domain注册</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_domain_add/</link>
       <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_domain_add/</guid>
-      <description><![CDATA[1. IRQ domain注册 中断控制器初始化的过程中，要向中断子系统注册irq domain。核心函数__irq_domain_add。 gic-v2使]]></description>
+      <description><![CDATA[<h1 id="1-irq-domain注册" data-numberify>1. IRQ domain注册<a class="anchor ms-1" href="#1-irq-domain注册"></a></h1>
+<p>中断控制器初始化的过程中，要向中断子系统注册<code>irq domain</code>。核心函数<code>__irq_domain_add</code>。</p>
+<p>gic-v2使用<code>irq_domain_create_linear</code>，gic-v3则使用<code>irq_domain_add_tree</code>。</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/laptop_backlight_colorful_194324_300x168.jpg" length="7666" type="image/.jpg" />
     </item>
     
@@ -152,9 +354,9 @@
       <title>Linux中断子系统（三）设备中断注册</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_create_mapping/</link>
       <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_create_mapping/</guid>
-      <description><![CDATA[1. 设备中断注册 gic-v3的中断号划分在《IHI0069H_gic_architecture_specification.pdf》有所罗列：]]></description>
+      <description><![CDATA[<h1 id="1-设备中断注册" data-numberify>1. 设备中断注册<a class="anchor ms-1" href="#1-设备中断注册"></a></h1>
+<p>gic-v3的中断号划分在《IHI0069H_gic_architecture_specification.pdf》有所罗列：</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/wavy_curvy_lines_146044_300x168.jpg" length="25854" type="image/.jpg" />
     </item>
     
@@ -162,9 +364,13 @@
       <title>Linux中断子系统（四）申请中断request_irq</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/request_irq/</link>
       <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/request_irq/</guid>
-      <description><![CDATA[1. 申请中断 __setup_irq是用于设置和注册中断的核心函数，它是request_threaded_irq等函数的内部实现。 1.1. irqaction handl]]></description>
+      <description><![CDATA[<h1 id="1-申请中断" data-numberify>1. 申请中断<a class="anchor ms-1" href="#1-申请中断"></a></h1>
+<p><code>__setup_irq</code>是用于设置和注册中断的核心函数，它是<code>request_threaded_irq</code>等函数的内部实现。
+<picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.6/interrupt/request_irq/request_irq.png" loading="lazy" width="1157" height="443" />
+</picture>
+
+</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/pixels_cubes_shapes_127558_300x168.jpg" length="18339" type="image/.jpg" />
     </item>
     
@@ -172,9 +378,34 @@
       <title>Linux中断子系统（五）中断处理</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/handler_entry/</link>
       <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/handler_entry/</guid>
-      <description><![CDATA[1. 中断入口 要处理中断，必须为handle_arch_irq赋值。 ARM64自己定义handle_arch_irq的实现。 1/// arch/arm64/kernel/irq.c 2void (*handle_arch_irq)(struct pt_regs *) __ro_after_init = default_handle_irq; 3void]]></description>
+      <description><![CDATA[<h1 id="1-中断入口" data-numberify>1. 中断入口<a class="anchor ms-1" href="#1-中断入口"></a></h1>
+<p>要处理中断，必须为<code>handle_arch_irq</code>赋值。</p>
+<p>ARM64自己定义<code>handle_arch_irq</code>的实现。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// arch/arm64/kernel/irq.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">handle_arch_irq</span><span class="p">)(</span><span class="k">struct</span> <span class="n">pt_regs</span> <span class="o">*</span><span class="p">)</span> <span class="n">__ro_after_init</span> <span class="o">=</span> <span class="n">default_handle_irq</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">handle_arch_fiq</span><span class="p">)(</span><span class="k">struct</span> <span class="n">pt_regs</span> <span class="o">*</span><span class="p">)</span> <span class="n">__ro_after_init</span> <span class="o">=</span> <span class="n">default_handle_fiq</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="kt">int</span> <span class="n">__init</span> <span class="nf">set_handle_irq</span><span class="p">(</span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">handle_irq</span><span class="p">)(</span><span class="k">struct</span> <span class="n">pt_regs</span> <span class="o">*</span><span class="p">))</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">handle_arch_irq</span> <span class="o">!=</span> <span class="n">default_handle_irq</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">        <span class="k">return</span> <span class="o">-</span><span class="n">EBUSY</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">
+</span></span><span class="line"><span class="ln">10</span><span class="cl">    <span class="n">handle_arch_irq</span> <span class="o">=</span> <span class="n">handle_irq</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">    <span class="nf">pr_info</span><span class="p">(</span><span class="s">&#34;Root IRQ handler: %ps</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">handle_irq</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">
+</span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="kt">int</span> <span class="n">__init</span> <span class="nf">set_handle_fiq</span><span class="p">(</span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">handle_fiq</span><span class="p">)(</span><span class="k">struct</span> <span class="n">pt_regs</span> <span class="o">*</span><span class="p">))</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">handle_arch_fiq</span> <span class="o">!=</span> <span class="n">default_handle_fiq</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">        <span class="k">return</span> <span class="o">-</span><span class="n">EBUSY</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">
+</span></span><span class="line"><span class="ln">20</span><span class="cl">    <span class="n">handle_arch_fiq</span> <span class="o">=</span> <span class="n">handle_fiq</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl">    <span class="nf">pr_info</span><span class="p">(</span><span class="s">&#34;Root FIQ handler: %ps</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">handle_fiq</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>ARM使能<code>CONFIG_GENERIC_IRQ_MULTI_HANDLER</code>。</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/travel_map_compass_123078_300x168.jpg" length="14785" type="image/.jpg" />
     </item>
     
@@ -182,9 +413,14 @@
       <title>Linux中断子系统（一）软硬件初始化</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/init/</link>
       <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/init/</guid>
-      <description><![CDATA[1. 简介 early_irq_init完成中断子系统软件部分初始化。 irqchip_init初始化中断控制器，向系统注册struct irq_do]]></description>
+      <description><![CDATA[<h1 id="1-简介" data-numberify>1. 简介<a class="anchor ms-1" href="#1-简介"></a></h1>
+<p><code>early_irq_init</code>完成中断子系统软件部分初始化。</p>
+<p><code>irqchip_init</code>初始化中断控制器，向系统注册<code>struct irq_domain</code>。</p>
+<p><picture><img class="img-fluid " alt="irq_intc_init" src="/zh-cn/docs/04-kernel/linux-6.6/interrupt/init/irq_intc_init.png" loading="lazy" width="787" height="443" />
+</picture>
+
+</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/vintage_retro_camera_126517_300x168.jpg" length="11143" type="image/.jpg" />
     </item>
     
@@ -192,19 +428,92 @@
       <title>用memcmp比较结构体会有什么问题</title>
       <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/c_struct_cmp/</link>
       <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/c_struct_cmp/</guid>
-      <description><![CDATA[1. 示例一 先看下如下代码，思考一下，结果是输出a == b还是a != b？ 1#include &lt;stdio.h&gt; 2#include &lt;string.h&gt; 3 4struct test_type { 5 char name[10]; 6 int i; 7 long l; 8}; 9 10int main(void) 11{ 12 struct test_type a = { 13 &#34;test&#34;, 1, 2 14 }; 15 struct test_type b; 16]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/trunk_tree_texture_119590_300x168.jpg" length="18828" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-示例一" data-numberify>1. 示例一<a class="anchor ms-1" href="#1-示例一"></a></h1>
+<p>先看下如下代码，思考一下，结果是输出<code>a == b</code>还是<code>a != b</code>？</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="k">struct</span> <span class="n">test_type</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">    <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="kt">long</span> <span class="n">l</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="k">struct</span> <span class="n">test_type</span> <span class="n">a</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">        <span class="s">&#34;test&#34;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">    <span class="k">struct</span> <span class="n">test_type</span> <span class="n">b</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl">
+</span></span><span class="line"><span class="ln">17</span><span class="cl">    <span class="n">b</span><span class="p">.</span><span class="n">i</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">    <span class="n">b</span><span class="p">.</span><span class="n">l</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">l</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">    <span class="nf">strcpy</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">
+</span></span><span class="line"><span class="ln">21</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">==</span> <span class="nf">memcmp</span><span class="p">(</span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">test_type</span><span class="p">)))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;a == b</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;a != b</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="ln">26</span><span class="cl">
+</span></span><span class="line"><span class="ln">27</span><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div>
+<h2 id="11-结果及分析" data-numberify>1.1. 结果及分析<a class="anchor ms-1" href="#11-结果及分析"></a></h2>
+<p>实际结果很可能是<code>a != b</code>。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_texture_127524_300x168.jpg" length="18901" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux内核代码的编写和优化技巧</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/optimize_tips/</link>
       <pubDate>Sun, 09 Jun 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/optimize_tips/</guid>
-      <description><![CDATA[1. Linux内核代码的编写和优化技巧 1.1. 代码编写 使用 __same_type和 typecheck编译时检查类型匹配。 __printf和 __sca]]></description>
+      <description><![CDATA[<h1 id="1-linux内核代码的编写和优化技巧" data-numberify>1. Linux内核代码的编写和优化技巧<a class="anchor ms-1" href="#1-linux内核代码的编写和优化技巧"></a></h1>
+
+<h2 id="11-代码编写" data-numberify>1.1. 代码编写<a class="anchor ms-1" href="#11-代码编写"></a></h2>
+<ol>
+<li>使用 <code>__same_type</code>和 <code>typecheck</code>编译时检查类型匹配。</li>
+<li><code>__printf</code>和 <code>__scanf</code>编译时检查代码。</li>
+<li>对宏进行undef后重新定义，生成不同的代码，如 <code>__SYSCALL</code>配合 <code>unistd.h</code>生成系统调用，<code>TRACE_EVENT</code>生成ftrace相关的数据结构和各个函数。</li>
+<li>使用模板宏，减少重复代码也降低出错率，如 <code>STANDARD_PARAM_DEF</code>生成 <code>module_param</code>用到的set和get函数。</li>
+<li>使用内联汇编提升性能。</li>
+<li>使用位图优化内存占用。</li>
+<li>无锁队列kfifo。</li>
+</ol>
+
+<h2 id="12-控制编译时行为" data-numberify>1.2. 控制编译时行为<a class="anchor ms-1" href="#12-控制编译时行为"></a></h2>
+<ol>
+<li><code>O2</code>或 <code>O3</code>，编译时优化汇编代码。</li>
+<li><code>__builtin_constant_p</code>优化常量分支。</li>
+<li>使用 <code>likely</code>和 <code>unlikely</code>，编译时对代码进程重排序。</li>
+<li><code>__noreturn</code>优化不需要返回的函数。</li>
+<li>宏、<code>inline</code>和 <code>__always_inline</code>，内联函数，减少入栈出栈操作。</li>
+<li>使用 <code>__randomize_layout</code>，结构体布局随机化，打乱成员排序，提升入侵难度。</li>
+<li>使用 <code>__cacheline_aligned</code>对结构体进行cache line对齐，提升访问性能，减少cache颠簸</li>
+<li>细化程序分段，如 <code>init</code>、<code>initdata</code>等，释放无用内存。</li>
+<li>区分冷热段，热段如 <code>sched</code>、<code>read_mostly</code>，冷段如 <code>tracepoint</code>段，热段更容易常驻cache。</li>
+<li>重要部分使用联合减少结构大小，如 <code>struct page</code>，减少内存占用。</li>
+</ol>
+
+<h2 id="13-控制运行时行为" data-numberify>1.3. 控制运行时行为<a class="anchor ms-1" href="#13-控制运行时行为"></a></h2>
+<ol>
+<li>使用percpu变量减少核见竞争。</li>
+<li>访问一个变量时，需同时获取两把锁，将锁放到不同的cache line。如<code>struct zone</code>。</li>
+<li>使用动态代码修改，如 <code>jump_label</code>、<code>alternative_if</code>，减少分支判断。</li>
+<li>栈随机化和地址空间布局随机化（KASLR），提升攻击难度。</li>
+<li>零拷贝技术、写时复制</li>
+</ol>
+
+<h1 id="2-linux内核中的面向对象编程" data-numberify>2. Linux内核中的面向对象编程<a class="anchor ms-1" href="#2-linux内核中的面向对象编程"></a></h1>
+<ol>
+<li>使用函数回调，抽象通用接口</li>
+<li>抽象通用数据结构，使用container获取自定义数据结构</li>
+</ol>
+
+<h2 id="21-使用-__noreturn会有哪些编译优化" data-numberify>2.1. 使用 __noreturn会有哪些编译优化？<a class="anchor ms-1" href="#21-使用-__noreturn会有哪些编译优化"></a></h2>
+<p>使用 <code>__noreturn</code>属性可以允许编译器进行一些特定的优化，因为编译器知道带这个属性的函数不会返回。这些优化可能包括：</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/laptop_dj_equipment_212416_300x168.jpg" length="9857" type="image/.jpg" />
     </item>
     
@@ -212,19 +521,52 @@
       <title>vmalloc原理</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/vmalloc/</link>
       <pubDate>Sat, 01 Jun 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/vmalloc/</guid>
-      <description><![CDATA[1. 全局数据结构 1/// mm/vmalloc.c 2/* Export for kexec only */ 3LIST_HEAD(vmap_area_list); 4static struct rb_root vmap_area_root = RB_ROOT; 5/// ... ... 6 7/* 8 * This kmem_cache is used for vmap_area objects. Instead of 9 * allocating from slab we reuse an object from this cache to 10 * make things faster. Especially in &#34;no edge&#34; splitting of 11 * free block. 12 */ 13static struct]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/metal_texture_surface_157344_300x168.jpg" length="9729" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-全局数据结构" data-numberify>1. 全局数据结构<a class="anchor ms-1" href="#1-全局数据结构"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// mm/vmalloc.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cm">/* Export for kexec only */</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="nf">LIST_HEAD</span><span class="p">(</span><span class="n">vmap_area_list</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="k">static</span> <span class="k">struct</span> <span class="n">rb_root</span> <span class="n">vmap_area_root</span> <span class="o">=</span> <span class="n">RB_ROOT</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="c1">/// ... ...
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> * This kmem_cache is used for vmap_area objects. Instead of
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> * allocating from slab we reuse an object from this cache to
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> * make things faster. Especially in &#34;no edge&#34; splitting of
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cm"> * free block.
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="k">static</span> <span class="k">struct</span> <span class="n">kmem_cache</span> <span class="o">*</span><span class="n">vmap_area_cachep</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">
+</span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cm"> * This linked list is used in pair with free_vmap_area_root.
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cm"> * It gives O(1) access to prev/next to perform fast coalescing.
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="k">static</span> <span class="nf">LIST_HEAD</span><span class="p">(</span><span class="n">free_vmap_area_list</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">
+</span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="cm"> * This augment red-black tree represents the free vmap space.
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="cm"> * All vmap_area objects in this tree are sorted by va-&gt;va_start
+</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="cm"> * address. It is used for allocation and merging when a vmap
+</span></span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="cm"> * object is released.
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="cm"> * Each vmap_area node contains a maximum available free block
+</span></span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="cm"> * of its sub-tree, right or left. Therefore it is possible to
+</span></span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="cm"> * find a lowest match of free area.
+</span></span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="k">static</span> <span class="k">struct</span> <span class="n">rb_root</span> <span class="n">free_vmap_area_root</span> <span class="o">=</span> <span class="n">RB_ROOT</span><span class="p">;</span>
+</span></span></code></pre></div><p><code>vmalloc</code>管理的内存区域使用<code>struct vmap_area</code>描述，<code>vmap_area_cachep</code>用于分配<code>struct vmap_area</code>对象。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/binary_code_code_numbers_147523_300x168.jpg" length="15658" type="image/.jpg" />
     </item>
     
     <item>
       <title>ARM64 jump label源码分析</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/jump_label/</link>
       <pubDate>Fri, 24 May 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/jump_label/</guid>
-      <description><![CDATA[1. 背景 引入jump label的背景，参考Linux: Jump label实现简析 在内核代码中，有很多分支判断条件，它们在绝大多数情形下，都是不成立的]]></description>
+      <description><![CDATA[<h1 id="1-背景" data-numberify>1. 背景<a class="anchor ms-1" href="#1-背景"></a></h1>
+<p>引入jump label的背景，参考<a href="https://blog.csdn.net/JiMoKuangXiangQu/article/details/128239338" target="_blank" rel="noopener noreferrer">Linux: Jump label实现简析<i class="fas fa-external-link-square-alt ms-1"></i></a></p>
+<blockquote>
+<p>在内核代码中，有很多分支判断条件，它们在绝大多数情形下，都是不成立的。尽管我们已经加上unlikely修饰来进行优化，但是，读取 condition 仍然要访问内存，仍然需要用到cache；另外，也会CPU分支预测失败。虽然少数这样的代码影响不大，但当这样的条件判断代码（如内核中大量的tracepoint）增多的时候，将对cache会造成很大压力，所有这些代码导致的cache miss，以及CPU分支预测失败，所造成的性能损失，就变得可观起来。因此，内核需要一种方案，来解决这样的问题。这个解决方案，就是本文描述的 Jump label。</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/paint_wall_shabby_135205_300x168.jpg" length="17321" type="image/.jpg" />
     </item>
     
@@ -232,29 +574,27 @@
       <title>Linux drm mm分析(基于intel ivpu驱动)</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_mm/</link>
       <pubDate>Wed, 24 Apr 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_mm/</guid>
       <description><![CDATA[使用drm mm管理虚拟内存和物理内存]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/bubbles_drops_macro_126764_300x168.jpg" length="23506" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/metal_texture_surface_157344_300x168.jpg" length="9729" type="image/.jpg" />
     </item>
     
     <item>
       <title>【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/</link>
       <pubDate>Sun, 21 Apr 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/</guid>
       <description><![CDATA[深度分析系统调用从用户程序到内核的流程]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lava_texture_surface_140175_300x168.jpg" length="10556" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/keyboard_laptop_gradient_203739_300x168.jpg" length="10539" type="image/.jpg" />
     </item>
     
     <item>
       <title>ARM64 Linux中断入口</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/</link>
       <pubDate>Sun, 21 Apr 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/</guid>
-      <description><![CDATA[1. 简介 ARM64中断入口相关的代码主要在arch/arm64/kernel/entry.S，启动过程中，会将中断向量表vectors的起始虚]]></description>
+      <description><![CDATA[<h1 id="1-简介" data-numberify>1. 简介<a class="anchor ms-1" href="#1-简介"></a></h1>
+<p>ARM64中断入口相关的代码主要在<code>arch/arm64/kernel/entry.S</code>，启动过程中，会将中断向量表<code>vectors</code>的起始虚拟地址写入到VBAR_EL1。</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/shortcode.png" length="6548" type="image/.png" />
     </item>
     
@@ -262,189 +602,431 @@
       <title>U-Boot和Linux内核的CRC函数</title>
       <link>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/crc32_func/</link>
       <pubDate>Sun, 21 Apr 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/crc32_func/</guid>
-      <description><![CDATA[测试的时候，发现内核驱动里用crc32_le计算出的值和u-boot里用crc32计算出的值不一样。 又用python的zlib.crc32和]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/laptop_keyboard_glow_170138_300x168.jpg" length="3604" type="image/.jpg" />
+      <description><![CDATA[<p>测试的时候，发现内核驱动里用<code>crc32_le</code>计算出的值和u-boot里用<code>crc32</code>计算出的值不一样。</p>
+<p>又用python的<code>zlib.crc32</code>和把内容写到文件用linux<code>crc32</code>命令计算，发现与u-boot<code>crc32</code>函数计算结果一致。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/code_letters_screen_137590_300x168.jpg" length="10341" type="image/.jpg" />
     </item>
     
     <item>
       <title>linux常用命令-系统管理</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_sys/</link>
       <pubDate>Sat, 09 Mar 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_sys/</guid>
-      <description><![CDATA[1. pstree查看进程树 1$ pstree -ptA 2systemd(1)-+-VGAuthService(546) 3 |-cron(625) 4 |-dbus-daemon(626) 5 |-dhclient(1587) 6 |-dhclient(1831) 7 |-rinetd(707) 8 |-rsyslogd(629)-+-{in:imklog}(632) 9 | |-{in:imuxsock}(631) 10 | `-{rs:main Q:Reg}(633) 2. ps 1# 查看命名空间，需要用root权限，可以使用sudo 2ps -eo pid,pidns,user,group,cmd 3# ps查]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/water_waves_ripples_143522_300x168.jpg" length="11080" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-pstree查看进程树" data-numberify>1. pstree查看进程树<a class="anchor ms-1" href="#1-pstree查看进程树"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln"> 1</span><span class="cl">$ pstree -ptA
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">systemd<span class="o">(</span>1<span class="o">)</span>-+-VGAuthService<span class="o">(</span>546<span class="o">)</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">           <span class="p">|</span>-cron<span class="o">(</span>625<span class="o">)</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">           <span class="p">|</span>-dbus-daemon<span class="o">(</span>626<span class="o">)</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">           <span class="p">|</span>-dhclient<span class="o">(</span>1587<span class="o">)</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">           <span class="p">|</span>-dhclient<span class="o">(</span>1831<span class="o">)</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">           <span class="p">|</span>-rinetd<span class="o">(</span>707<span class="o">)</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">           <span class="p">|</span>-rsyslogd<span class="o">(</span>629<span class="o">)</span>-+-<span class="o">{</span>in:imklog<span class="o">}(</span>632<span class="o">)</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">           <span class="p">|</span>               <span class="p">|</span>-<span class="o">{</span>in:imuxsock<span class="o">}(</span>631<span class="o">)</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">           <span class="p">|</span>               <span class="sb">`</span>-<span class="o">{</span>rs:main Q:Reg<span class="o">}(</span>633<span class="o">)</span>
+</span></span></code></pre></div>
+<h1 id="2-ps" data-numberify>2. ps<a class="anchor ms-1" href="#2-ps"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1"># 查看命名空间，需要用root权限，可以使用sudo</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">ps -eo pid,pidns,user,group,cmd
+</span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="c1"># ps查看进程间的关系。</span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl">ps -Teo ppid,sid,pgid,pid,tgid,tid,comm
+</span></span><span class="line"><span class="ln">5</span><span class="cl">
+</span></span><span class="line"><span class="ln">6</span><span class="cl">ps -eL -o pid,tid,stat,comm
+</span></span><span class="line"><span class="ln">7</span><span class="cl">ps -eL -o psr,pid,tid,stat,comm
+</span></span></code></pre></div>
+<h1 id="3-mount" data-numberify>3. mount<a class="anchor ms-1" href="#3-mount"></a></h1>
+
+<h2 id="31-使用mount替代软链接" data-numberify>3.1. 使用mount替代软链接<a class="anchor ms-1" href="#31-使用mount替代软链接"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1"># vi /etc/fstab</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">/data/docker		/var/lib/docker     none    <span class="nb">bind</span> <span class="m">0</span>       <span class="m">0</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl">
+</span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="c1"># 重新mount所有文件系统</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl">sudo mount -a
+</span></span></code></pre></div>
+<h2 id="32-挂载samba共享目录" data-numberify>3.2. 挂载samba共享目录<a class="anchor ms-1" href="#32-挂载samba共享目录"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="nv">MP</span><span class="o">=</span>/mnt/smb_share
+</span></span><span class="line"><span class="ln">2</span><span class="cl">
+</span></span><span class="line"><span class="ln">3</span><span class="cl">mkdir -p <span class="si">${</span><span class="nv">MP</span><span class="si">}</span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl">
+</span></span><span class="line"><span class="ln">5</span><span class="cl">mount -t cifs //<span class="si">${</span><span class="nv">IPADDR</span><span class="si">}</span>/share <span class="si">${</span><span class="nv">MP</span><span class="si">}</span> -o rw,noatime,nodiratime,file_mode<span class="o">=</span>0644,dir_mode<span class="o">=</span>0755,gid<span class="o">=</span>1000,uid<span class="o">=</span>1000,,username<span class="o">=</span><span class="si">${</span><span class="nv">USERNAME</span><span class="si">}</span>,pass<span class="o">=</span><span class="si">${</span><span class="nv">PASSWORD</span><span class="si">}</span>
+</span></span></code></pre></div>
+<h2 id="33-挂载u盘并指定默认用户等" data-numberify>3.3. 挂载U盘，并指定默认用户等<a class="anchor ms-1" href="#33-挂载u盘并指定默认用户等"></a></h2>
+<p>格式为exfat，如果不指定gid和uid，默认只有root可以写入。
+fmask和dmask参考Linux umask命令。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/texture_background_color_72786_300x168.jpg" length="9947" type="image/.jpg" />
     </item>
     
     <item>
       <title>C语言编译断言</title>
       <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/c_assert/</link>
       <pubDate>Sun, 25 Feb 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/c_assert/</guid>
-      <description><![CDATA[1. 简介 c++17标准引入了static_assert。 1static_assert(bool-constexpr, message ) /// since C++11 2static_assert(bool-constexpr) /// since C++17 gnu c编译器也实现了_Static_assert，见Static As]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wood_texture_logs_159793_300x168.jpg" length="19513" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-简介" data-numberify>1. 简介<a class="anchor ms-1" href="#1-简介"></a></h1>
+<p>c++17标准引入了<code>static_assert</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="nf">static_assert</span><span class="p">(</span><span class="kt">bool</span><span class="o">-</span><span class="n">constexpr</span><span class="p">,</span> <span class="n">message</span> <span class="p">)</span>     <span class="c1">/// since C++11
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="c1"></span><span class="nf">static_assert</span><span class="p">(</span><span class="kt">bool</span><span class="o">-</span><span class="n">constexpr</span><span class="p">)</span>               <span class="c1">/// since C++17
+</span></span></span></code></pre></div><p><code>gnu c</code>编译器也实现了<code>_Static_assert</code>，见<a href="https://www.gnu.org/software/c-intro-and-ref/manual/html_node/Static-Assertions.html" target="_blank" rel="noopener noreferrer">Static Assertions<i class="fas fa-external-link-square-alt ms-1"></i></a>。</p>
+
+<h1 id="2-自定义" data-numberify>2. 自定义<a class="anchor ms-1" href="#2-自定义"></a></h1>
+<p>在没有<code>static_assert</code>的c语言中，可以自己实现类似的功能，如下：</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/pixels_circles_colorful_121100_300x168.jpg" length="23064" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux Bash技巧</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/bash_tips/</link>
       <pubDate>Sun, 25 Feb 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/bash_tips/</guid>
-      <description><![CDATA[1. shell语法 shell核心基础知识 进阶版 2. 忽略大小写 重新进入bash后生效。 1echo &#39;set completion-ignore-case on&#39; &gt; ~/.inputrc 3. 临时使用alias前的命令 参考LINUX下使用]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_autumn_129305_300x168.jpg" length="15566" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-shell语法" data-numberify>1. shell语法<a class="anchor ms-1" href="#1-shell语法"></a></h1>
+<p><a href="https://www.jianshu.com/p/fdcbd620c07e" target="_blank" rel="noopener noreferrer">shell核心基础知识 进阶版<i class="fas fa-external-link-square-alt ms-1"></i></a></p>
+
+<h1 id="2-忽略大小写" data-numberify>2. 忽略大小写<a class="anchor ms-1" href="#2-忽略大小写"></a></h1>
+<p>重新进入bash后生效。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="nb">echo</span> <span class="s1">&#39;set completion-ignore-case on&#39;</span> &gt; ~/.inputrc
+</span></span></code></pre></div>
+<h1 id="3-临时使用alias前的命令" data-numberify>3. 临时使用alias前的命令<a class="anchor ms-1" href="#3-临时使用alias前的命令"></a></h1>
+<p>参考<a href="https://blog.csdn.net/imtech/article/details/126124210" target="_blank" rel="noopener noreferrer">LINUX下使用命令行获取公网IP地址转载<i class="fas fa-external-link-square-alt ms-1"></i></a></p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lines_intersection_oblique_153331_300x168.jpg" length="16159" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux fork进程/线程简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/a-fork/</link>
       <pubDate>Sat, 03 Feb 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/a-fork/</guid>
-      <description><![CDATA[1. kernel_clone kernel_clone是内核创建进程/线程的核心函数，如下功能都是通过调用kernel_clone实现的。 kernel_thread：]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/stars_figure_pattern_178502_300x168.jpg" length="18670" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-kernel_clone" data-numberify>1. kernel_clone<a class="anchor ms-1" href="#1-kernel_clone"></a></h1>
+<p>kernel_clone是内核创建进程/线程的核心函数，如下功能都是通过调用kernel_clone实现的。</p>
+<ul>
+<li>kernel_thread：创建内核进程</li>
+<li>user_mode_thread：创建1号进程，1号进程的回调函数先是内核态的kernel_init，之后通过execve切换到用户进程</li>
+<li>fork和clone系统调用：创建用户进程/线程</li>
+</ul>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.6/sched/a-fork/kernel_clone.png" loading="lazy" width="697" height="419" />
+</picture>
+
+</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/camera_photographer_smoke_126548_300x168.jpg" length="9088" type="image/.jpg" />
     </item>
     
     <item>
       <title>ARM64 Linux内核内存大小和布局</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/memory_size_layout/</link>
       <pubDate>Wed, 03 Jan 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/memory_size_layout/</guid>
-      <description><![CDATA[1. memblock 1.1. 结构体 memblock相关的全局变量是编译时静态初始化的。 1/// mm/memblock.c 2 3/// INIT_MEMBLOCK_MEMORY_REGIONS和INIT_]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wood_texture_logs_159793_300x168.jpg" length="19513" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-memblock" data-numberify>1. memblock<a class="anchor ms-1" href="#1-memblock"></a></h1>
+
+<h2 id="11-结构体" data-numberify>1.1. 结构体<a class="anchor ms-1" href="#11-结构体"></a></h2>
+<p><code>memblock</code>相关的全局变量是编译时静态初始化的。</p>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.6/mm/memory_size_layout/memblock.png" loading="lazy" width="1212" height="562" />
+</picture>
+
+</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// mm/memblock.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="c1">/// INIT_MEMBLOCK_MEMORY_REGIONS和INIT_MEMBLOCK_RESERVED_REGIONS见arch/arm64/include/asm/memory.h
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="k">struct</span> <span class="n">memblock_region</span> <span class="n">memblock_memory_init_regions</span><span class="p">[</span><span class="n">INIT_MEMBLOCK_MEMORY_REGIONS</span><span class="p">]</span> <span class="n">__initdata_memblock</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="k">static</span> <span class="k">struct</span> <span class="n">memblock_region</span> <span class="n">memblock_reserved_init_regions</span><span class="p">[</span><span class="n">INIT_MEMBLOCK_RESERVED_REGIONS</span><span class="p">]</span> <span class="n">__initdata_memblock</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cp">#ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cp"></span><span class="k">static</span> <span class="k">struct</span> <span class="n">memblock_region</span> <span class="n">memblock_physmem_init_regions</span><span class="p">[</span><span class="n">INIT_PHYSMEM_REGIONS</span><span class="p">];</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="k">struct</span> <span class="n">memblock</span> <span class="n">memblock</span> <span class="n">__initdata_memblock</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">    <span class="p">.</span><span class="n">memory</span><span class="p">.</span><span class="n">regions</span>		<span class="o">=</span> <span class="n">memblock_memory_init_regions</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="p">.</span><span class="n">memory</span><span class="p">.</span><span class="n">cnt</span>		<span class="o">=</span> <span class="mi">1</span><span class="p">,</span>	<span class="cm">/* empty dummy entry */</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">    <span class="p">.</span><span class="n">memory</span><span class="p">.</span><span class="n">max</span>		<span class="o">=</span> <span class="n">INIT_MEMBLOCK_MEMORY_REGIONS</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">    <span class="p">.</span><span class="n">memory</span><span class="p">.</span><span class="n">name</span>		<span class="o">=</span> <span class="s">&#34;memory&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">
+</span></span><span class="line"><span class="ln">16</span><span class="cl">    <span class="p">.</span><span class="n">reserved</span><span class="p">.</span><span class="n">regions</span>	<span class="o">=</span> <span class="n">memblock_reserved_init_regions</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">    <span class="p">.</span><span class="n">reserved</span><span class="p">.</span><span class="n">cnt</span>		<span class="o">=</span> <span class="mi">1</span><span class="p">,</span>	<span class="cm">/* empty dummy entry */</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">    <span class="p">.</span><span class="n">reserved</span><span class="p">.</span><span class="n">max</span>		<span class="o">=</span> <span class="n">INIT_MEMBLOCK_RESERVED_REGIONS</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">    <span class="p">.</span><span class="n">reserved</span><span class="p">.</span><span class="n">name</span>		<span class="o">=</span> <span class="s">&#34;reserved&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">
+</span></span><span class="line"><span class="ln">21</span><span class="cl">    <span class="p">.</span><span class="n">bottom_up</span>		<span class="o">=</span> <span class="nb">false</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">    <span class="p">.</span><span class="n">current_limit</span>		<span class="o">=</span> <span class="n">MEMBLOCK_ALLOC_ANYWHERE</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl">
+</span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="cp">#ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="cp"></span><span class="k">struct</span> <span class="n">memblock_type</span> <span class="n">physmem</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">27</span><span class="cl">    <span class="p">.</span><span class="n">regions</span>		<span class="o">=</span> <span class="n">memblock_physmem_init_regions</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl">    <span class="p">.</span><span class="n">cnt</span>			<span class="o">=</span> <span class="mi">1</span><span class="p">,</span>	<span class="cm">/* empty dummy entry */</span>
+</span></span><span class="line"><span class="ln">29</span><span class="cl">    <span class="p">.</span><span class="n">max</span>			<span class="o">=</span> <span class="n">INIT_PHYSMEM_REGIONS</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">30</span><span class="cl">    <span class="p">.</span><span class="n">name</span>			<span class="o">=</span> <span class="s">&#34;physmem&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="cp">#endif
+</span></span></span></code></pre></div>
+<h2 id="12-memblock操作函数" data-numberify>1.2. memblock操作函数<a class="anchor ms-1" href="#12-memblock操作函数"></a></h2>
+<p>主要关注<code>struct memblock memblock</code>的<code>memory</code>和<code>reserved</code>两个成员和三个函数。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/pattern_frosty_frost_134125_300x168.jpg" length="18643" type="image/.jpg" />
     </item>
     
     <item>
       <title>exec系统调用简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/execve/</link>
       <pubDate>Wed, 03 Jan 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/execve/</guid>
-      <description><![CDATA[1. 动态链接和静态链接 1.1. 编译命令 1aarch64-linux-gnu-gcc -o dummy_arm64 dummy.c 2aarch64-linux-gnu-gcc -static -o dummy_arm64_static dummy.c 1.2. 查看文件格式信息 1$ file dummy_arm64* 2dummy_arm64: ELF 64-bit LSB executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=3fa0f1369e1b3181f059174b078dd893e813abb2, for GNU/Linux 3.7.0, with debug_info, not stripped 3dummy_arm64_static: ELF 64-bit LSB executable, ARM aarch64, version 1 (GNU/Linux), statically linked,]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/canvas_picture_abstraction_138874_300x168.jpg" length="19551" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-动态链接和静态链接" data-numberify>1. 动态链接和静态链接<a class="anchor ms-1" href="#1-动态链接和静态链接"></a></h1>
+
+<h2 id="11-编译命令" data-numberify>1.1. 编译命令<a class="anchor ms-1" href="#11-编译命令"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">aarch64-linux-gnu-gcc -o dummy_arm64 dummy.c
+</span></span><span class="line"><span class="ln">2</span><span class="cl">aarch64-linux-gnu-gcc -static -o dummy_arm64_static dummy.c
+</span></span></code></pre></div>
+<h2 id="12-查看文件格式信息" data-numberify>1.2. 查看文件格式信息<a class="anchor ms-1" href="#12-查看文件格式信息"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">$ file dummy_arm64*
+</span></span><span class="line"><span class="ln">2</span><span class="cl">dummy_arm64:        ELF 64-bit LSB executable, ARM aarch64, version <span class="m">1</span> <span class="o">(</span>SYSV<span class="o">)</span>, dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID<span class="o">[</span>sha1<span class="o">]=</span>3fa0f1369e1b3181f059174b078dd893e813abb2, <span class="k">for</span> GNU/Linux 3.7.0, with debug_info, not stripped
+</span></span><span class="line"><span class="ln">3</span><span class="cl">dummy_arm64_static: ELF 64-bit LSB executable, ARM aarch64, version <span class="m">1</span> <span class="o">(</span>GNU/Linux<span class="o">)</span>, statically linked, BuildID<span class="o">[</span>sha1<span class="o">]=</span>5475ac20b174d94d96e666e170fb2d6ce69cdf76, <span class="k">for</span> GNU/Linux 3.7.0, with debug_info, not stripped
+</span></span></code></pre></div>
+<h2 id="13-读取elf文件信息" data-numberify>1.3. 读取elf文件信息<a class="anchor ms-1" href="#13-读取elf文件信息"></a></h2>
+<p>可以看到动态链接的程序需要有解释器<code>/lib64/ld-linux-x86-64.so.2</code>，与<code>file</code>目录看到的是一样的。静态链接的程序没有解释器段。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lava_texture_surface_140175_300x168.jpg" length="10556" type="image/.jpg" />
     </item>
     
     <item>
       <title>进程调度简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/schedule1/</link>
       <pubDate>Wed, 03 Jan 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/schedule1/</guid>
-      <description><![CDATA[1. 运行队列：runqueue Linux内核使用运行队列来管理每个CPU上运行的任务，要运行的任务抽象成“调度实体”，调度实体可以是进程、线程]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wavy_motley_metallic_139065_300x168.jpg" length="26579" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-运行队列runqueue" data-numberify>1. 运行队列：runqueue<a class="anchor ms-1" href="#1-运行队列runqueue"></a></h1>
+<p>Linux内核使用运行队列来管理每个CPU上运行的任务，要运行的任务抽象成“调度实体”，调度实体可以是进程、线程或任务组。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/dots_light_background_50767_300x168.jpg" length="5596" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux进程命名空间（pid namespace）</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/pid_namespace/</link>
       <pubDate>Sun, 31 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/pid_namespace/</guid>
-      <description><![CDATA[1. namespace简介 namespace是Linux提供的一种内核级别环境隔离的方法，很多编程语言也有namespace这样的功能，例如C]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/iridescent_colorful_lines_130978_300x168.jpg" length="11918" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-namespace简介" data-numberify>1. namespace简介<a class="anchor ms-1" href="#1-namespace简介"></a></h1>
+<p>namespace是Linux提供的一种内核级别环境隔离的方法，很多编程语言也有namespace这样的功能，例如C++，Java等。编程语言的namespace是为了解决项目中能够在不同的命名空间里使用相同的函数名或者类名。而Linux的namespace也是为了实现资源能够在不同的命名空间里有相同的名称，比如在A命名空间有个pid为1的进程，而在B命名空间中也可以有一个pid为1的进程。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lines_obliquely_stripes_123801_300x168.jpg" length="18016" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux进程和线程关系</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/relationship/</link>
       <pubDate>Wed, 27 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/relationship/</guid>
-      <description><![CDATA[1. 基本概念 Linux内核中没有使用单独的数据结构来描述进程和线程，而是将它们统一起来，使用task_struct结构体来描述，这就是“Lin]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/trunk_tree_texture_119590_300x168.jpg" length="18828" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-基本概念" data-numberify>1. 基本概念<a class="anchor ms-1" href="#1-基本概念"></a></h1>
+<p>Linux内核中没有使用单独的数据结构来描述进程和线程，而是将它们统一起来，使用task_struct结构体来描述，这就是“Linux不区分进程和线程”的来源。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" length="24563" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux 0号线程swapper简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_0/</link>
       <pubDate>Wed, 13 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_0/</guid>
-      <description><![CDATA[1. 总览 这里以ARM64为例。 在内核的起始阶段，还没有进程和线程的概念，在开启MMU之后，__primary_switched的第一步就是将i]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_300x168.jpg" length="21351" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-总览" data-numberify>1. 总览<a class="anchor ms-1" href="#1-总览"></a></h1>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.1/sched/task_0/tasks.png" loading="lazy" width="3204" height="1128" />
+</picture>
+
+</p>
+<p>这里以ARM64为例。</p>
+<p>在内核的起始阶段，还没有进程和线程的概念，在开启MMU之后，<code>__primary_switched</code>的第一步就是将init_task的地址写到sp_el0，这个时候就可以用get_current()或者curent获取到0号线程的task_struct了。在0号线程的上下文，完成调度器的相关初始化之后，创建1号和2号线程，然后开启调度器，init_task自此进入idle状态。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_texture_127524_300x168.jpg" length="18901" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux 1号线程init简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_1/</link>
       <pubDate>Wed, 13 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_1/</guid>
-      <description><![CDATA[1. 1号进程的内核态 1号进程首先运行在内核态，其函数是kernel_init，这里简单介绍一下其工作： 非bootcpu相关初始化 页分配器初始化]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/gradient_blur_blending_130648_300x168.jpg" length="2927" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-1号进程的内核态" data-numberify>1. 1号进程的内核态<a class="anchor ms-1" href="#1-1号进程的内核态"></a></h1>
+<p>1号进程首先运行在内核态，其函数是kernel_init，这里简单介绍一下其工作：</p>
+<ol>
+<li>非bootcpu相关初始化</li>
+<li>页分配器初始化的收尾工作</li>
+<li>驱动子系统和设备树初始化</li>
+<li>调用<code>__initcall</code>指定的初始化函数</li>
+<li>挂载根文件系统</li>
+<li>是否<code>__init</code>指定的内存</li>
+<li>执行用户态init程序</li>
+</ol>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.1/sched/task_1/kernel_init.png" loading="lazy" width="1469" height="1859" />
+</picture>
+
+</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/trunk_tree_texture_119590_300x168.jpg" length="18828" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux 2号线程kthreadd简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_2/</link>
       <pubDate>Wed, 13 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_2/</guid>
-      <description><![CDATA[1. 2号线程kthreadd Linux内核规定，所有的线程必须由已存在的线程创建出来，也就是要求所有的task_struct都需要在已有的ta]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" length="24563" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-2号线程kthreadd" data-numberify>1. 2号线程kthreadd<a class="anchor ms-1" href="#1-2号线程kthreadd"></a></h1>
+<p>Linux内核规定，所有的线程必须由已存在的线程创建出来，也就是要求所有的task_struct都需要在已有的task_struct上复制出来。Linux可以通过kernel_thread来创建内核线程，这个函数会复制当前线程的task_struct。如果任由各个子系统或驱动自己调用kernel_thread来创建线程，那在创建内核线程时current所指向的task_struct是不确定的。为了解决这一问题，Linux内核将所有内核线程的创建交给固定的线程来做，这个线程就是2号线程kthreadd。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/pattern_frosty_frost_134125_300x168.jpg" length="18643" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux进程状态与生命周期</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/task_state/</link>
       <pubDate>Wed, 13 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/task_state/</guid>
-      <description><![CDATA[1. 进程状态切换 state value desc TASK_NEW 0x00000800 新建 TASK_RUNNING 0x00000000 就绪或占有cpu运行 TASK_INTERRUPTIBLE 0x00000001 可中断睡眠 TASK_UNINTERRUPTIBLE 0x00000002 不可中断睡眠 TASK_WAKEKILL 0x00000100 可以在stopped/traced/killable的]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/dunes_sand_texture_151004_300x168.jpg" length="17708" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-进程状态切换" data-numberify>1. 进程状态切换<a class="anchor ms-1" href="#1-进程状态切换"></a></h1>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.6/sched/task_state/task_statemachine.png" loading="lazy" width="1633" height="452" />
+</picture>
+
+</p>
+<table>
+  <thead>
+      <tr>
+          <th>state</th>
+          <th>value</th>
+          <th>desc</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>TASK_NEW</td>
+          <td>0x00000800</td>
+          <td>新建</td>
+      </tr>
+      <tr>
+          <td>TASK_RUNNING</td>
+          <td>0x00000000</td>
+          <td>就绪或占有cpu运行</td>
+      </tr>
+      <tr>
+          <td>TASK_INTERRUPTIBLE</td>
+          <td>0x00000001</td>
+          <td>可中断睡眠</td>
+      </tr>
+      <tr>
+          <td>TASK_UNINTERRUPTIBLE</td>
+          <td>0x00000002</td>
+          <td>不可中断睡眠</td>
+      </tr>
+      <tr>
+          <td>TASK_WAKEKILL</td>
+          <td>0x00000100</td>
+          <td>可以在stopped/traced/killable的情况下唤醒</td>
+      </tr>
+      <tr>
+          <td>TASK_WAKING</td>
+          <td>0x00000200</td>
+          <td>正在被唤醒</td>
+      </tr>
+      <tr>
+          <td>__TASK_STOPPED</td>
+          <td>0x00000004</td>
+          <td>和其他状态组合，用于唤醒包含此状态标记的进程</td>
+      </tr>
+      <tr>
+          <td>TASK_STOPPED</td>
+          <td>0x00000104</td>
+          <td>TASK_WAKEKILL和__TASK_STOPPED的组合</td>
+      </tr>
+      <tr>
+          <td>TASK_IDLE</td>
+          <td>0x00000402</td>
+          <td>TASK_UNINTERRUPTIBLE和TASK_NOLOAD的组合</td>
+      </tr>
+      <tr>
+          <td>TASK_DEAD</td>
+          <td>0x00000080</td>
+          <td>进程消亡，即将回收task_struct</td>
+      </tr>
+      <tr>
+          <td>EXIT_DEAD</td>
+          <td>0x00000010</td>
+          <td>来自EXIT_ZOMBIE，即将回收task_struct</td>
+      </tr>
+      <tr>
+          <td>EXIT_ZOMBIE</td>
+          <td>0x00000020</td>
+          <td>僵尸态，进程已经结束，但task_struct还没有回收</td>
+      </tr>
+  </tbody>
+</table>
+<p>EXIT前缀的状态，是由<code>struct task_struct.exit_state</code>使用的。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_1280x720.jpg" length="194685" type="image/.jpg" />
     </item>
     
     <item>
       <title>ARM64 Crash调试环境搭建</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/arm64_setup/</link>
       <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/arm64_setup/</guid>
-      <description><![CDATA[1. ARM64 Crash调试环境搭建 主要参考资料： 内核源码 Documentation/admin-guide/kdump/kdump.rst或者Doc]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/vintage_retro_camera_126517_300x168.jpg" length="11143" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-arm64-crash调试环境搭建" data-numberify>1. ARM64 Crash调试环境搭建<a class="anchor ms-1" href="#1-arm64-crash调试环境搭建"></a></h1>
+<p>主要参考资料：</p>
+<ul>
+<li>内核源码 <code>Documentation/admin-guide/kdump/kdump.rst</code>或者<a href="https://www.kernel.org/doc/html/v6.6/admin-guide/kdump/kdump.html" target="_blank" rel="noopener noreferrer">Documentation for Kdump - The kexec-based Crash Dumping Solution<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li>Crash白皮书：<a href="https://crash-utility.github.io/crash_whitepaper.html" target="_blank" rel="noopener noreferrer">https://crash-utility.github.io/crash_whitepaper.html<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li>Crash github：<a href="https://github.com/crash-utility/crash" target="_blank" rel="noopener noreferrer">https://github.com/crash-utility/crash<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li>Oracle: <a href="https://docs.oracle.com/en/operating-systems/oracle-linux/6/admin/crash-debugger-use.html" target="_blank" rel="noopener noreferrer">Using the crash Debugger<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+</ul>
+
+<h2 id="11-x86_64主机编译arm64-crash工具" data-numberify>1.1. x86_64主机编译ARM64 Crash工具<a class="anchor ms-1" href="#11-x86_64主机编译arm64-crash工具"></a></h2>
+<p>在x86机器上安装的Crash工具不能直接调试ARM64的coredump文件。可以通过重新编译Crash源码来生成调试ARM64 coredump文件的Crash。参考<a href="https://github.com/crash-utility/crash/tree/8.0.3" target="_blank" rel="noopener noreferrer">https://github.com/crash-utility/crash/tree/8.0.3<i class="fas fa-external-link-square-alt ms-1"></i></a>的README中提供的编译方法，解压代码后，执行 <code>make target=ARM64</code>即可。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/pixels_cubes_shapes_127558_300x168.jpg" length="18339" type="image/.jpg" />
     </item>
     
     <item>
       <title>Crash帮助信息</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/help/</link>
       <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/help/</guid>
       <description><![CDATA[Crash帮助信息，来自于crash &ndash;help]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lines_plexus_neon_128926_300x168.jpg" length="24964" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/travel_map_compass_123078_300x168.jpg" length="14785" type="image/.jpg" />
     </item>
     
     <item>
       <title>Crash命令介绍</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/crash_cmd_set/</link>
       <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/crash_cmd_set/</guid>
-      <description><![CDATA[1. Crash命令介绍 虽然使用硬件设备来调试有很多优点和方便之处，但是我一直希望代码是可以自己调试自己的，从而避免使用一些昂贵的外部的的设备。]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/laptop_dj_equipment_212416_300x168.jpg" length="9857" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-crash命令介绍" data-numberify>1. Crash命令介绍<a class="anchor ms-1" href="#1-crash命令介绍"></a></h1>
+<p>虽然使用硬件设备来调试有很多优点和方便之处，但是我一直希望代码是可以自己调试自己的，从而避免使用一些昂贵的外部的的设备。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/hologram_scheme_scifi_139294_300x168.jpg" length="9556" type="image/.jpg" />
     </item>
     
     <item>
       <title>linux常用命令-网络</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_network/</link>
       <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_network/</guid>
-      <description><![CDATA[nmap 1nmap -sVn 192.168.31.* 2 3nmap -sVn 192.168.31.* -oN out.txt 4 5nmap -sV -sC -Pn 192.168.31.* 6 7nmap -sV -sC -Pn 192.168.31.* -oN out.txt 8 9nmap -sV -sC -Pn 192.168.31.* -oG out.txt 10 11nmap -sV -sC -Pn 192.168.31.* -oX out.xml 12 13nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script=banner,vuln 14 15nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script=banner,vuln --script-args=banner.timeout=10,vuln.timeout=10 16 17nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script=banner,vuln --script-args=banner.timeout=10,vuln.timeout=10 --script-args=banner.path=/usr/share/nmap/scripts/http-title.nse,vuln.cvss-threshold=7]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/texture_background_color_72786_300x168.jpg" length="9947" type="image/.jpg" />
+      <description><![CDATA[<h1 id="nmap" data-numberify>nmap<a class="anchor ms-1" href="#nmap"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln"> 1</span><span class="cl">nmap  -sVn 192.168.31.*
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">nmap -sVn 192.168.31.* -oN out.txt
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">nmap -sV -sC -Pn 192.168.31.*
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">nmap -sV -sC -Pn 192.168.31.* -oN out.txt
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">nmap -sV -sC -Pn 192.168.31.* -oG out.txt
+</span></span><span class="line"><span class="ln">10</span><span class="cl">
+</span></span><span class="line"><span class="ln">11</span><span class="cl">nmap -sV -sC -Pn 192.168.31.* -oX out.xml
+</span></span><span class="line"><span class="ln">12</span><span class="cl">
+</span></span><span class="line"><span class="ln">13</span><span class="cl">nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script<span class="o">=</span>banner,vuln
+</span></span><span class="line"><span class="ln">14</span><span class="cl">
+</span></span><span class="line"><span class="ln">15</span><span class="cl">nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script<span class="o">=</span>banner,vuln --script-args<span class="o">=</span>banner.timeout<span class="o">=</span>10,vuln.timeout<span class="o">=</span><span class="m">10</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl">
+</span></span><span class="line"><span class="ln">17</span><span class="cl">nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script<span class="o">=</span>banner,vuln --script-args<span class="o">=</span>banner.timeout<span class="o">=</span>10,vuln.timeout<span class="o">=</span><span class="m">10</span> --script-args<span class="o">=</span>banner.path<span class="o">=</span>/usr/share/nmap/scripts/http-title.nse,vuln.cvss-threshold<span class="o">=</span><span class="m">7</span>
+</span></span></code></pre></div>
+<h1 id="ip" data-numberify>ip<a class="anchor ms-1" href="#ip"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">ip addr
+</span></span><span class="line"><span class="ln">2</span><span class="cl">ip route
+</span></span></code></pre></div>
+<h1 id="ssh" data-numberify>ssh<a class="anchor ms-1" href="#ssh"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">ssh-keygen -f <span class="s2">&#34;/home/</span><span class="si">${</span><span class="nv">USERNAME</span><span class="si">}</span><span class="s2">/.ssh/known_hosts&#34;</span> -R <span class="s2">&#34;[localhost]:22&#34;</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">ssh-copy-id -p <span class="m">22</span> <span class="si">${</span><span class="nv">USERNAME</span><span class="si">}</span>@<span class="si">${</span><span class="nv">IP</span><span class="si">}</span>
+</span></span></code></pre></div><p><a href="https://zhuanlan.zhihu.com/p/521768041" target="_blank" rel="noopener noreferrer">https://zhuanlan.zhihu.com/p/521768041<i class="fas fa-external-link-square-alt ms-1"></i></a></p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/keyboard_laptop_gradient_203739_300x168.jpg" length="10539" type="image/.jpg" />
     </item>
     
     <item>
       <title>保证内核启动安全的几种方式</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/kernel_boot_security/</link>
       <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/kernel_boot_security/</guid>
-      <description><![CDATA[保证内核启动安全的几种方式 禁止修改cmdline 禁止修改根文件系统 使能内核地址空间布局随机化(KASLR)]]></description>
+      <description><![CDATA[<h1 id="保证内核启动安全的几种方式" data-numberify>保证内核启动安全的几种方式<a class="anchor ms-1" href="#保证内核启动安全的几种方式"></a></h1>
+<ol>
+<li>禁止修改cmdline</li>
+<li>禁止修改根文件系统</li>
+<li>使能内核地址空间布局随机化(KASLR)</li>
+</ol>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/code_text_colorful_140555_300x168.jpg" length="22830" type="image/.jpg" />
     </item>
     
@@ -452,19 +1034,22 @@
       <title>解决Windows不能使用python3.10的问题</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/win/win_python3/</link>
       <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/win/win_python3/</guid>
-      <description><![CDATA[1. 现象 Windows上输入python3 test.py后，脚本没有执行。 单独输入python3，会启动Microsoft Store，搜索Py]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/dots_light_background_50767_300x168.jpg" length="5596" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-现象" data-numberify>1. 现象<a class="anchor ms-1" href="#1-现象"></a></h1>
+<p>Windows上输入<code>python3 test.py</code>后，脚本没有执行。
+单独输入python3，会启动Microsoft Store，搜索Python3。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/pink_color_background_153889_300x168.jpg" length="1430" type="image/.jpg" />
     </item>
     
     <item>
       <title>linux atomic接口简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/atomic/</link>
       <pubDate>Wed, 30 Aug 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/atomic/</guid>
-      <description><![CDATA[1. 后缀说明 acquire操作指的是在这条语句之后的所有内存操作只准在这条语句之后，不准被提前到这条语句之前。 release操作指的是在这条语]]></description>
+      <description><![CDATA[<h1 id="1-后缀说明" data-numberify>1. 后缀说明<a class="anchor ms-1" href="#1-后缀说明"></a></h1>
+<p>acquire操作指的是在这条语句之后的所有内存操作只准在这条语句之后，不准被提前到这条语句之前。
+release操作指的是在这条语句之前的所有内存操作只准在这条语句之前，不准被延后到这条语句之后。
+relaxed操作指的是不保证任何的内存顺序。</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/lines_multicolored_rainbow_125651_300x168.jpg" length="11453" type="image/.jpg" />
     </item>
     
@@ -472,57 +1057,58 @@
       <title>Linux内核驱动模型（三）驱动初始化</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/initcall/</link>
       <pubDate>Thu, 20 Jul 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/initcall/</guid>
-      <description><![CDATA[1. module_init是什么 module_init是Linux内核开发和驱动开发中非常常见的宏，其定义在 include/linux/mod]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_1280x720.jpg" length="194685" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-module_init是什么" data-numberify>1. module_init是什么<a class="anchor ms-1" href="#1-module_init是什么"></a></h1>
+<p>module_init是Linux内核开发和驱动开发中非常常见的宏，其定义在 <code>include/linux/module.h</code>中，可以看到，module_init的实现会根据是否定义MODULE而有所不同。MODULE决定了我们编写的驱动，是与内核编译到一起，还是单独编译为ko。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/camera_photographer_smoke_126548_300x168.jpg" length="9088" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux内核驱动模型（四）核心结构体</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/device_model/</link>
       <pubDate>Wed, 12 Jul 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/device_model/</guid>
-      <description><![CDATA[1. sysfs中的bus/class/device/driver 首先通过实例来看bus/class/device/driver的关系。下图绘制]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/dunes_sand_texture_151004_300x168.jpg" length="17708" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-sysfs中的busclassdevicedriver" data-numberify>1. sysfs中的bus/class/device/driver<a class="anchor ms-1" href="#1-sysfs中的busclassdevicedriver"></a></h1>
+<p>首先通过实例来看bus/class/device/driver的关系。下图绘制的是qemu启动ARM64后，sysfs中platform总线下部分目录和文件的关系。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/stars_figure_pattern_178502_300x168.jpg" length="18670" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux内核驱动模型（一）设备树展开</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/fdt_dt/</link>
       <pubDate>Wed, 12 Jul 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/fdt_dt/</guid>
-      <description><![CDATA[1. DT和FDT 设备树（Device Tree，DT）是一种层次结构的文本数据表示方式，用于描述硬件设备的配置信息。扁平设备树（Flattene]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/iridescent_colorful_lines_130978_300x168.jpg" length="11918" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-dt和fdt" data-numberify>1. DT和FDT<a class="anchor ms-1" href="#1-dt和fdt"></a></h1>
+<p>设备树（Device Tree，DT）是一种层次结构的文本数据表示方式，用于描述硬件设备的配置信息。扁平设备树（Flattened Device Tree，FDT），也叫平坦设备树，是设备树的一种二进制表示形式，提高了在嵌入式系统中的传输和解析效率。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/blinds_lines_shade_143653_300x168.jpg" length="11444" type="image/.jpg" />
     </item>
     
     <item>
       <title>U-Boot从dtb获取内存布局并传递到内核</title>
       <link>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_mem/</link>
       <pubDate>Tue, 11 Jul 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_mem/</guid>
-      <description><![CDATA[1. U-Boot获取布局内存 U-Boot在启动过程中，默认内存布局通常在.config中定义。 1CONFIG_SYS_SDRAM_BASE=0x240000000 2CONFIG_SYS_DDR_SIZE=0xC0000000 在DDR控制器初始化完成之后，就要确定系统中]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wall_brick_neon_150470_300x168.jpg" length="13857" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-u-boot获取布局内存" data-numberify>1. U-Boot获取布局内存<a class="anchor ms-1" href="#1-u-boot获取布局内存"></a></h1>
+<p>U-Boot在启动过程中，默认内存布局通常在<code>.config</code>中定义。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="n">CONFIG_SYS_SDRAM_BASE</span><span class="o">=</span><span class="mh">0x240000000</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="n">CONFIG_SYS_DDR_SIZE</span><span class="o">=</span><span class="mh">0xC0000000</span>
+</span></span></code></pre></div><p>在DDR控制器初始化完成之后，就要确定系统中有多少可用内存，这通常是由<code>dram_init_banksize</code>来实现的，而不同的板级文件会实现不同的<code>dram_init_banksize</code>，这也就决定了不同的板级可以定义不同的获取内存布局的方法。这里介绍一种从dtb中获取内存布局的实现，这可以通过简单的调用<code>fdtdec_setup_memory_banksize</code>来实现。而在使能了<code>CONFIG_OF_LIBFDT</code>的情况下，U-Boot又会通过<code>fdt_fixup_memory_banks</code>来为内核dtb添加或修改<code>memory</code>节点，这样就可以只在U-Boot中定义<code>memory</code>信息，内核dtb省略<code>memory</code>定义，从而可以使其更加简洁通用。相信这也是后续U-Boot推荐使用的方式。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/drone_camera_technology_171576_300x168.jpg" length="10102" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux ARM64页面大小和虚拟地址位数</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtable/</link>
       <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtable/</guid>
-      <description><![CDATA[ARM64的可配置的页面大小和虚拟地址位数是由ARM硬件决定的，不同的ARM版本，可选择的页面大小和地址位数也不一样。比如52位虚拟地址和物]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/squares_colorful_texture_133972_300x168.jpg" length="17371" type="image/.jpg" />
+      <description><![CDATA[<p>ARM64的可配置的页面大小和虚拟地址位数是由ARM硬件决定的，不同的ARM版本，可选择的页面大小和地址位数也不一样。比如52位虚拟地址和物理地址是在ARMv8.2及之后的架构才支持的，ARMv8.2提供了两种重要的拓展：大虚拟寻址（LVA）和大物理寻址（LPA）。Linux从5.4开始支持ARM64的52位虚拟地址和物理地址。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/chip_circuit_processor_140251_300x168.jpg" length="19023" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux内核常见ARM64汇编宏</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/asm_macors/</link>
       <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/asm_macors/</guid>
       <description><![CDATA[ARM64汇编宏：adr_l]]></description>
     <enclosure url="https://kingdix10.github.io/covers/paint_grunge_green_124502_300x168.jpg" length="5826" type="image/.jpg" />
@@ -532,37 +1118,48 @@
       <title>Linux内核驱动模型（二）设备树转换</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/dt_to_dt/</link>
       <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/dt_to_dt/</guid>
-      <description><![CDATA[1. device_node tree到device tree device_node的层次结构建立之后，并没有struct device生成，那我们实现的驱动probe函数又是]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg" length="10737" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-device_node-tree到device-tree" data-numberify>1. device_node tree到device tree<a class="anchor ms-1" href="#1-device_node-tree到device-tree"></a></h1>
+<p>device_node的层次结构建立之后，并没有struct device生成，那我们实现的驱动probe函数又是如何获取设备的呢？
+这就需要有一个从device_node创建struct device的过程，这个过程并没有一个统一的函数来实现，而是各个总线的在初始化时，主动扫描设备树，根据device_node创建自己需要的设备。下边以platform总线为例说明。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/gradient_orange_shades_131495_300x168.jpg" length="2713" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux内核数据结构kobject/kset/ktype</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/kobject/kobject/</link>
       <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/kobject/kobject/</guid>
-      <description><![CDATA[1. 数据结构简介 内核版本：linux-6.1 内核文档：Everything you never wanted to know about kobjects, ksets, and ktypes — The Linux Kernel documentation 在Linux内核中，kobject、k]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lines_obliquely_stripes_123801_300x168.jpg" length="18016" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-数据结构简介" data-numberify>1. 数据结构简介<a class="anchor ms-1" href="#1-数据结构简介"></a></h1>
+<p>内核版本：linux-6.1</p>
+<p>内核文档：<a href="https://www.kernel.org/doc/html/v6.1/core-api/kobject.html" target="_blank" rel="noopener noreferrer">Everything you never wanted to know about kobjects, ksets, and ktypes — The Linux Kernel documentation<i class="fas fa-external-link-square-alt ms-1"></i></a></p>
+<p>在Linux内核中，kobject、kset和kobj_type是用于管理和表示kobject的数据结构。kobject是设备驱动模型的基石，sysfs和uevent也与kobject密切相关。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/mosaic_multicolored_texture_126795_300x168.jpg" length="20064" type="image/.jpg" />
     </item>
     
     <item>
       <title>U-Boot杂项记录</title>
       <link>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_misc_note/</link>
       <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/uboot_misc_note/</guid>
-      <description><![CDATA[1. get_ram_size get_ram_size只适用于CONFIG_SYS_DDR_SIZE=2^n。 1int dram_init(void) 2{ 3 gd-&gt;ram_size = get_ram_size((long *)CONFIG_SYS_SDRAM_BASE, 4 CONFIG_SYS_DDR_SIZE); 5 return 0; 6} 2. 多核启动之spintabl]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/spots_stains_colorful_147593_300x168.jpg" length="20423" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-get_ram_size" data-numberify>1. get_ram_size<a class="anchor ms-1" href="#1-get_ram_size"></a></h1>
+<p><code>get_ram_size</code>只适用于<code>CONFIG_SYS_DDR_SIZE=2^n</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="kt">int</span> <span class="nf">dram_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl">    <span class="n">gd</span><span class="o">-&gt;</span><span class="n">ram_size</span> <span class="o">=</span> <span class="nf">get_ram_size</span><span class="p">((</span><span class="kt">long</span> <span class="o">*</span><span class="p">)</span><span class="n">CONFIG_SYS_SDRAM_BASE</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl">                    <span class="n">CONFIG_SYS_DDR_SIZE</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div>
+<h1 id="2-多核启动之spintable" data-numberify>2. 多核启动之spintable<a class="anchor ms-1" href="#2-多核启动之spintable"></a></h1>
+<p>U-Boo中需要开启<code>ARMV8_MULTIENTRY</code>，另外<code>CPU_RELEASE_ADDR</code>的值要与内核dtb的<code>cpu-release-addr</code>保持一致。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/bubbles_drops_macro_126764_300x168.jpg" length="23506" type="image/.jpg" />
     </item>
     
     <item>
       <title>磁盘和文件系统扩容/缩容</title>
       <link>https://kingdix10.github.io/zh-cn/docs/02-dev_env/resizefs/</link>
       <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/02-dev_env/resizefs/</guid>
       <description><![CDATA[Linux磁盘和文件系统扩容/缩容]]></description>
     <enclosure url="https://kingdix10.github.io/covers/lines_obliquely_stripes_123801_300x168.jpg" length="18016" type="image/.jpg" />
@@ -572,109 +1169,146 @@
       <title>Exynos4412启动介绍</title>
       <link>https://kingdix10.github.io/zh-cn/docs/exynos4412/exynos4412/</link>
       <pubDate>Mon, 05 Jun 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/exynos4412/exynos4412/</guid>
-      <description><![CDATA[1. 两种大小的BL1是怎么回事 关于4412的BL1，有说8k的，也有说15k的，到底哪一个是对的呢？ 这要追溯一下4412的版本，Exynos4]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/vintage_retro_camera_126517_300x168.jpg" length="11143" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-两种大小的bl1是怎么回事" data-numberify>1. 两种大小的BL1是怎么回事<a class="anchor ms-1" href="#1-两种大小的bl1是怎么回事"></a></h1>
+<p>关于4412的BL1，有说8k的，也有说15k的，到底哪一个是对的呢？</p>
+<p>这要追溯一下4412的版本，Exynos4412一共有两个版本，一个是Exynos 4412，另一个是Exynos 4412 Prime。网上大多数文章都是基于8k来介绍BL1的。我只在<a href="https://chasinglulu.github.io/2019/05/28/%E5%85%B3%E4%BA%8EExynos4412-SoC%E7%9A%84%E5%90%AF%E5%8A%A8%E5%88%86%E6%9E%90/" target="_blank" rel="noopener noreferrer">关于Exynos4412 SoC的启动分析 | 点滴汇聚 (chasinglulu.github.io)<i class="fas fa-external-link-square-alt ms-1"></i></a>和<a href="https://blog.csdn.net/u012867916/article/details/119619545" target="_blank" rel="noopener noreferrer">Exynos4412 的启动过程详解（四）<i class="fas fa-external-link-square-alt ms-1"></i></a>看到过关于Exynos 4412 Prime的介绍，但是没到找到对应的官方资料。两者的主要差异就在于BL1的大小。Exynos 4412 Prime可以支持15k的BL1，也向后兼容，支持8k的BL1。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/hologram_scheme_scifi_139294_300x168.jpg" length="9556" type="image/.jpg" />
     </item>
     
     <item>
       <title>Exynos4412自制BL1</title>
       <link>https://kingdix10.github.io/zh-cn/docs/exynos4412/mkbl1/</link>
       <pubDate>Mon, 05 Jun 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/exynos4412/mkbl1/</guid>
-      <description><![CDATA[1. 自制BL1 参考Android_Exynos4412_iROM_Secure_Booting_Guide_Ver.1.00.00.pdf，E]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/travel_map_compass_123078_300x168.jpg" length="14785" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-自制bl1" data-numberify>1. 自制BL1<a class="anchor ms-1" href="#1-自制bl1"></a></h1>
+<p>参考Android_Exynos4412_iROM_Secure_Booting_Guide_Ver.1.00.00.pdf，Exynos4412会自动把BL加载到0x0202_1400运行。所以BL1的入口地址需要设置为0x0202_1400，这样才能保证位置相关码可以正常执行。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/vintage_retro_camera_126517_300x168.jpg" length="11143" type="image/.jpg" />
     </item>
     
     <item>
       <title>Exynos4412自制BL2</title>
       <link>https://kingdix10.github.io/zh-cn/docs/exynos4412/mkbl2/</link>
       <pubDate>Mon, 05 Jun 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/exynos4412/mkbl2/</guid>
-      <description><![CDATA[1. 自制BL2 在官方提供的BL1或自制的BL1基础上，可以自制BL2。如果是使用U-Boot，编译时生成u-booot-spl.bin也是制作]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lines_plexus_neon_128926_300x168.jpg" length="24964" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-自制bl2" data-numberify>1. 自制BL2<a class="anchor ms-1" href="#1-自制bl2"></a></h1>
+<p>在官方提供的BL1或自制的BL1基础上，可以自制BL2。如果是使用U-Boot，编译时生成u-booot-spl.bin也是制作BL2的原材料。
+如果是自制的BL1，BL2可以根据BL1随心定制。如果是在官方提供的BL1基础上进行开发，BL2要求为16k，其中最后2k使用0填充。可执行文件的大下不能超过(14k-4)字节，其中14k的最后4个字节是存储校验值的。相较于BL1的校验值，BL2的校验简单的多，只是把前（14k-4）的内容按字节进行累加即可。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lens_camera_glare_147903_300x168.jpg" length="7000" type="image/.jpg" />
     </item>
     
     <item>
       <title>linux内核时间子系统（二）</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/timekeeping/</link>
       <pubDate>Wed, 22 Feb 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/timekeeping/</guid>
-      <description><![CDATA[1. timekeeping timekeeping是时间子系统用于从clocksource获取时间，维护墙上时间、单调递增时间、启动时间的模块，timekeepin]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/flowers_leaves_pattern_148777_300x168.jpg" length="26948" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-timekeeping" data-numberify>1. timekeeping<a class="anchor ms-1" href="#1-timekeeping"></a></h1>
+<p>timekeeping是时间子系统用于从clocksource获取时间，维护墙上时间、单调递增时间、启动时间的模块，timekeeping提供了各种时间的获取接口。其核心数据为tk_core，实现了对timekeeper的加锁访问。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/metal_texture_surface_157344_300x168.jpg" length="9729" type="image/.jpg" />
     </item>
     
     <item>
       <title>kmalloc分配内存的大小(基于linux-5.15)</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_size/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_size/</guid>
-      <description><![CDATA[1. kmalloc分配内存的大小 本文基于linux-5.15分析，linux-6.6已经删除slob，后续也会将slab移除。 kmalloc会]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/laptop_keyboard_glow_170138_300x168.jpg" length="3604" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-kmalloc分配内存的大小" data-numberify>1. kmalloc分配内存的大小<a class="anchor ms-1" href="#1-kmalloc分配内存的大小"></a></h1>
+<p>本文基于<code>linux-5.15</code>分析，linux-6.6已经删除slob，后续也会将slab移除。</p>
+<p><code>kmalloc</code>会根据申请的内存大小来决定来决定使用块分配器(slab/slub/slob)或页分配器进行内存分配。
+控制<code>kmalloc</code>分配行为的主要有如下三个宏。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/spots_stains_colorful_147593_300x168.jpg" length="20423" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux Bash终端美化</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/bash_decorate/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/bash_decorate/</guid>
-      <description><![CDATA[1. PS1示例 先说一下bash版本 1$ bash --version 2GNU bash, version 5.1.4(1)-release (x86_64-pc-linux-gnu) 3Copyright (C) 2020 Free Software Foundation, Inc. 4License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt; 5 6This is free software; you are free to change and redistribute it. 7There is NO WARRANTY, to the extent permitted by law. bash中的P]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/keyboard_laptop_gradient_203739_300x168.jpg" length="10539" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-ps1示例" data-numberify>1. PS1示例<a class="anchor ms-1" href="#1-ps1示例"></a></h1>
+<p>先说一下bash版本</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln">1</span><span class="cl">$ bash --version
+</span></span><span class="line"><span class="ln">2</span><span class="cl">GNU bash, version 5.1.4(1)-release (x86_64-pc-linux-gnu)
+</span></span><span class="line"><span class="ln">3</span><span class="cl">Copyright (C) 2020 Free Software Foundation, Inc.
+</span></span><span class="line"><span class="ln">4</span><span class="cl">License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;
+</span></span><span class="line"><span class="ln">5</span><span class="cl">
+</span></span><span class="line"><span class="ln">6</span><span class="cl">This is free software; you are free to change and redistribute it.
+</span></span><span class="line"><span class="ln">7</span><span class="cl">There is NO WARRANTY, to the extent permitted by law.
+</span></span></code></pre></div><p>bash中的PS1是主提示符变量，也是默认提示符变量。另外需要注意，<code>PS1</code>对bash起作用，对sh是无效的。可以通过<code>echo $SHELL</code>确认当前用户使用的shell是否为bash。除了PS1外，还有PS2、PS3、PS4几个环境变量用来提示一些其他信息。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/paint_canvas_stains_124156_300x168.jpg" length="18821" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux printk日志输出格式控制</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-formats/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-formats/</guid>
-      <description><![CDATA[1. 说明 根据内核文档整理而成，具体格式含义可查看内核文档，或点击如何获得正确的printk格式占位符(v6.6)或如何获得正确的printk格]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/keyboard_backlight_light_159518_300x168.jpg" length="10821" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-说明" data-numberify>1. 说明<a class="anchor ms-1" href="#1-说明"></a></h1>
+<p>根据内核文档整理而成，具体格式含义可查看内核文档，或点击<a href="https://www.kernel.org/doc/html/v6.6/translations/zh_CN/core-api/printk-formats.html" target="_blank" rel="noopener noreferrer">如何获得正确的printk格式占位符(v6.6)<i class="fas fa-external-link-square-alt ms-1"></i></a>或<a href="https://www.kernel.org/doc/html/latest/translations/zh_CN/core-api/printk-formats.html" target="_blank" rel="noopener noreferrer">如何获得正确的printk格式占位符(latest)<i class="fas fa-external-link-square-alt ms-1"></i></a>查看。
+linux-6.6相关内核文档路径如下:</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lens_camera_glare_147903_300x168.jpg" length="7000" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux sysrq简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/sysrq/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/sysrq/</guid>
-      <description><![CDATA[1. 串口发送sysrq 对于串口来说，sysrq本质是一个低电平脉冲，通常为100ms。 1在通用异步收发传输器（UART）中，Line Status Regi]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/pixels_cubes_shapes_127558_300x168.jpg" length="18339" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-串口发送sysrq" data-numberify>1. 串口发送sysrq<a class="anchor ms-1" href="#1-串口发送sysrq"></a></h1>
+<p>对于串口来说，<code>sysrq</code>本质是一个低电平脉冲，通常为100ms。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln">1</span><span class="cl">在通用异步收发传输器（UART）中，Line Status Register（LSR）的 “Break interrupt indicator”（中断指示位）表示检测到了一个间断信号。
+</span></span><span class="line"><span class="ln">2</span><span class="cl">一、含义
+</span></span><span class="line"><span class="ln">3</span><span class="cl">当该位被置位时，表明 UART 接收器检测到了一个间断条件。一个间断通常是指接收线路上长时间保持为低电平状态，通常超过一个字符传输的时间。这可能是由于外部设备故意发送一个间断信号，或者由于通信线路上的异常情况导致的。
+</span></span><span class="line"><span class="ln">4</span><span class="cl">二、用途
+</span></span><span class="line"><span class="ln">5</span><span class="cl">信号异常检测：可以用来检测通信线路上的异常情况。例如，如果通信双方在一段时间内没有数据传输，然后突然检测到一个间断信号，这可能表示通信出现了问题，需要进行故障排查。
+</span></span><span class="line"><span class="ln">6</span><span class="cl">特殊通信协议：在某些特殊的通信协议中，间断信号可能被用作一种特殊的控制信号。例如，在一些调试场景中，可以通过发送间断信号来触发特定的操作。
+</span></span><span class="line"><span class="ln">7</span><span class="cl">三、注意事项
+</span></span><span class="line"><span class="ln">8</span><span class="cl">误触发：该位可能会由于噪声或其他短暂的干扰而被误触发。因此，在检测到间断信号后，通常需要进行进一步的确认和处理，以确定是否真的存在通信问题。
+</span></span><span class="line"><span class="ln">9</span><span class="cl">处理方式：当检测到间断信号时，软件可以采取适当的措施，例如重新初始化通信接口、通知用户进行故障排查等。具体的处理方式取决于应用的需求。
+</span></span></code></pre></div>
+<h2 id="11-minicom" data-numberify>1.1. minicom<a class="anchor ms-1" href="#11-minicom"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln">1</span><span class="cl">Ctrl + A
+</span></span><span class="line"><span class="ln">2</span><span class="cl">B
+</span></span><span class="line"><span class="ln">3</span><span class="cl">&lt;code&gt;
+</span></span></code></pre></div>
+<h2 id="12-xshell" data-numberify>1.2. xshell<a class="anchor ms-1" href="#12-xshell"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln">1</span><span class="cl">文件
+</span></span><span class="line"><span class="ln">2</span><span class="cl">传输
+</span></span><span class="line"><span class="ln">3</span><span class="cl">发送取消代码
+</span></span><span class="line"><span class="ln">4</span><span class="cl">&lt;code&gt;
+</span></span></code></pre></div>
+<h1 id="2-添加自定义sysrq" data-numberify>2. 添加自定义sysrq<a class="anchor ms-1" href="#2-添加自定义sysrq"></a></h1>
+<p>Linux支持添加自定义的<code>sysrq</code>按键，前提是<code>sysrq_key_table</code>中对应的按键未被占用。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/code_programming_text_140050_300x168.jpg" length="11796" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux thermal子系统(基于5.10)</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/thermal/linux-5.10/thermal_5.10/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/thermal/linux-5.10/thermal_5.10/</guid>
-      <description><![CDATA[1. thermal简介 thermal子系统主要用来监测和调节CPU、GPU等芯片或设备的温度。三个主要结构体的关系：从thermal_zone]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/gradient_orange_shades_131495_300x168.jpg" length="2713" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-thermal简介" data-numberify>1. thermal简介<a class="anchor ms-1" href="#1-thermal简介"></a></h1>
+<p>thermal子系统主要用来监测和调节CPU、GPU等芯片或设备的温度。三个主要结构体的关系：从thermal_zone_device获取温度后，根据governor指定的策略，来控制thermal_cooling_device进行温度调节。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" length="24563" type="image/.jpg" />
     </item>
     
     <item>
       <title>linux thermal子系统简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/</guid>
-      <description><![CDATA[1. thermal简介 内核版本：linux-6.1 thermal子系统主要用来监测和调节CPU、GPU等芯片或设备的温度。三个主要结构体的关系]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/blinds_lines_shade_143653_300x168.jpg" length="11444" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-thermal简介" data-numberify>1. thermal简介<a class="anchor ms-1" href="#1-thermal简介"></a></h1>
+<p>内核版本：linux-6.1</p>
+<p>thermal子系统主要用来监测和调节CPU、GPU等芯片或设备的温度。三个主要结构体的关系：从thermal_zone_device获取温度后，根据governor指定的策略，来控制thermal_cooling_device进行温度调节。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_300x168.jpg" length="21351" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux的errno简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/linux-err-return/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/linux-err-return/</guid>
-      <description><![CDATA[1. Linux的errno和指针 常见的Linux函数返回值类型包括整型和指针，内核中这两种返回值类型的函数会互相调用。Linux的errno为]]></description>
+      <description><![CDATA[<h1 id="1-linux的errno和指针" data-numberify>1. Linux的errno和指针<a class="anchor ms-1" href="#1-linux的errno和指针"></a></h1>
+<p>常见的Linux函数返回值类型包括整型和指针，内核中这两种返回值类型的函数会互相调用。Linux的<code>errno</code>为整型，为了与<code>errno</code>对应，Linux将指针分为3种：</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/lines_intersection_oblique_153331_300x168.jpg" length="16159" type="image/.jpg" />
     </item>
     
@@ -682,39 +1316,133 @@
       <title>linux内核dynamic_debug</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/dynamic_debug/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/dynamic_debug/</guid>
-      <description><![CDATA[1. 打开dynamic_debug 1CONFIG_DYNAMIC_DEBUG=y 运行时控制：/proc/dynamic_debug/control，如果开启了CONFIG_DEBUG_F]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/travel_map_compass_123078_300x168.jpg" length="14785" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-打开dynamic_debug" data-numberify>1. 打开dynamic_debug<a class="anchor ms-1" href="#1-打开dynamic_debug"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-makefile" data-lang="makefile"><span class="line"><span class="ln">1</span><span class="cl"><span class="nv">CONFIG_DYNAMIC_DEBUG</span><span class="o">=</span>y
+</span></span></code></pre></div><p>运行时控制：<code>/proc/dynamic_debug/control</code>，如果开启了<code>CONFIG_DEBUG_FS</code>，在<code>&lt;debugfs&gt;/dynamic_debug/control</code>，两者效果是相同的。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/wavy_curvy_lines_146044_300x168.jpg" length="25854" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux内核sched_class汇总</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_table/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_table/</guid>
-      <description><![CDATA[1. vmlinux中shced_class的位置 1/// kernel/sched/sched.h 2/* 3 * Helper to define a sched_class instance; each one is placed in a separate 4 * section which is ordered by the linker script: 5 * 6 * include/asm-generic/vmlinux.lds.h 7 * 8 * *CAREFUL* they are laid out in *REVERSE* order!!! 9 *]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/mosaic_multicolored_texture_126795_300x168.jpg" length="20064" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-vmlinux中shced_class的位置" data-numberify>1. vmlinux中shced_class的位置<a class="anchor ms-1" href="#1-vmlinux中shced_class的位置"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// kernel/sched/sched.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * Helper to define a sched_class instance; each one is placed in a separate
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> * section which is ordered by the linker script:
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> *   include/asm-generic/vmlinux.lds.h
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> * *CAREFUL* they are laid out in *REVERSE* order!!!
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> * Also enforce alignment on the instance, not the type, to guarantee layout.
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cp">#define DEFINE_SCHED_CLASS(name) \
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cp">const struct sched_class name##_sched_class \
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cp">	__aligned(__alignof__(struct sched_class)) \
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cp">	__section(&#34;__&#34; #name &#34;_sched_class&#34;)
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cm">/* Defined in include/asm-generic/vmlinux.lds.h */</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="k">extern</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">__sched_class_highest</span><span class="p">[];</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="k">extern</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">__sched_class_lowest</span><span class="p">[];</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">
+</span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="cp">#define for_class_range(class, _from, _to) \
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="cp">	for (class = (_from); class &lt; (_to); class++)
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="cp">#define for_each_class(class) \
+</span></span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="cp">	for_class_range(class, __sched_class_highest, __sched_class_lowest)
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="cp">#define sched_class_above(_a, _b)	((_a) &lt; (_b))
+</span></span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="k">extern</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">stop_sched_class</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="k">extern</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">dl_sched_class</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="k">extern</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">rt_sched_class</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="k">extern</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">fair_sched_class</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">33</span><span class="cl"><span class="k">extern</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">idle_sched_class</span><span class="p">;</span>
+</span></span></code></pre></div><p><code>sched_class</code>定义。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg" length="10737" type="image/.jpg" />
     </item>
     
     <item>
       <title>linux内核时间子系统（一）</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/time/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/time/</guid>
-      <description><![CDATA[1. 简介 内核版本：linux-6.1 时间子系统的作用： 时间读取功能 定时器功能，有传统的定时器timer、高精度定时器hrtimer 提供用于调度]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wood_texture_logs_159793_300x168.jpg" length="19513" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-简介" data-numberify>1. 简介<a class="anchor ms-1" href="#1-简介"></a></h1>
+<p>内核版本：linux-6.1</p>
+<p>时间子系统的作用：</p>
+<ol>
+<li>时间读取功能</li>
+<li>定时器功能，有传统的定时器timer、高精度定时器hrtimer</li>
+<li>提供用于调度的tick，有周期tick和动态tick</li>
+</ol>
+
+<h1 id="2-linux的各种时间" data-numberify>2. Linux的各种时间<a class="anchor ms-1" href="#2-linux的各种时间"></a></h1>
+<p>Linux的系统时钟ID定义如下，选其中常用的简单介绍一下。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/squares_colorful_texture_133972_300x168.jpg" length="17371" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux中断处理流程图</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_flow/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_flow/</guid>
-      <description><![CDATA[sequenceDiagram participant caller as caller participant irq as irq.c participant irqdomain as irqdomain.c participant irqdesc as irqdesc.c participant bitmap as bitmap.c activate caller caller -&gt;&gt; irq: irq_of_parse_and_map activate irq Note right of irq: irq_of_parse_and_map irq -&gt;&gt; irq: of_irq_parse_one irq -&gt;&gt; irqdomain: irq_create_of_mapping activate irqdomain Note right of irqdomain :irq_create_of_mapping irqdomain -&gt;&gt; irqdomain: of_phandle_args_to_fwspec irqdomain -&gt;&gt; irqdomain: irq_create_fwspec_mapping activate irqdomain Note right of irqdomain :irq_create_fwspec_mapping irqdomain -&gt;&gt; irqdomain: irq_domain_translate irqdomain -&gt;&gt;]]></description>
+      <description><![CDATA[<pre class="text-center mermaid">sequenceDiagram
+    participant caller as caller
+    participant irq as irq.c
+    participant irqdomain as irqdomain.c
+    participant irqdesc as irqdesc.c
+    participant bitmap as bitmap.c
+
+    activate caller
+    caller -&gt;&gt; irq: irq_of_parse_and_map
+
+    activate irq
+        Note right of irq: irq_of_parse_and_map
+        irq -&gt;&gt; irq: of_irq_parse_one
+        irq -&gt;&gt; irqdomain: irq_create_of_mapping
+        activate irqdomain
+        Note right of irqdomain :irq_create_of_mapping
+        irqdomain -&gt;&gt; irqdomain: of_phandle_args_to_fwspec
+        irqdomain -&gt;&gt; irqdomain: irq_create_fwspec_mapping
+        activate irqdomain
+            Note right of irqdomain :irq_create_fwspec_mapping
+            irqdomain -&gt;&gt; irqdomain: irq_domain_translate
+            irqdomain -&gt;&gt; irqdomain: irq_find_mapping
+            opt irq_find_mapping &gt; 0
+                irqdomain --&gt;&gt; irq: return
+                irq --&gt;&gt; caller: return
+            end
+            alt irq_domain_is_hierarchy
+                irqdomain -&gt;&gt; irqdomain: irq_domain_alloc_irqs
+                irqdomain -&gt;&gt; irqdesc: irq_domain_alloc_descs
+        activate irqdesc
+        Note right of irqdesc :irq_domain_alloc_descs
+            else
+                irqdomain -&gt;&gt; irqdomain: irq_create_mapping
+                irqdomain -&gt;&gt; irqdesc: irq_domain_alloc_descs
+            end
+        irqdesc -&gt;&gt; irqdesc : __irq_alloc_descs
+        activate irqdesc
+        Note right of irqdesc: __irq_alloc_descs
+        irqdesc -&gt;&gt; bitmap: bitmap_find_next_zero_area
+        activate bitmap
+        bitmap -&gt;&gt; bitmap: bitmap_find_next_zero_area_off
+        bitmap --&gt;&gt; irqdesc: return
+        deactivate bitmap
+        irqdesc --&gt;&gt; irqdomain: return
+        deactivate irqdomain
+        deactivate irqdesc
+        deactivate irqdesc
+
+        irqdomain --&gt;&gt; irq: return
+        deactivate irqdomain
+        irq --&gt;&gt; caller: return
+    deactivate irq
+    deactivate caller</pre>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/desert_sand_wavy_141026_300x168.jpg" length="13782" type="image/.jpg" />
     </item>
     
@@ -722,99 +1450,129 @@
       <title>printk的pr_fmt</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/</guid>
-      <description><![CDATA[1. printk 打印级别控制：/proc/sys/kernel/printk printk_index：/sys/kernel/debug/printk/]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wall_brick_purple_141823_300x168.jpg" length="14935" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-printk" data-numberify>1. printk<a class="anchor ms-1" href="#1-printk"></a></h1>
+<p>打印级别控制：<code>/proc/sys/kernel/printk</code></p>
+<p>printk_index：<code>/sys/kernel/debug/printk/index/</code></p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/laptop_dj_equipment_212416_300x168.jpg" length="9857" type="image/.jpg" />
     </item>
     
     <item>
       <title>U-Boot启动分析</title>
       <link>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/u-boot-bootflow/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/u-boot-bootflow/</guid>
-      <description><![CDATA[1. 查找入口 u-boot版本：2024.01 参考defconfig：imx8qm_mek_defconfig 通过编译生成的u-boot.lds]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/code_letters_screen_137590_300x168.jpg" length="10341" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-查找入口" data-numberify>1. 查找入口<a class="anchor ms-1" href="#1-查找入口"></a></h1>
+<p>u-boot版本：2024.01
+参考defconfig：imx8qm_mek_defconfig</p>
+<p>通过编译生成的<code>u-boot.lds</code>，<code>U-Boot</code>的入口为<code>_start</code>。而程序的一开始存放的指令是由<code>start.c</code>生成的。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/wall_brick_neon_150470_300x168.jpg" length="13857" type="image/.jpg" />
     </item>
     
     <item>
       <title>Windows系统迁移</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/win/os_migrate/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/win/os_migrate/</guid>
-      <description><![CDATA[1. 旧机器拷贝 WEPE制作U盘启动盘 保留原硬盘，接新硬盘 开机选择进入PE 新硬盘改为GPT分区表，删除所有分区 拷贝或创建EFI分区，大小约为10]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/canvas_picture_abstraction_138874_300x168.jpg" length="19551" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-旧机器拷贝" data-numberify>1. 旧机器拷贝<a class="anchor ms-1" href="#1-旧机器拷贝"></a></h1>
+<ol>
+<li>WEPE制作U盘启动盘</li>
+<li>保留原硬盘，接新硬盘</li>
+<li>开机选择进入PE</li>
+<li>新硬盘改为GPT分区表，删除所有分区</li>
+<li>拷贝或创建EFI分区，大小约为100M即可，也可以加大</li>
+<li>【可选】拷贝或创建MSR分区，大小约为16M</li>
+<li>拷贝C盘</li>
+<li>【可选】拷贝其他有需要的分区</li>
+</ol>
+
+<h1 id="2-重建引导" data-numberify>2. 重建引导<a class="anchor ms-1" href="#2-重建引导"></a></h1>
+<p>在原机器PE中操作，完成后将硬盘换到新机器</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/cockpit_panel_display_169481_300x168.jpg" length="10012" type="image/.jpg" />
     </item>
     
     <item>
       <title>多维数组作为函数参数</title>
       <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/array_func/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/array_func/</guid>
-      <description><![CDATA[1. 方法一：传递数组 C语言对多维数组的存储是按照一维数组来处理的，数组的每个维度在内存中按顺序存储。所以将多维数组作为参数传递时，必须指定多维]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/pattern_frosty_frost_134125_300x168.jpg" length="18643" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-方法一传递数组" data-numberify>1. 方法一：传递数组<a class="anchor ms-1" href="#1-方法一传递数组"></a></h1>
+<p>C语言对多维数组的存储是按照一维数组来处理的，数组的每个维度在内存中按顺序存储。所以将多维数组作为参数传递时，必须指定多维数组子维度的大小，否则函数无法得知每个子维度结束地址。
+第一维的长度可以指定，也可以不指定。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/wood_texture_logs_159793_300x168.jpg" length="19513" type="image/.jpg" />
     </item>
     
     <item>
       <title>内存管理API汇总</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/mm_api/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/mm_api/</guid>
-      <description><![CDATA[1. 总览 如下为内核开发或驱动开发常见的内存管理API关系，其他如CMA分配器等相关API未列出。 1.1. 框架图 1.2. 函数图总览 2. memblock分配器 m]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/squares_structure_glow_140857_300x168.jpg" length="22907" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-总览" data-numberify>1. 总览<a class="anchor ms-1" href="#1-总览"></a></h1>
+<p>如下为内核开发或驱动开发常见的内存管理API关系，其他如CMA分配器等相关API未列出。</p>
+
+<h2 id="11-框架图" data-numberify>1.1. 框架图<a class="anchor ms-1" href="#11-框架图"></a></h2>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.6/mm/mm_api/mm_api_brief.png" loading="lazy" width="687" height="347" />
+</picture>
+
+</p>
+
+<h2 id="12-函数图总览" data-numberify>1.2. 函数图总览<a class="anchor ms-1" href="#12-函数图总览"></a></h2>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.6/mm/mm_api/slab_alloc_node.png" loading="lazy" width="2608" height="1873" />
+</picture>
+
+</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/keyboard_backlight_purple_212155_300x168.jpg" length="11894" type="image/.jpg" />
     </item>
     
     <item>
       <title>内核启动流程（一）</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/boot/entry/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/boot/entry/</guid>
-      <description><![CDATA[1. 内核启动入口 根据Makefile对KBUILD_LDS的定义，链接vmlinux使用的连接脚本为 arch/$(SRCARCH)/kerne]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/keyboard_laptop_gradient_203739_300x168.jpg" length="10539" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-内核启动入口" data-numberify>1. 内核启动入口<a class="anchor ms-1" href="#1-内核启动入口"></a></h1>
+<p>根据Makefile对KBUILD_LDS的定义，链接vmlinux使用的连接脚本为 <code>arch/$(SRCARCH)/kernel/vmlinux.lds</code>，实际上这个脚本是在编译过程中生成的。从链接脚本 <code>arch/arm64/kernel/vmlinux.lds</code>可以查到，程序的入口为 <code>_text</code>，镜像起始位置存放的是 <code>.head.text</code>段生成的指令。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/water_waves_ripples_143522_300x168.jpg" length="11080" type="image/.jpg" />
     </item>
     
     <item>
       <title>嵌入式系统启动流程</title>
       <link>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/boot_flow/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/boot_flow/</guid>
-      <description><![CDATA[1. 启动流程 1.1. bootrom 芯片上电后，会自动执行bootrom代码，bootrom是各家厂商定制的，但完成的工作基本相同。bootrom通常支持从多种不]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/bubbles_drops_macro_126764_300x168.jpg" length="23506" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-启动流程" data-numberify>1. 启动流程<a class="anchor ms-1" href="#1-启动流程"></a></h1>
+
+<h2 id="11-bootrom" data-numberify>1.1. bootrom<a class="anchor ms-1" href="#11-bootrom"></a></h2>
+<p>芯片上电后，会自动执行bootrom代码，bootrom是各家厂商定制的，但完成的工作基本相同。bootrom通常支持从多种不同的介质启动，如SD卡、NADN、eMMC、USB等。以Exynos4412为例，bootrom会读取OM引脚指定的启动介质。以eMMC为例，eMMC分为boot0、boot1、RPMB和user四个物理分区，四个物理分区独立寻址。可以通过寄存器指定eMMC的bootmode，也就是eMMC启动时，读取那个物理分区的数据。这就需要根据厂家需要，提前设置eMMC的寄存器。对于Exynos4412来说，bootrom会去读boot0分区的内容。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/laptop_keyboard_glow_170138_300x168.jpg" length="3604" type="image/.jpg" />
     </item>
     
     <item>
       <title>数组a、&amp;a、&amp;a[0]、&amp;a[0][0]的区别与联系</title>
       <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/array_type/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/array_type/</guid>
-      <description><![CDATA[1. 测试结果 分别声明一个一维数组a1[8]和二维数组a2[4][8]，查看各个表达式的类型、地址、与首地址的差值，以及内存地址内存储的int变]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_300x168.jpg" length="21351" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-测试结果" data-numberify>1. 测试结果<a class="anchor ms-1" href="#1-测试结果"></a></h1>
+<p>分别声明一个一维数组<code>a1[8]</code>和二维数组<code>a2[4][8]</code>，查看各个表达式的类型、地址、与首地址的差值，以及内存地址内存储的<code>int</code>变量值。数组内变量的低8位记录数组的行号和列号，其中高4位为行，低4位为列。先看一下测试程序给出的结果。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" length="24563" type="image/.jpg" />
     </item>
     
     <item>
       <title>为什么要有idmap</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/why_idmap/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/why_idmap/</guid>
-      <description><![CDATA[要开启MMU，需要建立页表映射，而且需要处理缓存一致性的问题，这样内核启动的依赖条件就会变得复杂。为了降低启动代码的复杂度，约定在Linux]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/backlight_neon_electronics_144683_300x168.jpg" length="9613" type="image/.jpg" />
+      <description><![CDATA[<p>要开启MMU，需要建立页表映射，而且需要处理缓存一致性的问题，这样内核启动的依赖条件就会变得复杂。为了降低启动代码的复杂度，约定在Linux内核启动时，MMU是关闭的。这样也就意味着不能利用高速缓存的性能。为了获得更好的性能，也为了后续可以给不同的地址空间设置不同的访问属性以更好地管理内存，需要在某个阶段把MMU打开，并使能高速缓存。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/squares_colorful_texture_133972_300x168.jpg" length="17371" type="image/.jpg" />
     </item>
     
     <item>
       <title>samba服务器搭建和使用</title>
       <link>https://kingdix10.github.io/zh-cn/docs/02-dev_env/samba/</link>
       <pubDate>Sun, 09 Jan 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/02-dev_env/samba/</guid>
-      <description><![CDATA[1. 准备工作 如果是虚拟机中安装的Linux系统，需要新建一个网络适配器，模式为桥接模式。 如果是独立的物理机安装了Linux系统，可以在路由器或]]></description>
+      <description><![CDATA[<h1 id="1-准备工作" data-numberify>1. 准备工作<a class="anchor ms-1" href="#1-准备工作"></a></h1>
+<p>如果是虚拟机中安装的<code>Linux</code>系统，需要新建一个网络适配器，模式为桥接模式。</p>
+<p>如果是独立的物理机安装了<code>Linux</code>系统，可以在路由器或交换机中，将物理机的IP地址设为固定的IP地址。</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/iridescent_colorful_lines_130978_300x168.jpg" length="11918" type="image/.jpg" />
     </item>
     
@@ -822,50 +1580,141 @@
       <title>u-boot的stubs机制</title>
       <link>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/u-boot-stubs/</link>
       <pubDate>Sun, 09 Jan 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/u-boot-stubs/</guid>
-      <description><![CDATA[1. U-Boot版本 1VERSION = 2021 2PATCHLEVEL = 10 3SUBLEVEL = 4EXTRAVERSION = 5NAME = 2. 涉及的文件 include/_exports.h，辅助文件，在包含_exports.h前，定义不同]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/drone_camera_technology_171576_300x168.jpg" length="10102" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-u-boot版本" data-numberify>1. U-Boot版本<a class="anchor ms-1" href="#1-u-boot版本"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-makefile" data-lang="makefile"><span class="line"><span class="ln">1</span><span class="cl"><span class="nv">VERSION</span> <span class="o">=</span> <span class="m">2021</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="nv">PATCHLEVEL</span> <span class="o">=</span> <span class="m">10</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="nv">SUBLEVEL</span> <span class="o">=</span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="nv">EXTRAVERSION</span> <span class="o">=</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="nv">NAME</span> <span class="o">=</span>
+</span></span></code></pre></div>
+<h1 id="2-涉及的文件" data-numberify>2. 涉及的文件<a class="anchor ms-1" href="#2-涉及的文件"></a></h1>
+<ol>
+<li><code>include/_exports.h</code>，辅助文件，在包含<code>_exports.h</code>前，定义不同的<code>EXPORT_FUNC</code>来实现不同的功能，其内容为一系列<code>EXPORT_FUNC</code>修饰的函数。</li>
+<li><code>include/exports.h</code>，函数声明。</li>
+<li><code>examples/standalone/stubs.c</code>，用于建立<code>jumptable</code>，将U-Boot的函数指针存入<code>jumptable</code>中。</li>
+<li><code>common/exports.c</code>，初始化<code>jumptable</code>。</li>
+<li><code>examples/standalone/hello_world.c</code>，独立于U-Boot的程序代码，编译目标文件为单独的bin，可以调用U-Boot的函数。</li>
+</ol>
+<p>类似的还有<code>kernel</code>的<code>include/uapi/asm-generic/unistd.h</code>文件（以v5.15为例）。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/cameras_photography_accessories_197110_300x168.jpg" length="15246" type="image/.jpg" />
     </item>
     
     <item>
       <title>linux常用命令-文件管理</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_file/</link>
       <pubDate>Mon, 02 Sep 2019 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_file/</guid>
-      <description><![CDATA[1. 打包隐藏文件 1tar -czf data.tar.gz ./.[!.]* 2. find 2.1. 查找文件并按大小排序 1find -type f -name &#39;*.md&#39; -printf &#39;%s\t%p\n&#39; | grep -v &#39;\.git&#39; | sort -nr | less -N 2.2. 批量删除7天前的文件 1find -type f -mtime +7 -exec rm -rf {} \; 2find -type f -mtime +7 -exec rm -fr]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/camera_lens_strap_145518_300x168.jpg" length="15893" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-打包隐藏文件" data-numberify>1. 打包隐藏文件<a class="anchor ms-1" href="#1-打包隐藏文件"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">tar -czf data.tar.gz  ./.<span class="o">[</span>!.<span class="o">]</span>*
+</span></span></code></pre></div>
+<h1 id="2-find" data-numberify>2. find<a class="anchor ms-1" href="#2-find"></a></h1>
+
+<h2 id="21-查找文件并按大小排序" data-numberify>2.1. 查找文件并按大小排序<a class="anchor ms-1" href="#21-查找文件并按大小排序"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">find -type f -name <span class="s1">&#39;*.md&#39;</span> -printf <span class="s1">&#39;%s\t%p\n&#39;</span> <span class="p">|</span> grep -v <span class="s1">&#39;\.git&#39;</span> <span class="p">|</span> sort -nr  <span class="p">|</span> less -N
+</span></span></code></pre></div>
+<h2 id="22-批量删除7天前的文件" data-numberify>2.2. 批量删除7天前的文件<a class="anchor ms-1" href="#22-批量删除7天前的文件"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">find -type f -mtime +7 -exec rm -fr <span class="o">{}</span> <span class="se">\;</span>
+</span></span></code></pre></div>
+<h2 id="23-多个条件-o" data-numberify>2.3. 多个条件(-o)<a class="anchor ms-1" href="#23-多个条件-o"></a></h2>
+<p>find ./ -name &lsquo;<em>.c&rsquo; -o -name &lsquo;</em>.h&rsquo;
+find ./ -name &lsquo;*.[ch];</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/paint_grunge_green_124502_300x168.jpg" length="5826" type="image/.jpg" />
     </item>
     
     <item>
       <title>gcc宏定义中的连接符和可变参数</title>
       <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/macro_link_args/</link>
       <pubDate>Thu, 18 Jul 2019 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/macro_link_args/</guid>
-      <description><![CDATA[1. 连接符 1.1. 字符串转换# #用来把参数转换成字符串 1#define pr_var(var) printf(#var &#34; is %d\n&#34;, var); 2 3int main(int argc, char **argv) 4{ 5 int a = 1, b = 2; 6 7 pr_var(a); 8 pr_var(b); 9 pr_var(a+b); 10} 1.2. 参数连接## 在宏中，##可以用于]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/fabric_texture_colorful_142186_300x168.jpg" length="17451" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-连接符" data-numberify>1. 连接符<a class="anchor ms-1" href="#1-连接符"></a></h1>
+
+<h2 id="11-字符串转换" data-numberify>1.1. 字符串转换#<a class="anchor ms-1" href="#11-字符串转换"></a></h2>
+<p><code>#</code>用来把参数转换成字符串</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cp">#define pr_var(var)   printf(#var &#34; is %d\n&#34;, var);
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">    <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="nf">pr_var</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">    <span class="nf">pr_var</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    <span class="nf">pr_var</span><span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p> </p>
+
+<h2 id="12-参数连接" data-numberify>1.2. 参数连接##<a class="anchor ms-1" href="#12-参数连接"></a></h2>
+<p>在宏中，<code>##</code>可以用于参数连接。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/trunk_tree_texture_119590_300x168.jpg" length="18828" type="image/.jpg" />
     </item>
     
     <item>
       <title>sourceinsight快速建工程</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/01-os/win/sourceinsight/</link>
+      <link>https://kingdix10.github.io/zh-cn/docs/02-dev_env/sourceinsight/</link>
       <pubDate>Thu, 18 Jul 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/01-os/win/sourceinsight/</guid>
-      <description><![CDATA[1. 环境准备 Windows映射Linux下的Samba共享目录 工具脚本：https://gitee.com/kingdix10/eel-cto]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/pink_color_background_153889_300x168.jpg" length="1430" type="image/.jpg" />
+      <guid>https://kingdix10.github.io/zh-cn/docs/02-dev_env/sourceinsight/</guid>
+      <description><![CDATA[<h1 id="1-环境准备" data-numberify>1. 环境准备<a class="anchor ms-1" href="#1-环境准备"></a></h1>
+<ol>
+<li>Windows映射Linux下的Samba共享目录</li>
+<li>工具脚本：<a href="https://gitee.com/kingdix10/eel-ctools" target="_blank" rel="noopener noreferrer">https://gitee.com/kingdix10/eel-ctools<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+</ol>
+
+<h1 id="2-sourceinsight快速建工程" data-numberify>2. SourceInsight快速建工程<a class="anchor ms-1" href="#2-sourceinsight快速建工程"></a></h1>
+
+<h2 id="21-修改代码保留编译中间生成物" data-numberify>2.1. 修改代码，保留编译中间生成物<a class="anchor ms-1" href="#21-修改代码保留编译中间生成物"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">keepdep_patch.sh kernel/scirpts
+</span></span><span class="line"><span class="ln">2</span><span class="cl">keepdep_patch.sh u-boot/scirpts
+</span></span></code></pre></div><p>原理是保留编译过程中的<code>.d</code>文件，这个是编译器查找的依赖文件，可以保证添加文件时不会有多余的文件。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/camera_photographer_smoke_126548_300x168.jpg" length="9088" type="image/.jpg" />
     </item>
     
     <item>
       <title>编译器预定义宏</title>
       <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/gcc_predefine/</link>
       <pubDate>Thu, 18 Jul 2019 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/gcc_predefine/</guid>
-      <description><![CDATA[1. 查看gcc预定义宏 在Linux下可以输入如下命令： 1gcc -posix -E -dM - &lt; /dev/null window下，命令稍有不同 1gcc -posix -E -dM - &lt; nul 1.1. 常见宏 macro desc __FILE__ 文件名 __LINE__ 行号 __func__ 函数]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/pixels_circles_colorful_121100_300x168.jpg" length="23064" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-查看gcc预定义宏" data-numberify>1. 查看gcc预定义宏<a class="anchor ms-1" href="#1-查看gcc预定义宏"></a></h1>
+<p>在Linux下可以输入如下命令：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">gcc -posix -E -dM - &lt; /dev/null
+</span></span></code></pre></div><p>window下，命令稍有不同</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">gcc -posix -E -dM - &lt; nul
+</span></span></code></pre></div>
+<h2 id="11-常见宏" data-numberify>1.1. 常见宏<a class="anchor ms-1" href="#11-常见宏"></a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>macro</th>
+          <th>desc</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>__FILE__</code></td>
+          <td>文件名</td>
+      </tr>
+      <tr>
+          <td><code>__LINE__</code></td>
+          <td>行号</td>
+      </tr>
+      <tr>
+          <td><code>__func__</code></td>
+          <td>函数名，早期版本为<code>__FUNCTION__</code></td>
+      </tr>
+      <tr>
+          <td><code>__DATE__</code></td>
+          <td>编译日期</td>
+      </tr>
+      <tr>
+          <td><code>__TIME__</code></td>
+          <td>编译时间</td>
+      </tr>
+      <tr>
+          <td><code>__linux__</code></td>
+          <td>编译平台是linux时定义</td>
+      </tr>
+  </tbody>
+</table>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/chip_circuit_processor_140251_300x168.jpg" length="19023" type="image/.jpg" />
     </item>
     
   </channel>

@@ -4,7 +4,8 @@
     <title>内核基础 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/categories/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/</link>
     <description>Recent content in 内核基础 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Tue, 10 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E5%86%85%E6%A0%B8%E5%9F%BA%E7%A1%80/index.xml" rel="self" type="application/rss+xml" />
@@ -12,9 +13,9 @@
       <title>Linux中的栈</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/stack/</link>
       <pubDate>Tue, 10 Sep 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/stack/</guid>
-      <description><![CDATA[1. 内核栈 在每一个进程的生命周期中，必然会通过到系统调用陷入内核。在执行系统调用陷入内核之后，这些内核代码所使用的栈并不是原先进程用户空间中的]]></description>
+      <description><![CDATA[<h1 id="1-内核栈" data-numberify>1. 内核栈<a class="anchor ms-1" href="#1-内核栈"></a></h1>
+<p>在每一个进程的生命周期中，必然会通过到系统调用陷入内核。在执行系统调用陷入内核之后，这些内核代码所使用的栈并不是原先进程用户空间中的栈，而是一个单独内核空间的栈，这个称作进程内核栈。</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/water_waves_ripples_143522_300x168.jpg" length="11080" type="image/.jpg" />
     </item>
     
@@ -22,19 +23,19 @@
       <title>Linux内核的通知链机制</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/notifier_chain/notifier_chain/</link>
       <pubDate>Wed, 14 Aug 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/notifier_chain/notifier_chain/</guid>
-      <description><![CDATA[1. 简介 Linux内核中的notifier_chain是一种用于跨模块通信的机制。当一个模块需要通知其他模块某些事件时，它可以使用notifi]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/code_letters_screen_137590_300x168.jpg" length="10341" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-简介" data-numberify>1. 简介<a class="anchor ms-1" href="#1-简介"></a></h1>
+<p>Linux内核中的notifier_chain是一种用于跨模块通信的机制。当一个模块需要通知其他模块某些事件时，它可以使用notifier_chain将这些事件通知给其他模块。这种机制使得模块之间的耦合度降低，提高了代码的可维护性和可扩展性。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/bubbles_drops_macro_126764_300x168.jpg" length="23506" type="image/.jpg" />
     </item>
     
     <item>
       <title>栈帧寄存器相关的编译选项</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/fp/</link>
       <pubDate>Mon, 29 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/fp/</guid>
-      <description><![CDATA[1. 编译选项 -fomit-frame-pointer表示在函数调用时不需要存储堆栈帧指针。此选项可减小生成的代码镜像大小， 一般在启用-On优化]]></description>
+      <description><![CDATA[<h1 id="1-编译选项" data-numberify>1. 编译选项<a class="anchor ms-1" href="#1-编译选项"></a></h1>
+<p><code>-fomit-frame-pointer</code>表示在函数调用时不需要存储堆栈帧指针。此选项可减小生成的代码镜像大小， 一般在启用<code>-On</code>优化后会自动打开，也有的平台是默认打开的。</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/wall_brick_purple_141823_300x168.jpg" length="14935" type="image/.jpg" />
     </item>
     
@@ -42,9 +43,11 @@
       <title>linux atomic接口简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/atomic/</link>
       <pubDate>Wed, 30 Aug 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/atomic/</guid>
-      <description><![CDATA[1. 后缀说明 acquire操作指的是在这条语句之后的所有内存操作只准在这条语句之后，不准被提前到这条语句之前。 release操作指的是在这条语]]></description>
+      <description><![CDATA[<h1 id="1-后缀说明" data-numberify>1. 后缀说明<a class="anchor ms-1" href="#1-后缀说明"></a></h1>
+<p>acquire操作指的是在这条语句之后的所有内存操作只准在这条语句之后，不准被提前到这条语句之前。
+release操作指的是在这条语句之前的所有内存操作只准在这条语句之前，不准被延后到这条语句之后。
+relaxed操作指的是不保证任何的内存顺序。</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/lines_multicolored_rainbow_125651_300x168.jpg" length="11453" type="image/.jpg" />
     </item>
     
@@ -52,7 +55,6 @@
       <title>Linux内核常见ARM64汇编宏</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/asm_macors/</link>
       <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/asm_macors/</guid>
       <description><![CDATA[ARM64汇编宏：adr_l]]></description>
     <enclosure url="https://kingdix10.github.io/covers/paint_grunge_green_124502_300x168.jpg" length="5826" type="image/.jpg" />
@@ -62,19 +64,20 @@
       <title>Linux printk日志输出格式控制</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-formats/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-formats/</guid>
-      <description><![CDATA[1. 说明 根据内核文档整理而成，具体格式含义可查看内核文档，或点击如何获得正确的printk格式占位符(v6.6)或如何获得正确的printk格]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/keyboard_backlight_light_159518_300x168.jpg" length="10821" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-说明" data-numberify>1. 说明<a class="anchor ms-1" href="#1-说明"></a></h1>
+<p>根据内核文档整理而成，具体格式含义可查看内核文档，或点击<a href="https://www.kernel.org/doc/html/v6.6/translations/zh_CN/core-api/printk-formats.html" target="_blank" rel="noopener noreferrer">如何获得正确的printk格式占位符(v6.6)<i class="fas fa-external-link-square-alt ms-1"></i></a>或<a href="https://www.kernel.org/doc/html/latest/translations/zh_CN/core-api/printk-formats.html" target="_blank" rel="noopener noreferrer">如何获得正确的printk格式占位符(latest)<i class="fas fa-external-link-square-alt ms-1"></i></a>查看。
+linux-6.6相关内核文档路径如下:</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lens_camera_glare_147903_300x168.jpg" length="7000" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux的errno简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/linux-err-return/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/linux-err-return/</guid>
-      <description><![CDATA[1. Linux的errno和指针 常见的Linux函数返回值类型包括整型和指针，内核中这两种返回值类型的函数会互相调用。Linux的errno为]]></description>
+      <description><![CDATA[<h1 id="1-linux的errno和指针" data-numberify>1. Linux的errno和指针<a class="anchor ms-1" href="#1-linux的errno和指针"></a></h1>
+<p>常见的Linux函数返回值类型包括整型和指针，内核中这两种返回值类型的函数会互相调用。Linux的<code>errno</code>为整型，为了与<code>errno</code>对应，Linux将指针分为3种：</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/lines_intersection_oblique_153331_300x168.jpg" length="16159" type="image/.jpg" />
     </item>
     
@@ -82,20 +85,22 @@
       <title>linux内核dynamic_debug</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/dynamic_debug/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/dynamic_debug/</guid>
-      <description><![CDATA[1. 打开dynamic_debug 1CONFIG_DYNAMIC_DEBUG=y 运行时控制：/proc/dynamic_debug/control，如果开启了CONFIG_DEBUG_F]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/travel_map_compass_123078_300x168.jpg" length="14785" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-打开dynamic_debug" data-numberify>1. 打开dynamic_debug<a class="anchor ms-1" href="#1-打开dynamic_debug"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-makefile" data-lang="makefile"><span class="line"><span class="ln">1</span><span class="cl"><span class="nv">CONFIG_DYNAMIC_DEBUG</span><span class="o">=</span>y
+</span></span></code></pre></div><p>运行时控制：<code>/proc/dynamic_debug/control</code>，如果开启了<code>CONFIG_DEBUG_FS</code>，在<code>&lt;debugfs&gt;/dynamic_debug/control</code>，两者效果是相同的。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/wavy_curvy_lines_146044_300x168.jpg" length="25854" type="image/.jpg" />
     </item>
     
     <item>
       <title>printk的pr_fmt</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/</guid>
-      <description><![CDATA[1. printk 打印级别控制：/proc/sys/kernel/printk printk_index：/sys/kernel/debug/printk/]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wall_brick_purple_141823_300x168.jpg" length="14935" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-printk" data-numberify>1. printk<a class="anchor ms-1" href="#1-printk"></a></h1>
+<p>打印级别控制：<code>/proc/sys/kernel/printk</code></p>
+<p>printk_index：<code>/sys/kernel/debug/printk/index/</code></p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/laptop_dj_equipment_212416_300x168.jpg" length="9857" type="image/.jpg" />
     </item>
     
   </channel>

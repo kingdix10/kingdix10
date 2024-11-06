@@ -4,7 +4,8 @@
     <title>进程管理 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/categories/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</link>
     <description>Recent content in 进程管理 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Sat, 31 Aug 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
@@ -12,110 +13,256 @@
       <title>用trace追踪Linux进程的一生</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/task_life/</link>
       <pubDate>Sat, 31 Aug 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/task_life/</guid>
-      <description><![CDATA[1. 简介 通常来说，shell要启动一个新的程序，会先fork一个新进程，然后执行exec系统调用将替换新进程的执行程序。posix规定了pos]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/pink_color_background_153889_300x168.jpg" length="1430" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-简介" data-numberify>1. 简介<a class="anchor ms-1" href="#1-简介"></a></h1>
+<p>通常来说，<code>shell</code>要启动一个新的程序，会先<code>fork</code>一个新进程，然后执行<code>exec</code>系统调用将替换新进程的执行程序。<code>posix</code>规定了<code>posix_spawn</code>函数，封装了<code>fork</code>+<code>exec</code>的过程，提供了更加高效的接口。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/cockpit_panel_display_169481_300x168.jpg" length="10012" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux fork进程/线程简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/a-fork/</link>
       <pubDate>Sat, 03 Feb 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/a-fork/</guid>
-      <description><![CDATA[1. kernel_clone kernel_clone是内核创建进程/线程的核心函数，如下功能都是通过调用kernel_clone实现的。 kernel_thread：]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/stars_figure_pattern_178502_300x168.jpg" length="18670" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-kernel_clone" data-numberify>1. kernel_clone<a class="anchor ms-1" href="#1-kernel_clone"></a></h1>
+<p>kernel_clone是内核创建进程/线程的核心函数，如下功能都是通过调用kernel_clone实现的。</p>
+<ul>
+<li>kernel_thread：创建内核进程</li>
+<li>user_mode_thread：创建1号进程，1号进程的回调函数先是内核态的kernel_init，之后通过execve切换到用户进程</li>
+<li>fork和clone系统调用：创建用户进程/线程</li>
+</ul>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.6/sched/a-fork/kernel_clone.png" loading="lazy" width="697" height="419" />
+</picture>
+
+</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/camera_photographer_smoke_126548_300x168.jpg" length="9088" type="image/.jpg" />
     </item>
     
     <item>
       <title>exec系统调用简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/execve/</link>
       <pubDate>Wed, 03 Jan 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/execve/</guid>
-      <description><![CDATA[1. 动态链接和静态链接 1.1. 编译命令 1aarch64-linux-gnu-gcc -o dummy_arm64 dummy.c 2aarch64-linux-gnu-gcc -static -o dummy_arm64_static dummy.c 1.2. 查看文件格式信息 1$ file dummy_arm64* 2dummy_arm64: ELF 64-bit LSB executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=3fa0f1369e1b3181f059174b078dd893e813abb2, for GNU/Linux 3.7.0, with debug_info, not stripped 3dummy_arm64_static: ELF 64-bit LSB executable, ARM aarch64, version 1 (GNU/Linux), statically linked,]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/canvas_picture_abstraction_138874_300x168.jpg" length="19551" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-动态链接和静态链接" data-numberify>1. 动态链接和静态链接<a class="anchor ms-1" href="#1-动态链接和静态链接"></a></h1>
+
+<h2 id="11-编译命令" data-numberify>1.1. 编译命令<a class="anchor ms-1" href="#11-编译命令"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">aarch64-linux-gnu-gcc -o dummy_arm64 dummy.c
+</span></span><span class="line"><span class="ln">2</span><span class="cl">aarch64-linux-gnu-gcc -static -o dummy_arm64_static dummy.c
+</span></span></code></pre></div>
+<h2 id="12-查看文件格式信息" data-numberify>1.2. 查看文件格式信息<a class="anchor ms-1" href="#12-查看文件格式信息"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">$ file dummy_arm64*
+</span></span><span class="line"><span class="ln">2</span><span class="cl">dummy_arm64:        ELF 64-bit LSB executable, ARM aarch64, version <span class="m">1</span> <span class="o">(</span>SYSV<span class="o">)</span>, dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID<span class="o">[</span>sha1<span class="o">]=</span>3fa0f1369e1b3181f059174b078dd893e813abb2, <span class="k">for</span> GNU/Linux 3.7.0, with debug_info, not stripped
+</span></span><span class="line"><span class="ln">3</span><span class="cl">dummy_arm64_static: ELF 64-bit LSB executable, ARM aarch64, version <span class="m">1</span> <span class="o">(</span>GNU/Linux<span class="o">)</span>, statically linked, BuildID<span class="o">[</span>sha1<span class="o">]=</span>5475ac20b174d94d96e666e170fb2d6ce69cdf76, <span class="k">for</span> GNU/Linux 3.7.0, with debug_info, not stripped
+</span></span></code></pre></div>
+<h2 id="13-读取elf文件信息" data-numberify>1.3. 读取elf文件信息<a class="anchor ms-1" href="#13-读取elf文件信息"></a></h2>
+<p>可以看到动态链接的程序需要有解释器<code>/lib64/ld-linux-x86-64.so.2</code>，与<code>file</code>目录看到的是一样的。静态链接的程序没有解释器段。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lava_texture_surface_140175_300x168.jpg" length="10556" type="image/.jpg" />
     </item>
     
     <item>
       <title>进程调度简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/schedule1/</link>
       <pubDate>Wed, 03 Jan 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/schedule1/</guid>
-      <description><![CDATA[1. 运行队列：runqueue Linux内核使用运行队列来管理每个CPU上运行的任务，要运行的任务抽象成“调度实体”，调度实体可以是进程、线程]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wavy_motley_metallic_139065_300x168.jpg" length="26579" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-运行队列runqueue" data-numberify>1. 运行队列：runqueue<a class="anchor ms-1" href="#1-运行队列runqueue"></a></h1>
+<p>Linux内核使用运行队列来管理每个CPU上运行的任务，要运行的任务抽象成“调度实体”，调度实体可以是进程、线程或任务组。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/dots_light_background_50767_300x168.jpg" length="5596" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux进程命名空间（pid namespace）</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/pid_namespace/</link>
       <pubDate>Sun, 31 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/pid_namespace/</guid>
-      <description><![CDATA[1. namespace简介 namespace是Linux提供的一种内核级别环境隔离的方法，很多编程语言也有namespace这样的功能，例如C]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/iridescent_colorful_lines_130978_300x168.jpg" length="11918" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-namespace简介" data-numberify>1. namespace简介<a class="anchor ms-1" href="#1-namespace简介"></a></h1>
+<p>namespace是Linux提供的一种内核级别环境隔离的方法，很多编程语言也有namespace这样的功能，例如C++，Java等。编程语言的namespace是为了解决项目中能够在不同的命名空间里使用相同的函数名或者类名。而Linux的namespace也是为了实现资源能够在不同的命名空间里有相同的名称，比如在A命名空间有个pid为1的进程，而在B命名空间中也可以有一个pid为1的进程。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lines_obliquely_stripes_123801_300x168.jpg" length="18016" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux进程和线程关系</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/relationship/</link>
       <pubDate>Wed, 27 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/relationship/</guid>
-      <description><![CDATA[1. 基本概念 Linux内核中没有使用单独的数据结构来描述进程和线程，而是将它们统一起来，使用task_struct结构体来描述，这就是“Lin]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/trunk_tree_texture_119590_300x168.jpg" length="18828" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-基本概念" data-numberify>1. 基本概念<a class="anchor ms-1" href="#1-基本概念"></a></h1>
+<p>Linux内核中没有使用单独的数据结构来描述进程和线程，而是将它们统一起来，使用task_struct结构体来描述，这就是“Linux不区分进程和线程”的来源。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" length="24563" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux 0号线程swapper简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_0/</link>
       <pubDate>Wed, 13 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_0/</guid>
-      <description><![CDATA[1. 总览 这里以ARM64为例。 在内核的起始阶段，还没有进程和线程的概念，在开启MMU之后，__primary_switched的第一步就是将i]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_300x168.jpg" length="21351" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-总览" data-numberify>1. 总览<a class="anchor ms-1" href="#1-总览"></a></h1>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.1/sched/task_0/tasks.png" loading="lazy" width="3204" height="1128" />
+</picture>
+
+</p>
+<p>这里以ARM64为例。</p>
+<p>在内核的起始阶段，还没有进程和线程的概念，在开启MMU之后，<code>__primary_switched</code>的第一步就是将init_task的地址写到sp_el0，这个时候就可以用get_current()或者curent获取到0号线程的task_struct了。在0号线程的上下文，完成调度器的相关初始化之后，创建1号和2号线程，然后开启调度器，init_task自此进入idle状态。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_texture_127524_300x168.jpg" length="18901" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux 1号线程init简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_1/</link>
       <pubDate>Wed, 13 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_1/</guid>
-      <description><![CDATA[1. 1号进程的内核态 1号进程首先运行在内核态，其函数是kernel_init，这里简单介绍一下其工作： 非bootcpu相关初始化 页分配器初始化]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/gradient_blur_blending_130648_300x168.jpg" length="2927" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-1号进程的内核态" data-numberify>1. 1号进程的内核态<a class="anchor ms-1" href="#1-1号进程的内核态"></a></h1>
+<p>1号进程首先运行在内核态，其函数是kernel_init，这里简单介绍一下其工作：</p>
+<ol>
+<li>非bootcpu相关初始化</li>
+<li>页分配器初始化的收尾工作</li>
+<li>驱动子系统和设备树初始化</li>
+<li>调用<code>__initcall</code>指定的初始化函数</li>
+<li>挂载根文件系统</li>
+<li>是否<code>__init</code>指定的内存</li>
+<li>执行用户态init程序</li>
+</ol>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.1/sched/task_1/kernel_init.png" loading="lazy" width="1469" height="1859" />
+</picture>
+
+</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/trunk_tree_texture_119590_300x168.jpg" length="18828" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux 2号线程kthreadd简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_2/</link>
       <pubDate>Wed, 13 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_2/</guid>
-      <description><![CDATA[1. 2号线程kthreadd Linux内核规定，所有的线程必须由已存在的线程创建出来，也就是要求所有的task_struct都需要在已有的ta]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" length="24563" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-2号线程kthreadd" data-numberify>1. 2号线程kthreadd<a class="anchor ms-1" href="#1-2号线程kthreadd"></a></h1>
+<p>Linux内核规定，所有的线程必须由已存在的线程创建出来，也就是要求所有的task_struct都需要在已有的task_struct上复制出来。Linux可以通过kernel_thread来创建内核线程，这个函数会复制当前线程的task_struct。如果任由各个子系统或驱动自己调用kernel_thread来创建线程，那在创建内核线程时current所指向的task_struct是不确定的。为了解决这一问题，Linux内核将所有内核线程的创建交给固定的线程来做，这个线程就是2号线程kthreadd。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/pattern_frosty_frost_134125_300x168.jpg" length="18643" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux进程状态与生命周期</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/task_state/</link>
       <pubDate>Wed, 13 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/task_state/</guid>
-      <description><![CDATA[1. 进程状态切换 state value desc TASK_NEW 0x00000800 新建 TASK_RUNNING 0x00000000 就绪或占有cpu运行 TASK_INTERRUPTIBLE 0x00000001 可中断睡眠 TASK_UNINTERRUPTIBLE 0x00000002 不可中断睡眠 TASK_WAKEKILL 0x00000100 可以在stopped/traced/killable的]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/dunes_sand_texture_151004_300x168.jpg" length="17708" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-进程状态切换" data-numberify>1. 进程状态切换<a class="anchor ms-1" href="#1-进程状态切换"></a></h1>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.6/sched/task_state/task_statemachine.png" loading="lazy" width="1633" height="452" />
+</picture>
+
+</p>
+<table>
+  <thead>
+      <tr>
+          <th>state</th>
+          <th>value</th>
+          <th>desc</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>TASK_NEW</td>
+          <td>0x00000800</td>
+          <td>新建</td>
+      </tr>
+      <tr>
+          <td>TASK_RUNNING</td>
+          <td>0x00000000</td>
+          <td>就绪或占有cpu运行</td>
+      </tr>
+      <tr>
+          <td>TASK_INTERRUPTIBLE</td>
+          <td>0x00000001</td>
+          <td>可中断睡眠</td>
+      </tr>
+      <tr>
+          <td>TASK_UNINTERRUPTIBLE</td>
+          <td>0x00000002</td>
+          <td>不可中断睡眠</td>
+      </tr>
+      <tr>
+          <td>TASK_WAKEKILL</td>
+          <td>0x00000100</td>
+          <td>可以在stopped/traced/killable的情况下唤醒</td>
+      </tr>
+      <tr>
+          <td>TASK_WAKING</td>
+          <td>0x00000200</td>
+          <td>正在被唤醒</td>
+      </tr>
+      <tr>
+          <td>__TASK_STOPPED</td>
+          <td>0x00000004</td>
+          <td>和其他状态组合，用于唤醒包含此状态标记的进程</td>
+      </tr>
+      <tr>
+          <td>TASK_STOPPED</td>
+          <td>0x00000104</td>
+          <td>TASK_WAKEKILL和__TASK_STOPPED的组合</td>
+      </tr>
+      <tr>
+          <td>TASK_IDLE</td>
+          <td>0x00000402</td>
+          <td>TASK_UNINTERRUPTIBLE和TASK_NOLOAD的组合</td>
+      </tr>
+      <tr>
+          <td>TASK_DEAD</td>
+          <td>0x00000080</td>
+          <td>进程消亡，即将回收task_struct</td>
+      </tr>
+      <tr>
+          <td>EXIT_DEAD</td>
+          <td>0x00000010</td>
+          <td>来自EXIT_ZOMBIE，即将回收task_struct</td>
+      </tr>
+      <tr>
+          <td>EXIT_ZOMBIE</td>
+          <td>0x00000020</td>
+          <td>僵尸态，进程已经结束，但task_struct还没有回收</td>
+      </tr>
+  </tbody>
+</table>
+<p>EXIT前缀的状态，是由<code>struct task_struct.exit_state</code>使用的。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_1280x720.jpg" length="194685" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux内核sched_class汇总</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_table/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_table/</guid>
-      <description><![CDATA[1. vmlinux中shced_class的位置 1/// kernel/sched/sched.h 2/* 3 * Helper to define a sched_class instance; each one is placed in a separate 4 * section which is ordered by the linker script: 5 * 6 * include/asm-generic/vmlinux.lds.h 7 * 8 * *CAREFUL* they are laid out in *REVERSE* order!!! 9 *]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/mosaic_multicolored_texture_126795_300x168.jpg" length="20064" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-vmlinux中shced_class的位置" data-numberify>1. vmlinux中shced_class的位置<a class="anchor ms-1" href="#1-vmlinux中shced_class的位置"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// kernel/sched/sched.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * Helper to define a sched_class instance; each one is placed in a separate
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> * section which is ordered by the linker script:
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> *   include/asm-generic/vmlinux.lds.h
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> * *CAREFUL* they are laid out in *REVERSE* order!!!
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> * Also enforce alignment on the instance, not the type, to guarantee layout.
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cp">#define DEFINE_SCHED_CLASS(name) \
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cp">const struct sched_class name##_sched_class \
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cp">	__aligned(__alignof__(struct sched_class)) \
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cp">	__section(&#34;__&#34; #name &#34;_sched_class&#34;)
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cm">/* Defined in include/asm-generic/vmlinux.lds.h */</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="k">extern</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">__sched_class_highest</span><span class="p">[];</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="k">extern</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">__sched_class_lowest</span><span class="p">[];</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">
+</span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="cp">#define for_class_range(class, _from, _to) \
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="cp">	for (class = (_from); class &lt; (_to); class++)
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="cp">#define for_each_class(class) \
+</span></span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="cp">	for_class_range(class, __sched_class_highest, __sched_class_lowest)
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="cp">#define sched_class_above(_a, _b)	((_a) &lt; (_b))
+</span></span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="k">extern</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">stop_sched_class</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="k">extern</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">dl_sched_class</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="k">extern</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">rt_sched_class</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="k">extern</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">fair_sched_class</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">33</span><span class="cl"><span class="k">extern</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">idle_sched_class</span><span class="p">;</span>
+</span></span></code></pre></div><p><code>sched_class</code>定义。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg" length="10737" type="image/.jpg" />
     </item>
     
   </channel>

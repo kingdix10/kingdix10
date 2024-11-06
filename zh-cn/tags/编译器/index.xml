@@ -4,7 +4,8 @@
     <title>编译器 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/tags/%E7%BC%96%E8%AF%91%E5%99%A8/</link>
     <description>Recent content in 编译器 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Thu, 18 Jul 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/%E7%BC%96%E8%AF%91%E5%99%A8/index.xml" rel="self" type="application/rss+xml" />
@@ -12,20 +13,75 @@
       <title>gcc宏定义中的连接符和可变参数</title>
       <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/macro_link_args/</link>
       <pubDate>Thu, 18 Jul 2019 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/macro_link_args/</guid>
-      <description><![CDATA[1. 连接符 1.1. 字符串转换# #用来把参数转换成字符串 1#define pr_var(var) printf(#var &#34; is %d\n&#34;, var); 2 3int main(int argc, char **argv) 4{ 5 int a = 1, b = 2; 6 7 pr_var(a); 8 pr_var(b); 9 pr_var(a+b); 10} 1.2. 参数连接## 在宏中，##可以用于]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/fabric_texture_colorful_142186_300x168.jpg" length="17451" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-连接符" data-numberify>1. 连接符<a class="anchor ms-1" href="#1-连接符"></a></h1>
+
+<h2 id="11-字符串转换" data-numberify>1.1. 字符串转换#<a class="anchor ms-1" href="#11-字符串转换"></a></h2>
+<p><code>#</code>用来把参数转换成字符串</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cp">#define pr_var(var)   printf(#var &#34; is %d\n&#34;, var);
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">    <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="nf">pr_var</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">    <span class="nf">pr_var</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    <span class="nf">pr_var</span><span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p> </p>
+
+<h2 id="12-参数连接" data-numberify>1.2. 参数连接##<a class="anchor ms-1" href="#12-参数连接"></a></h2>
+<p>在宏中，<code>##</code>可以用于参数连接。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/trunk_tree_texture_119590_300x168.jpg" length="18828" type="image/.jpg" />
     </item>
     
     <item>
       <title>编译器预定义宏</title>
       <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/gcc_predefine/</link>
       <pubDate>Thu, 18 Jul 2019 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/gcc_predefine/</guid>
-      <description><![CDATA[1. 查看gcc预定义宏 在Linux下可以输入如下命令： 1gcc -posix -E -dM - &lt; /dev/null window下，命令稍有不同 1gcc -posix -E -dM - &lt; nul 1.1. 常见宏 macro desc __FILE__ 文件名 __LINE__ 行号 __func__ 函数]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/pixels_circles_colorful_121100_300x168.jpg" length="23064" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-查看gcc预定义宏" data-numberify>1. 查看gcc预定义宏<a class="anchor ms-1" href="#1-查看gcc预定义宏"></a></h1>
+<p>在Linux下可以输入如下命令：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">gcc -posix -E -dM - &lt; /dev/null
+</span></span></code></pre></div><p>window下，命令稍有不同</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">gcc -posix -E -dM - &lt; nul
+</span></span></code></pre></div>
+<h2 id="11-常见宏" data-numberify>1.1. 常见宏<a class="anchor ms-1" href="#11-常见宏"></a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>macro</th>
+          <th>desc</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>__FILE__</code></td>
+          <td>文件名</td>
+      </tr>
+      <tr>
+          <td><code>__LINE__</code></td>
+          <td>行号</td>
+      </tr>
+      <tr>
+          <td><code>__func__</code></td>
+          <td>函数名，早期版本为<code>__FUNCTION__</code></td>
+      </tr>
+      <tr>
+          <td><code>__DATE__</code></td>
+          <td>编译日期</td>
+      </tr>
+      <tr>
+          <td><code>__TIME__</code></td>
+          <td>编译时间</td>
+      </tr>
+      <tr>
+          <td><code>__linux__</code></td>
+          <td>编译平台是linux时定义</td>
+      </tr>
+  </tbody>
+</table>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/chip_circuit_processor_140251_300x168.jpg" length="19023" type="image/.jpg" />
     </item>
     
   </channel>

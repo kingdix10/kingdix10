@@ -4,7 +4,8 @@
     <title>数组 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/tags/%E6%95%B0%E7%BB%84/</link>
     <description>Recent content in 数组 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Fri, 30 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/%E6%95%B0%E7%BB%84/index.xml" rel="self" type="application/rss+xml" />
@@ -12,20 +13,21 @@
       <title>多维数组作为函数参数</title>
       <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/array_func/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/array_func/</guid>
-      <description><![CDATA[1. 方法一：传递数组 C语言对多维数组的存储是按照一维数组来处理的，数组的每个维度在内存中按顺序存储。所以将多维数组作为参数传递时，必须指定多维]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/pattern_frosty_frost_134125_300x168.jpg" length="18643" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-方法一传递数组" data-numberify>1. 方法一：传递数组<a class="anchor ms-1" href="#1-方法一传递数组"></a></h1>
+<p>C语言对多维数组的存储是按照一维数组来处理的，数组的每个维度在内存中按顺序存储。所以将多维数组作为参数传递时，必须指定多维数组子维度的大小，否则函数无法得知每个子维度结束地址。
+第一维的长度可以指定，也可以不指定。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/wood_texture_logs_159793_300x168.jpg" length="19513" type="image/.jpg" />
     </item>
     
     <item>
       <title>数组a、&amp;a、&amp;a[0]、&amp;a[0][0]的区别与联系</title>
       <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/array_type/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/array_type/</guid>
-      <description><![CDATA[1. 测试结果 分别声明一个一维数组a1[8]和二维数组a2[4][8]，查看各个表达式的类型、地址、与首地址的差值，以及内存地址内存储的int变]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_300x168.jpg" length="21351" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-测试结果" data-numberify>1. 测试结果<a class="anchor ms-1" href="#1-测试结果"></a></h1>
+<p>分别声明一个一维数组<code>a1[8]</code>和二维数组<code>a2[4][8]</code>，查看各个表达式的类型、地址、与首地址的差值，以及内存地址内存储的<code>int</code>变量值。数组内变量的低8位记录数组的行号和列号，其中高4位为行，低4位为列。先看一下测试程序给出的结果。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" length="24563" type="image/.jpg" />
     </item>
     
   </channel>

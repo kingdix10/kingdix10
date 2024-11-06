@@ -4,48 +4,68 @@
     <title>linux-6.6 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/</link>
     <description>Recent content in linux-6.6 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
-    <lastBuildDate>Mon, 30 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 01 Nov 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RiscV内核初始化</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/boot/entry_riscv/</link>
+      <pubDate>Fri, 01 Nov 2024 00:00:00 +0000</pubDate>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/boot/entry_riscv/</guid>
+      <description><![CDATA[<h1 id="linux-66" data-numberify>linux-6.6<a class="anchor ms-1" href="#linux-66"></a></h1>
+<p><code>arch/riscv/kernel/head.S</code>只有不到500行。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// arch/riscv/kernel/head.S
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="nf">_start</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="err">\</span><span class="o">--</span> <span class="nf">_start_kernel</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">    <span class="o">+--</span> <span class="nf">reset_regs</span><span class="p">()</span>            <span class="c1">/// if CONFIG_RISCV_M_MODE
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="c1"></span>    <span class="o">+--</span> <span class="nf">setup_vm</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    <span class="o">+--</span> <span class="nf">relocate_enable_mmu</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="o">+--</span> <span class="nf">setup_trap_vector</span><span class="p">()</span>     <span class="c1">/// 设置CSR_TVEC为handle_exception
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="c1"></span>    <span class="o">+--</span> <span class="nf">kasan_early_init</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    <span class="o">+--</span> <span class="nf">soc_early_init</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">    <span class="err">\</span><span class="o">--</span> <span class="nf">start_kernel</span><span class="p">()</span>
+</span></span></code></pre></div>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/camera_lens_strap_145518_300x168.jpg" length="15893" type="image/.jpg" />
+    </item>
+    
     <item>
       <title>Linux内核的通知链机制</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/notifier_chain/notifier_chain/</link>
       <pubDate>Wed, 14 Aug 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/notifier_chain/notifier_chain/</guid>
-      <description><![CDATA[1. 简介 Linux内核中的notifier_chain是一种用于跨模块通信的机制。当一个模块需要通知其他模块某些事件时，它可以使用notifi]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/code_letters_screen_137590_300x168.jpg" length="10341" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-简介" data-numberify>1. 简介<a class="anchor ms-1" href="#1-简介"></a></h1>
+<p>Linux内核中的notifier_chain是一种用于跨模块通信的机制。当一个模块需要通知其他模块某些事件时，它可以使用notifier_chain将这些事件通知给其他模块。这种机制使得模块之间的耦合度降低，提高了代码的可维护性和可扩展性。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/bubbles_drops_macro_126764_300x168.jpg" length="23506" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux drm mm分析(基于intel ivpu驱动)</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_mm/</link>
       <pubDate>Wed, 24 Apr 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_mm/</guid>
       <description><![CDATA[使用drm mm管理虚拟内存和物理内存]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/bubbles_drops_macro_126764_300x168.jpg" length="23506" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/metal_texture_surface_157344_300x168.jpg" length="9729" type="image/.jpg" />
     </item>
     
     <item>
       <title>【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/</link>
       <pubDate>Sun, 21 Apr 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/</guid>
       <description><![CDATA[深度分析系统调用从用户程序到内核的流程]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lava_texture_surface_140175_300x168.jpg" length="10556" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/keyboard_laptop_gradient_203739_300x168.jpg" length="10539" type="image/.jpg" />
     </item>
     
     <item>
       <title>内核启动流程（一）</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/boot/entry/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/boot/entry/</guid>
-      <description><![CDATA[1. 内核启动入口 根据Makefile对KBUILD_LDS的定义，链接vmlinux使用的连接脚本为 arch/$(SRCARCH)/kerne]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/keyboard_laptop_gradient_203739_300x168.jpg" length="10539" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-内核启动入口" data-numberify>1. 内核启动入口<a class="anchor ms-1" href="#1-内核启动入口"></a></h1>
+<p>根据Makefile对KBUILD_LDS的定义，链接vmlinux使用的连接脚本为 <code>arch/$(SRCARCH)/kernel/vmlinux.lds</code>，实际上这个脚本是在编译过程中生成的。从链接脚本 <code>arch/arm64/kernel/vmlinux.lds</code>可以查到，程序的入口为 <code>_text</code>，镜像起始位置存放的是 <code>.head.text</code>段生成的指令。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/water_waves_ripples_143522_300x168.jpg" length="11080" type="image/.jpg" />
     </item>
     
   </channel>

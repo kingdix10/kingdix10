@@ -4,7 +4,8 @@
     <title>系统调用 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/series/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/</link>
     <description>Recent content in 系统调用 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Sun, 21 Apr 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/series/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/index.xml" rel="self" type="application/rss+xml" />
@@ -12,10 +13,9 @@
       <title>【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/</link>
       <pubDate>Sun, 21 Apr 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/</guid>
       <description><![CDATA[深度分析系统调用从用户程序到内核的流程]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lava_texture_surface_140175_300x168.jpg" length="10556" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/keyboard_laptop_gradient_203739_300x168.jpg" length="10539" type="image/.jpg" />
     </item>
     
   </channel>

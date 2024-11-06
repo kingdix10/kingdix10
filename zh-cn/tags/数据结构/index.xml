@@ -4,7 +4,8 @@
     <title>数据结构 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</link>
     <description>Recent content in 数据结构 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Mon, 10 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/index.xml" rel="self" type="application/rss+xml" />
@@ -12,10 +13,12 @@
       <title>Linux内核数据结构kobject/kset/ktype</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/kobject/kobject/</link>
       <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/kobject/kobject/</guid>
-      <description><![CDATA[1. 数据结构简介 内核版本：linux-6.1 内核文档：Everything you never wanted to know about kobjects, ksets, and ktypes — The Linux Kernel documentation 在Linux内核中，kobject、k]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lines_obliquely_stripes_123801_300x168.jpg" length="18016" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-数据结构简介" data-numberify>1. 数据结构简介<a class="anchor ms-1" href="#1-数据结构简介"></a></h1>
+<p>内核版本：linux-6.1</p>
+<p>内核文档：<a href="https://www.kernel.org/doc/html/v6.1/core-api/kobject.html" target="_blank" rel="noopener noreferrer">Everything you never wanted to know about kobjects, ksets, and ktypes — The Linux Kernel documentation<i class="fas fa-external-link-square-alt ms-1"></i></a></p>
+<p>在Linux内核中，kobject、kset和kobj_type是用于管理和表示kobject的数据结构。kobject是设备驱动模型的基石，sysfs和uevent也与kobject密切相关。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/mosaic_multicolored_texture_126795_300x168.jpg" length="20064" type="image/.jpg" />
     </item>
     
   </channel>

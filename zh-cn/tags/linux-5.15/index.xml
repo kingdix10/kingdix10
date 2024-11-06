@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>linux-5.15 on kingdix10&#39;s site</title>
+    <title>Linux-5.15 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/tags/linux-5.15/</link>
-    <description>Recent content in linux-5.15 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Linux-5.15 on kingdix10&#39;s site</description>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Fri, 30 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/linux-5.15/index.xml" rel="self" type="application/rss+xml" />
@@ -12,10 +13,12 @@
       <title>kmalloc分配内存的大小(基于linux-5.15)</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_size/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_size/</guid>
-      <description><![CDATA[1. kmalloc分配内存的大小 本文基于linux-5.15分析，linux-6.6已经删除slob，后续也会将slab移除。 kmalloc会]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/laptop_keyboard_glow_170138_300x168.jpg" length="3604" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-kmalloc分配内存的大小" data-numberify>1. kmalloc分配内存的大小<a class="anchor ms-1" href="#1-kmalloc分配内存的大小"></a></h1>
+<p>本文基于<code>linux-5.15</code>分析，linux-6.6已经删除slob，后续也会将slab移除。</p>
+<p><code>kmalloc</code>会根据申请的内存大小来决定来决定使用块分配器(slab/slub/slob)或页分配器进行内存分配。
+控制<code>kmalloc</code>分配行为的主要有如下三个宏。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/spots_stains_colorful_147593_300x168.jpg" length="20423" type="image/.jpg" />
     </item>
     
   </channel>

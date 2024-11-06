@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>linux-6.6 on kingdix10&#39;s site</title>
+    <title>Linux-6.6 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/tags/linux-6.6/</link>
-    <description>Recent content in linux-6.6 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Linux-6.6 on kingdix10&#39;s site</description>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Wed, 04 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/linux-6.6/index.xml" rel="self" type="application/rss+xml" />
@@ -12,19 +13,21 @@
       <title>Linux使用ftrace进行boottime跟踪</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/boottime_trace/</link>
       <pubDate>Wed, 04 Sep 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/boottime_trace/</guid>
-      <description><![CDATA[1. 简介 要使用ftrace进行boottime追踪，可以使用内核参数(bootargs)或者bootconfig来进行配置。 关键的函数如下： 1+--]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/code_text_colorful_140555_300x168.jpg" length="22830" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-简介" data-numberify>1. 简介<a class="anchor ms-1" href="#1-简介"></a></h1>
+<p>要使用ftrace进行boottime追踪，可以使用内核参数(bootargs)或者bootconfig来进行配置。</p>
+<p>关键的函数如下：</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lines_multicolored_rainbow_125651_300x168.jpg" length="11453" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux中断子系统（二）domain注册</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_domain_add/</link>
       <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_domain_add/</guid>
-      <description><![CDATA[1. IRQ domain注册 中断控制器初始化的过程中，要向中断子系统注册irq domain。核心函数__irq_domain_add。 gic-v2使]]></description>
+      <description><![CDATA[<h1 id="1-irq-domain注册" data-numberify>1. IRQ domain注册<a class="anchor ms-1" href="#1-irq-domain注册"></a></h1>
+<p>中断控制器初始化的过程中，要向中断子系统注册<code>irq domain</code>。核心函数<code>__irq_domain_add</code>。</p>
+<p>gic-v2使用<code>irq_domain_create_linear</code>，gic-v3则使用<code>irq_domain_add_tree</code>。</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/laptop_backlight_colorful_194324_300x168.jpg" length="7666" type="image/.jpg" />
     </item>
     
@@ -32,9 +35,9 @@
       <title>Linux中断子系统（三）设备中断注册</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_create_mapping/</link>
       <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_create_mapping/</guid>
-      <description><![CDATA[1. 设备中断注册 gic-v3的中断号划分在《IHI0069H_gic_architecture_specification.pdf》有所罗列：]]></description>
+      <description><![CDATA[<h1 id="1-设备中断注册" data-numberify>1. 设备中断注册<a class="anchor ms-1" href="#1-设备中断注册"></a></h1>
+<p>gic-v3的中断号划分在《IHI0069H_gic_architecture_specification.pdf》有所罗列：</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/wavy_curvy_lines_146044_300x168.jpg" length="25854" type="image/.jpg" />
     </item>
     
@@ -42,9 +45,13 @@
       <title>Linux中断子系统（四）申请中断request_irq</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/request_irq/</link>
       <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/request_irq/</guid>
-      <description><![CDATA[1. 申请中断 __setup_irq是用于设置和注册中断的核心函数，它是request_threaded_irq等函数的内部实现。 1.1. irqaction handl]]></description>
+      <description><![CDATA[<h1 id="1-申请中断" data-numberify>1. 申请中断<a class="anchor ms-1" href="#1-申请中断"></a></h1>
+<p><code>__setup_irq</code>是用于设置和注册中断的核心函数，它是<code>request_threaded_irq</code>等函数的内部实现。
+<picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.6/interrupt/request_irq/request_irq.png" loading="lazy" width="1157" height="443" />
+</picture>
+
+</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/pixels_cubes_shapes_127558_300x168.jpg" length="18339" type="image/.jpg" />
     </item>
     
@@ -52,9 +59,34 @@
       <title>Linux中断子系统（五）中断处理</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/handler_entry/</link>
       <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/handler_entry/</guid>
-      <description><![CDATA[1. 中断入口 要处理中断，必须为handle_arch_irq赋值。 ARM64自己定义handle_arch_irq的实现。 1/// arch/arm64/kernel/irq.c 2void (*handle_arch_irq)(struct pt_regs *) __ro_after_init = default_handle_irq; 3void]]></description>
+      <description><![CDATA[<h1 id="1-中断入口" data-numberify>1. 中断入口<a class="anchor ms-1" href="#1-中断入口"></a></h1>
+<p>要处理中断，必须为<code>handle_arch_irq</code>赋值。</p>
+<p>ARM64自己定义<code>handle_arch_irq</code>的实现。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// arch/arm64/kernel/irq.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">handle_arch_irq</span><span class="p">)(</span><span class="k">struct</span> <span class="n">pt_regs</span> <span class="o">*</span><span class="p">)</span> <span class="n">__ro_after_init</span> <span class="o">=</span> <span class="n">default_handle_irq</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">handle_arch_fiq</span><span class="p">)(</span><span class="k">struct</span> <span class="n">pt_regs</span> <span class="o">*</span><span class="p">)</span> <span class="n">__ro_after_init</span> <span class="o">=</span> <span class="n">default_handle_fiq</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="kt">int</span> <span class="n">__init</span> <span class="nf">set_handle_irq</span><span class="p">(</span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">handle_irq</span><span class="p">)(</span><span class="k">struct</span> <span class="n">pt_regs</span> <span class="o">*</span><span class="p">))</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">handle_arch_irq</span> <span class="o">!=</span> <span class="n">default_handle_irq</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">        <span class="k">return</span> <span class="o">-</span><span class="n">EBUSY</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">
+</span></span><span class="line"><span class="ln">10</span><span class="cl">    <span class="n">handle_arch_irq</span> <span class="o">=</span> <span class="n">handle_irq</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">    <span class="nf">pr_info</span><span class="p">(</span><span class="s">&#34;Root IRQ handler: %ps</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">handle_irq</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">
+</span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="kt">int</span> <span class="n">__init</span> <span class="nf">set_handle_fiq</span><span class="p">(</span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">handle_fiq</span><span class="p">)(</span><span class="k">struct</span> <span class="n">pt_regs</span> <span class="o">*</span><span class="p">))</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">handle_arch_fiq</span> <span class="o">!=</span> <span class="n">default_handle_fiq</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">        <span class="k">return</span> <span class="o">-</span><span class="n">EBUSY</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">
+</span></span><span class="line"><span class="ln">20</span><span class="cl">    <span class="n">handle_arch_fiq</span> <span class="o">=</span> <span class="n">handle_fiq</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl">    <span class="nf">pr_info</span><span class="p">(</span><span class="s">&#34;Root FIQ handler: %ps</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">handle_fiq</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>ARM使能<code>CONFIG_GENERIC_IRQ_MULTI_HANDLER</code>。</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/travel_map_compass_123078_300x168.jpg" length="14785" type="image/.jpg" />
     </item>
     
@@ -62,9 +94,14 @@
       <title>Linux中断子系统（一）软硬件初始化</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/init/</link>
       <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/init/</guid>
-      <description><![CDATA[1. 简介 early_irq_init完成中断子系统软件部分初始化。 irqchip_init初始化中断控制器，向系统注册struct irq_do]]></description>
+      <description><![CDATA[<h1 id="1-简介" data-numberify>1. 简介<a class="anchor ms-1" href="#1-简介"></a></h1>
+<p><code>early_irq_init</code>完成中断子系统软件部分初始化。</p>
+<p><code>irqchip_init</code>初始化中断控制器，向系统注册<code>struct irq_domain</code>。</p>
+<p><picture><img class="img-fluid " alt="irq_intc_init" src="/zh-cn/docs/04-kernel/linux-6.6/interrupt/init/irq_intc_init.png" loading="lazy" width="787" height="443" />
+</picture>
+
+</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/vintage_retro_camera_126517_300x168.jpg" length="11143" type="image/.jpg" />
     </item>
     
@@ -72,29 +109,27 @@
       <title>Linux drm mm分析(基于intel ivpu驱动)</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_mm/</link>
       <pubDate>Wed, 24 Apr 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/drm/ivpu_drm_mm/</guid>
       <description><![CDATA[使用drm mm管理虚拟内存和物理内存]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/bubbles_drops_macro_126764_300x168.jpg" length="23506" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/metal_texture_surface_157344_300x168.jpg" length="9729" type="image/.jpg" />
     </item>
     
     <item>
       <title>【Linux内核|系统调用】深度分析系统调用从用户程序到内核的流程</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/</link>
       <pubDate>Sun, 21 Apr 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/syscall/syscall/</guid>
       <description><![CDATA[深度分析系统调用从用户程序到内核的流程]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lava_texture_surface_140175_300x168.jpg" length="10556" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/keyboard_laptop_gradient_203739_300x168.jpg" length="10539" type="image/.jpg" />
     </item>
     
     <item>
       <title>ARM64 Linux中断入口</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/</link>
       <pubDate>Sun, 21 Apr 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/</guid>
-      <description><![CDATA[1. 简介 ARM64中断入口相关的代码主要在arch/arm64/kernel/entry.S，启动过程中，会将中断向量表vectors的起始虚]]></description>
+      <description><![CDATA[<h1 id="1-简介" data-numberify>1. 简介<a class="anchor ms-1" href="#1-简介"></a></h1>
+<p>ARM64中断入口相关的代码主要在<code>arch/arm64/kernel/entry.S</code>，启动过程中，会将中断向量表<code>vectors</code>的起始虚拟地址写入到VBAR_EL1。</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/shortcode.png" length="6548" type="image/.png" />
     </item>
     
@@ -102,87 +137,221 @@
       <title>Linux fork进程/线程简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/a-fork/</link>
       <pubDate>Sat, 03 Feb 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/a-fork/</guid>
-      <description><![CDATA[1. kernel_clone kernel_clone是内核创建进程/线程的核心函数，如下功能都是通过调用kernel_clone实现的。 kernel_thread：]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/stars_figure_pattern_178502_300x168.jpg" length="18670" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-kernel_clone" data-numberify>1. kernel_clone<a class="anchor ms-1" href="#1-kernel_clone"></a></h1>
+<p>kernel_clone是内核创建进程/线程的核心函数，如下功能都是通过调用kernel_clone实现的。</p>
+<ul>
+<li>kernel_thread：创建内核进程</li>
+<li>user_mode_thread：创建1号进程，1号进程的回调函数先是内核态的kernel_init，之后通过execve切换到用户进程</li>
+<li>fork和clone系统调用：创建用户进程/线程</li>
+</ul>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.6/sched/a-fork/kernel_clone.png" loading="lazy" width="697" height="419" />
+</picture>
+
+</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/camera_photographer_smoke_126548_300x168.jpg" length="9088" type="image/.jpg" />
     </item>
     
     <item>
       <title>ARM64 Linux内核内存大小和布局</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/memory_size_layout/</link>
       <pubDate>Wed, 03 Jan 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/memory_size_layout/</guid>
-      <description><![CDATA[1. memblock 1.1. 结构体 memblock相关的全局变量是编译时静态初始化的。 1/// mm/memblock.c 2 3/// INIT_MEMBLOCK_MEMORY_REGIONS和INIT_]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wood_texture_logs_159793_300x168.jpg" length="19513" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-memblock" data-numberify>1. memblock<a class="anchor ms-1" href="#1-memblock"></a></h1>
+
+<h2 id="11-结构体" data-numberify>1.1. 结构体<a class="anchor ms-1" href="#11-结构体"></a></h2>
+<p><code>memblock</code>相关的全局变量是编译时静态初始化的。</p>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.6/mm/memory_size_layout/memblock.png" loading="lazy" width="1212" height="562" />
+</picture>
+
+</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// mm/memblock.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="c1">/// INIT_MEMBLOCK_MEMORY_REGIONS和INIT_MEMBLOCK_RESERVED_REGIONS见arch/arm64/include/asm/memory.h
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="k">struct</span> <span class="n">memblock_region</span> <span class="n">memblock_memory_init_regions</span><span class="p">[</span><span class="n">INIT_MEMBLOCK_MEMORY_REGIONS</span><span class="p">]</span> <span class="n">__initdata_memblock</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="k">static</span> <span class="k">struct</span> <span class="n">memblock_region</span> <span class="n">memblock_reserved_init_regions</span><span class="p">[</span><span class="n">INIT_MEMBLOCK_RESERVED_REGIONS</span><span class="p">]</span> <span class="n">__initdata_memblock</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cp">#ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cp"></span><span class="k">static</span> <span class="k">struct</span> <span class="n">memblock_region</span> <span class="n">memblock_physmem_init_regions</span><span class="p">[</span><span class="n">INIT_PHYSMEM_REGIONS</span><span class="p">];</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="k">struct</span> <span class="n">memblock</span> <span class="n">memblock</span> <span class="n">__initdata_memblock</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">    <span class="p">.</span><span class="n">memory</span><span class="p">.</span><span class="n">regions</span>		<span class="o">=</span> <span class="n">memblock_memory_init_regions</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="p">.</span><span class="n">memory</span><span class="p">.</span><span class="n">cnt</span>		<span class="o">=</span> <span class="mi">1</span><span class="p">,</span>	<span class="cm">/* empty dummy entry */</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">    <span class="p">.</span><span class="n">memory</span><span class="p">.</span><span class="n">max</span>		<span class="o">=</span> <span class="n">INIT_MEMBLOCK_MEMORY_REGIONS</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">    <span class="p">.</span><span class="n">memory</span><span class="p">.</span><span class="n">name</span>		<span class="o">=</span> <span class="s">&#34;memory&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">
+</span></span><span class="line"><span class="ln">16</span><span class="cl">    <span class="p">.</span><span class="n">reserved</span><span class="p">.</span><span class="n">regions</span>	<span class="o">=</span> <span class="n">memblock_reserved_init_regions</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">    <span class="p">.</span><span class="n">reserved</span><span class="p">.</span><span class="n">cnt</span>		<span class="o">=</span> <span class="mi">1</span><span class="p">,</span>	<span class="cm">/* empty dummy entry */</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">    <span class="p">.</span><span class="n">reserved</span><span class="p">.</span><span class="n">max</span>		<span class="o">=</span> <span class="n">INIT_MEMBLOCK_RESERVED_REGIONS</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">    <span class="p">.</span><span class="n">reserved</span><span class="p">.</span><span class="n">name</span>		<span class="o">=</span> <span class="s">&#34;reserved&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">
+</span></span><span class="line"><span class="ln">21</span><span class="cl">    <span class="p">.</span><span class="n">bottom_up</span>		<span class="o">=</span> <span class="nb">false</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">    <span class="p">.</span><span class="n">current_limit</span>		<span class="o">=</span> <span class="n">MEMBLOCK_ALLOC_ANYWHERE</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl">
+</span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="cp">#ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="cp"></span><span class="k">struct</span> <span class="n">memblock_type</span> <span class="n">physmem</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">27</span><span class="cl">    <span class="p">.</span><span class="n">regions</span>		<span class="o">=</span> <span class="n">memblock_physmem_init_regions</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl">    <span class="p">.</span><span class="n">cnt</span>			<span class="o">=</span> <span class="mi">1</span><span class="p">,</span>	<span class="cm">/* empty dummy entry */</span>
+</span></span><span class="line"><span class="ln">29</span><span class="cl">    <span class="p">.</span><span class="n">max</span>			<span class="o">=</span> <span class="n">INIT_PHYSMEM_REGIONS</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">30</span><span class="cl">    <span class="p">.</span><span class="n">name</span>			<span class="o">=</span> <span class="s">&#34;physmem&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="cp">#endif
+</span></span></span></code></pre></div>
+<h2 id="12-memblock操作函数" data-numberify>1.2. memblock操作函数<a class="anchor ms-1" href="#12-memblock操作函数"></a></h2>
+<p>主要关注<code>struct memblock memblock</code>的<code>memory</code>和<code>reserved</code>两个成员和三个函数。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/pattern_frosty_frost_134125_300x168.jpg" length="18643" type="image/.jpg" />
     </item>
     
     <item>
       <title>exec系统调用简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/execve/</link>
       <pubDate>Wed, 03 Jan 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/execve/</guid>
-      <description><![CDATA[1. 动态链接和静态链接 1.1. 编译命令 1aarch64-linux-gnu-gcc -o dummy_arm64 dummy.c 2aarch64-linux-gnu-gcc -static -o dummy_arm64_static dummy.c 1.2. 查看文件格式信息 1$ file dummy_arm64* 2dummy_arm64: ELF 64-bit LSB executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=3fa0f1369e1b3181f059174b078dd893e813abb2, for GNU/Linux 3.7.0, with debug_info, not stripped 3dummy_arm64_static: ELF 64-bit LSB executable, ARM aarch64, version 1 (GNU/Linux), statically linked,]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/canvas_picture_abstraction_138874_300x168.jpg" length="19551" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-动态链接和静态链接" data-numberify>1. 动态链接和静态链接<a class="anchor ms-1" href="#1-动态链接和静态链接"></a></h1>
+
+<h2 id="11-编译命令" data-numberify>1.1. 编译命令<a class="anchor ms-1" href="#11-编译命令"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">aarch64-linux-gnu-gcc -o dummy_arm64 dummy.c
+</span></span><span class="line"><span class="ln">2</span><span class="cl">aarch64-linux-gnu-gcc -static -o dummy_arm64_static dummy.c
+</span></span></code></pre></div>
+<h2 id="12-查看文件格式信息" data-numberify>1.2. 查看文件格式信息<a class="anchor ms-1" href="#12-查看文件格式信息"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">$ file dummy_arm64*
+</span></span><span class="line"><span class="ln">2</span><span class="cl">dummy_arm64:        ELF 64-bit LSB executable, ARM aarch64, version <span class="m">1</span> <span class="o">(</span>SYSV<span class="o">)</span>, dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID<span class="o">[</span>sha1<span class="o">]=</span>3fa0f1369e1b3181f059174b078dd893e813abb2, <span class="k">for</span> GNU/Linux 3.7.0, with debug_info, not stripped
+</span></span><span class="line"><span class="ln">3</span><span class="cl">dummy_arm64_static: ELF 64-bit LSB executable, ARM aarch64, version <span class="m">1</span> <span class="o">(</span>GNU/Linux<span class="o">)</span>, statically linked, BuildID<span class="o">[</span>sha1<span class="o">]=</span>5475ac20b174d94d96e666e170fb2d6ce69cdf76, <span class="k">for</span> GNU/Linux 3.7.0, with debug_info, not stripped
+</span></span></code></pre></div>
+<h2 id="13-读取elf文件信息" data-numberify>1.3. 读取elf文件信息<a class="anchor ms-1" href="#13-读取elf文件信息"></a></h2>
+<p>可以看到动态链接的程序需要有解释器<code>/lib64/ld-linux-x86-64.so.2</code>，与<code>file</code>目录看到的是一样的。静态链接的程序没有解释器段。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lava_texture_surface_140175_300x168.jpg" length="10556" type="image/.jpg" />
     </item>
     
     <item>
       <title>进程调度简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/schedule1/</link>
       <pubDate>Wed, 03 Jan 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/schedule1/</guid>
-      <description><![CDATA[1. 运行队列：runqueue Linux内核使用运行队列来管理每个CPU上运行的任务，要运行的任务抽象成“调度实体”，调度实体可以是进程、线程]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wavy_motley_metallic_139065_300x168.jpg" length="26579" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-运行队列runqueue" data-numberify>1. 运行队列：runqueue<a class="anchor ms-1" href="#1-运行队列runqueue"></a></h1>
+<p>Linux内核使用运行队列来管理每个CPU上运行的任务，要运行的任务抽象成“调度实体”，调度实体可以是进程、线程或任务组。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/dots_light_background_50767_300x168.jpg" length="5596" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux进程命名空间（pid namespace）</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/pid_namespace/</link>
       <pubDate>Sun, 31 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/pid_namespace/</guid>
-      <description><![CDATA[1. namespace简介 namespace是Linux提供的一种内核级别环境隔离的方法，很多编程语言也有namespace这样的功能，例如C]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/iridescent_colorful_lines_130978_300x168.jpg" length="11918" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-namespace简介" data-numberify>1. namespace简介<a class="anchor ms-1" href="#1-namespace简介"></a></h1>
+<p>namespace是Linux提供的一种内核级别环境隔离的方法，很多编程语言也有namespace这样的功能，例如C++，Java等。编程语言的namespace是为了解决项目中能够在不同的命名空间里使用相同的函数名或者类名。而Linux的namespace也是为了实现资源能够在不同的命名空间里有相同的名称，比如在A命名空间有个pid为1的进程，而在B命名空间中也可以有一个pid为1的进程。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lines_obliquely_stripes_123801_300x168.jpg" length="18016" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux进程和线程关系</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/relationship/</link>
       <pubDate>Wed, 27 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/relationship/</guid>
-      <description><![CDATA[1. 基本概念 Linux内核中没有使用单独的数据结构来描述进程和线程，而是将它们统一起来，使用task_struct结构体来描述，这就是“Lin]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/trunk_tree_texture_119590_300x168.jpg" length="18828" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-基本概念" data-numberify>1. 基本概念<a class="anchor ms-1" href="#1-基本概念"></a></h1>
+<p>Linux内核中没有使用单独的数据结构来描述进程和线程，而是将它们统一起来，使用task_struct结构体来描述，这就是“Linux不区分进程和线程”的来源。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" length="24563" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux进程状态与生命周期</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/task_state/</link>
       <pubDate>Wed, 13 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/task_state/</guid>
-      <description><![CDATA[1. 进程状态切换 state value desc TASK_NEW 0x00000800 新建 TASK_RUNNING 0x00000000 就绪或占有cpu运行 TASK_INTERRUPTIBLE 0x00000001 可中断睡眠 TASK_UNINTERRUPTIBLE 0x00000002 不可中断睡眠 TASK_WAKEKILL 0x00000100 可以在stopped/traced/killable的]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/dunes_sand_texture_151004_300x168.jpg" length="17708" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-进程状态切换" data-numberify>1. 进程状态切换<a class="anchor ms-1" href="#1-进程状态切换"></a></h1>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.6/sched/task_state/task_statemachine.png" loading="lazy" width="1633" height="452" />
+</picture>
+
+</p>
+<table>
+  <thead>
+      <tr>
+          <th>state</th>
+          <th>value</th>
+          <th>desc</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>TASK_NEW</td>
+          <td>0x00000800</td>
+          <td>新建</td>
+      </tr>
+      <tr>
+          <td>TASK_RUNNING</td>
+          <td>0x00000000</td>
+          <td>就绪或占有cpu运行</td>
+      </tr>
+      <tr>
+          <td>TASK_INTERRUPTIBLE</td>
+          <td>0x00000001</td>
+          <td>可中断睡眠</td>
+      </tr>
+      <tr>
+          <td>TASK_UNINTERRUPTIBLE</td>
+          <td>0x00000002</td>
+          <td>不可中断睡眠</td>
+      </tr>
+      <tr>
+          <td>TASK_WAKEKILL</td>
+          <td>0x00000100</td>
+          <td>可以在stopped/traced/killable的情况下唤醒</td>
+      </tr>
+      <tr>
+          <td>TASK_WAKING</td>
+          <td>0x00000200</td>
+          <td>正在被唤醒</td>
+      </tr>
+      <tr>
+          <td>__TASK_STOPPED</td>
+          <td>0x00000004</td>
+          <td>和其他状态组合，用于唤醒包含此状态标记的进程</td>
+      </tr>
+      <tr>
+          <td>TASK_STOPPED</td>
+          <td>0x00000104</td>
+          <td>TASK_WAKEKILL和__TASK_STOPPED的组合</td>
+      </tr>
+      <tr>
+          <td>TASK_IDLE</td>
+          <td>0x00000402</td>
+          <td>TASK_UNINTERRUPTIBLE和TASK_NOLOAD的组合</td>
+      </tr>
+      <tr>
+          <td>TASK_DEAD</td>
+          <td>0x00000080</td>
+          <td>进程消亡，即将回收task_struct</td>
+      </tr>
+      <tr>
+          <td>EXIT_DEAD</td>
+          <td>0x00000010</td>
+          <td>来自EXIT_ZOMBIE，即将回收task_struct</td>
+      </tr>
+      <tr>
+          <td>EXIT_ZOMBIE</td>
+          <td>0x00000020</td>
+          <td>僵尸态，进程已经结束，但task_struct还没有回收</td>
+      </tr>
+  </tbody>
+</table>
+<p>EXIT前缀的状态，是由<code>struct task_struct.exit_state</code>使用的。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_1280x720.jpg" length="194685" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux ARM64页面大小和虚拟地址位数</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtable/</link>
       <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtable/</guid>
-      <description><![CDATA[ARM64的可配置的页面大小和虚拟地址位数是由ARM硬件决定的，不同的ARM版本，可选择的页面大小和地址位数也不一样。比如52位虚拟地址和物]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/squares_colorful_texture_133972_300x168.jpg" length="17371" type="image/.jpg" />
+      <description><![CDATA[<p>ARM64的可配置的页面大小和虚拟地址位数是由ARM硬件决定的，不同的ARM版本，可选择的页面大小和地址位数也不一样。比如52位虚拟地址和物理地址是在ARMv8.2及之后的架构才支持的，ARMv8.2提供了两种重要的拓展：大虚拟寻址（LVA）和大物理寻址（LPA）。Linux从5.4开始支持ARM64的52位虚拟地址和物理地址。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/chip_circuit_processor_140251_300x168.jpg" length="19023" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux内核常见ARM64汇编宏</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/asm_macors/</link>
       <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/asm_macors/</guid>
       <description><![CDATA[ARM64汇编宏：adr_l]]></description>
     <enclosure url="https://kingdix10.github.io/covers/paint_grunge_green_124502_300x168.jpg" length="5826" type="image/.jpg" />
@@ -192,19 +361,103 @@
       <title>Linux内核sched_class汇总</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_table/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/sched/sched_class_table/</guid>
-      <description><![CDATA[1. vmlinux中shced_class的位置 1/// kernel/sched/sched.h 2/* 3 * Helper to define a sched_class instance; each one is placed in a separate 4 * section which is ordered by the linker script: 5 * 6 * include/asm-generic/vmlinux.lds.h 7 * 8 * *CAREFUL* they are laid out in *REVERSE* order!!! 9 *]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/mosaic_multicolored_texture_126795_300x168.jpg" length="20064" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-vmlinux中shced_class的位置" data-numberify>1. vmlinux中shced_class的位置<a class="anchor ms-1" href="#1-vmlinux中shced_class的位置"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// kernel/sched/sched.h
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> * Helper to define a sched_class instance; each one is placed in a separate
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cm"> * section which is ordered by the linker script:
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cm"> *   include/asm-generic/vmlinux.lds.h
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> * *CAREFUL* they are laid out in *REVERSE* order!!!
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> * Also enforce alignment on the instance, not the type, to guarantee layout.
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cp">#define DEFINE_SCHED_CLASS(name) \
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="cp">const struct sched_class name##_sched_class \
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="cp">	__aligned(__alignof__(struct sched_class)) \
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cp">	__section(&#34;__&#34; #name &#34;_sched_class&#34;)
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cm">/* Defined in include/asm-generic/vmlinux.lds.h */</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="k">extern</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">__sched_class_highest</span><span class="p">[];</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="k">extern</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">__sched_class_lowest</span><span class="p">[];</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">
+</span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="cp">#define for_class_range(class, _from, _to) \
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="cp">	for (class = (_from); class &lt; (_to); class++)
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="cp">#define for_each_class(class) \
+</span></span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="cp">	for_class_range(class, __sched_class_highest, __sched_class_lowest)
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="cp">#define sched_class_above(_a, _b)	((_a) &lt; (_b))
+</span></span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="k">extern</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">stop_sched_class</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="k">extern</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">dl_sched_class</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="k">extern</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">rt_sched_class</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="k">extern</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">fair_sched_class</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">33</span><span class="cl"><span class="k">extern</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">sched_class</span> <span class="n">idle_sched_class</span><span class="p">;</span>
+</span></span></code></pre></div><p><code>sched_class</code>定义。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg" length="10737" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux中断处理流程图</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_flow/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_flow/</guid>
-      <description><![CDATA[sequenceDiagram participant caller as caller participant irq as irq.c participant irqdomain as irqdomain.c participant irqdesc as irqdesc.c participant bitmap as bitmap.c activate caller caller -&gt;&gt; irq: irq_of_parse_and_map activate irq Note right of irq: irq_of_parse_and_map irq -&gt;&gt; irq: of_irq_parse_one irq -&gt;&gt; irqdomain: irq_create_of_mapping activate irqdomain Note right of irqdomain :irq_create_of_mapping irqdomain -&gt;&gt; irqdomain: of_phandle_args_to_fwspec irqdomain -&gt;&gt; irqdomain: irq_create_fwspec_mapping activate irqdomain Note right of irqdomain :irq_create_fwspec_mapping irqdomain -&gt;&gt; irqdomain: irq_domain_translate irqdomain -&gt;&gt;]]></description>
+      <description><![CDATA[<pre class="text-center mermaid">sequenceDiagram
+    participant caller as caller
+    participant irq as irq.c
+    participant irqdomain as irqdomain.c
+    participant irqdesc as irqdesc.c
+    participant bitmap as bitmap.c
+
+    activate caller
+    caller -&gt;&gt; irq: irq_of_parse_and_map
+
+    activate irq
+        Note right of irq: irq_of_parse_and_map
+        irq -&gt;&gt; irq: of_irq_parse_one
+        irq -&gt;&gt; irqdomain: irq_create_of_mapping
+        activate irqdomain
+        Note right of irqdomain :irq_create_of_mapping
+        irqdomain -&gt;&gt; irqdomain: of_phandle_args_to_fwspec
+        irqdomain -&gt;&gt; irqdomain: irq_create_fwspec_mapping
+        activate irqdomain
+            Note right of irqdomain :irq_create_fwspec_mapping
+            irqdomain -&gt;&gt; irqdomain: irq_domain_translate
+            irqdomain -&gt;&gt; irqdomain: irq_find_mapping
+            opt irq_find_mapping &gt; 0
+                irqdomain --&gt;&gt; irq: return
+                irq --&gt;&gt; caller: return
+            end
+            alt irq_domain_is_hierarchy
+                irqdomain -&gt;&gt; irqdomain: irq_domain_alloc_irqs
+                irqdomain -&gt;&gt; irqdesc: irq_domain_alloc_descs
+        activate irqdesc
+        Note right of irqdesc :irq_domain_alloc_descs
+            else
+                irqdomain -&gt;&gt; irqdomain: irq_create_mapping
+                irqdomain -&gt;&gt; irqdesc: irq_domain_alloc_descs
+            end
+        irqdesc -&gt;&gt; irqdesc : __irq_alloc_descs
+        activate irqdesc
+        Note right of irqdesc: __irq_alloc_descs
+        irqdesc -&gt;&gt; bitmap: bitmap_find_next_zero_area
+        activate bitmap
+        bitmap -&gt;&gt; bitmap: bitmap_find_next_zero_area_off
+        bitmap --&gt;&gt; irqdesc: return
+        deactivate bitmap
+        irqdesc --&gt;&gt; irqdomain: return
+        deactivate irqdomain
+        deactivate irqdesc
+        deactivate irqdesc
+
+        irqdomain --&gt;&gt; irq: return
+        deactivate irqdomain
+        irq --&gt;&gt; caller: return
+    deactivate irq
+    deactivate caller</pre>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/desert_sand_wavy_141026_300x168.jpg" length="13782" type="image/.jpg" />
     </item>
     

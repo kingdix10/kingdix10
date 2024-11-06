@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>git on kingdix10&#39;s site</title>
+    <title>Git on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/tags/git/</link>
-    <description>Recent content in git on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Git on kingdix10&#39;s site</description>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Sat, 27 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/git/index.xml" rel="self" type="application/rss+xml" />
@@ -12,10 +13,29 @@
       <title>git配置和操作</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/git/git_misc/</link>
       <pubDate>Sat, 27 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/git/git_misc/</guid>
-      <description><![CDATA[官方资料：Git Community Book 中文版 1. 个人gitconfig 1# cat ~/.gitconfig 2 3[color] 4 ui = auto 5 6[safe] 7# directory = * 8 9[core] 10# 支持中文 11 quotepath = false 12 editor = vim 13# 14 pager = less -x1,5 15# 支持https下]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wall_brick_purple_141823_300x168.jpg" length="14935" type="image/.jpg" />
+      <description><![CDATA[<p>官方资料：<a href="http://gitbook.liuhui998.com/index.html" target="_blank" rel="noopener noreferrer">Git Community Book 中文版<i class="fas fa-external-link-square-alt ms-1"></i></a></p>
+
+<h1 id="1-个人gitconfig" data-numberify>1. 个人gitconfig<a class="anchor ms-1" href="#1-个人gitconfig"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln"> 1</span><span class="cl"># cat ~/.gitconfig
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">[color]
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">	ui = auto
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">[safe]
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">#	directory = *
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">[core]
+</span></span><span class="line"><span class="ln">10</span><span class="cl"># 支持中文
+</span></span><span class="line"><span class="ln">11</span><span class="cl">	quotepath = false
+</span></span><span class="line"><span class="ln">12</span><span class="cl">	editor = vim
+</span></span><span class="line"><span class="ln">13</span><span class="cl">#
+</span></span><span class="line"><span class="ln">14</span><span class="cl">	pager = less -x1,5
+</span></span><span class="line"><span class="ln">15</span><span class="cl"># 支持https下保存用户名密码
+</span></span><span class="line"><span class="ln">16</span><span class="cl">[credential]
+</span></span><span class="line"><span class="ln">17</span><span class="cl">	helper = store
+</span></span></code></pre></div><p>参考<a href="https://zhuanlan.zhihu.com/p/133706032" target="_blank" rel="noopener noreferrer">git 显示中文和解决中文乱码<i class="fas fa-external-link-square-alt ms-1"></i></a></p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/code_text_colorful_140555_300x168.jpg" length="22830" type="image/.jpg" />
     </item>
     
   </channel>

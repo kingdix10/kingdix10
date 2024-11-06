@@ -4,7 +4,8 @@
     <title>Bash on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/tags/bash/</link>
     <description>Recent content in Bash on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Sun, 25 Feb 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/bash/index.xml" rel="self" type="application/rss+xml" />
@@ -12,20 +13,35 @@
       <title>Linux Bash技巧</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/bash_tips/</link>
       <pubDate>Sun, 25 Feb 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/bash_tips/</guid>
-      <description><![CDATA[1. shell语法 shell核心基础知识 进阶版 2. 忽略大小写 重新进入bash后生效。 1echo &#39;set completion-ignore-case on&#39; &gt; ~/.inputrc 3. 临时使用alias前的命令 参考LINUX下使用]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_autumn_129305_300x168.jpg" length="15566" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-shell语法" data-numberify>1. shell语法<a class="anchor ms-1" href="#1-shell语法"></a></h1>
+<p><a href="https://www.jianshu.com/p/fdcbd620c07e" target="_blank" rel="noopener noreferrer">shell核心基础知识 进阶版<i class="fas fa-external-link-square-alt ms-1"></i></a></p>
+
+<h1 id="2-忽略大小写" data-numberify>2. 忽略大小写<a class="anchor ms-1" href="#2-忽略大小写"></a></h1>
+<p>重新进入bash后生效。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="nb">echo</span> <span class="s1">&#39;set completion-ignore-case on&#39;</span> &gt; ~/.inputrc
+</span></span></code></pre></div>
+<h1 id="3-临时使用alias前的命令" data-numberify>3. 临时使用alias前的命令<a class="anchor ms-1" href="#3-临时使用alias前的命令"></a></h1>
+<p>参考<a href="https://blog.csdn.net/imtech/article/details/126124210" target="_blank" rel="noopener noreferrer">LINUX下使用命令行获取公网IP地址转载<i class="fas fa-external-link-square-alt ms-1"></i></a></p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lines_intersection_oblique_153331_300x168.jpg" length="16159" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux Bash终端美化</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/bash_decorate/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/bash_decorate/</guid>
-      <description><![CDATA[1. PS1示例 先说一下bash版本 1$ bash --version 2GNU bash, version 5.1.4(1)-release (x86_64-pc-linux-gnu) 3Copyright (C) 2020 Free Software Foundation, Inc. 4License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt; 5 6This is free software; you are free to change and redistribute it. 7There is NO WARRANTY, to the extent permitted by law. bash中的P]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/keyboard_laptop_gradient_203739_300x168.jpg" length="10539" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-ps1示例" data-numberify>1. PS1示例<a class="anchor ms-1" href="#1-ps1示例"></a></h1>
+<p>先说一下bash版本</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln">1</span><span class="cl">$ bash --version
+</span></span><span class="line"><span class="ln">2</span><span class="cl">GNU bash, version 5.1.4(1)-release (x86_64-pc-linux-gnu)
+</span></span><span class="line"><span class="ln">3</span><span class="cl">Copyright (C) 2020 Free Software Foundation, Inc.
+</span></span><span class="line"><span class="ln">4</span><span class="cl">License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;
+</span></span><span class="line"><span class="ln">5</span><span class="cl">
+</span></span><span class="line"><span class="ln">6</span><span class="cl">This is free software; you are free to change and redistribute it.
+</span></span><span class="line"><span class="ln">7</span><span class="cl">There is NO WARRANTY, to the extent permitted by law.
+</span></span></code></pre></div><p>bash中的PS1是主提示符变量，也是默认提示符变量。另外需要注意，<code>PS1</code>对bash起作用，对sh是无效的。可以通过<code>echo $SHELL</code>确认当前用户使用的shell是否为bash。除了PS1外，还有PS2、PS3、PS4几个环境变量用来提示一些其他信息。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/paint_canvas_stains_124156_300x168.jpg" length="18821" type="image/.jpg" />
     </item>
     
   </channel>

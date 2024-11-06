@@ -4,7 +4,8 @@
     <title>内存管理 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/categories/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</link>
     <description>Recent content in 内存管理 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Mon, 30 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
@@ -12,70 +13,157 @@
       <title>kmalloc和vmalloc对比</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_vmalloc/</link>
       <pubDate>Mon, 30 Sep 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_vmalloc/</guid>
-      <description><![CDATA[1. kmalloc和vmalloc对比 以ARM64为例，不考虑高端内存。 1.1. 实现原理 kmalloc和vmalloc底层函数都是__alloc_p]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/drone_camera_technology_171576_300x168.jpg" length="10102" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-kmalloc和vmalloc对比" data-numberify>1. kmalloc和vmalloc对比<a class="anchor ms-1" href="#1-kmalloc和vmalloc对比"></a></h1>
+<p>以ARM64为例，不考虑高端内存。</p>
+
+<h2 id="11-实现原理" data-numberify>1.1. 实现原理<a class="anchor ms-1" href="#11-实现原理"></a></h2>
+<p><code>kmalloc</code>和<code>vmalloc</code>底层函数都是<code>__alloc_pages</code>。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/wall_brick_neon_150470_300x168.jpg" length="13857" type="image/.jpg" />
     </item>
     
     <item>
       <title>vmalloc原理</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/vmalloc/</link>
       <pubDate>Sat, 01 Jun 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/vmalloc/</guid>
-      <description><![CDATA[1. 全局数据结构 1/// mm/vmalloc.c 2/* Export for kexec only */ 3LIST_HEAD(vmap_area_list); 4static struct rb_root vmap_area_root = RB_ROOT; 5/// ... ... 6 7/* 8 * This kmem_cache is used for vmap_area objects. Instead of 9 * allocating from slab we reuse an object from this cache to 10 * make things faster. Especially in &#34;no edge&#34; splitting of 11 * free block. 12 */ 13static struct]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/metal_texture_surface_157344_300x168.jpg" length="9729" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-全局数据结构" data-numberify>1. 全局数据结构<a class="anchor ms-1" href="#1-全局数据结构"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// mm/vmalloc.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="cm">/* Export for kexec only */</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="nf">LIST_HEAD</span><span class="p">(</span><span class="n">vmap_area_list</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="k">static</span> <span class="k">struct</span> <span class="n">rb_root</span> <span class="n">vmap_area_root</span> <span class="o">=</span> <span class="n">RB_ROOT</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="c1">/// ... ...
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cm"> * This kmem_cache is used for vmap_area objects. Instead of
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cm"> * allocating from slab we reuse an object from this cache to
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cm"> * make things faster. Especially in &#34;no edge&#34; splitting of
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cm"> * free block.
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="k">static</span> <span class="k">struct</span> <span class="n">kmem_cache</span> <span class="o">*</span><span class="n">vmap_area_cachep</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">
+</span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="cm"> * This linked list is used in pair with free_vmap_area_root.
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="cm"> * It gives O(1) access to prev/next to perform fast coalescing.
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="k">static</span> <span class="nf">LIST_HEAD</span><span class="p">(</span><span class="n">free_vmap_area_list</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">
+</span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="cm"> * This augment red-black tree represents the free vmap space.
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="cm"> * All vmap_area objects in this tree are sorted by va-&gt;va_start
+</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="cm"> * address. It is used for allocation and merging when a vmap
+</span></span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="cm"> * object is released.
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="cm"> * Each vmap_area node contains a maximum available free block
+</span></span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="cm"> * of its sub-tree, right or left. Therefore it is possible to
+</span></span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="cm"> * find a lowest match of free area.
+</span></span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="k">static</span> <span class="k">struct</span> <span class="n">rb_root</span> <span class="n">free_vmap_area_root</span> <span class="o">=</span> <span class="n">RB_ROOT</span><span class="p">;</span>
+</span></span></code></pre></div><p><code>vmalloc</code>管理的内存区域使用<code>struct vmap_area</code>描述，<code>vmap_area_cachep</code>用于分配<code>struct vmap_area</code>对象。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/binary_code_code_numbers_147523_300x168.jpg" length="15658" type="image/.jpg" />
     </item>
     
     <item>
       <title>ARM64 Linux内核内存大小和布局</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/memory_size_layout/</link>
       <pubDate>Wed, 03 Jan 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/memory_size_layout/</guid>
-      <description><![CDATA[1. memblock 1.1. 结构体 memblock相关的全局变量是编译时静态初始化的。 1/// mm/memblock.c 2 3/// INIT_MEMBLOCK_MEMORY_REGIONS和INIT_]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wood_texture_logs_159793_300x168.jpg" length="19513" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-memblock" data-numberify>1. memblock<a class="anchor ms-1" href="#1-memblock"></a></h1>
+
+<h2 id="11-结构体" data-numberify>1.1. 结构体<a class="anchor ms-1" href="#11-结构体"></a></h2>
+<p><code>memblock</code>相关的全局变量是编译时静态初始化的。</p>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.6/mm/memory_size_layout/memblock.png" loading="lazy" width="1212" height="562" />
+</picture>
+
+</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// mm/memblock.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="c1">/// INIT_MEMBLOCK_MEMORY_REGIONS和INIT_MEMBLOCK_RESERVED_REGIONS见arch/arm64/include/asm/memory.h
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="k">struct</span> <span class="n">memblock_region</span> <span class="n">memblock_memory_init_regions</span><span class="p">[</span><span class="n">INIT_MEMBLOCK_MEMORY_REGIONS</span><span class="p">]</span> <span class="n">__initdata_memblock</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="k">static</span> <span class="k">struct</span> <span class="n">memblock_region</span> <span class="n">memblock_reserved_init_regions</span><span class="p">[</span><span class="n">INIT_MEMBLOCK_RESERVED_REGIONS</span><span class="p">]</span> <span class="n">__initdata_memblock</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cp">#ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cp"></span><span class="k">static</span> <span class="k">struct</span> <span class="n">memblock_region</span> <span class="n">memblock_physmem_init_regions</span><span class="p">[</span><span class="n">INIT_PHYSMEM_REGIONS</span><span class="p">];</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="k">struct</span> <span class="n">memblock</span> <span class="n">memblock</span> <span class="n">__initdata_memblock</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">    <span class="p">.</span><span class="n">memory</span><span class="p">.</span><span class="n">regions</span>		<span class="o">=</span> <span class="n">memblock_memory_init_regions</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="p">.</span><span class="n">memory</span><span class="p">.</span><span class="n">cnt</span>		<span class="o">=</span> <span class="mi">1</span><span class="p">,</span>	<span class="cm">/* empty dummy entry */</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">    <span class="p">.</span><span class="n">memory</span><span class="p">.</span><span class="n">max</span>		<span class="o">=</span> <span class="n">INIT_MEMBLOCK_MEMORY_REGIONS</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">    <span class="p">.</span><span class="n">memory</span><span class="p">.</span><span class="n">name</span>		<span class="o">=</span> <span class="s">&#34;memory&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">
+</span></span><span class="line"><span class="ln">16</span><span class="cl">    <span class="p">.</span><span class="n">reserved</span><span class="p">.</span><span class="n">regions</span>	<span class="o">=</span> <span class="n">memblock_reserved_init_regions</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">    <span class="p">.</span><span class="n">reserved</span><span class="p">.</span><span class="n">cnt</span>		<span class="o">=</span> <span class="mi">1</span><span class="p">,</span>	<span class="cm">/* empty dummy entry */</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">    <span class="p">.</span><span class="n">reserved</span><span class="p">.</span><span class="n">max</span>		<span class="o">=</span> <span class="n">INIT_MEMBLOCK_RESERVED_REGIONS</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">    <span class="p">.</span><span class="n">reserved</span><span class="p">.</span><span class="n">name</span>		<span class="o">=</span> <span class="s">&#34;reserved&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">
+</span></span><span class="line"><span class="ln">21</span><span class="cl">    <span class="p">.</span><span class="n">bottom_up</span>		<span class="o">=</span> <span class="nb">false</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">    <span class="p">.</span><span class="n">current_limit</span>		<span class="o">=</span> <span class="n">MEMBLOCK_ALLOC_ANYWHERE</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl">
+</span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="cp">#ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="cp"></span><span class="k">struct</span> <span class="n">memblock_type</span> <span class="n">physmem</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">27</span><span class="cl">    <span class="p">.</span><span class="n">regions</span>		<span class="o">=</span> <span class="n">memblock_physmem_init_regions</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl">    <span class="p">.</span><span class="n">cnt</span>			<span class="o">=</span> <span class="mi">1</span><span class="p">,</span>	<span class="cm">/* empty dummy entry */</span>
+</span></span><span class="line"><span class="ln">29</span><span class="cl">    <span class="p">.</span><span class="n">max</span>			<span class="o">=</span> <span class="n">INIT_PHYSMEM_REGIONS</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">30</span><span class="cl">    <span class="p">.</span><span class="n">name</span>			<span class="o">=</span> <span class="s">&#34;physmem&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="cp">#endif
+</span></span></span></code></pre></div>
+<h2 id="12-memblock操作函数" data-numberify>1.2. memblock操作函数<a class="anchor ms-1" href="#12-memblock操作函数"></a></h2>
+<p>主要关注<code>struct memblock memblock</code>的<code>memory</code>和<code>reserved</code>两个成员和三个函数。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/pattern_frosty_frost_134125_300x168.jpg" length="18643" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux ARM64页面大小和虚拟地址位数</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtable/</link>
       <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtable/</guid>
-      <description><![CDATA[ARM64的可配置的页面大小和虚拟地址位数是由ARM硬件决定的，不同的ARM版本，可选择的页面大小和地址位数也不一样。比如52位虚拟地址和物]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/squares_colorful_texture_133972_300x168.jpg" length="17371" type="image/.jpg" />
+      <description><![CDATA[<p>ARM64的可配置的页面大小和虚拟地址位数是由ARM硬件决定的，不同的ARM版本，可选择的页面大小和地址位数也不一样。比如52位虚拟地址和物理地址是在ARMv8.2及之后的架构才支持的，ARMv8.2提供了两种重要的拓展：大虚拟寻址（LVA）和大物理寻址（LPA）。Linux从5.4开始支持ARM64的52位虚拟地址和物理地址。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/chip_circuit_processor_140251_300x168.jpg" length="19023" type="image/.jpg" />
     </item>
     
     <item>
       <title>kmalloc分配内存的大小(基于linux-5.15)</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_size/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/kmalloc_size/</guid>
-      <description><![CDATA[1. kmalloc分配内存的大小 本文基于linux-5.15分析，linux-6.6已经删除slob，后续也会将slab移除。 kmalloc会]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/laptop_keyboard_glow_170138_300x168.jpg" length="3604" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-kmalloc分配内存的大小" data-numberify>1. kmalloc分配内存的大小<a class="anchor ms-1" href="#1-kmalloc分配内存的大小"></a></h1>
+<p>本文基于<code>linux-5.15</code>分析，linux-6.6已经删除slob，后续也会将slab移除。</p>
+<p><code>kmalloc</code>会根据申请的内存大小来决定来决定使用块分配器(slab/slub/slob)或页分配器进行内存分配。
+控制<code>kmalloc</code>分配行为的主要有如下三个宏。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/spots_stains_colorful_147593_300x168.jpg" length="20423" type="image/.jpg" />
     </item>
     
     <item>
       <title>内存管理API汇总</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/mm_api/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/mm_api/</guid>
-      <description><![CDATA[1. 总览 如下为内核开发或驱动开发常见的内存管理API关系，其他如CMA分配器等相关API未列出。 1.1. 框架图 1.2. 函数图总览 2. memblock分配器 m]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/squares_structure_glow_140857_300x168.jpg" length="22907" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-总览" data-numberify>1. 总览<a class="anchor ms-1" href="#1-总览"></a></h1>
+<p>如下为内核开发或驱动开发常见的内存管理API关系，其他如CMA分配器等相关API未列出。</p>
+
+<h2 id="11-框架图" data-numberify>1.1. 框架图<a class="anchor ms-1" href="#11-框架图"></a></h2>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.6/mm/mm_api/mm_api_brief.png" loading="lazy" width="687" height="347" />
+</picture>
+
+</p>
+
+<h2 id="12-函数图总览" data-numberify>1.2. 函数图总览<a class="anchor ms-1" href="#12-函数图总览"></a></h2>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.6/mm/mm_api/slab_alloc_node.png" loading="lazy" width="2608" height="1873" />
+</picture>
+
+</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/keyboard_backlight_purple_212155_300x168.jpg" length="11894" type="image/.jpg" />
     </item>
     
     <item>
       <title>为什么要有idmap</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/why_idmap/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/why_idmap/</guid>
-      <description><![CDATA[要开启MMU，需要建立页表映射，而且需要处理缓存一致性的问题，这样内核启动的依赖条件就会变得复杂。为了降低启动代码的复杂度，约定在Linux]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/backlight_neon_electronics_144683_300x168.jpg" length="9613" type="image/.jpg" />
+      <description><![CDATA[<p>要开启MMU，需要建立页表映射，而且需要处理缓存一致性的问题，这样内核启动的依赖条件就会变得复杂。为了降低启动代码的复杂度，约定在Linux内核启动时，MMU是关闭的。这样也就意味着不能利用高速缓存的性能。为了获得更好的性能，也为了后续可以给不同的地址空间设置不同的访问属性以更好地管理内存，需要在某个阶段把MMU打开，并使能高速缓存。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/squares_colorful_texture_133972_300x168.jpg" length="17371" type="image/.jpg" />
     </item>
     
   </channel>

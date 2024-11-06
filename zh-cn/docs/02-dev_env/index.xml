@@ -4,7 +4,8 @@
     <title>开发环境 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/docs/02-dev_env/</link>
     <description>Recent content in 开发环境 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Mon, 05 Aug 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/docs/02-dev_env/index.xml" rel="self" type="application/rss+xml" />
@@ -12,9 +13,18 @@
       <title>VMware和Hyper-V回收虚拟磁盘空间</title>
       <link>https://kingdix10.github.io/zh-cn/docs/02-dev_env/vdisk_compact/</link>
       <pubDate>Mon, 05 Aug 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/02-dev_env/vdisk_compact/</guid>
-      <description><![CDATA[1. 基本原理 文件系统未占用的空间数据写完全0，会被视为空闲空间，可以被虚拟机软件回收。 操作步骤： 虚拟机内，空闲空间数据写0。 关闭虚拟机 回收虚拟]]></description>
+      <description><![CDATA[<h1 id="1-基本原理" data-numberify>1. 基本原理<a class="anchor ms-1" href="#1-基本原理"></a></h1>
+<p>文件系统未占用的空间数据写完全0，会被视为空闲空间，可以被虚拟机软件回收。</p>
+<p>操作步骤：</p>
+<ol>
+<li>虚拟机内，空闲空间数据写0。</li>
+<li>关闭虚拟机</li>
+<li>回收虚拟磁盘文件空间</li>
+</ol>
+
+<h1 id="2-文件系统和磁盘空闲区间擦除" data-numberify>2. 文件系统和磁盘空闲区间擦除<a class="anchor ms-1" href="#2-文件系统和磁盘空闲区间擦除"></a></h1>
+<p>对于根文件系统，只能使用<code>dd</code>命令创建全零文件模拟擦除。</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg" length="10737" type="image/.jpg" />
     </item>
     
@@ -22,7 +32,6 @@
       <title>磁盘和文件系统扩容/缩容</title>
       <link>https://kingdix10.github.io/zh-cn/docs/02-dev_env/resizefs/</link>
       <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/02-dev_env/resizefs/</guid>
       <description><![CDATA[Linux磁盘和文件系统扩容/缩容]]></description>
     <enclosure url="https://kingdix10.github.io/covers/lines_obliquely_stripes_123801_300x168.jpg" length="18016" type="image/.jpg" />
@@ -32,10 +41,31 @@
       <title>samba服务器搭建和使用</title>
       <link>https://kingdix10.github.io/zh-cn/docs/02-dev_env/samba/</link>
       <pubDate>Sun, 09 Jan 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/02-dev_env/samba/</guid>
-      <description><![CDATA[1. 准备工作 如果是虚拟机中安装的Linux系统，需要新建一个网络适配器，模式为桥接模式。 如果是独立的物理机安装了Linux系统，可以在路由器或]]></description>
+      <description><![CDATA[<h1 id="1-准备工作" data-numberify>1. 准备工作<a class="anchor ms-1" href="#1-准备工作"></a></h1>
+<p>如果是虚拟机中安装的<code>Linux</code>系统，需要新建一个网络适配器，模式为桥接模式。</p>
+<p>如果是独立的物理机安装了<code>Linux</code>系统，可以在路由器或交换机中，将物理机的IP地址设为固定的IP地址。</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/iridescent_colorful_lines_130978_300x168.jpg" length="11918" type="image/.jpg" />
+    </item>
+    
+    <item>
+      <title>sourceinsight快速建工程</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/02-dev_env/sourceinsight/</link>
+      <pubDate>Thu, 18 Jul 2019 00:00:00 +0000</pubDate>
+      <guid>https://kingdix10.github.io/zh-cn/docs/02-dev_env/sourceinsight/</guid>
+      <description><![CDATA[<h1 id="1-环境准备" data-numberify>1. 环境准备<a class="anchor ms-1" href="#1-环境准备"></a></h1>
+<ol>
+<li>Windows映射Linux下的Samba共享目录</li>
+<li>工具脚本：<a href="https://gitee.com/kingdix10/eel-ctools" target="_blank" rel="noopener noreferrer">https://gitee.com/kingdix10/eel-ctools<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+</ol>
+
+<h1 id="2-sourceinsight快速建工程" data-numberify>2. SourceInsight快速建工程<a class="anchor ms-1" href="#2-sourceinsight快速建工程"></a></h1>
+
+<h2 id="21-修改代码保留编译中间生成物" data-numberify>2.1. 修改代码，保留编译中间生成物<a class="anchor ms-1" href="#21-修改代码保留编译中间生成物"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">keepdep_patch.sh kernel/scirpts
+</span></span><span class="line"><span class="ln">2</span><span class="cl">keepdep_patch.sh u-boot/scirpts
+</span></span></code></pre></div><p>原理是保留编译过程中的<code>.d</code>文件，这个是编译器查找的依赖文件，可以保证添加文件时不会有多余的文件。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/camera_photographer_smoke_126548_300x168.jpg" length="9088" type="image/.jpg" />
     </item>
     
   </channel>

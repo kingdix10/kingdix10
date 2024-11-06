@@ -4,7 +4,8 @@
     <title>结构体 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/tags/%E7%BB%93%E6%9E%84%E4%BD%93/</link>
     <description>Recent content in 结构体 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Tue, 16 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/%E7%BB%93%E6%9E%84%E4%BD%93/index.xml" rel="self" type="application/rss+xml" />
@@ -12,10 +13,41 @@
       <title>用memcmp比较结构体会有什么问题</title>
       <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/c_struct_cmp/</link>
       <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/c_struct_cmp/</guid>
-      <description><![CDATA[1. 示例一 先看下如下代码，思考一下，结果是输出a == b还是a != b？ 1#include &lt;stdio.h&gt; 2#include &lt;string.h&gt; 3 4struct test_type { 5 char name[10]; 6 int i; 7 long l; 8}; 9 10int main(void) 11{ 12 struct test_type a = { 13 &#34;test&#34;, 1, 2 14 }; 15 struct test_type b; 16]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/trunk_tree_texture_119590_300x168.jpg" length="18828" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-示例一" data-numberify>1. 示例一<a class="anchor ms-1" href="#1-示例一"></a></h1>
+<p>先看下如下代码，思考一下，结果是输出<code>a == b</code>还是<code>a != b</code>？</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="k">struct</span> <span class="n">test_type</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">    <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="kt">long</span> <span class="n">l</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="k">struct</span> <span class="n">test_type</span> <span class="n">a</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">        <span class="s">&#34;test&#34;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">    <span class="k">struct</span> <span class="n">test_type</span> <span class="n">b</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl">
+</span></span><span class="line"><span class="ln">17</span><span class="cl">    <span class="n">b</span><span class="p">.</span><span class="n">i</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">    <span class="n">b</span><span class="p">.</span><span class="n">l</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">l</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">    <span class="nf">strcpy</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">
+</span></span><span class="line"><span class="ln">21</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">==</span> <span class="nf">memcmp</span><span class="p">(</span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">test_type</span><span class="p">)))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;a == b</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;a != b</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="ln">26</span><span class="cl">
+</span></span><span class="line"><span class="ln">27</span><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div>
+<h2 id="11-结果及分析" data-numberify>1.1. 结果及分析<a class="anchor ms-1" href="#11-结果及分析"></a></h2>
+<p>实际结果很可能是<code>a != b</code>。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_texture_127524_300x168.jpg" length="18901" type="image/.jpg" />
     </item>
     
   </channel>

@@ -4,7 +4,8 @@
     <title>环境搭建 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</link>
     <description>Recent content in 环境搭建 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Sun, 03 Dec 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/index.xml" rel="self" type="application/rss+xml" />
@@ -12,10 +13,11 @@
       <title>解决Windows不能使用python3.10的问题</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/win/win_python3/</link>
       <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/win/win_python3/</guid>
-      <description><![CDATA[1. 现象 Windows上输入python3 test.py后，脚本没有执行。 单独输入python3，会启动Microsoft Store，搜索Py]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/dots_light_background_50767_300x168.jpg" length="5596" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-现象" data-numberify>1. 现象<a class="anchor ms-1" href="#1-现象"></a></h1>
+<p>Windows上输入<code>python3 test.py</code>后，脚本没有执行。
+单独输入python3，会启动Microsoft Store，搜索Python3。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/pink_color_background_153889_300x168.jpg" length="1430" type="image/.jpg" />
     </item>
     
   </channel>

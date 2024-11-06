@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>samba on kingdix10&#39;s site</title>
+    <title>Samba on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/tags/samba/</link>
-    <description>Recent content in samba on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Samba on kingdix10&#39;s site</description>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Sun, 09 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/samba/index.xml" rel="self" type="application/rss+xml" />
@@ -12,9 +13,10 @@
       <title>samba服务器搭建和使用</title>
       <link>https://kingdix10.github.io/zh-cn/docs/02-dev_env/samba/</link>
       <pubDate>Sun, 09 Jan 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/02-dev_env/samba/</guid>
-      <description><![CDATA[1. 准备工作 如果是虚拟机中安装的Linux系统，需要新建一个网络适配器，模式为桥接模式。 如果是独立的物理机安装了Linux系统，可以在路由器或]]></description>
+      <description><![CDATA[<h1 id="1-准备工作" data-numberify>1. 准备工作<a class="anchor ms-1" href="#1-准备工作"></a></h1>
+<p>如果是虚拟机中安装的<code>Linux</code>系统，需要新建一个网络适配器，模式为桥接模式。</p>
+<p>如果是独立的物理机安装了<code>Linux</code>系统，可以在路由器或交换机中，将物理机的IP地址设为固定的IP地址。</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/iridescent_colorful_lines_130978_300x168.jpg" length="11918" type="image/.jpg" />
     </item>
     

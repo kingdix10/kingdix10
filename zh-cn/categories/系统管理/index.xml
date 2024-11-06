@@ -4,7 +4,8 @@
     <title>系统管理 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/categories/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86/</link>
     <description>Recent content in 系统管理 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Sun, 28 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
@@ -12,40 +13,122 @@
       <title>Debian安装和配置</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/debian_setup/</link>
       <pubDate>Sun, 28 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/debian_setup/</guid>
-      <description><![CDATA[1. 网址 1.1. Debian 官网：https://www.debian.org 下载链接： https://www.debian.org/distrib https://www.debian.org/distrib/netinst 如果不使用图形界面，可以下载网络安装ISO。 1.2. ElementaryOS elementar]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/paint_canvas_stains_124156_300x168.jpg" length="18821" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-网址" data-numberify>1. 网址<a class="anchor ms-1" href="#1-网址"></a></h1>
+
+<h2 id="11-debian" data-numberify>1.1. Debian<a class="anchor ms-1" href="#11-debian"></a></h2>
+<p>官网：<a href="https://www.debian.org" target="_blank" rel="noopener noreferrer">https://www.debian.org<i class="fas fa-external-link-square-alt ms-1"></i></a></p>
+<p>下载链接：</p>
+<ul>
+<li><a href="https://www.debian.org/distrib" target="_blank" rel="noopener noreferrer">https://www.debian.org/distrib<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li><a href="https://www.debian.org/distrib/netinst" target="_blank" rel="noopener noreferrer">https://www.debian.org/distrib/netinst<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+</ul>
+<p>如果不使用图形界面，可以下载网络安装ISO。</p>
+
+<h2 id="12-elementaryos" data-numberify>1.2. ElementaryOS<a class="anchor ms-1" href="#12-elementaryos"></a></h2>
+<p>elementaryOS基于Ubuntu。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lava_texture_surface_140175_300x168.jpg" length="10556" type="image/.jpg" />
     </item>
     
     <item>
       <title>Docker安装和配置</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/docker_setup/</link>
       <pubDate>Sun, 28 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/docker_setup/</guid>
-      <description><![CDATA[1. Docker安装 参考docker-ce | 镜像站使用帮助 | 清华大学开源软件镜像站，可以使用https://gitee.com/kingdix]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/code_text_colorful_140555_300x168.jpg" length="22830" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-docker安装" data-numberify>1. Docker安装<a class="anchor ms-1" href="#1-docker安装"></a></h1>
+<p>参考<a href="https://mirrors.tuna.tsinghua.edu.cn/help/docker-ce" target="_blank" rel="noopener noreferrer">docker-ce | 镜像站使用帮助 | 清华大学开源软件镜像站<i class="fas fa-external-link-square-alt ms-1"></i></a>，可以使用<a href="https://gitee.com/kingdix10/envsetup" target="_blank" rel="noopener noreferrer">https://gitee.com/kingdix10/envsetup<i class="fas fa-external-link-square-alt ms-1"></i></a>下的工具脚本。</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">script</th>
+          <th style="text-align: left">function</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">debian_install_docker.sh</td>
+          <td style="text-align: left">安装docker，使用tsinghua apt源</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">docker_conf_mirrors.sh</td>
+          <td style="text-align: left">修改docker镜像源</td>
+      </tr>
+  </tbody>
+</table>
+
+<h2 id="11-添加用户到docker组" data-numberify>1.1. 添加用户到docker组<a class="anchor ms-1" href="#11-添加用户到docker组"></a></h2>
+<p>安装docker需要添加用户到docker组，否则需要以root运行。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/paint_wall_shabby_135205_300x168.jpg" length="17321" type="image/.jpg" />
     </item>
     
     <item>
       <title>linux常用命令-系统管理</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_sys/</link>
       <pubDate>Sat, 09 Mar 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_sys/</guid>
-      <description><![CDATA[1. pstree查看进程树 1$ pstree -ptA 2systemd(1)-+-VGAuthService(546) 3 |-cron(625) 4 |-dbus-daemon(626) 5 |-dhclient(1587) 6 |-dhclient(1831) 7 |-rinetd(707) 8 |-rsyslogd(629)-+-{in:imklog}(632) 9 | |-{in:imuxsock}(631) 10 | `-{rs:main Q:Reg}(633) 2. ps 1# 查看命名空间，需要用root权限，可以使用sudo 2ps -eo pid,pidns,user,group,cmd 3# ps查]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/water_waves_ripples_143522_300x168.jpg" length="11080" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-pstree查看进程树" data-numberify>1. pstree查看进程树<a class="anchor ms-1" href="#1-pstree查看进程树"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln"> 1</span><span class="cl">$ pstree -ptA
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">systemd<span class="o">(</span>1<span class="o">)</span>-+-VGAuthService<span class="o">(</span>546<span class="o">)</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">           <span class="p">|</span>-cron<span class="o">(</span>625<span class="o">)</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">           <span class="p">|</span>-dbus-daemon<span class="o">(</span>626<span class="o">)</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">           <span class="p">|</span>-dhclient<span class="o">(</span>1587<span class="o">)</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">           <span class="p">|</span>-dhclient<span class="o">(</span>1831<span class="o">)</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">           <span class="p">|</span>-rinetd<span class="o">(</span>707<span class="o">)</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">           <span class="p">|</span>-rsyslogd<span class="o">(</span>629<span class="o">)</span>-+-<span class="o">{</span>in:imklog<span class="o">}(</span>632<span class="o">)</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">           <span class="p">|</span>               <span class="p">|</span>-<span class="o">{</span>in:imuxsock<span class="o">}(</span>631<span class="o">)</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">           <span class="p">|</span>               <span class="sb">`</span>-<span class="o">{</span>rs:main Q:Reg<span class="o">}(</span>633<span class="o">)</span>
+</span></span></code></pre></div>
+<h1 id="2-ps" data-numberify>2. ps<a class="anchor ms-1" href="#2-ps"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1"># 查看命名空间，需要用root权限，可以使用sudo</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">ps -eo pid,pidns,user,group,cmd
+</span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="c1"># ps查看进程间的关系。</span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl">ps -Teo ppid,sid,pgid,pid,tgid,tid,comm
+</span></span><span class="line"><span class="ln">5</span><span class="cl">
+</span></span><span class="line"><span class="ln">6</span><span class="cl">ps -eL -o pid,tid,stat,comm
+</span></span><span class="line"><span class="ln">7</span><span class="cl">ps -eL -o psr,pid,tid,stat,comm
+</span></span></code></pre></div>
+<h1 id="3-mount" data-numberify>3. mount<a class="anchor ms-1" href="#3-mount"></a></h1>
+
+<h2 id="31-使用mount替代软链接" data-numberify>3.1. 使用mount替代软链接<a class="anchor ms-1" href="#31-使用mount替代软链接"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1"># vi /etc/fstab</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">/data/docker		/var/lib/docker     none    <span class="nb">bind</span> <span class="m">0</span>       <span class="m">0</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl">
+</span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="c1"># 重新mount所有文件系统</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl">sudo mount -a
+</span></span></code></pre></div>
+<h2 id="32-挂载samba共享目录" data-numberify>3.2. 挂载samba共享目录<a class="anchor ms-1" href="#32-挂载samba共享目录"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="nv">MP</span><span class="o">=</span>/mnt/smb_share
+</span></span><span class="line"><span class="ln">2</span><span class="cl">
+</span></span><span class="line"><span class="ln">3</span><span class="cl">mkdir -p <span class="si">${</span><span class="nv">MP</span><span class="si">}</span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl">
+</span></span><span class="line"><span class="ln">5</span><span class="cl">mount -t cifs //<span class="si">${</span><span class="nv">IPADDR</span><span class="si">}</span>/share <span class="si">${</span><span class="nv">MP</span><span class="si">}</span> -o rw,noatime,nodiratime,file_mode<span class="o">=</span>0644,dir_mode<span class="o">=</span>0755,gid<span class="o">=</span>1000,uid<span class="o">=</span>1000,,username<span class="o">=</span><span class="si">${</span><span class="nv">USERNAME</span><span class="si">}</span>,pass<span class="o">=</span><span class="si">${</span><span class="nv">PASSWORD</span><span class="si">}</span>
+</span></span></code></pre></div>
+<h2 id="33-挂载u盘并指定默认用户等" data-numberify>3.3. 挂载U盘，并指定默认用户等<a class="anchor ms-1" href="#33-挂载u盘并指定默认用户等"></a></h2>
+<p>格式为exfat，如果不指定gid和uid，默认只有root可以写入。
+fmask和dmask参考Linux umask命令。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/texture_background_color_72786_300x168.jpg" length="9947" type="image/.jpg" />
     </item>
     
     <item>
       <title>Windows系统迁移</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/win/os_migrate/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/win/os_migrate/</guid>
-      <description><![CDATA[1. 旧机器拷贝 WEPE制作U盘启动盘 保留原硬盘，接新硬盘 开机选择进入PE 新硬盘改为GPT分区表，删除所有分区 拷贝或创建EFI分区，大小约为10]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/canvas_picture_abstraction_138874_300x168.jpg" length="19551" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-旧机器拷贝" data-numberify>1. 旧机器拷贝<a class="anchor ms-1" href="#1-旧机器拷贝"></a></h1>
+<ol>
+<li>WEPE制作U盘启动盘</li>
+<li>保留原硬盘，接新硬盘</li>
+<li>开机选择进入PE</li>
+<li>新硬盘改为GPT分区表，删除所有分区</li>
+<li>拷贝或创建EFI分区，大小约为100M即可，也可以加大</li>
+<li>【可选】拷贝或创建MSR分区，大小约为16M</li>
+<li>拷贝C盘</li>
+<li>【可选】拷贝其他有需要的分区</li>
+</ol>
+
+<h1 id="2-重建引导" data-numberify>2. 重建引导<a class="anchor ms-1" href="#2-重建引导"></a></h1>
+<p>在原机器PE中操作，完成后将硬盘换到新机器</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/cockpit_panel_display_169481_300x168.jpg" length="10012" type="image/.jpg" />
     </item>
     
   </channel>

@@ -4,98 +4,170 @@
     <title>内核调试 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/</link>
     <description>Recent content in 内核调试 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
-    <lastBuildDate>Wed, 04 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 06 Oct 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Linux使用ftrace进行boottime跟踪</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/boottime_trace/</link>
       <pubDate>Wed, 04 Sep 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/boottime_trace/</guid>
-      <description><![CDATA[1. 简介 要使用ftrace进行boottime追踪，可以使用内核参数(bootargs)或者bootconfig来进行配置。 关键的函数如下： 1+--]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/code_text_colorful_140555_300x168.jpg" length="22830" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-简介" data-numberify>1. 简介<a class="anchor ms-1" href="#1-简介"></a></h1>
+<p>要使用ftrace进行boottime追踪，可以使用内核参数(bootargs)或者bootconfig来进行配置。</p>
+<p>关键的函数如下：</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lines_multicolored_rainbow_125651_300x168.jpg" length="11453" type="image/.jpg" />
     </item>
     
     <item>
       <title>trace-cmd实例</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/trace_cmd_usage/</link>
       <pubDate>Wed, 04 Sep 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/trace_cmd_usage/</guid>
-      <description><![CDATA[1. trace-cmd trace-cmd需要root权限。 1.1. 使用步骤 1# 保存成文件 2trace-cmd record 3trace-cmd report 1# 从tracefs读取 2trace-cmd start 3trace-cmd stop 4trace-cmd show 5 6trace-cmd clear 7trace-cmd restart 8trace-cmd show 1.2. 常见需要忽略的函数 1#]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_autumn_129305_300x168.jpg" length="15566" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-trace-cmd" data-numberify>1. trace-cmd<a class="anchor ms-1" href="#1-trace-cmd"></a></h1>
+<p><code>trace-cmd</code>需要root权限。</p>
+
+<h2 id="11-使用步骤" data-numberify>1.1. 使用步骤<a class="anchor ms-1" href="#11-使用步骤"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1"># 保存成文件</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">trace-cmd record
+</span></span><span class="line"><span class="ln">3</span><span class="cl">trace-cmd report
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1"># 从tracefs读取</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">trace-cmd start
+</span></span><span class="line"><span class="ln">3</span><span class="cl">trace-cmd stop
+</span></span><span class="line"><span class="ln">4</span><span class="cl">trace-cmd show
+</span></span><span class="line"><span class="ln">5</span><span class="cl">
+</span></span><span class="line"><span class="ln">6</span><span class="cl">trace-cmd clear
+</span></span><span class="line"><span class="ln">7</span><span class="cl">trace-cmd restart
+</span></span><span class="line"><span class="ln">8</span><span class="cl">trace-cmd show
+</span></span></code></pre></div>
+<h2 id="12-常见需要忽略的函数" data-numberify>1.2. 常见需要忽略的函数<a class="anchor ms-1" href="#12-常见需要忽略的函数"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cp"># 内存分配
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cp"></span><span class="o">-</span><span class="n">n</span> <span class="n">kmem_cache_alloc</span> <span class="o">-</span><span class="n">n</span> <span class="n">__kmalloc</span> <span class="o">-</span><span class="n">n</span> <span class="n">kmalloc_trace</span> <span class="o">-</span><span class="n">n</span> <span class="n">kfree</span> <span class="o">-</span><span class="n">n</span> <span class="n">kmalloc_slab</span> <span class="o">-</span><span class="n">n</span> <span class="n">__kmalloc_node_track_caller</span> <span class="o">-</span><span class="n">n</span> <span class="n">vmalloc</span> <span class="o">-</span><span class="n">n</span> <span class="n">vfree</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cp"># 调度
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cp"></span><span class="o">-</span><span class="n">n</span> <span class="n">__cond_resched</span> <span class="o">-</span><span class="n">n</span> <span class="n">__wake_up</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cp"># 中断
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cp"></span><span class="o">-</span><span class="n">n</span> <span class="n">irq_enter_rcu</span> <span class="o">-</span><span class="n">n</span> <span class="n">irq_exit_rcu</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cp"># 锁
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cp"></span><span class="o">-</span><span class="n">n</span> <span class="err">&#39;</span><span class="o">*</span><span class="n">_</span><span class="o">*</span><span class="n">lock</span><span class="err">&#39;</span> <span class="o">-</span><span class="n">n</span> <span class="o">*</span><span class="n">_lock_irqsave</span> <span class="o">-</span><span class="n">n</span> <span class="o">*</span><span class="n">_unlock_irqrestore</span> <span class="o">-</span><span class="n">n</span> <span class="n">down_write</span> <span class="o">-</span><span class="n">n</span> <span class="n">up_write</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="o">-</span><span class="n">n</span> <span class="n">mutex_lock</span> <span class="o">-</span><span class="n">n</span> <span class="n">mutex_unlock</span> \
+</span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="o">-</span><span class="n">n</span> <span class="n">_raw_spin_lock</span> <span class="o">-</span><span class="n">n</span> <span class="n">_raw_spin_unlock</span> \
+</span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="o">-</span><span class="n">n</span> <span class="n">_raw_spin_lock_irqsave</span> <span class="o">-</span><span class="n">n</span> <span class="n">_raw_spin_unlock_irqrestore</span> \
+</span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="o">-</span><span class="n">n</span> <span class="n">__rcu_read_lock</span> <span class="o">-</span><span class="n">n</span> <span class="n">__rcu_read_unlock</span> \
+</span></span></code></pre></div>
+<h1 id="2-trace-cmd实例" data-numberify>2. trace-cmd实例<a class="anchor ms-1" href="#2-trace-cmd实例"></a></h1>
+
+<h2 id="21-跟踪已存在的进程" data-numberify>2.1. 跟踪已存在的进程<a class="anchor ms-1" href="#21-跟踪已存在的进程"></a></h2>
+<p>使用<code>function_graph</code></p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/wall_brick_purple_141823_300x168.jpg" length="14935" type="image/.jpg" />
     </item>
     
     <item>
       <title>ARM64 Crash调试环境搭建</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/arm64_setup/</link>
       <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/arm64_setup/</guid>
-      <description><![CDATA[1. ARM64 Crash调试环境搭建 主要参考资料： 内核源码 Documentation/admin-guide/kdump/kdump.rst或者Doc]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/vintage_retro_camera_126517_300x168.jpg" length="11143" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-arm64-crash调试环境搭建" data-numberify>1. ARM64 Crash调试环境搭建<a class="anchor ms-1" href="#1-arm64-crash调试环境搭建"></a></h1>
+<p>主要参考资料：</p>
+<ul>
+<li>内核源码 <code>Documentation/admin-guide/kdump/kdump.rst</code>或者<a href="https://www.kernel.org/doc/html/v6.6/admin-guide/kdump/kdump.html" target="_blank" rel="noopener noreferrer">Documentation for Kdump - The kexec-based Crash Dumping Solution<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li>Crash白皮书：<a href="https://crash-utility.github.io/crash_whitepaper.html" target="_blank" rel="noopener noreferrer">https://crash-utility.github.io/crash_whitepaper.html<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li>Crash github：<a href="https://github.com/crash-utility/crash" target="_blank" rel="noopener noreferrer">https://github.com/crash-utility/crash<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+<li>Oracle: <a href="https://docs.oracle.com/en/operating-systems/oracle-linux/6/admin/crash-debugger-use.html" target="_blank" rel="noopener noreferrer">Using the crash Debugger<i class="fas fa-external-link-square-alt ms-1"></i></a></li>
+</ul>
+
+<h2 id="11-x86_64主机编译arm64-crash工具" data-numberify>1.1. x86_64主机编译ARM64 Crash工具<a class="anchor ms-1" href="#11-x86_64主机编译arm64-crash工具"></a></h2>
+<p>在x86机器上安装的Crash工具不能直接调试ARM64的coredump文件。可以通过重新编译Crash源码来生成调试ARM64 coredump文件的Crash。参考<a href="https://github.com/crash-utility/crash/tree/8.0.3" target="_blank" rel="noopener noreferrer">https://github.com/crash-utility/crash/tree/8.0.3<i class="fas fa-external-link-square-alt ms-1"></i></a>的README中提供的编译方法，解压代码后，执行 <code>make target=ARM64</code>即可。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/pixels_cubes_shapes_127558_300x168.jpg" length="18339" type="image/.jpg" />
     </item>
     
     <item>
       <title>Crash帮助信息</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/help/</link>
       <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/help/</guid>
       <description><![CDATA[Crash帮助信息，来自于crash &ndash;help]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lines_plexus_neon_128926_300x168.jpg" length="24964" type="image/.jpg" />
+    <enclosure url="https://kingdix10.github.io/covers/travel_map_compass_123078_300x168.jpg" length="14785" type="image/.jpg" />
     </item>
     
     <item>
       <title>Crash命令介绍</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/crash_cmd_set/</link>
       <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/kdump_crash/crash_cmd_set/</guid>
-      <description><![CDATA[1. Crash命令介绍 虽然使用硬件设备来调试有很多优点和方便之处，但是我一直希望代码是可以自己调试自己的，从而避免使用一些昂贵的外部的的设备。]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/laptop_dj_equipment_212416_300x168.jpg" length="9857" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-crash命令介绍" data-numberify>1. Crash命令介绍<a class="anchor ms-1" href="#1-crash命令介绍"></a></h1>
+<p>虽然使用硬件设备来调试有很多优点和方便之处，但是我一直希望代码是可以自己调试自己的，从而避免使用一些昂贵的外部的的设备。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/hologram_scheme_scifi_139294_300x168.jpg" length="9556" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux printk日志输出格式控制</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-formats/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-formats/</guid>
-      <description><![CDATA[1. 说明 根据内核文档整理而成，具体格式含义可查看内核文档，或点击如何获得正确的printk格式占位符(v6.6)或如何获得正确的printk格]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/keyboard_backlight_light_159518_300x168.jpg" length="10821" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-说明" data-numberify>1. 说明<a class="anchor ms-1" href="#1-说明"></a></h1>
+<p>根据内核文档整理而成，具体格式含义可查看内核文档，或点击<a href="https://www.kernel.org/doc/html/v6.6/translations/zh_CN/core-api/printk-formats.html" target="_blank" rel="noopener noreferrer">如何获得正确的printk格式占位符(v6.6)<i class="fas fa-external-link-square-alt ms-1"></i></a>或<a href="https://www.kernel.org/doc/html/latest/translations/zh_CN/core-api/printk-formats.html" target="_blank" rel="noopener noreferrer">如何获得正确的printk格式占位符(latest)<i class="fas fa-external-link-square-alt ms-1"></i></a>查看。
+linux-6.6相关内核文档路径如下:</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lens_camera_glare_147903_300x168.jpg" length="7000" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux sysrq简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/sysrq/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/sysrq/</guid>
-      <description><![CDATA[1. 串口发送sysrq 对于串口来说，sysrq本质是一个低电平脉冲，通常为100ms。 1在通用异步收发传输器（UART）中，Line Status Regi]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/pixels_cubes_shapes_127558_300x168.jpg" length="18339" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-串口发送sysrq" data-numberify>1. 串口发送sysrq<a class="anchor ms-1" href="#1-串口发送sysrq"></a></h1>
+<p>对于串口来说，<code>sysrq</code>本质是一个低电平脉冲，通常为100ms。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln">1</span><span class="cl">在通用异步收发传输器（UART）中，Line Status Register（LSR）的 “Break interrupt indicator”（中断指示位）表示检测到了一个间断信号。
+</span></span><span class="line"><span class="ln">2</span><span class="cl">一、含义
+</span></span><span class="line"><span class="ln">3</span><span class="cl">当该位被置位时，表明 UART 接收器检测到了一个间断条件。一个间断通常是指接收线路上长时间保持为低电平状态，通常超过一个字符传输的时间。这可能是由于外部设备故意发送一个间断信号，或者由于通信线路上的异常情况导致的。
+</span></span><span class="line"><span class="ln">4</span><span class="cl">二、用途
+</span></span><span class="line"><span class="ln">5</span><span class="cl">信号异常检测：可以用来检测通信线路上的异常情况。例如，如果通信双方在一段时间内没有数据传输，然后突然检测到一个间断信号，这可能表示通信出现了问题，需要进行故障排查。
+</span></span><span class="line"><span class="ln">6</span><span class="cl">特殊通信协议：在某些特殊的通信协议中，间断信号可能被用作一种特殊的控制信号。例如，在一些调试场景中，可以通过发送间断信号来触发特定的操作。
+</span></span><span class="line"><span class="ln">7</span><span class="cl">三、注意事项
+</span></span><span class="line"><span class="ln">8</span><span class="cl">误触发：该位可能会由于噪声或其他短暂的干扰而被误触发。因此，在检测到间断信号后，通常需要进行进一步的确认和处理，以确定是否真的存在通信问题。
+</span></span><span class="line"><span class="ln">9</span><span class="cl">处理方式：当检测到间断信号时，软件可以采取适当的措施，例如重新初始化通信接口、通知用户进行故障排查等。具体的处理方式取决于应用的需求。
+</span></span></code></pre></div>
+<h2 id="11-minicom" data-numberify>1.1. minicom<a class="anchor ms-1" href="#11-minicom"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln">1</span><span class="cl">Ctrl + A
+</span></span><span class="line"><span class="ln">2</span><span class="cl">B
+</span></span><span class="line"><span class="ln">3</span><span class="cl">&lt;code&gt;
+</span></span></code></pre></div>
+<h2 id="12-xshell" data-numberify>1.2. xshell<a class="anchor ms-1" href="#12-xshell"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln">1</span><span class="cl">文件
+</span></span><span class="line"><span class="ln">2</span><span class="cl">传输
+</span></span><span class="line"><span class="ln">3</span><span class="cl">发送取消代码
+</span></span><span class="line"><span class="ln">4</span><span class="cl">&lt;code&gt;
+</span></span></code></pre></div>
+<h1 id="2-添加自定义sysrq" data-numberify>2. 添加自定义sysrq<a class="anchor ms-1" href="#2-添加自定义sysrq"></a></h1>
+<p>Linux支持添加自定义的<code>sysrq</code>按键，前提是<code>sysrq_key_table</code>中对应的按键未被占用。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/code_programming_text_140050_300x168.jpg" length="11796" type="image/.jpg" />
     </item>
     
     <item>
       <title>linux内核dynamic_debug</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/dynamic_debug/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/dynamic_debug/</guid>
-      <description><![CDATA[1. 打开dynamic_debug 1CONFIG_DYNAMIC_DEBUG=y 运行时控制：/proc/dynamic_debug/control，如果开启了CONFIG_DEBUG_F]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/travel_map_compass_123078_300x168.jpg" length="14785" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-打开dynamic_debug" data-numberify>1. 打开dynamic_debug<a class="anchor ms-1" href="#1-打开dynamic_debug"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-makefile" data-lang="makefile"><span class="line"><span class="ln">1</span><span class="cl"><span class="nv">CONFIG_DYNAMIC_DEBUG</span><span class="o">=</span>y
+</span></span></code></pre></div><p>运行时控制：<code>/proc/dynamic_debug/control</code>，如果开启了<code>CONFIG_DEBUG_FS</code>，在<code>&lt;debugfs&gt;/dynamic_debug/control</code>，两者效果是相同的。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/wavy_curvy_lines_146044_300x168.jpg" length="25854" type="image/.jpg" />
     </item>
     
     <item>
       <title>printk的pr_fmt</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/printk-pr_fmt/</guid>
-      <description><![CDATA[1. printk 打印级别控制：/proc/sys/kernel/printk printk_index：/sys/kernel/debug/printk/]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wall_brick_purple_141823_300x168.jpg" length="14935" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-printk" data-numberify>1. printk<a class="anchor ms-1" href="#1-printk"></a></h1>
+<p>打印级别控制：<code>/proc/sys/kernel/printk</code></p>
+<p>printk_index：<code>/sys/kernel/debug/printk/index/</code></p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/laptop_dj_equipment_212416_300x168.jpg" length="9857" type="image/.jpg" />
     </item>
     
   </channel>

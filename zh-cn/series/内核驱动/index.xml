@@ -4,7 +4,8 @@
     <title>内核驱动 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/series/%E5%86%85%E6%A0%B8%E9%A9%B1%E5%8A%A8/</link>
     <description>Recent content in 内核驱动 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Fri, 30 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/series/%E5%86%85%E6%A0%B8%E9%A9%B1%E5%8A%A8/index.xml" rel="self" type="application/rss+xml" />
@@ -12,20 +13,21 @@
       <title>Linux thermal子系统(基于5.10)</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/thermal/linux-5.10/thermal_5.10/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/thermal/linux-5.10/thermal_5.10/</guid>
-      <description><![CDATA[1. thermal简介 thermal子系统主要用来监测和调节CPU、GPU等芯片或设备的温度。三个主要结构体的关系：从thermal_zone]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/gradient_orange_shades_131495_300x168.jpg" length="2713" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-thermal简介" data-numberify>1. thermal简介<a class="anchor ms-1" href="#1-thermal简介"></a></h1>
+<p>thermal子系统主要用来监测和调节CPU、GPU等芯片或设备的温度。三个主要结构体的关系：从thermal_zone_device获取温度后，根据governor指定的策略，来控制thermal_cooling_device进行温度调节。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" length="24563" type="image/.jpg" />
     </item>
     
     <item>
       <title>linux thermal子系统简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/</guid>
-      <description><![CDATA[1. thermal简介 内核版本：linux-6.1 thermal子系统主要用来监测和调节CPU、GPU等芯片或设备的温度。三个主要结构体的关系]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/blinds_lines_shade_143653_300x168.jpg" length="11444" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-thermal简介" data-numberify>1. thermal简介<a class="anchor ms-1" href="#1-thermal简介"></a></h1>
+<p>内核版本：linux-6.1</p>
+<p>thermal子系统主要用来监测和调节CPU、GPU等芯片或设备的温度。三个主要结构体的关系：从thermal_zone_device获取温度后，根据governor指定的策略，来控制thermal_cooling_device进行温度调节。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_300x168.jpg" length="21351" type="image/.jpg" />
     </item>
     
   </channel>

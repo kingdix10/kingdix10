@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>linux命令 on kingdix10&#39;s site</title>
+    <title>Linux命令 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/categories/linux%E5%91%BD%E4%BB%A4/</link>
-    <description>Recent content in linux命令 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Linux命令 on kingdix10&#39;s site</description>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Sun, 28 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/linux%E5%91%BD%E4%BB%A4/index.xml" rel="self" type="application/rss+xml" />
@@ -12,57 +13,215 @@
       <title>linux常用命令-文本处理</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_text/</link>
       <pubDate>Sun, 28 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_text/</guid>
-      <description><![CDATA[1. grep 1.1. 常用选项 1# 输出start到end 2grep -o &#39;start.*end&#39; file 3# 文件作为文本处理 4grep -a &#39;xxx&#39; file 5# 忽略二进制文件 6grep -rsnI &#39;xxx&#39; ./ 7# 递归目录 8grep -r &#39;xxx&#39; ./ 9 10# 忽略大小写(-i, --ignore-case) 11#]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lines_intersection_oblique_153331_300x168.jpg" length="16159" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-grep" data-numberify>1. grep<a class="anchor ms-1" href="#1-grep"></a></h1>
+
+<h2 id="11-常用选项" data-numberify>1.1. 常用选项<a class="anchor ms-1" href="#11-常用选项"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1"># 输出start到end</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">grep -o <span class="s1">&#39;start.*end&#39;</span> file
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="c1"># 文件作为文本处理</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">grep -a <span class="s1">&#39;xxx&#39;</span> file
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="c1"># 忽略二进制文件</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">grep -rsnI <span class="s1">&#39;xxx&#39;</span> ./
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="c1"># 递归目录</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">grep -r <span class="s1">&#39;xxx&#39;</span> ./
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="c1"># 忽略大小写(-i, --ignore-case)</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="c1"># 全词匹配(-w, --word-regexp)</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="c1"># 输出计数(-c, --count)</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="c1"># 显示行号(-n, --line-number)</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="c1"># 只列出匹配的文件名(-l, --files-with-matches)</span>
+</span></span></code></pre></div>
+<h2 id="12-其他选项" data-numberify>1.2. 其他选项<a class="anchor ms-1" href="#12-其他选项"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1"># --color：显示颜色，默认开启</span>
+</span></span></code></pre></div>
+<h1 id="2-sed示例" data-numberify>2. sed示例<a class="anchor ms-1" href="#2-sed示例"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1"># 在第5行前插入新行</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">sed -i <span class="s1">&#39;5i\string&#39;</span> file
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="c1"># 全词匹配替换</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">sed -e <span class="s1">&#39;s%\&lt;old\&gt;%new%g&#39;</span> file
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="c1"># 忽略大小写匹配替换</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">sed -e <span class="s1">&#39;s%\&lt;old\&gt;%new%ig&#39;</span> file
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="c1"># 输出图片链接，输出完整 &#34;![...](...)&#34;</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">sed -n <span class="s1">&#39;/!\[.*\]\(.*\)/p&#39;</span> *.md
+</span></span><span class="line"><span class="ln">11</span><span class="cl">sed -n <span class="s1">&#39;s/!\[.*\]\(.*\)/\0/p&#39;</span> *.md
+</span></span><span class="line"><span class="ln">12</span><span class="cl">
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="c1"># 输出图片链接，只输出 &#34;(...)&#34;</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">sed -n <span class="s1">&#39;s/!\[.*\]\(.*\)/\1/p&#39;</span> *.md
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">sed -i <span class="se">\
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="se"></span>    -e <span class="s1">&#39;/^description:/a\featured: false&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="se"></span>    -e <span class="s1">&#39;/^image:.*/d&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="se"></span>    -e <span class="s1">&#39;/^hidden:/a\image:\nfigurePositionShow:\nfeatureImage:\nfeatureImageAlt:\nfeatureImageCap:\nthumbnail:\nshareImage:\ncodeMaxLines:\ncodeLineNumbers:\n&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="se"></span>    -e <span class="s1">&#39;/^tags:$/i\series:&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="se"></span>    <span class="nv">$*</span>
+</span></span></code></pre></div>
+<h1 id="3-awk" data-numberify>3. awk<a class="anchor ms-1" href="#3-awk"></a></h1>
+
+<h1 id="4-patch" data-numberify>4. patch<a class="anchor ms-1" href="#4-patch"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">patch -t -p <span class="m">1</span> &lt; patchfile.patch
+</span></span></code></pre></div>
+<h1 id="5-hexdump" data-numberify>5. hexdump<a class="anchor ms-1" href="#5-hexdump"></a></h1>
+
+<h2 id="51-按4字节显示" data-numberify>5.1. 按4字节显示<a class="anchor ms-1" href="#51-按4字节显示"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">hexdump -e <span class="s1">&#39;\&#34;0x%08_ax: \&#34;&#39;</span> -e <span class="s1">&#39;4/4 \&#34;%08X \&#34;&#39;</span> -e <span class="s1">&#39;\&#34;\n\&#34;&#39;</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="nb">alias</span> <span class="nv">xdump</span><span class="o">=</span><span class="s1">&#39;hexdump -e &#39;</span><span class="se">\&#39;</span><span class="s1">&#39;&#34;0x%08_ax: &#34;&#39;</span><span class="se">\&#39;</span><span class="s1">&#39; -e &#39;</span><span class="se">\&#39;</span><span class="s1">&#39;4/4 &#34;%08X &#34;&#39;</span><span class="se">\&#39;</span><span class="s1">&#39; -e &#39;</span><span class="se">\&#39;</span><span class="s1">&#39;&#34;\n&#34;&#39;</span><span class="se">\&#39;</span><span class="s1">&#39;&#39;</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln"> 1</span><span class="cl">hexdump -v -n <span class="m">128</span> /sys/devices/platform/soc/243000.efuse/nvmem*/nvmem -e <span class="se">\
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="se"></span><span class="s1">&#39;&#34;compat: 0x&#34;       24/1 &#34;%x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="s1">&#34;AICORE\t: 0x&#34;      1/1 &#34;%02x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="s1">&#34;compat: 0x&#34;        43/1 &#34;%x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="s1">&#34;DATE\t: 0x&#34;        8/1  &#34;%02x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="s1">&#34;compat: 0x&#34;        32/1 &#34;%x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="s1">&#34;===========SYSTEM SOFTWARE===========\n&#34;
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="s1">&#34;board_type\t: 0x&#34;   1/1 &#34;%02x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="s1">&#34;bom_version\t: 0x&#34;  2/1 &#34;%02x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="s1">&#34;ddr_info\t: 0x&#34;     2/1 &#34;%02x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="s1">&#34;flash_info\t: 0x&#34;   2/1 &#34;%02x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="s1">&#34;pmic\t: 0x&#34;         3/1 &#34;%02x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="s1">&#34;pmic_sw\t: 0x&#34;      1/1 &#34;%02x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="s1">&#34;vendor\t: 0x&#34;       2/1 &#34;%02x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="s1">&#34;SN\t: &#34;             4/1 &#34;%02x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="s1">&#34;others\t: 0x&#34;       3/1 &#34;%02x&#34; &#34;\n&#34;
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="s1">&#39;</span> <span class="p">|</span> grep DATE <span class="p">|</span> awk <span class="s1">&#39;{print $3}&#39;</span> <span class="p">|</span> tac -rs .. <span class="p">|</span> <span class="nb">echo</span> <span class="s2">&#34;</span><span class="k">$(</span>tr -d <span class="s1">&#39;\n&#39;</span><span class="k">)</span><span class="s2">&#34;</span>
+</span></span></code></pre></div>
+<h1 id="iconv" data-numberify>iconv<a class="anchor ms-1" href="#iconv"></a></h1>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/camera_lens_strap_145518_300x168.jpg" length="15893" type="image/.jpg" />
     </item>
     
     <item>
       <title>git配置和操作</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/git/git_misc/</link>
       <pubDate>Sat, 27 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/git/git_misc/</guid>
-      <description><![CDATA[官方资料：Git Community Book 中文版 1. 个人gitconfig 1# cat ~/.gitconfig 2 3[color] 4 ui = auto 5 6[safe] 7# directory = * 8 9[core] 10# 支持中文 11 quotepath = false 12 editor = vim 13# 14 pager = less -x1,5 15# 支持https下]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wall_brick_purple_141823_300x168.jpg" length="14935" type="image/.jpg" />
+      <description><![CDATA[<p>官方资料：<a href="http://gitbook.liuhui998.com/index.html" target="_blank" rel="noopener noreferrer">Git Community Book 中文版<i class="fas fa-external-link-square-alt ms-1"></i></a></p>
+
+<h1 id="1-个人gitconfig" data-numberify>1. 个人gitconfig<a class="anchor ms-1" href="#1-个人gitconfig"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln"> 1</span><span class="cl"># cat ~/.gitconfig
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">[color]
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">	ui = auto
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">[safe]
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">#	directory = *
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">[core]
+</span></span><span class="line"><span class="ln">10</span><span class="cl"># 支持中文
+</span></span><span class="line"><span class="ln">11</span><span class="cl">	quotepath = false
+</span></span><span class="line"><span class="ln">12</span><span class="cl">	editor = vim
+</span></span><span class="line"><span class="ln">13</span><span class="cl">#
+</span></span><span class="line"><span class="ln">14</span><span class="cl">	pager = less -x1,5
+</span></span><span class="line"><span class="ln">15</span><span class="cl"># 支持https下保存用户名密码
+</span></span><span class="line"><span class="ln">16</span><span class="cl">[credential]
+</span></span><span class="line"><span class="ln">17</span><span class="cl">	helper = store
+</span></span></code></pre></div><p>参考<a href="https://zhuanlan.zhihu.com/p/133706032" target="_blank" rel="noopener noreferrer">git 显示中文和解决中文乱码<i class="fas fa-external-link-square-alt ms-1"></i></a></p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/code_text_colorful_140555_300x168.jpg" length="22830" type="image/.jpg" />
     </item>
     
     <item>
       <title>linux常用命令-系统管理</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_sys/</link>
       <pubDate>Sat, 09 Mar 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_sys/</guid>
-      <description><![CDATA[1. pstree查看进程树 1$ pstree -ptA 2systemd(1)-+-VGAuthService(546) 3 |-cron(625) 4 |-dbus-daemon(626) 5 |-dhclient(1587) 6 |-dhclient(1831) 7 |-rinetd(707) 8 |-rsyslogd(629)-+-{in:imklog}(632) 9 | |-{in:imuxsock}(631) 10 | `-{rs:main Q:Reg}(633) 2. ps 1# 查看命名空间，需要用root权限，可以使用sudo 2ps -eo pid,pidns,user,group,cmd 3# ps查]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/water_waves_ripples_143522_300x168.jpg" length="11080" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-pstree查看进程树" data-numberify>1. pstree查看进程树<a class="anchor ms-1" href="#1-pstree查看进程树"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln"> 1</span><span class="cl">$ pstree -ptA
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">systemd<span class="o">(</span>1<span class="o">)</span>-+-VGAuthService<span class="o">(</span>546<span class="o">)</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">           <span class="p">|</span>-cron<span class="o">(</span>625<span class="o">)</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">           <span class="p">|</span>-dbus-daemon<span class="o">(</span>626<span class="o">)</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">           <span class="p">|</span>-dhclient<span class="o">(</span>1587<span class="o">)</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">           <span class="p">|</span>-dhclient<span class="o">(</span>1831<span class="o">)</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">           <span class="p">|</span>-rinetd<span class="o">(</span>707<span class="o">)</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">           <span class="p">|</span>-rsyslogd<span class="o">(</span>629<span class="o">)</span>-+-<span class="o">{</span>in:imklog<span class="o">}(</span>632<span class="o">)</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">           <span class="p">|</span>               <span class="p">|</span>-<span class="o">{</span>in:imuxsock<span class="o">}(</span>631<span class="o">)</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">           <span class="p">|</span>               <span class="sb">`</span>-<span class="o">{</span>rs:main Q:Reg<span class="o">}(</span>633<span class="o">)</span>
+</span></span></code></pre></div>
+<h1 id="2-ps" data-numberify>2. ps<a class="anchor ms-1" href="#2-ps"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1"># 查看命名空间，需要用root权限，可以使用sudo</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">ps -eo pid,pidns,user,group,cmd
+</span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="c1"># ps查看进程间的关系。</span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl">ps -Teo ppid,sid,pgid,pid,tgid,tid,comm
+</span></span><span class="line"><span class="ln">5</span><span class="cl">
+</span></span><span class="line"><span class="ln">6</span><span class="cl">ps -eL -o pid,tid,stat,comm
+</span></span><span class="line"><span class="ln">7</span><span class="cl">ps -eL -o psr,pid,tid,stat,comm
+</span></span></code></pre></div>
+<h1 id="3-mount" data-numberify>3. mount<a class="anchor ms-1" href="#3-mount"></a></h1>
+
+<h2 id="31-使用mount替代软链接" data-numberify>3.1. 使用mount替代软链接<a class="anchor ms-1" href="#31-使用mount替代软链接"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1"># vi /etc/fstab</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">/data/docker		/var/lib/docker     none    <span class="nb">bind</span> <span class="m">0</span>       <span class="m">0</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl">
+</span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="c1"># 重新mount所有文件系统</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl">sudo mount -a
+</span></span></code></pre></div>
+<h2 id="32-挂载samba共享目录" data-numberify>3.2. 挂载samba共享目录<a class="anchor ms-1" href="#32-挂载samba共享目录"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="nv">MP</span><span class="o">=</span>/mnt/smb_share
+</span></span><span class="line"><span class="ln">2</span><span class="cl">
+</span></span><span class="line"><span class="ln">3</span><span class="cl">mkdir -p <span class="si">${</span><span class="nv">MP</span><span class="si">}</span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl">
+</span></span><span class="line"><span class="ln">5</span><span class="cl">mount -t cifs //<span class="si">${</span><span class="nv">IPADDR</span><span class="si">}</span>/share <span class="si">${</span><span class="nv">MP</span><span class="si">}</span> -o rw,noatime,nodiratime,file_mode<span class="o">=</span>0644,dir_mode<span class="o">=</span>0755,gid<span class="o">=</span>1000,uid<span class="o">=</span>1000,,username<span class="o">=</span><span class="si">${</span><span class="nv">USERNAME</span><span class="si">}</span>,pass<span class="o">=</span><span class="si">${</span><span class="nv">PASSWORD</span><span class="si">}</span>
+</span></span></code></pre></div>
+<h2 id="33-挂载u盘并指定默认用户等" data-numberify>3.3. 挂载U盘，并指定默认用户等<a class="anchor ms-1" href="#33-挂载u盘并指定默认用户等"></a></h2>
+<p>格式为exfat，如果不指定gid和uid，默认只有root可以写入。
+fmask和dmask参考Linux umask命令。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/texture_background_color_72786_300x168.jpg" length="9947" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux Bash技巧</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/bash_tips/</link>
       <pubDate>Sun, 25 Feb 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/bash_tips/</guid>
-      <description><![CDATA[1. shell语法 shell核心基础知识 进阶版 2. 忽略大小写 重新进入bash后生效。 1echo &#39;set completion-ignore-case on&#39; &gt; ~/.inputrc 3. 临时使用alias前的命令 参考LINUX下使用]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_autumn_129305_300x168.jpg" length="15566" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-shell语法" data-numberify>1. shell语法<a class="anchor ms-1" href="#1-shell语法"></a></h1>
+<p><a href="https://www.jianshu.com/p/fdcbd620c07e" target="_blank" rel="noopener noreferrer">shell核心基础知识 进阶版<i class="fas fa-external-link-square-alt ms-1"></i></a></p>
+
+<h1 id="2-忽略大小写" data-numberify>2. 忽略大小写<a class="anchor ms-1" href="#2-忽略大小写"></a></h1>
+<p>重新进入bash后生效。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="nb">echo</span> <span class="s1">&#39;set completion-ignore-case on&#39;</span> &gt; ~/.inputrc
+</span></span></code></pre></div>
+<h1 id="3-临时使用alias前的命令" data-numberify>3. 临时使用alias前的命令<a class="anchor ms-1" href="#3-临时使用alias前的命令"></a></h1>
+<p>参考<a href="https://blog.csdn.net/imtech/article/details/126124210" target="_blank" rel="noopener noreferrer">LINUX下使用命令行获取公网IP地址转载<i class="fas fa-external-link-square-alt ms-1"></i></a></p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lines_intersection_oblique_153331_300x168.jpg" length="16159" type="image/.jpg" />
     </item>
     
     <item>
       <title>linux常用命令-网络</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_network/</link>
       <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_network/</guid>
-      <description><![CDATA[nmap 1nmap -sVn 192.168.31.* 2 3nmap -sVn 192.168.31.* -oN out.txt 4 5nmap -sV -sC -Pn 192.168.31.* 6 7nmap -sV -sC -Pn 192.168.31.* -oN out.txt 8 9nmap -sV -sC -Pn 192.168.31.* -oG out.txt 10 11nmap -sV -sC -Pn 192.168.31.* -oX out.xml 12 13nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script=banner,vuln 14 15nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script=banner,vuln --script-args=banner.timeout=10,vuln.timeout=10 16 17nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script=banner,vuln --script-args=banner.timeout=10,vuln.timeout=10 --script-args=banner.path=/usr/share/nmap/scripts/http-title.nse,vuln.cvss-threshold=7]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/texture_background_color_72786_300x168.jpg" length="9947" type="image/.jpg" />
+      <description><![CDATA[<h1 id="nmap" data-numberify>nmap<a class="anchor ms-1" href="#nmap"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln"> 1</span><span class="cl">nmap  -sVn 192.168.31.*
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">nmap -sVn 192.168.31.* -oN out.txt
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">nmap -sV -sC -Pn 192.168.31.*
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">nmap -sV -sC -Pn 192.168.31.* -oN out.txt
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">nmap -sV -sC -Pn 192.168.31.* -oG out.txt
+</span></span><span class="line"><span class="ln">10</span><span class="cl">
+</span></span><span class="line"><span class="ln">11</span><span class="cl">nmap -sV -sC -Pn 192.168.31.* -oX out.xml
+</span></span><span class="line"><span class="ln">12</span><span class="cl">
+</span></span><span class="line"><span class="ln">13</span><span class="cl">nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script<span class="o">=</span>banner,vuln
+</span></span><span class="line"><span class="ln">14</span><span class="cl">
+</span></span><span class="line"><span class="ln">15</span><span class="cl">nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script<span class="o">=</span>banner,vuln --script-args<span class="o">=</span>banner.timeout<span class="o">=</span>10,vuln.timeout<span class="o">=</span><span class="m">10</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl">
+</span></span><span class="line"><span class="ln">17</span><span class="cl">nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script<span class="o">=</span>banner,vuln --script-args<span class="o">=</span>banner.timeout<span class="o">=</span>10,vuln.timeout<span class="o">=</span><span class="m">10</span> --script-args<span class="o">=</span>banner.path<span class="o">=</span>/usr/share/nmap/scripts/http-title.nse,vuln.cvss-threshold<span class="o">=</span><span class="m">7</span>
+</span></span></code></pre></div>
+<h1 id="ip" data-numberify>ip<a class="anchor ms-1" href="#ip"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">ip addr
+</span></span><span class="line"><span class="ln">2</span><span class="cl">ip route
+</span></span></code></pre></div>
+<h1 id="ssh" data-numberify>ssh<a class="anchor ms-1" href="#ssh"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">ssh-keygen -f <span class="s2">&#34;/home/</span><span class="si">${</span><span class="nv">USERNAME</span><span class="si">}</span><span class="s2">/.ssh/known_hosts&#34;</span> -R <span class="s2">&#34;[localhost]:22&#34;</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">ssh-copy-id -p <span class="m">22</span> <span class="si">${</span><span class="nv">USERNAME</span><span class="si">}</span>@<span class="si">${</span><span class="nv">IP</span><span class="si">}</span>
+</span></span></code></pre></div><p><a href="https://zhuanlan.zhihu.com/p/521768041" target="_blank" rel="noopener noreferrer">https://zhuanlan.zhihu.com/p/521768041<i class="fas fa-external-link-square-alt ms-1"></i></a></p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/keyboard_laptop_gradient_203739_300x168.jpg" length="10539" type="image/.jpg" />
     </item>
     
     <item>
       <title>磁盘和文件系统扩容/缩容</title>
       <link>https://kingdix10.github.io/zh-cn/docs/02-dev_env/resizefs/</link>
       <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/02-dev_env/resizefs/</guid>
       <description><![CDATA[Linux磁盘和文件系统扩容/缩容]]></description>
     <enclosure url="https://kingdix10.github.io/covers/lines_obliquely_stripes_123801_300x168.jpg" length="18016" type="image/.jpg" />
@@ -72,19 +231,28 @@
       <title>Linux Bash终端美化</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/bash_decorate/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/bash_decorate/</guid>
-      <description><![CDATA[1. PS1示例 先说一下bash版本 1$ bash --version 2GNU bash, version 5.1.4(1)-release (x86_64-pc-linux-gnu) 3Copyright (C) 2020 Free Software Foundation, Inc. 4License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt; 5 6This is free software; you are free to change and redistribute it. 7There is NO WARRANTY, to the extent permitted by law. bash中的P]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/keyboard_laptop_gradient_203739_300x168.jpg" length="10539" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-ps1示例" data-numberify>1. PS1示例<a class="anchor ms-1" href="#1-ps1示例"></a></h1>
+<p>先说一下bash版本</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln">1</span><span class="cl">$ bash --version
+</span></span><span class="line"><span class="ln">2</span><span class="cl">GNU bash, version 5.1.4(1)-release (x86_64-pc-linux-gnu)
+</span></span><span class="line"><span class="ln">3</span><span class="cl">Copyright (C) 2020 Free Software Foundation, Inc.
+</span></span><span class="line"><span class="ln">4</span><span class="cl">License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;
+</span></span><span class="line"><span class="ln">5</span><span class="cl">
+</span></span><span class="line"><span class="ln">6</span><span class="cl">This is free software; you are free to change and redistribute it.
+</span></span><span class="line"><span class="ln">7</span><span class="cl">There is NO WARRANTY, to the extent permitted by law.
+</span></span></code></pre></div><p>bash中的PS1是主提示符变量，也是默认提示符变量。另外需要注意，<code>PS1</code>对bash起作用，对sh是无效的。可以通过<code>echo $SHELL</code>确认当前用户使用的shell是否为bash。除了PS1外，还有PS2、PS3、PS4几个环境变量用来提示一些其他信息。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/paint_canvas_stains_124156_300x168.jpg" length="18821" type="image/.jpg" />
     </item>
     
     <item>
       <title>samba服务器搭建和使用</title>
       <link>https://kingdix10.github.io/zh-cn/docs/02-dev_env/samba/</link>
       <pubDate>Sun, 09 Jan 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/02-dev_env/samba/</guid>
-      <description><![CDATA[1. 准备工作 如果是虚拟机中安装的Linux系统，需要新建一个网络适配器，模式为桥接模式。 如果是独立的物理机安装了Linux系统，可以在路由器或]]></description>
+      <description><![CDATA[<h1 id="1-准备工作" data-numberify>1. 准备工作<a class="anchor ms-1" href="#1-准备工作"></a></h1>
+<p>如果是虚拟机中安装的<code>Linux</code>系统，需要新建一个网络适配器，模式为桥接模式。</p>
+<p>如果是独立的物理机安装了<code>Linux</code>系统，可以在路由器或交换机中，将物理机的IP地址设为固定的IP地址。</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/iridescent_colorful_lines_130978_300x168.jpg" length="11918" type="image/.jpg" />
     </item>
     
@@ -92,10 +260,22 @@
       <title>linux常用命令-文件管理</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_file/</link>
       <pubDate>Mon, 02 Sep 2019 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_file/</guid>
-      <description><![CDATA[1. 打包隐藏文件 1tar -czf data.tar.gz ./.[!.]* 2. find 2.1. 查找文件并按大小排序 1find -type f -name &#39;*.md&#39; -printf &#39;%s\t%p\n&#39; | grep -v &#39;\.git&#39; | sort -nr | less -N 2.2. 批量删除7天前的文件 1find -type f -mtime +7 -exec rm -rf {} \; 2find -type f -mtime +7 -exec rm -fr]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/camera_lens_strap_145518_300x168.jpg" length="15893" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-打包隐藏文件" data-numberify>1. 打包隐藏文件<a class="anchor ms-1" href="#1-打包隐藏文件"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">tar -czf data.tar.gz  ./.<span class="o">[</span>!.<span class="o">]</span>*
+</span></span></code></pre></div>
+<h1 id="2-find" data-numberify>2. find<a class="anchor ms-1" href="#2-find"></a></h1>
+
+<h2 id="21-查找文件并按大小排序" data-numberify>2.1. 查找文件并按大小排序<a class="anchor ms-1" href="#21-查找文件并按大小排序"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">find -type f -name <span class="s1">&#39;*.md&#39;</span> -printf <span class="s1">&#39;%s\t%p\n&#39;</span> <span class="p">|</span> grep -v <span class="s1">&#39;\.git&#39;</span> <span class="p">|</span> sort -nr  <span class="p">|</span> less -N
+</span></span></code></pre></div>
+<h2 id="22-批量删除7天前的文件" data-numberify>2.2. 批量删除7天前的文件<a class="anchor ms-1" href="#22-批量删除7天前的文件"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">find -type f -mtime +7 -exec rm -fr <span class="o">{}</span> <span class="se">\;</span>
+</span></span></code></pre></div>
+<h2 id="23-多个条件-o" data-numberify>2.3. 多个条件(-o)<a class="anchor ms-1" href="#23-多个条件-o"></a></h2>
+<p>find ./ -name &lsquo;<em>.c&rsquo; -o -name &lsquo;</em>.h&rsquo;
+find ./ -name &lsquo;*.[ch];</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/paint_grunge_green_124502_300x168.jpg" length="5826" type="image/.jpg" />
     </item>
     
   </channel>

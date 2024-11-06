@@ -4,7 +4,8 @@
     <title>ARM64 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/tags/arm64/</link>
     <description>Recent content in ARM64 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Wed, 03 Jan 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/arm64/index.xml" rel="self" type="application/rss+xml" />
@@ -12,20 +13,60 @@
       <title>ARM64 Linux内核内存大小和布局</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/memory_size_layout/</link>
       <pubDate>Wed, 03 Jan 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/memory_size_layout/</guid>
-      <description><![CDATA[1. memblock 1.1. 结构体 memblock相关的全局变量是编译时静态初始化的。 1/// mm/memblock.c 2 3/// INIT_MEMBLOCK_MEMORY_REGIONS和INIT_]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wood_texture_logs_159793_300x168.jpg" length="19513" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-memblock" data-numberify>1. memblock<a class="anchor ms-1" href="#1-memblock"></a></h1>
+
+<h2 id="11-结构体" data-numberify>1.1. 结构体<a class="anchor ms-1" href="#11-结构体"></a></h2>
+<p><code>memblock</code>相关的全局变量是编译时静态初始化的。</p>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.6/mm/memory_size_layout/memblock.png" loading="lazy" width="1212" height="562" />
+</picture>
+
+</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// mm/memblock.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="c1">/// INIT_MEMBLOCK_MEMORY_REGIONS和INIT_MEMBLOCK_RESERVED_REGIONS见arch/arm64/include/asm/memory.h
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="k">struct</span> <span class="n">memblock_region</span> <span class="n">memblock_memory_init_regions</span><span class="p">[</span><span class="n">INIT_MEMBLOCK_MEMORY_REGIONS</span><span class="p">]</span> <span class="n">__initdata_memblock</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="k">static</span> <span class="k">struct</span> <span class="n">memblock_region</span> <span class="n">memblock_reserved_init_regions</span><span class="p">[</span><span class="n">INIT_MEMBLOCK_RESERVED_REGIONS</span><span class="p">]</span> <span class="n">__initdata_memblock</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="cp">#ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cp"></span><span class="k">static</span> <span class="k">struct</span> <span class="n">memblock_region</span> <span class="n">memblock_physmem_init_regions</span><span class="p">[</span><span class="n">INIT_PHYSMEM_REGIONS</span><span class="p">];</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="k">struct</span> <span class="n">memblock</span> <span class="n">memblock</span> <span class="n">__initdata_memblock</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">    <span class="p">.</span><span class="n">memory</span><span class="p">.</span><span class="n">regions</span>		<span class="o">=</span> <span class="n">memblock_memory_init_regions</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="p">.</span><span class="n">memory</span><span class="p">.</span><span class="n">cnt</span>		<span class="o">=</span> <span class="mi">1</span><span class="p">,</span>	<span class="cm">/* empty dummy entry */</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">    <span class="p">.</span><span class="n">memory</span><span class="p">.</span><span class="n">max</span>		<span class="o">=</span> <span class="n">INIT_MEMBLOCK_MEMORY_REGIONS</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">    <span class="p">.</span><span class="n">memory</span><span class="p">.</span><span class="n">name</span>		<span class="o">=</span> <span class="s">&#34;memory&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">
+</span></span><span class="line"><span class="ln">16</span><span class="cl">    <span class="p">.</span><span class="n">reserved</span><span class="p">.</span><span class="n">regions</span>	<span class="o">=</span> <span class="n">memblock_reserved_init_regions</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">    <span class="p">.</span><span class="n">reserved</span><span class="p">.</span><span class="n">cnt</span>		<span class="o">=</span> <span class="mi">1</span><span class="p">,</span>	<span class="cm">/* empty dummy entry */</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">    <span class="p">.</span><span class="n">reserved</span><span class="p">.</span><span class="n">max</span>		<span class="o">=</span> <span class="n">INIT_MEMBLOCK_RESERVED_REGIONS</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">    <span class="p">.</span><span class="n">reserved</span><span class="p">.</span><span class="n">name</span>		<span class="o">=</span> <span class="s">&#34;reserved&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">
+</span></span><span class="line"><span class="ln">21</span><span class="cl">    <span class="p">.</span><span class="n">bottom_up</span>		<span class="o">=</span> <span class="nb">false</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">    <span class="p">.</span><span class="n">current_limit</span>		<span class="o">=</span> <span class="n">MEMBLOCK_ALLOC_ANYWHERE</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl">
+</span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="cp">#ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="cp"></span><span class="k">struct</span> <span class="n">memblock_type</span> <span class="n">physmem</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">27</span><span class="cl">    <span class="p">.</span><span class="n">regions</span>		<span class="o">=</span> <span class="n">memblock_physmem_init_regions</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl">    <span class="p">.</span><span class="n">cnt</span>			<span class="o">=</span> <span class="mi">1</span><span class="p">,</span>	<span class="cm">/* empty dummy entry */</span>
+</span></span><span class="line"><span class="ln">29</span><span class="cl">    <span class="p">.</span><span class="n">max</span>			<span class="o">=</span> <span class="n">INIT_PHYSMEM_REGIONS</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">30</span><span class="cl">    <span class="p">.</span><span class="n">name</span>			<span class="o">=</span> <span class="s">&#34;physmem&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="cp">#endif
+</span></span></span></code></pre></div>
+<h2 id="12-memblock操作函数" data-numberify>1.2. memblock操作函数<a class="anchor ms-1" href="#12-memblock操作函数"></a></h2>
+<p>主要关注<code>struct memblock memblock</code>的<code>memory</code>和<code>reserved</code>两个成员和三个函数。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/pattern_frosty_frost_134125_300x168.jpg" length="18643" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux ARM64页面大小和虚拟地址位数</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtable/</link>
       <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/mm/arm64_pgtable/</guid>
-      <description><![CDATA[ARM64的可配置的页面大小和虚拟地址位数是由ARM硬件决定的，不同的ARM版本，可选择的页面大小和地址位数也不一样。比如52位虚拟地址和物]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/squares_colorful_texture_133972_300x168.jpg" length="17371" type="image/.jpg" />
+      <description><![CDATA[<p>ARM64的可配置的页面大小和虚拟地址位数是由ARM硬件决定的，不同的ARM版本，可选择的页面大小和地址位数也不一样。比如52位虚拟地址和物理地址是在ARMv8.2及之后的架构才支持的，ARMv8.2提供了两种重要的拓展：大虚拟寻址（LVA）和大物理寻址（LPA）。Linux从5.4开始支持ARM64的52位虚拟地址和物理地址。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/chip_circuit_processor_140251_300x168.jpg" length="19023" type="image/.jpg" />
     </item>
     
   </channel>

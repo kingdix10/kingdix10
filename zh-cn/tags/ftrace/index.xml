@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>ftrace on kingdix10&#39;s site</title>
+    <title>Ftrace on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/tags/ftrace/</link>
-    <description>Recent content in ftrace on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Ftrace on kingdix10&#39;s site</description>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Wed, 04 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/ftrace/index.xml" rel="self" type="application/rss+xml" />
@@ -12,20 +13,57 @@
       <title>Linux使用ftrace进行boottime跟踪</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/boottime_trace/</link>
       <pubDate>Wed, 04 Sep 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/boottime_trace/</guid>
-      <description><![CDATA[1. 简介 要使用ftrace进行boottime追踪，可以使用内核参数(bootargs)或者bootconfig来进行配置。 关键的函数如下： 1+--]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/code_text_colorful_140555_300x168.jpg" length="22830" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-简介" data-numberify>1. 简介<a class="anchor ms-1" href="#1-简介"></a></h1>
+<p>要使用ftrace进行boottime追踪，可以使用内核参数(bootargs)或者bootconfig来进行配置。</p>
+<p>关键的函数如下：</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lines_multicolored_rainbow_125651_300x168.jpg" length="11453" type="image/.jpg" />
     </item>
     
     <item>
       <title>trace-cmd实例</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/trace_cmd_usage/</link>
       <pubDate>Wed, 04 Sep 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/debug/tracing/trace_cmd_usage/</guid>
-      <description><![CDATA[1. trace-cmd trace-cmd需要root权限。 1.1. 使用步骤 1# 保存成文件 2trace-cmd record 3trace-cmd report 1# 从tracefs读取 2trace-cmd start 3trace-cmd stop 4trace-cmd show 5 6trace-cmd clear 7trace-cmd restart 8trace-cmd show 1.2. 常见需要忽略的函数 1#]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_autumn_129305_300x168.jpg" length="15566" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-trace-cmd" data-numberify>1. trace-cmd<a class="anchor ms-1" href="#1-trace-cmd"></a></h1>
+<p><code>trace-cmd</code>需要root权限。</p>
+
+<h2 id="11-使用步骤" data-numberify>1.1. 使用步骤<a class="anchor ms-1" href="#11-使用步骤"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1"># 保存成文件</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">trace-cmd record
+</span></span><span class="line"><span class="ln">3</span><span class="cl">trace-cmd report
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1"># 从tracefs读取</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">trace-cmd start
+</span></span><span class="line"><span class="ln">3</span><span class="cl">trace-cmd stop
+</span></span><span class="line"><span class="ln">4</span><span class="cl">trace-cmd show
+</span></span><span class="line"><span class="ln">5</span><span class="cl">
+</span></span><span class="line"><span class="ln">6</span><span class="cl">trace-cmd clear
+</span></span><span class="line"><span class="ln">7</span><span class="cl">trace-cmd restart
+</span></span><span class="line"><span class="ln">8</span><span class="cl">trace-cmd show
+</span></span></code></pre></div>
+<h2 id="12-常见需要忽略的函数" data-numberify>1.2. 常见需要忽略的函数<a class="anchor ms-1" href="#12-常见需要忽略的函数"></a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cp"># 内存分配
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cp"></span><span class="o">-</span><span class="n">n</span> <span class="n">kmem_cache_alloc</span> <span class="o">-</span><span class="n">n</span> <span class="n">__kmalloc</span> <span class="o">-</span><span class="n">n</span> <span class="n">kmalloc_trace</span> <span class="o">-</span><span class="n">n</span> <span class="n">kfree</span> <span class="o">-</span><span class="n">n</span> <span class="n">kmalloc_slab</span> <span class="o">-</span><span class="n">n</span> <span class="n">__kmalloc_node_track_caller</span> <span class="o">-</span><span class="n">n</span> <span class="n">vmalloc</span> <span class="o">-</span><span class="n">n</span> <span class="n">vfree</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="cp"># 调度
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="cp"></span><span class="o">-</span><span class="n">n</span> <span class="n">__cond_resched</span> <span class="o">-</span><span class="n">n</span> <span class="n">__wake_up</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="cp"># 中断
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="cp"></span><span class="o">-</span><span class="n">n</span> <span class="n">irq_enter_rcu</span> <span class="o">-</span><span class="n">n</span> <span class="n">irq_exit_rcu</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="cp"># 锁
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="cp"></span><span class="o">-</span><span class="n">n</span> <span class="err">&#39;</span><span class="o">*</span><span class="n">_</span><span class="o">*</span><span class="n">lock</span><span class="err">&#39;</span> <span class="o">-</span><span class="n">n</span> <span class="o">*</span><span class="n">_lock_irqsave</span> <span class="o">-</span><span class="n">n</span> <span class="o">*</span><span class="n">_unlock_irqrestore</span> <span class="o">-</span><span class="n">n</span> <span class="n">down_write</span> <span class="o">-</span><span class="n">n</span> <span class="n">up_write</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="o">-</span><span class="n">n</span> <span class="n">mutex_lock</span> <span class="o">-</span><span class="n">n</span> <span class="n">mutex_unlock</span> \
+</span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="o">-</span><span class="n">n</span> <span class="n">_raw_spin_lock</span> <span class="o">-</span><span class="n">n</span> <span class="n">_raw_spin_unlock</span> \
+</span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="o">-</span><span class="n">n</span> <span class="n">_raw_spin_lock_irqsave</span> <span class="o">-</span><span class="n">n</span> <span class="n">_raw_spin_unlock_irqrestore</span> \
+</span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="o">-</span><span class="n">n</span> <span class="n">__rcu_read_lock</span> <span class="o">-</span><span class="n">n</span> <span class="n">__rcu_read_unlock</span> \
+</span></span></code></pre></div>
+<h1 id="2-trace-cmd实例" data-numberify>2. trace-cmd实例<a class="anchor ms-1" href="#2-trace-cmd实例"></a></h1>
+
+<h2 id="21-跟踪已存在的进程" data-numberify>2.1. 跟踪已存在的进程<a class="anchor ms-1" href="#21-跟踪已存在的进程"></a></h2>
+<p>使用<code>function_graph</code></p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/wall_brick_purple_141823_300x168.jpg" length="14935" type="image/.jpg" />
     </item>
     
   </channel>

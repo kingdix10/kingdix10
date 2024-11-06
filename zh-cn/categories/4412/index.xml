@@ -4,7 +4,8 @@
     <title>4412 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/categories/4412/</link>
     <description>Recent content in 4412 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Mon, 05 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/4412/index.xml" rel="self" type="application/rss+xml" />
@@ -12,30 +13,32 @@
       <title>Exynos4412启动介绍</title>
       <link>https://kingdix10.github.io/zh-cn/docs/exynos4412/exynos4412/</link>
       <pubDate>Mon, 05 Jun 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/exynos4412/exynos4412/</guid>
-      <description><![CDATA[1. 两种大小的BL1是怎么回事 关于4412的BL1，有说8k的，也有说15k的，到底哪一个是对的呢？ 这要追溯一下4412的版本，Exynos4]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/vintage_retro_camera_126517_300x168.jpg" length="11143" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-两种大小的bl1是怎么回事" data-numberify>1. 两种大小的BL1是怎么回事<a class="anchor ms-1" href="#1-两种大小的bl1是怎么回事"></a></h1>
+<p>关于4412的BL1，有说8k的，也有说15k的，到底哪一个是对的呢？</p>
+<p>这要追溯一下4412的版本，Exynos4412一共有两个版本，一个是Exynos 4412，另一个是Exynos 4412 Prime。网上大多数文章都是基于8k来介绍BL1的。我只在<a href="https://chasinglulu.github.io/2019/05/28/%E5%85%B3%E4%BA%8EExynos4412-SoC%E7%9A%84%E5%90%AF%E5%8A%A8%E5%88%86%E6%9E%90/" target="_blank" rel="noopener noreferrer">关于Exynos4412 SoC的启动分析 | 点滴汇聚 (chasinglulu.github.io)<i class="fas fa-external-link-square-alt ms-1"></i></a>和<a href="https://blog.csdn.net/u012867916/article/details/119619545" target="_blank" rel="noopener noreferrer">Exynos4412 的启动过程详解（四）<i class="fas fa-external-link-square-alt ms-1"></i></a>看到过关于Exynos 4412 Prime的介绍，但是没到找到对应的官方资料。两者的主要差异就在于BL1的大小。Exynos 4412 Prime可以支持15k的BL1，也向后兼容，支持8k的BL1。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/hologram_scheme_scifi_139294_300x168.jpg" length="9556" type="image/.jpg" />
     </item>
     
     <item>
       <title>Exynos4412自制BL1</title>
       <link>https://kingdix10.github.io/zh-cn/docs/exynos4412/mkbl1/</link>
       <pubDate>Mon, 05 Jun 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/exynos4412/mkbl1/</guid>
-      <description><![CDATA[1. 自制BL1 参考Android_Exynos4412_iROM_Secure_Booting_Guide_Ver.1.00.00.pdf，E]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/travel_map_compass_123078_300x168.jpg" length="14785" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-自制bl1" data-numberify>1. 自制BL1<a class="anchor ms-1" href="#1-自制bl1"></a></h1>
+<p>参考Android_Exynos4412_iROM_Secure_Booting_Guide_Ver.1.00.00.pdf，Exynos4412会自动把BL加载到0x0202_1400运行。所以BL1的入口地址需要设置为0x0202_1400，这样才能保证位置相关码可以正常执行。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/vintage_retro_camera_126517_300x168.jpg" length="11143" type="image/.jpg" />
     </item>
     
     <item>
       <title>Exynos4412自制BL2</title>
       <link>https://kingdix10.github.io/zh-cn/docs/exynos4412/mkbl2/</link>
       <pubDate>Mon, 05 Jun 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/exynos4412/mkbl2/</guid>
-      <description><![CDATA[1. 自制BL2 在官方提供的BL1或自制的BL1基础上，可以自制BL2。如果是使用U-Boot，编译时生成u-booot-spl.bin也是制作]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lines_plexus_neon_128926_300x168.jpg" length="24964" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-自制bl2" data-numberify>1. 自制BL2<a class="anchor ms-1" href="#1-自制bl2"></a></h1>
+<p>在官方提供的BL1或自制的BL1基础上，可以自制BL2。如果是使用U-Boot，编译时生成u-booot-spl.bin也是制作BL2的原材料。
+如果是自制的BL1，BL2可以根据BL1随心定制。如果是在官方提供的BL1基础上进行开发，BL2要求为16k，其中最后2k使用0填充。可执行文件的大下不能超过(14k-4)字节，其中14k的最后4个字节是存储校验值的。相较于BL1的校验值，BL2的校验简单的多，只是把前（14k-4）的内容按字节进行累加即可。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/lens_camera_glare_147903_300x168.jpg" length="7000" type="image/.jpg" />
     </item>
     
   </channel>

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>atomic on kingdix10&#39;s site</title>
+    <title>Atomic on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/tags/atomic/</link>
-    <description>Recent content in atomic on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Atomic on kingdix10&#39;s site</description>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Wed, 30 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/atomic/index.xml" rel="self" type="application/rss+xml" />
@@ -12,9 +13,11 @@
       <title>linux atomic接口简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/atomic/</link>
       <pubDate>Wed, 30 Aug 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/atomic/</guid>
-      <description><![CDATA[1. 后缀说明 acquire操作指的是在这条语句之后的所有内存操作只准在这条语句之后，不准被提前到这条语句之前。 release操作指的是在这条语]]></description>
+      <description><![CDATA[<h1 id="1-后缀说明" data-numberify>1. 后缀说明<a class="anchor ms-1" href="#1-后缀说明"></a></h1>
+<p>acquire操作指的是在这条语句之后的所有内存操作只准在这条语句之后，不准被提前到这条语句之前。
+release操作指的是在这条语句之前的所有内存操作只准在这条语句之前，不准被延后到这条语句之后。
+relaxed操作指的是不保证任何的内存顺序。</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/lines_multicolored_rainbow_125651_300x168.jpg" length="11453" type="image/.jpg" />
     </item>
     

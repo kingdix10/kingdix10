@@ -4,68 +4,162 @@
     <title>C/C&#43;&#43; on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/</link>
     <description>Recent content in C/C&#43;&#43; on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
-    <lastBuildDate>Tue, 16 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 12 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>用memcmp比较结构体会有什么问题</title>
       <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/c_struct_cmp/</link>
       <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/c_struct_cmp/</guid>
-      <description><![CDATA[1. 示例一 先看下如下代码，思考一下，结果是输出a == b还是a != b？ 1#include &lt;stdio.h&gt; 2#include &lt;string.h&gt; 3 4struct test_type { 5 char name[10]; 6 int i; 7 long l; 8}; 9 10int main(void) 11{ 12 struct test_type a = { 13 &#34;test&#34;, 1, 2 14 }; 15 struct test_type b; 16]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/trunk_tree_texture_119590_300x168.jpg" length="18828" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-示例一" data-numberify>1. 示例一<a class="anchor ms-1" href="#1-示例一"></a></h1>
+<p>先看下如下代码，思考一下，结果是输出<code>a == b</code>还是<code>a != b</code>？</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="k">struct</span> <span class="n">test_type</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">    <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="kt">long</span> <span class="n">l</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="k">struct</span> <span class="n">test_type</span> <span class="n">a</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">        <span class="s">&#34;test&#34;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl">    <span class="k">struct</span> <span class="n">test_type</span> <span class="n">b</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl">
+</span></span><span class="line"><span class="ln">17</span><span class="cl">    <span class="n">b</span><span class="p">.</span><span class="n">i</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">    <span class="n">b</span><span class="p">.</span><span class="n">l</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">l</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">    <span class="nf">strcpy</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl">
+</span></span><span class="line"><span class="ln">21</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">==</span> <span class="nf">memcmp</span><span class="p">(</span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">test_type</span><span class="p">)))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;a == b</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="ln">24</span><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;a != b</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">25</span><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="ln">26</span><span class="cl">
+</span></span><span class="line"><span class="ln">27</span><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div>
+<h2 id="11-结果及分析" data-numberify>1.1. 结果及分析<a class="anchor ms-1" href="#11-结果及分析"></a></h2>
+<p>实际结果很可能是<code>a != b</code>。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_texture_127524_300x168.jpg" length="18901" type="image/.jpg" />
     </item>
     
     <item>
       <title>C语言编译断言</title>
       <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/c_assert/</link>
       <pubDate>Sun, 25 Feb 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/c_assert/</guid>
-      <description><![CDATA[1. 简介 c++17标准引入了static_assert。 1static_assert(bool-constexpr, message ) /// since C++11 2static_assert(bool-constexpr) /// since C++17 gnu c编译器也实现了_Static_assert，见Static As]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wood_texture_logs_159793_300x168.jpg" length="19513" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-简介" data-numberify>1. 简介<a class="anchor ms-1" href="#1-简介"></a></h1>
+<p>c++17标准引入了<code>static_assert</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln">1</span><span class="cl"><span class="nf">static_assert</span><span class="p">(</span><span class="kt">bool</span><span class="o">-</span><span class="n">constexpr</span><span class="p">,</span> <span class="n">message</span> <span class="p">)</span>     <span class="c1">/// since C++11
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="c1"></span><span class="nf">static_assert</span><span class="p">(</span><span class="kt">bool</span><span class="o">-</span><span class="n">constexpr</span><span class="p">)</span>               <span class="c1">/// since C++17
+</span></span></span></code></pre></div><p><code>gnu c</code>编译器也实现了<code>_Static_assert</code>，见<a href="https://www.gnu.org/software/c-intro-and-ref/manual/html_node/Static-Assertions.html" target="_blank" rel="noopener noreferrer">Static Assertions<i class="fas fa-external-link-square-alt ms-1"></i></a>。</p>
+
+<h1 id="2-自定义" data-numberify>2. 自定义<a class="anchor ms-1" href="#2-自定义"></a></h1>
+<p>在没有<code>static_assert</code>的c语言中，可以自己实现类似的功能，如下：</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/pixels_circles_colorful_121100_300x168.jpg" length="23064" type="image/.jpg" />
     </item>
     
     <item>
       <title>多维数组作为函数参数</title>
       <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/array_func/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/array_func/</guid>
-      <description><![CDATA[1. 方法一：传递数组 C语言对多维数组的存储是按照一维数组来处理的，数组的每个维度在内存中按顺序存储。所以将多维数组作为参数传递时，必须指定多维]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/pattern_frosty_frost_134125_300x168.jpg" length="18643" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-方法一传递数组" data-numberify>1. 方法一：传递数组<a class="anchor ms-1" href="#1-方法一传递数组"></a></h1>
+<p>C语言对多维数组的存储是按照一维数组来处理的，数组的每个维度在内存中按顺序存储。所以将多维数组作为参数传递时，必须指定多维数组子维度的大小，否则函数无法得知每个子维度结束地址。
+第一维的长度可以指定，也可以不指定。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/wood_texture_logs_159793_300x168.jpg" length="19513" type="image/.jpg" />
     </item>
     
     <item>
       <title>数组a、&amp;a、&amp;a[0]、&amp;a[0][0]的区别与联系</title>
       <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/array_type/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/array_type/</guid>
-      <description><![CDATA[1. 测试结果 分别声明一个一维数组a1[8]和二维数组a2[4][8]，查看各个表达式的类型、地址、与首地址的差值，以及内存地址内存储的int变]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_300x168.jpg" length="21351" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-测试结果" data-numberify>1. 测试结果<a class="anchor ms-1" href="#1-测试结果"></a></h1>
+<p>分别声明一个一维数组<code>a1[8]</code>和二维数组<code>a2[4][8]</code>，查看各个表达式的类型、地址、与首地址的差值，以及内存地址内存储的<code>int</code>变量值。数组内变量的低8位记录数组的行号和列号，其中高4位为行，低4位为列。先看一下测试程序给出的结果。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" length="24563" type="image/.jpg" />
     </item>
     
     <item>
       <title>gcc宏定义中的连接符和可变参数</title>
       <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/macro_link_args/</link>
       <pubDate>Thu, 18 Jul 2019 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/macro_link_args/</guid>
-      <description><![CDATA[1. 连接符 1.1. 字符串转换# #用来把参数转换成字符串 1#define pr_var(var) printf(#var &#34; is %d\n&#34;, var); 2 3int main(int argc, char **argv) 4{ 5 int a = 1, b = 2; 6 7 pr_var(a); 8 pr_var(b); 9 pr_var(a+b); 10} 1.2. 参数连接## 在宏中，##可以用于]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/fabric_texture_colorful_142186_300x168.jpg" length="17451" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-连接符" data-numberify>1. 连接符<a class="anchor ms-1" href="#1-连接符"></a></h1>
+
+<h2 id="11-字符串转换" data-numberify>1.1. 字符串转换#<a class="anchor ms-1" href="#11-字符串转换"></a></h2>
+<p><code>#</code>用来把参数转换成字符串</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cp">#define pr_var(var)   printf(#var &#34; is %d\n&#34;, var);
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">    <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="nf">pr_var</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">    <span class="nf">pr_var</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    <span class="nf">pr_var</span><span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p> </p>
+
+<h2 id="12-参数连接" data-numberify>1.2. 参数连接##<a class="anchor ms-1" href="#12-参数连接"></a></h2>
+<p>在宏中，<code>##</code>可以用于参数连接。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/trunk_tree_texture_119590_300x168.jpg" length="18828" type="image/.jpg" />
     </item>
     
     <item>
       <title>编译器预定义宏</title>
       <link>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/gcc_predefine/</link>
       <pubDate>Thu, 18 Jul 2019 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/05-program/ccpp/gcc_predefine/</guid>
-      <description><![CDATA[1. 查看gcc预定义宏 在Linux下可以输入如下命令： 1gcc -posix -E -dM - &lt; /dev/null window下，命令稍有不同 1gcc -posix -E -dM - &lt; nul 1.1. 常见宏 macro desc __FILE__ 文件名 __LINE__ 行号 __func__ 函数]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/pixels_circles_colorful_121100_300x168.jpg" length="23064" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-查看gcc预定义宏" data-numberify>1. 查看gcc预定义宏<a class="anchor ms-1" href="#1-查看gcc预定义宏"></a></h1>
+<p>在Linux下可以输入如下命令：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">gcc -posix -E -dM - &lt; /dev/null
+</span></span></code></pre></div><p>window下，命令稍有不同</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">gcc -posix -E -dM - &lt; nul
+</span></span></code></pre></div>
+<h2 id="11-常见宏" data-numberify>1.1. 常见宏<a class="anchor ms-1" href="#11-常见宏"></a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>macro</th>
+          <th>desc</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>__FILE__</code></td>
+          <td>文件名</td>
+      </tr>
+      <tr>
+          <td><code>__LINE__</code></td>
+          <td>行号</td>
+      </tr>
+      <tr>
+          <td><code>__func__</code></td>
+          <td>函数名，早期版本为<code>__FUNCTION__</code></td>
+      </tr>
+      <tr>
+          <td><code>__DATE__</code></td>
+          <td>编译日期</td>
+      </tr>
+      <tr>
+          <td><code>__TIME__</code></td>
+          <td>编译时间</td>
+      </tr>
+      <tr>
+          <td><code>__linux__</code></td>
+          <td>编译平台是linux时定义</td>
+      </tr>
+  </tbody>
+</table>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/chip_circuit_processor_140251_300x168.jpg" length="19023" type="image/.jpg" />
     </item>
     
   </channel>

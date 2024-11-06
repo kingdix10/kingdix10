@@ -4,7 +4,8 @@
     <title>中断子系统 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/</link>
     <description>Recent content in 中断子系统 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Tue, 16 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/index.xml" rel="self" type="application/rss+xml" />
@@ -12,9 +13,10 @@
       <title>Linux中断子系统（二）domain注册</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_domain_add/</link>
       <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_domain_add/</guid>
-      <description><![CDATA[1. IRQ domain注册 中断控制器初始化的过程中，要向中断子系统注册irq domain。核心函数__irq_domain_add。 gic-v2使]]></description>
+      <description><![CDATA[<h1 id="1-irq-domain注册" data-numberify>1. IRQ domain注册<a class="anchor ms-1" href="#1-irq-domain注册"></a></h1>
+<p>中断控制器初始化的过程中，要向中断子系统注册<code>irq domain</code>。核心函数<code>__irq_domain_add</code>。</p>
+<p>gic-v2使用<code>irq_domain_create_linear</code>，gic-v3则使用<code>irq_domain_add_tree</code>。</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/laptop_backlight_colorful_194324_300x168.jpg" length="7666" type="image/.jpg" />
     </item>
     
@@ -22,9 +24,9 @@
       <title>Linux中断子系统（三）设备中断注册</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_create_mapping/</link>
       <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_create_mapping/</guid>
-      <description><![CDATA[1. 设备中断注册 gic-v3的中断号划分在《IHI0069H_gic_architecture_specification.pdf》有所罗列：]]></description>
+      <description><![CDATA[<h1 id="1-设备中断注册" data-numberify>1. 设备中断注册<a class="anchor ms-1" href="#1-设备中断注册"></a></h1>
+<p>gic-v3的中断号划分在《IHI0069H_gic_architecture_specification.pdf》有所罗列：</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/wavy_curvy_lines_146044_300x168.jpg" length="25854" type="image/.jpg" />
     </item>
     
@@ -32,9 +34,13 @@
       <title>Linux中断子系统（四）申请中断request_irq</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/request_irq/</link>
       <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/request_irq/</guid>
-      <description><![CDATA[1. 申请中断 __setup_irq是用于设置和注册中断的核心函数，它是request_threaded_irq等函数的内部实现。 1.1. irqaction handl]]></description>
+      <description><![CDATA[<h1 id="1-申请中断" data-numberify>1. 申请中断<a class="anchor ms-1" href="#1-申请中断"></a></h1>
+<p><code>__setup_irq</code>是用于设置和注册中断的核心函数，它是<code>request_threaded_irq</code>等函数的内部实现。
+<picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.6/interrupt/request_irq/request_irq.png" loading="lazy" width="1157" height="443" />
+</picture>
+
+</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/pixels_cubes_shapes_127558_300x168.jpg" length="18339" type="image/.jpg" />
     </item>
     
@@ -42,9 +48,34 @@
       <title>Linux中断子系统（五）中断处理</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/handler_entry/</link>
       <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/handler_entry/</guid>
-      <description><![CDATA[1. 中断入口 要处理中断，必须为handle_arch_irq赋值。 ARM64自己定义handle_arch_irq的实现。 1/// arch/arm64/kernel/irq.c 2void (*handle_arch_irq)(struct pt_regs *) __ro_after_init = default_handle_irq; 3void]]></description>
+      <description><![CDATA[<h1 id="1-中断入口" data-numberify>1. 中断入口<a class="anchor ms-1" href="#1-中断入口"></a></h1>
+<p>要处理中断，必须为<code>handle_arch_irq</code>赋值。</p>
+<p>ARM64自己定义<code>handle_arch_irq</code>的实现。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// arch/arm64/kernel/irq.c
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">handle_arch_irq</span><span class="p">)(</span><span class="k">struct</span> <span class="n">pt_regs</span> <span class="o">*</span><span class="p">)</span> <span class="n">__ro_after_init</span> <span class="o">=</span> <span class="n">default_handle_irq</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">handle_arch_fiq</span><span class="p">)(</span><span class="k">struct</span> <span class="n">pt_regs</span> <span class="o">*</span><span class="p">)</span> <span class="n">__ro_after_init</span> <span class="o">=</span> <span class="n">default_handle_fiq</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="kt">int</span> <span class="n">__init</span> <span class="nf">set_handle_irq</span><span class="p">(</span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">handle_irq</span><span class="p">)(</span><span class="k">struct</span> <span class="n">pt_regs</span> <span class="o">*</span><span class="p">))</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">handle_arch_irq</span> <span class="o">!=</span> <span class="n">default_handle_irq</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">        <span class="k">return</span> <span class="o">-</span><span class="n">EBUSY</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">
+</span></span><span class="line"><span class="ln">10</span><span class="cl">    <span class="n">handle_arch_irq</span> <span class="o">=</span> <span class="n">handle_irq</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">    <span class="nf">pr_info</span><span class="p">(</span><span class="s">&#34;Root IRQ handler: %ps</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">handle_irq</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">
+</span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="kt">int</span> <span class="n">__init</span> <span class="nf">set_handle_fiq</span><span class="p">(</span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">handle_fiq</span><span class="p">)(</span><span class="k">struct</span> <span class="n">pt_regs</span> <span class="o">*</span><span class="p">))</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">17</span><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">handle_arch_fiq</span> <span class="o">!=</span> <span class="n">default_handle_fiq</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl">        <span class="k">return</span> <span class="o">-</span><span class="n">EBUSY</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">
+</span></span><span class="line"><span class="ln">20</span><span class="cl">    <span class="n">handle_arch_fiq</span> <span class="o">=</span> <span class="n">handle_fiq</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">21</span><span class="cl">    <span class="nf">pr_info</span><span class="p">(</span><span class="s">&#34;Root FIQ handler: %ps</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">handle_fiq</span><span class="p">);</span>
+</span></span><span class="line"><span class="ln">22</span><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>ARM使能<code>CONFIG_GENERIC_IRQ_MULTI_HANDLER</code>。</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/travel_map_compass_123078_300x168.jpg" length="14785" type="image/.jpg" />
     </item>
     
@@ -52,9 +83,14 @@
       <title>Linux中断子系统（一）软硬件初始化</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/init/</link>
       <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/init/</guid>
-      <description><![CDATA[1. 简介 early_irq_init完成中断子系统软件部分初始化。 irqchip_init初始化中断控制器，向系统注册struct irq_do]]></description>
+      <description><![CDATA[<h1 id="1-简介" data-numberify>1. 简介<a class="anchor ms-1" href="#1-简介"></a></h1>
+<p><code>early_irq_init</code>完成中断子系统软件部分初始化。</p>
+<p><code>irqchip_init</code>初始化中断控制器，向系统注册<code>struct irq_domain</code>。</p>
+<p><picture><img class="img-fluid " alt="irq_intc_init" src="/zh-cn/docs/04-kernel/linux-6.6/interrupt/init/irq_intc_init.png" loading="lazy" width="787" height="443" />
+</picture>
+
+</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/vintage_retro_camera_126517_300x168.jpg" length="11143" type="image/.jpg" />
     </item>
     
@@ -62,9 +98,9 @@
       <title>ARM64 Linux中断入口</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/</link>
       <pubDate>Sun, 21 Apr 2024 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/cpu_interrupt_entry/</guid>
-      <description><![CDATA[1. 简介 ARM64中断入口相关的代码主要在arch/arm64/kernel/entry.S，启动过程中，会将中断向量表vectors的起始虚]]></description>
+      <description><![CDATA[<h1 id="1-简介" data-numberify>1. 简介<a class="anchor ms-1" href="#1-简介"></a></h1>
+<p>ARM64中断入口相关的代码主要在<code>arch/arm64/kernel/entry.S</code>，启动过程中，会将中断向量表<code>vectors</code>的起始虚拟地址写入到VBAR_EL1。</p>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/shortcode.png" length="6548" type="image/.png" />
     </item>
     
@@ -72,9 +108,60 @@
       <title>Linux中断处理流程图</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_flow/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/interrupt/irq_flow/</guid>
-      <description><![CDATA[sequenceDiagram participant caller as caller participant irq as irq.c participant irqdomain as irqdomain.c participant irqdesc as irqdesc.c participant bitmap as bitmap.c activate caller caller -&gt;&gt; irq: irq_of_parse_and_map activate irq Note right of irq: irq_of_parse_and_map irq -&gt;&gt; irq: of_irq_parse_one irq -&gt;&gt; irqdomain: irq_create_of_mapping activate irqdomain Note right of irqdomain :irq_create_of_mapping irqdomain -&gt;&gt; irqdomain: of_phandle_args_to_fwspec irqdomain -&gt;&gt; irqdomain: irq_create_fwspec_mapping activate irqdomain Note right of irqdomain :irq_create_fwspec_mapping irqdomain -&gt;&gt; irqdomain: irq_domain_translate irqdomain -&gt;&gt;]]></description>
+      <description><![CDATA[<pre class="text-center mermaid">sequenceDiagram
+    participant caller as caller
+    participant irq as irq.c
+    participant irqdomain as irqdomain.c
+    participant irqdesc as irqdesc.c
+    participant bitmap as bitmap.c
+
+    activate caller
+    caller -&gt;&gt; irq: irq_of_parse_and_map
+
+    activate irq
+        Note right of irq: irq_of_parse_and_map
+        irq -&gt;&gt; irq: of_irq_parse_one
+        irq -&gt;&gt; irqdomain: irq_create_of_mapping
+        activate irqdomain
+        Note right of irqdomain :irq_create_of_mapping
+        irqdomain -&gt;&gt; irqdomain: of_phandle_args_to_fwspec
+        irqdomain -&gt;&gt; irqdomain: irq_create_fwspec_mapping
+        activate irqdomain
+            Note right of irqdomain :irq_create_fwspec_mapping
+            irqdomain -&gt;&gt; irqdomain: irq_domain_translate
+            irqdomain -&gt;&gt; irqdomain: irq_find_mapping
+            opt irq_find_mapping &gt; 0
+                irqdomain --&gt;&gt; irq: return
+                irq --&gt;&gt; caller: return
+            end
+            alt irq_domain_is_hierarchy
+                irqdomain -&gt;&gt; irqdomain: irq_domain_alloc_irqs
+                irqdomain -&gt;&gt; irqdesc: irq_domain_alloc_descs
+        activate irqdesc
+        Note right of irqdesc :irq_domain_alloc_descs
+            else
+                irqdomain -&gt;&gt; irqdomain: irq_create_mapping
+                irqdomain -&gt;&gt; irqdesc: irq_domain_alloc_descs
+            end
+        irqdesc -&gt;&gt; irqdesc : __irq_alloc_descs
+        activate irqdesc
+        Note right of irqdesc: __irq_alloc_descs
+        irqdesc -&gt;&gt; bitmap: bitmap_find_next_zero_area
+        activate bitmap
+        bitmap -&gt;&gt; bitmap: bitmap_find_next_zero_area_off
+        bitmap --&gt;&gt; irqdesc: return
+        deactivate bitmap
+        irqdesc --&gt;&gt; irqdomain: return
+        deactivate irqdomain
+        deactivate irqdesc
+        deactivate irqdesc
+
+        irqdomain --&gt;&gt; irq: return
+        deactivate irqdomain
+        irq --&gt;&gt; caller: return
+    deactivate irq
+    deactivate caller</pre>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/desert_sand_wavy_141026_300x168.jpg" length="13782" type="image/.jpg" />
     </item>
     

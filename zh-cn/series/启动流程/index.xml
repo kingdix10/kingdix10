@@ -4,27 +4,62 @@
     <title>启动流程 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/series/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/</link>
     <description>Recent content in 启动流程 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
-    <lastBuildDate>Sun, 04 Aug 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/series/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 01 Nov 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/series/%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RiscV内核初始化</title>
+      <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/boot/entry_riscv/</link>
+      <pubDate>Fri, 01 Nov 2024 00:00:00 +0000</pubDate>
+      <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/boot/entry_riscv/</guid>
+      <description><![CDATA[<h1 id="linux-66" data-numberify>linux-6.6<a class="anchor ms-1" href="#linux-66"></a></h1>
+<p><code>arch/riscv/kernel/head.S</code>只有不到500行。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c1">/// arch/riscv/kernel/head.S
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="c1"></span><span class="nf">_start</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="err">\</span><span class="o">--</span> <span class="nf">_start_kernel</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">    <span class="o">+--</span> <span class="nf">reset_regs</span><span class="p">()</span>            <span class="c1">/// if CONFIG_RISCV_M_MODE
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="c1"></span>    <span class="o">+--</span> <span class="nf">setup_vm</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    <span class="o">+--</span> <span class="nf">relocate_enable_mmu</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="o">+--</span> <span class="nf">setup_trap_vector</span><span class="p">()</span>     <span class="c1">/// 设置CSR_TVEC为handle_exception
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="c1"></span>    <span class="o">+--</span> <span class="nf">kasan_early_init</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    <span class="o">+--</span> <span class="nf">soc_early_init</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">    <span class="err">\</span><span class="o">--</span> <span class="nf">start_kernel</span><span class="p">()</span>
+</span></span></code></pre></div>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/camera_lens_strap_145518_300x168.jpg" length="15893" type="image/.jpg" />
+    </item>
+    
     <item>
       <title>rt-thread Cortex-A9 SMP启动</title>
-      <link>https://kingdix10.github.io/zh-cn/docs/03-boot/rtthread_smp_cortex_a9/</link>
+      <link>https://kingdix10.github.io/zh-cn/docs/03-boot/rtthread_bootflow/</link>
       <pubDate>Sun, 04 Aug 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/rtthread_smp_cortex_a9/</guid>
-      <description><![CDATA[rt-thread版本：4.0]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/metal_texture_surface_157344_300x168.jpg" length="9729" type="image/.jpg" />
+      <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/rtthread_bootflow/</guid>
+      <description><![CDATA[<p><code>rt-thread</code>版本：v5.0.0</p>
+<p>qemu-vexpress-a9</p>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/03-boot/rtthread_bootflow/rt-thread-smp-cortex-a9.png" loading="lazy" width="2493" height="805" />
+</picture>
+
+</p>
+<p>qemu arm64</p>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/03-boot/rtthread_bootflow/rt-thread_qemu_aarch64.png" loading="lazy" width="2437" height="863" />
+</picture>
+
+</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/spots_stains_colorful_147593_300x168.jpg" length="20423" type="image/.jpg" />
     </item>
     
     <item>
       <title>保证内核启动安全的几种方式</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/kernel_boot_security/</link>
       <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/misc/kernel_boot_security/</guid>
-      <description><![CDATA[保证内核启动安全的几种方式 禁止修改cmdline 禁止修改根文件系统 使能内核地址空间布局随机化(KASLR)]]></description>
+      <description><![CDATA[<h1 id="保证内核启动安全的几种方式" data-numberify>保证内核启动安全的几种方式<a class="anchor ms-1" href="#保证内核启动安全的几种方式"></a></h1>
+<ol>
+<li>禁止修改cmdline</li>
+<li>禁止修改根文件系统</li>
+<li>使能内核地址空间布局随机化(KASLR)</li>
+</ol>]]></description>
     <enclosure url="https://kingdix10.github.io/covers/code_text_colorful_140555_300x168.jpg" length="22830" type="image/.jpg" />
     </item>
     
@@ -32,20 +67,22 @@
       <title>内核启动流程（一）</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/boot/entry/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.6/boot/entry/</guid>
-      <description><![CDATA[1. 内核启动入口 根据Makefile对KBUILD_LDS的定义，链接vmlinux使用的连接脚本为 arch/$(SRCARCH)/kerne]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/keyboard_laptop_gradient_203739_300x168.jpg" length="10539" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-内核启动入口" data-numberify>1. 内核启动入口<a class="anchor ms-1" href="#1-内核启动入口"></a></h1>
+<p>根据Makefile对KBUILD_LDS的定义，链接vmlinux使用的连接脚本为 <code>arch/$(SRCARCH)/kernel/vmlinux.lds</code>，实际上这个脚本是在编译过程中生成的。从链接脚本 <code>arch/arm64/kernel/vmlinux.lds</code>可以查到，程序的入口为 <code>_text</code>，镜像起始位置存放的是 <code>.head.text</code>段生成的指令。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/water_waves_ripples_143522_300x168.jpg" length="11080" type="image/.jpg" />
     </item>
     
     <item>
       <title>嵌入式系统启动流程</title>
       <link>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/boot_flow/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/03-boot/u-boot/boot_flow/</guid>
-      <description><![CDATA[1. 启动流程 1.1. bootrom 芯片上电后，会自动执行bootrom代码，bootrom是各家厂商定制的，但完成的工作基本相同。bootrom通常支持从多种不]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/bubbles_drops_macro_126764_300x168.jpg" length="23506" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-启动流程" data-numberify>1. 启动流程<a class="anchor ms-1" href="#1-启动流程"></a></h1>
+
+<h2 id="11-bootrom" data-numberify>1.1. bootrom<a class="anchor ms-1" href="#11-bootrom"></a></h2>
+<p>芯片上电后，会自动执行bootrom代码，bootrom是各家厂商定制的，但完成的工作基本相同。bootrom通常支持从多种不同的介质启动，如SD卡、NADN、eMMC、USB等。以Exynos4412为例，bootrom会读取OM引脚指定的启动介质。以eMMC为例，eMMC分为boot0、boot1、RPMB和user四个物理分区，四个物理分区独立寻址。可以通过寄存器指定eMMC的bootmode，也就是eMMC启动时，读取那个物理分区的数据。这就需要根据厂家需要，提前设置eMMC的寄存器。对于Exynos4412来说，bootrom会去读boot0分区的内容。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/laptop_keyboard_glow_170138_300x168.jpg" length="3604" type="image/.jpg" />
     </item>
     
   </channel>

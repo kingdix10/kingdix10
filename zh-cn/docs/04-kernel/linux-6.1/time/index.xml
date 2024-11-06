@@ -4,28 +4,38 @@
     <title>时间子系统 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/</link>
     <description>Recent content in 时间子系统 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
-    <lastBuildDate>Wed, 22 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 08 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>linux内核时间子系统（二）</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/timekeeping/</link>
       <pubDate>Wed, 22 Feb 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/timekeeping/</guid>
-      <description><![CDATA[1. timekeeping timekeeping是时间子系统用于从clocksource获取时间，维护墙上时间、单调递增时间、启动时间的模块，timekeepin]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/flowers_leaves_pattern_148777_300x168.jpg" length="26948" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-timekeeping" data-numberify>1. timekeeping<a class="anchor ms-1" href="#1-timekeeping"></a></h1>
+<p>timekeeping是时间子系统用于从clocksource获取时间，维护墙上时间、单调递增时间、启动时间的模块，timekeeping提供了各种时间的获取接口。其核心数据为tk_core，实现了对timekeeper的加锁访问。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/metal_texture_surface_157344_300x168.jpg" length="9729" type="image/.jpg" />
     </item>
     
     <item>
       <title>linux内核时间子系统（一）</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/time/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/time/</guid>
-      <description><![CDATA[1. 简介 内核版本：linux-6.1 时间子系统的作用： 时间读取功能 定时器功能，有传统的定时器timer、高精度定时器hrtimer 提供用于调度]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wood_texture_logs_159793_300x168.jpg" length="19513" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-简介" data-numberify>1. 简介<a class="anchor ms-1" href="#1-简介"></a></h1>
+<p>内核版本：linux-6.1</p>
+<p>时间子系统的作用：</p>
+<ol>
+<li>时间读取功能</li>
+<li>定时器功能，有传统的定时器timer、高精度定时器hrtimer</li>
+<li>提供用于调度的tick，有周期tick和动态tick</li>
+</ol>
+
+<h1 id="2-linux的各种时间" data-numberify>2. Linux的各种时间<a class="anchor ms-1" href="#2-linux的各种时间"></a></h1>
+<p>Linux的系统时钟ID定义如下，选其中常用的简单介绍一下。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/squares_colorful_texture_133972_300x168.jpg" length="17371" type="image/.jpg" />
     </item>
     
   </channel>

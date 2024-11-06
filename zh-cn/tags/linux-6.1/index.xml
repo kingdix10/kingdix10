@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>linux-6.1 on kingdix10&#39;s site</title>
+    <title>Linux-6.1 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/tags/linux-6.1/</link>
-    <description>Recent content in linux-6.1 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Linux-6.1 on kingdix10&#39;s site</description>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Wed, 13 Dec 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/tags/linux-6.1/index.xml" rel="self" type="application/rss+xml" />
@@ -12,110 +13,141 @@
       <title>Linux 0号线程swapper简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_0/</link>
       <pubDate>Wed, 13 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_0/</guid>
-      <description><![CDATA[1. 总览 这里以ARM64为例。 在内核的起始阶段，还没有进程和线程的概念，在开启MMU之后，__primary_switched的第一步就是将i]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_300x168.jpg" length="21351" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-总览" data-numberify>1. 总览<a class="anchor ms-1" href="#1-总览"></a></h1>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.1/sched/task_0/tasks.png" loading="lazy" width="3204" height="1128" />
+</picture>
+
+</p>
+<p>这里以ARM64为例。</p>
+<p>在内核的起始阶段，还没有进程和线程的概念，在开启MMU之后，<code>__primary_switched</code>的第一步就是将init_task的地址写到sp_el0，这个时候就可以用get_current()或者curent获取到0号线程的task_struct了。在0号线程的上下文，完成调度器的相关初始化之后，创建1号和2号线程，然后开启调度器，init_task自此进入idle状态。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/leaves_patterns_texture_127524_300x168.jpg" length="18901" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux 1号线程init简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_1/</link>
       <pubDate>Wed, 13 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_1/</guid>
-      <description><![CDATA[1. 1号进程的内核态 1号进程首先运行在内核态，其函数是kernel_init，这里简单介绍一下其工作： 非bootcpu相关初始化 页分配器初始化]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/gradient_blur_blending_130648_300x168.jpg" length="2927" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-1号进程的内核态" data-numberify>1. 1号进程的内核态<a class="anchor ms-1" href="#1-1号进程的内核态"></a></h1>
+<p>1号进程首先运行在内核态，其函数是kernel_init，这里简单介绍一下其工作：</p>
+<ol>
+<li>非bootcpu相关初始化</li>
+<li>页分配器初始化的收尾工作</li>
+<li>驱动子系统和设备树初始化</li>
+<li>调用<code>__initcall</code>指定的初始化函数</li>
+<li>挂载根文件系统</li>
+<li>是否<code>__init</code>指定的内存</li>
+<li>执行用户态init程序</li>
+</ol>
+<p><picture><img class="img-fluid " alt="" src="/zh-cn/docs/04-kernel/linux-6.1/sched/task_1/kernel_init.png" loading="lazy" width="1469" height="1859" />
+</picture>
+
+</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/trunk_tree_texture_119590_300x168.jpg" length="18828" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux 2号线程kthreadd简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_2/</link>
       <pubDate>Wed, 13 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/sched/task_2/</guid>
-      <description><![CDATA[1. 2号线程kthreadd Linux内核规定，所有的线程必须由已存在的线程创建出来，也就是要求所有的task_struct都需要在已有的ta]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/metal_plates_lattice_199631_300x168.jpg" length="24563" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-2号线程kthreadd" data-numberify>1. 2号线程kthreadd<a class="anchor ms-1" href="#1-2号线程kthreadd"></a></h1>
+<p>Linux内核规定，所有的线程必须由已存在的线程创建出来，也就是要求所有的task_struct都需要在已有的task_struct上复制出来。Linux可以通过kernel_thread来创建内核线程，这个函数会复制当前线程的task_struct。如果任由各个子系统或驱动自己调用kernel_thread来创建线程，那在创建内核线程时current所指向的task_struct是不确定的。为了解决这一问题，Linux内核将所有内核线程的创建交给固定的线程来做，这个线程就是2号线程kthreadd。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/pattern_frosty_frost_134125_300x168.jpg" length="18643" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux内核驱动模型（三）驱动初始化</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/initcall/</link>
       <pubDate>Thu, 20 Jul 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/initcall/</guid>
-      <description><![CDATA[1. module_init是什么 module_init是Linux内核开发和驱动开发中非常常见的宏，其定义在 include/linux/mod]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_1280x720.jpg" length="194685" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-module_init是什么" data-numberify>1. module_init是什么<a class="anchor ms-1" href="#1-module_init是什么"></a></h1>
+<p>module_init是Linux内核开发和驱动开发中非常常见的宏，其定义在 <code>include/linux/module.h</code>中，可以看到，module_init的实现会根据是否定义MODULE而有所不同。MODULE决定了我们编写的驱动，是与内核编译到一起，还是单独编译为ko。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/camera_photographer_smoke_126548_300x168.jpg" length="9088" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux内核驱动模型（四）核心结构体</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/device_model/</link>
       <pubDate>Wed, 12 Jul 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/device_model/</guid>
-      <description><![CDATA[1. sysfs中的bus/class/device/driver 首先通过实例来看bus/class/device/driver的关系。下图绘制]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/dunes_sand_texture_151004_300x168.jpg" length="17708" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-sysfs中的busclassdevicedriver" data-numberify>1. sysfs中的bus/class/device/driver<a class="anchor ms-1" href="#1-sysfs中的busclassdevicedriver"></a></h1>
+<p>首先通过实例来看bus/class/device/driver的关系。下图绘制的是qemu启动ARM64后，sysfs中platform总线下部分目录和文件的关系。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/stars_figure_pattern_178502_300x168.jpg" length="18670" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux内核驱动模型（一）设备树展开</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/fdt_dt/</link>
       <pubDate>Wed, 12 Jul 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/fdt_dt/</guid>
-      <description><![CDATA[1. DT和FDT 设备树（Device Tree，DT）是一种层次结构的文本数据表示方式，用于描述硬件设备的配置信息。扁平设备树（Flattene]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/iridescent_colorful_lines_130978_300x168.jpg" length="11918" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-dt和fdt" data-numberify>1. DT和FDT<a class="anchor ms-1" href="#1-dt和fdt"></a></h1>
+<p>设备树（Device Tree，DT）是一种层次结构的文本数据表示方式，用于描述硬件设备的配置信息。扁平设备树（Flattened Device Tree，FDT），也叫平坦设备树，是设备树的一种二进制表示形式，提高了在嵌入式系统中的传输和解析效率。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/blinds_lines_shade_143653_300x168.jpg" length="11444" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux内核驱动模型（二）设备树转换</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/dt_to_dt/</link>
       <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/fdt/dt_to_dt/</guid>
-      <description><![CDATA[1. device_node tree到device tree device_node的层次结构建立之后，并没有struct device生成，那我们实现的驱动probe函数又是]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/gold_background_lines_72322_300x168.jpg" length="10737" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-device_node-tree到device-tree" data-numberify>1. device_node tree到device tree<a class="anchor ms-1" href="#1-device_node-tree到device-tree"></a></h1>
+<p>device_node的层次结构建立之后，并没有struct device生成，那我们实现的驱动probe函数又是如何获取设备的呢？
+这就需要有一个从device_node创建struct device的过程，这个过程并没有一个统一的函数来实现，而是各个总线的在初始化时，主动扫描设备树，根据device_node创建自己需要的设备。下边以platform总线为例说明。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/gradient_orange_shades_131495_300x168.jpg" length="2713" type="image/.jpg" />
     </item>
     
     <item>
       <title>Linux内核数据结构kobject/kset/ktype</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/kobject/kobject/</link>
       <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/devicemodel/kobject/kobject/</guid>
-      <description><![CDATA[1. 数据结构简介 内核版本：linux-6.1 内核文档：Everything you never wanted to know about kobjects, ksets, and ktypes — The Linux Kernel documentation 在Linux内核中，kobject、k]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/lines_obliquely_stripes_123801_300x168.jpg" length="18016" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-数据结构简介" data-numberify>1. 数据结构简介<a class="anchor ms-1" href="#1-数据结构简介"></a></h1>
+<p>内核版本：linux-6.1</p>
+<p>内核文档：<a href="https://www.kernel.org/doc/html/v6.1/core-api/kobject.html" target="_blank" rel="noopener noreferrer">Everything you never wanted to know about kobjects, ksets, and ktypes — The Linux Kernel documentation<i class="fas fa-external-link-square-alt ms-1"></i></a></p>
+<p>在Linux内核中，kobject、kset和kobj_type是用于管理和表示kobject的数据结构。kobject是设备驱动模型的基石，sysfs和uevent也与kobject密切相关。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/mosaic_multicolored_texture_126795_300x168.jpg" length="20064" type="image/.jpg" />
     </item>
     
     <item>
       <title>linux内核时间子系统（二）</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/timekeeping/</link>
       <pubDate>Wed, 22 Feb 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/timekeeping/</guid>
-      <description><![CDATA[1. timekeeping timekeeping是时间子系统用于从clocksource获取时间，维护墙上时间、单调递增时间、启动时间的模块，timekeepin]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/flowers_leaves_pattern_148777_300x168.jpg" length="26948" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-timekeeping" data-numberify>1. timekeeping<a class="anchor ms-1" href="#1-timekeeping"></a></h1>
+<p>timekeeping是时间子系统用于从clocksource获取时间，维护墙上时间、单调递增时间、启动时间的模块，timekeeping提供了各种时间的获取接口。其核心数据为tk_core，实现了对timekeeper的加锁访问。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/metal_texture_surface_157344_300x168.jpg" length="9729" type="image/.jpg" />
     </item>
     
     <item>
       <title>linux thermal子系统简介</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/thermal/thermal/</guid>
-      <description><![CDATA[1. thermal简介 内核版本：linux-6.1 thermal子系统主要用来监测和调节CPU、GPU等芯片或设备的温度。三个主要结构体的关系]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/blinds_lines_shade_143653_300x168.jpg" length="11444" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-thermal简介" data-numberify>1. thermal简介<a class="anchor ms-1" href="#1-thermal简介"></a></h1>
+<p>内核版本：linux-6.1</p>
+<p>thermal子系统主要用来监测和调节CPU、GPU等芯片或设备的温度。三个主要结构体的关系：从thermal_zone_device获取温度后，根据governor指定的策略，来控制thermal_cooling_device进行温度调节。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/scheme_glow_blue_140190_300x168.jpg" length="21351" type="image/.jpg" />
     </item>
     
     <item>
       <title>linux内核时间子系统（一）</title>
       <link>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/time/</link>
       <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/04-kernel/linux-6.1/time/time/</guid>
-      <description><![CDATA[1. 简介 内核版本：linux-6.1 时间子系统的作用： 时间读取功能 定时器功能，有传统的定时器timer、高精度定时器hrtimer 提供用于调度]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/wood_texture_logs_159793_300x168.jpg" length="19513" type="image/.jpg" />
+      <description><![CDATA[<h1 id="1-简介" data-numberify>1. 简介<a class="anchor ms-1" href="#1-简介"></a></h1>
+<p>内核版本：linux-6.1</p>
+<p>时间子系统的作用：</p>
+<ol>
+<li>时间读取功能</li>
+<li>定时器功能，有传统的定时器timer、高精度定时器hrtimer</li>
+<li>提供用于调度的tick，有周期tick和动态tick</li>
+</ol>
+
+<h1 id="2-linux的各种时间" data-numberify>2. Linux的各种时间<a class="anchor ms-1" href="#2-linux的各种时间"></a></h1>
+<p>Linux的系统时钟ID定义如下，选其中常用的简单介绍一下。</p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/squares_colorful_texture_133972_300x168.jpg" length="17371" type="image/.jpg" />
     </item>
     
   </channel>

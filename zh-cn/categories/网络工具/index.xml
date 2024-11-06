@@ -4,7 +4,8 @@
     <title>网络工具 on kingdix10&#39;s site</title>
     <link>https://kingdix10.github.io/zh-cn/categories/%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7/</link>
     <description>Recent content in 网络工具 on kingdix10&#39;s site</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
     <copyright>Copyright ? 2018-2024 kingdix10. All Rights Reserved.
 </copyright>
     <lastBuildDate>Sun, 03 Dec 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://kingdix10.github.io/zh-cn/categories/%E7%BD%91%E7%BB%9C%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml" />
@@ -12,10 +13,35 @@
       <title>linux常用命令-网络</title>
       <link>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_network/</link>
       <pubDate>Sun, 03 Dec 2023 00:00:00 +0000</pubDate>
-      
       <guid>https://kingdix10.github.io/zh-cn/docs/01-os/linux/shell/cmd_network/</guid>
-      <description><![CDATA[nmap 1nmap -sVn 192.168.31.* 2 3nmap -sVn 192.168.31.* -oN out.txt 4 5nmap -sV -sC -Pn 192.168.31.* 6 7nmap -sV -sC -Pn 192.168.31.* -oN out.txt 8 9nmap -sV -sC -Pn 192.168.31.* -oG out.txt 10 11nmap -sV -sC -Pn 192.168.31.* -oX out.xml 12 13nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script=banner,vuln 14 15nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script=banner,vuln --script-args=banner.timeout=10,vuln.timeout=10 16 17nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script=banner,vuln --script-args=banner.timeout=10,vuln.timeout=10 --script-args=banner.path=/usr/share/nmap/scripts/http-title.nse,vuln.cvss-threshold=7]]></description>
-    <enclosure url="https://kingdix10.github.io/covers/texture_background_color_72786_300x168.jpg" length="9947" type="image/.jpg" />
+      <description><![CDATA[<h1 id="nmap" data-numberify>nmap<a class="anchor ms-1" href="#nmap"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln"> 1</span><span class="cl">nmap  -sVn 192.168.31.*
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">nmap -sVn 192.168.31.* -oN out.txt
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">nmap -sV -sC -Pn 192.168.31.*
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">nmap -sV -sC -Pn 192.168.31.* -oN out.txt
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">nmap -sV -sC -Pn 192.168.31.* -oG out.txt
+</span></span><span class="line"><span class="ln">10</span><span class="cl">
+</span></span><span class="line"><span class="ln">11</span><span class="cl">nmap -sV -sC -Pn 192.168.31.* -oX out.xml
+</span></span><span class="line"><span class="ln">12</span><span class="cl">
+</span></span><span class="line"><span class="ln">13</span><span class="cl">nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script<span class="o">=</span>banner,vuln
+</span></span><span class="line"><span class="ln">14</span><span class="cl">
+</span></span><span class="line"><span class="ln">15</span><span class="cl">nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script<span class="o">=</span>banner,vuln --script-args<span class="o">=</span>banner.timeout<span class="o">=</span>10,vuln.timeout<span class="o">=</span><span class="m">10</span>
+</span></span><span class="line"><span class="ln">16</span><span class="cl">
+</span></span><span class="line"><span class="ln">17</span><span class="cl">nmap -sV -sC -Pn 192.168.31.* -oX out.xml --script<span class="o">=</span>banner,vuln --script-args<span class="o">=</span>banner.timeout<span class="o">=</span>10,vuln.timeout<span class="o">=</span><span class="m">10</span> --script-args<span class="o">=</span>banner.path<span class="o">=</span>/usr/share/nmap/scripts/http-title.nse,vuln.cvss-threshold<span class="o">=</span><span class="m">7</span>
+</span></span></code></pre></div>
+<h1 id="ip" data-numberify>ip<a class="anchor ms-1" href="#ip"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">ip addr
+</span></span><span class="line"><span class="ln">2</span><span class="cl">ip route
+</span></span></code></pre></div>
+<h1 id="ssh" data-numberify>ssh<a class="anchor ms-1" href="#ssh"></a></h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">ssh-keygen -f <span class="s2">&#34;/home/</span><span class="si">${</span><span class="nv">USERNAME</span><span class="si">}</span><span class="s2">/.ssh/known_hosts&#34;</span> -R <span class="s2">&#34;[localhost]:22&#34;</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">ssh-copy-id -p <span class="m">22</span> <span class="si">${</span><span class="nv">USERNAME</span><span class="si">}</span>@<span class="si">${</span><span class="nv">IP</span><span class="si">}</span>
+</span></span></code></pre></div><p><a href="https://zhuanlan.zhihu.com/p/521768041" target="_blank" rel="noopener noreferrer">https://zhuanlan.zhihu.com/p/521768041<i class="fas fa-external-link-square-alt ms-1"></i></a></p>]]></description>
+    <enclosure url="https://kingdix10.github.io/covers/keyboard_laptop_gradient_203739_300x168.jpg" length="10539" type="image/.jpg" />
     </item>
     
   </channel>
